@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 public class ButtonConnection : MonoBehaviour
 {
-    public GameObject MagCanvas;
+   // public GameObject MagCanvas;
     public GameObject ChannelCanvas;
     //public GameObject exitButton;
     public Button scarbButton;
@@ -13,7 +13,7 @@ public class ButtonConnection : MonoBehaviour
     Button btn_Exit;
     void Start()
     {
-        MagCanvas = GameObject.Find("CanvasMag");
+       // MagCanvas = GameObject.Find("CanvasMag");
         ChannelCanvas = GameObject.Find("ChannelCanvas");
 
         //MagCanvas.SetActive(false);
@@ -29,7 +29,7 @@ public class ButtonConnection : MonoBehaviour
     {
         // 캔버스 활성화/비활성화
         //MagCanvas.SetActive(!MagCanvas.activeSelf);
-        MagCanvas.SetActive(true);
+       // MagCanvas.SetActive(true);
         ChannelCanvas.SetActive(false);
     }
 }

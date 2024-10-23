@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class H_PostInfo
@@ -13,23 +14,36 @@ public class H_PostInfo
 [System.Serializable]
 public class PostInfoList
 {
-    public List<PostInfo> postData;
+    public List<H_PostInfo> postData;
 }
 
 public class PostMgr : MonoBehaviour
 {
-    public List<PostInfo> allPost = new List<PostInfo>();
+    public List<H_PostInfo> allPost = new List<H_PostInfo>();
     public GameObject prefabfactory;
     public GameObject content;
+
+    public GameObject MagCanvas;
+    public GameObject Channelcanvas;
+
+    List<Button> btns = new List<Button>();
+
+    public Button btn_Exit;
 
     // Start is called before the first frame update
     void Start()
     {
+        MagCanvas = GameObject.Find("CanvasMag");
+        Channelcanvas = GameObject.Find("ChannelCanvas");
+
         HttpInfo info = new HttpInfo();
         info.url = "file:///C:\\Users\\haqqm\\Desktop\\post\\postinfolist.txt";
         info.onComplete = OncompletePostInfo;
 
         StartCoroutine(HttpManager.GetInstance().Get(info));
+
+        btn_Exit.onClick.AddListener(OnClickExit);
+
     }
 
     public void OncompletePostInfo(DownloadHandler downloadhandler)
@@ -42,16 +56,34 @@ public class PostMgr : MonoBehaviour
         {
             GameObject go = Instantiate(prefabfactory, content.transform);
             PostThumb post = go.GetComponent<PostThumb>();
-           // post.SetInfo(allPost[i]);
+            Button bu = go.GetComponent<Button>();
+            btns.Add(bu);
+            btns[i].onClick.AddListener(OnClickMagContent);
+
+            post.SetInfo(allPost[i]);
         }
+       
+        print(MagCanvas);
+        MagCanvas.SetActive(false);
 
-        //GameObject.Find("CanvasMag") ;
+       
     }
+    public void OnClickMagContent()
+    {
+        MagCanvas.SetActive(true);
+        Channelcanvas.SetActive(false);
 
+    }
+   
+    public void OnClickExit()
+    {
+        MagCanvas.SetActive(false);
+        Channelcanvas.SetActive(true);
 
+    }
     // Update is called once per frame
     void Update()
     {
-
+       
     }
 }

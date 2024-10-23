@@ -42,7 +42,7 @@ public class CreateObj : MonoBehaviour {
 	{
 		//Create a new prefab at the path given
 		Object prefab = PrefabUtility.SaveAsPrefabAsset(obj, localPath);
-		PrefabUtility.ReplacePrefab(obj, prefab, ReplacePrefabOptions.ConnectToPrefab);
+		//PrefabUtility.ReplacePrefab(obj, prefab, ReplacePrefabOptions.ConnectToPrefab);
 	}
 	
 
