@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class PostThumb : MonoBehaviour
 {
-    public PostInfo postinfo;
+    public H_PostInfo postinfo;
     public Image image;
     // Start is called before the first frame update
     void Start()
@@ -20,7 +20,7 @@ public class PostThumb : MonoBehaviour
     {
 
     }
-    public void SetInfo(PostInfo info)
+    public void SetInfo(H_PostInfo info)
     {
         postinfo = info;
 

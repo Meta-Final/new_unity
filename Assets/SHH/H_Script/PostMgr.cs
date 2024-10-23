@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-[Serializable]
-public class PostInfo
+[System.Serializable]
+public class H_PostInfo
 {
     public string editorname;
     public string thumburl;
 }
-[Serializable]
+[System.Serializable]
 public class PostInfoList
 {
     public List<PostInfo> postData;
@@ -42,7 +42,7 @@ public class PostMgr : MonoBehaviour
         {
             GameObject go = Instantiate(prefabfactory, content.transform);
             PostThumb post = go.GetComponent<PostThumb>();
-            post.SetInfo(allPost[i]);
+           // post.SetInfo(allPost[i]);
         }
 
         //GameObject.Find("CanvasMag") ;
