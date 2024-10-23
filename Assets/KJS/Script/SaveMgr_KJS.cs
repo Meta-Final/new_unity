@@ -1,9 +1,11 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using TMPro;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;  // TextMeshPro 사용
+using System;
 
 public class SaveMgr_KJS : MonoBehaviour
 {
@@ -11,8 +13,8 @@ public class SaveMgr_KJS : MonoBehaviour
     public GameObject imageBoxPrefab;
     public GameObject pagePrefab;
 
-    public Transform parent;  // 기존 텍스트와 이미지 박스의 부모 트랜스폼
-    public Transform pagesParentTransform;  // 페이지 프리팹 생성 위치 지정
+    public Transform parent;  // 텍스트와 이미지 박스의 부모 트랜스폼
+    public Transform pagesParentTransform;  // 페이지 프리팹의 부모 트랜스폼
 
     public List<GameObject> textBoxes = new List<GameObject>();
     public List<GameObject> imageBoxes = new List<GameObject>();
@@ -24,7 +26,7 @@ public class SaveMgr_KJS : MonoBehaviour
     public Button saveButton;
     public Button loadButton;
 
-    private string saveDirectory = @"C:\Users\Admin\Documents\GitHub\unity\Assets\KJS\UserInfo";
+    private string saveDirectory = @"C:\Users\Admin\Documents\GitHub\new_unity\Assets\KJS\UserInfo";
     private string saveFileName = "Magazine.json";
     private string savePath;
 
@@ -82,16 +84,17 @@ public class SaveMgr_KJS : MonoBehaviour
         string userId = GetSelectedUserId();
         if (userId == null) return;
 
+        // 선택된 User ID가 없으면 새로 추가
         if (!userData.ContainsKey(userId))
         {
             userData[userId] = new UserPosts();
         }
 
         UserPosts posts = userData[userId];
-        posts.posts.Clear();
+        posts.posts.Clear();  // 기존 데이터 초기화
 
         // 유효한 텍스트 박스만 저장
-        textBoxes.RemoveAll(item => item == null);  // null 오브젝트 제거
+        textBoxes.RemoveAll(item => item == null);
         foreach (var textBox in textBoxes)
         {
             TMP_Text textComponent = textBox.GetComponentInChildren<TMP_Text>();
@@ -107,7 +110,7 @@ public class SaveMgr_KJS : MonoBehaviour
         }
 
         // 유효한 이미지 박스만 저장
-        imageBoxes.RemoveAll(item => item == null);  // null 오브젝트 제거
+        imageBoxes.RemoveAll(item => item == null);
         foreach (var imageBox in imageBoxes)
         {
             Image imageComponent = imageBox.transform.GetChild(0).GetComponent<Image>();
@@ -129,7 +132,7 @@ public class SaveMgr_KJS : MonoBehaviour
         }
 
         // 유효한 페이지만 저장
-        pages.RemoveAll(item => item == null);  // null 오브젝트 제거
+        pages.RemoveAll(item => item == null);
         foreach (var page in pages)
         {
             posts.posts.Add(new PostInfo(
@@ -141,8 +144,13 @@ public class SaveMgr_KJS : MonoBehaviour
             ));
         }
 
-        // JSON으로 변환 후 파일에 저장
-        string json = JsonUtility.ToJson(new SerializableDictionary(userData), true);
+        // PostInfoList 형식에 맞춰 JSON 생성
+        var postInfoList = new PostInfoList
+        {
+            postData = posts.posts
+        };
+
+        string json = JsonUtility.ToJson(postInfoList, true);
         File.WriteAllText(savePath, json);
 
         Debug.Log($"Data saved for User ID: {userId}");
@@ -150,16 +158,14 @@ public class SaveMgr_KJS : MonoBehaviour
 
     private void LoadObjectsFromFile()
     {
-        string userId = GetSelectedUserId();
-        if (userId == null) return;
-
-        if (!userData.ContainsKey(userId))
+        if (!File.Exists(savePath))
         {
-            Debug.LogWarning($"No data found for User ID: {userId}");
+            Debug.LogWarning($"저장된 파일이 없습니다: {savePath}");
             return;
         }
 
-        UserPosts posts = userData[userId];
+        string json = File.ReadAllText(savePath);
+        var postInfoList = JsonUtility.FromJson<PostInfoList>(json);
 
         // 기존 오브젝트 제거
         textBoxes.ForEach(Destroy);
@@ -170,8 +176,8 @@ public class SaveMgr_KJS : MonoBehaviour
         imageBoxes.Clear();
         pages.Clear();
 
-        // 저장된 데이터로부터 객체 생성
-        foreach (var post in posts.posts)
+        // 저장된 데이터로부터 오브젝트 생성
+        foreach (var post in postInfoList.postData)
         {
             GameObject newObj = null;
 
@@ -206,7 +212,6 @@ public class SaveMgr_KJS : MonoBehaviour
             }
             else if (post.type == "Page")
             {
-                // 페이지 프리팹 생성 시 지정된 pagesParentTransform을 부모로 사용
                 newObj = Instantiate(pagePrefab, pagesParentTransform);
                 AddPage(newObj);
             }
@@ -218,62 +223,68 @@ public class SaveMgr_KJS : MonoBehaviour
             }
         }
 
-        Debug.Log($"Data loaded for User ID: {userId}");
-    }
-}
-
-[System.Serializable]
-public class PostInfo
-{
-    public string type;
-    public string content;
-    public string imageData; // Base64 문자열로 이미지 데이터 저장
-    public Vector3 position;
-    public Vector3 scale;
-
-    public PostInfo(string type, string content, byte[] imageData, Vector3 position, Vector3 scale)
-    {
-        this.type = type;
-        this.content = content;
-        this.imageData = imageData != null ? Convert.ToBase64String(imageData) : null;
-        this.position = position;
-        this.scale = scale;
+        Debug.Log($"Data loaded for User ID: {GetSelectedUserId()}");
     }
 
-    public byte[] GetImageData()
+    [System.Serializable]
+    public class PostInfo
     {
-        return string.IsNullOrEmpty(imageData) ? null : Convert.FromBase64String(imageData);
-    }
-}
+        public string type;
+        public string content;
+        public string imageData; // Base64 문자열로 이미지 데이터 저장
+        public Vector3 position;
+        public Vector3 scale;
 
-[System.Serializable]
-public class UserPosts
-{
-    public List<PostInfo> posts = new List<PostInfo>();
-}
-
-[System.Serializable]
-public class SerializableDictionary
-{
-    public List<string> keys = new List<string>();
-    public List<UserPosts> values = new List<UserPosts>();
-
-    public SerializableDictionary(Dictionary<string, UserPosts> dictionary)
-    {
-        foreach (var kvp in dictionary)
+        public PostInfo(string type, string content, byte[] imageData, Vector3 position, Vector3 scale)
         {
-            keys.Add(kvp.Key);
-            values.Add(kvp.Value);
+            this.type = type;
+            this.content = content;
+            this.imageData = imageData != null ? Convert.ToBase64String(imageData) : null;
+            this.position = position;
+            this.scale = scale;
+        }
+
+        public byte[] GetImageData()
+        {
+            return string.IsNullOrEmpty(imageData) ? null : Convert.FromBase64String(imageData);
         }
     }
 
-    public Dictionary<string, UserPosts> ToDictionary()
+    [System.Serializable]
+    public class UserPosts
     {
-        var dict = new Dictionary<string, UserPosts>();
-        for (int i = 0; i < keys.Count; i++)
+        public List<PostInfo> posts = new List<PostInfo>();
+    }
+
+    [System.Serializable]
+    public class PostInfoList
+    {
+        public List<PostInfo> postData;
+    }
+
+    [System.Serializable]
+    public class SerializableDictionary
+    {
+        public List<string> keys = new List<string>();
+        public List<UserPosts> values = new List<UserPosts>();
+
+        public SerializableDictionary(Dictionary<string, UserPosts> dictionary)
         {
-            dict[keys[i]] = values[i];
+            foreach (var kvp in dictionary)
+            {
+                keys.Add(kvp.Key);
+                values.Add(kvp.Value);
+            }
         }
-        return dict;
+
+        public Dictionary<string, UserPosts> ToDictionary()
+        {
+            var dict = new Dictionary<string, UserPosts>();
+            for (int i = 0; i < keys.Count; i++)
+            {
+                dict[keys[i]] = values[i];
+            }
+            return dict;
+        }
     }
 }
