@@ -1,9 +1,69 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using System.Collections.Generic;
+using System;
+
+[System.Serializable]
+public class Element
+{
+    public string content;
+    public enum ElementType { Text_Box, Image_Box }
+    public ElementType type;
+    public string imageData;
+    public Vector3 position;
+    public Vector3 scale;
+
+    public Element(ElementType type, string content, string imageData, Vector3 position, Vector3 scale)
+    {
+        this.type = type;
+        this.content = content;
+        this.imageData = imageData;
+        this.position = position;
+        this.scale = scale;
+    }
+
+    public static string EncodeImageToBase64(Texture2D texture)
+    {
+        if (texture == null) return null;
+        byte[] imageData = texture.EncodeToPNG();
+        return Convert.ToBase64String(imageData);
+    }
+
+    public static Texture2D DecodeImageFromBase64(string base64String)
+    {
+        if (string.IsNullOrEmpty(base64String)) return null;
+        byte[] imageData = Convert.FromBase64String(base64String);
+        Texture2D texture = new Texture2D(2, 2);
+        texture.LoadImage(imageData);
+        return texture;
+    }
+}
+
+[System.Serializable]
+public class Page
+{
+    public int pageId;  // 페이지 ID 추가
+    public List<Element> elements = new List<Element>();
+
+    public Page(int id)
+    {
+        pageId = id;
+    }
+}
+
+[System.Serializable]
+public class Post
+{
+    public List<Page> pages = new List<Page>();
+}
+
+[System.Serializable]
+public class RootObject
+{
+    public List<Post> posts = new List<Post>();
+}
 
 public class SaveMgr_KJS : MonoBehaviour
 {
@@ -11,24 +71,22 @@ public class SaveMgr_KJS : MonoBehaviour
     public GameObject imageBoxPrefab;
     public GameObject pagePrefab;
 
-    public Transform parent;  // 기존 텍스트와 이미지 박스의 부모 트랜스폼
-    public Transform pagesParentTransform;  // 페이지 프리팹 생성 위치 지정
+    public Transform parent;                // 텍스트와 이미지 부모
+    public Transform pagesParentTransform;  // 페이지 부모
 
     public List<GameObject> textBoxes = new List<GameObject>();
     public List<GameObject> imageBoxes = new List<GameObject>();
-    public List<GameObject> pages = new List<GameObject>();
-
-    public List<string> userIds;
-    public int selectedUserIndex = 0;
+    public List<GameObject> pages = new List<GameObject>();  // 페이지 관리
 
     public Button saveButton;
     public Button loadButton;
 
-    private string saveDirectory = @"C:\Users\Admin\Documents\GitHub\unity\Assets\KJS\UserInfo";
+    private string saveDirectory = @"C:\Users\Admin\Documents\GitHub\new_unity\Assets\KJS\UserInfo";
     private string saveFileName = "Magazine.json";
     private string savePath;
 
-    private Dictionary<string, UserPosts> userData = new Dictionary<string, UserPosts>();
+    private RootObject rootData = new RootObject();
+    private int pageCounter = 0;  // 페이지 ID 카운터
 
     private void Start()
     {
@@ -42,7 +100,7 @@ public class SaveMgr_KJS : MonoBehaviour
         if (File.Exists(savePath))
         {
             string json = File.ReadAllText(savePath);
-            userData = JsonUtility.FromJson<SerializableDictionary>(json).ToDictionary();
+            rootData = JsonUtility.FromJson<RootObject>(json);
         }
     }
 
@@ -55,225 +113,170 @@ public class SaveMgr_KJS : MonoBehaviour
         }
     }
 
-    private string GetSelectedUserId()
-    {
-        if (userIds == null || userIds.Count == 0)
-        {
-            Debug.LogWarning("User ID list is empty.");
-            return null;
-        }
-
-        if (selectedUserIndex < 0 || selectedUserIndex >= userIds.Count)
-        {
-            Debug.LogWarning("Invalid user index selected.");
-            return null;
-        }
-
-        return userIds[selectedUserIndex];
-    }
-
     public void AddTextBox(GameObject textBox) => textBoxes.Add(textBox);
     public void AddImageBox(GameObject imageBox) => imageBoxes.Add(imageBox);
     public void AddPage(GameObject page) => pages.Add(page);
     public void RemovePage(GameObject page) => pages.Remove(page);
 
+    public void CreateNewPage()
+    {
+        GameObject newPageObj = Instantiate(pagePrefab, pagesParentTransform);
+        AddPage(newPageObj);
+        pageCounter++;  // 새 페이지 생성 시 ID 증가
+    }
+
     private void SaveObjectsToFile()
     {
-        string userId = GetSelectedUserId();
-        if (userId == null) return;
-
-        if (!userData.ContainsKey(userId))
+        try
         {
-            userData[userId] = new UserPosts();
-        }
+            rootData.posts.Clear();  // 기존 데이터 초기화
 
-        UserPosts posts = userData[userId];
-        posts.posts.Clear();
+            Post newPost = new Post();
 
-        // 유효한 텍스트 박스만 저장
-        textBoxes.RemoveAll(item => item == null);  // null 오브젝트 제거
-        foreach (var textBox in textBoxes)
-        {
-            TMP_Text textComponent = textBox.GetComponentInChildren<TMP_Text>();
-            string content = textComponent != null ? textComponent.text : "";
-
-            posts.posts.Add(new PostInfo(
-                "TextBox",
-                content,
-                null,
-                textBox.transform.position,
-                textBox.transform.localScale
-            ));
-        }
-
-        // 유효한 이미지 박스만 저장
-        imageBoxes.RemoveAll(item => item == null);  // null 오브젝트 제거
-        foreach (var imageBox in imageBoxes)
-        {
-            Image imageComponent = imageBox.transform.GetChild(0).GetComponent<Image>();
-            byte[] imageData = null;
-
-            if (imageComponent != null && imageComponent.sprite != null)
+            // 페이지 데이터 저장
+            for (int i = 0; i < pages.Count; i++)
             {
-                Texture2D texture = imageComponent.sprite.texture;
-                imageData = texture.EncodeToPNG();
+                Page newPage = new Page(i);
+
+                // 텍스트 박스 저장
+                textBoxes.RemoveAll(item => item == null);
+                foreach (var textBox in textBoxes)
+                {
+                    if (textBox.transform.parent != pages[i].transform) continue; // 부모 페이지 매칭
+
+                    TMP_Text textComponent = textBox.GetComponentInChildren<TMP_Text>();
+                    string content = textComponent != null ? textComponent.text : "";
+
+                    newPage.elements.Add(new Element(
+                        Element.ElementType.Text_Box,
+                        content,
+                        null,
+                        textBox.transform.localPosition,  // 로컬 좌표로 저장
+                        textBox.transform.localScale
+                    ));
+                }
+
+                // 이미지 박스 저장
+                imageBoxes.RemoveAll(item => item == null);
+                foreach (var imageBox in imageBoxes)
+                {
+                    if (imageBox.transform.parent != pages[i].transform) continue; // 부모 페이지 매칭
+
+                    Image imageComponent = imageBox.transform.GetChild(0).GetComponent<Image>();
+                    string imageData = null;
+
+                    if (imageComponent != null && imageComponent.sprite != null)
+                    {
+                        Texture2D texture = imageComponent.sprite.texture;
+                        imageData = Element.EncodeImageToBase64(texture);
+                    }
+
+                    newPage.elements.Add(new Element(
+                        Element.ElementType.Image_Box,
+                        "",
+                        imageData,
+                        imageBox.transform.localPosition,  // 로컬 좌표로 저장
+                        imageBox.transform.localScale
+                    ));
+                }
+
+                newPost.pages.Add(newPage);
             }
 
-            posts.posts.Add(new PostInfo(
-                "ImageBox",
-                "",
-                imageData,
-                imageBox.transform.position,
-                imageBox.transform.localScale
-            ));
-        }
+            rootData.posts.Add(newPost);
 
-        // 유효한 페이지만 저장
-        pages.RemoveAll(item => item == null);  // null 오브젝트 제거
-        foreach (var page in pages)
+            // JSON 직렬화 및 저장
+            string json = JsonUtility.ToJson(rootData, true);
+            File.WriteAllText(savePath, json);
+
+            Debug.Log("Data saved successfully.");
+        }
+        catch (Exception e)
         {
-            posts.posts.Add(new PostInfo(
-                "Page",
-                "",
-                null,
-                page.transform.position,
-                page.transform.localScale
-            ));
+            Debug.LogError($"Save failed: {e.Message}");
         }
-
-        // JSON으로 변환 후 파일에 저장
-        string json = JsonUtility.ToJson(new SerializableDictionary(userData), true);
-        File.WriteAllText(savePath, json);
-
-        Debug.Log($"Data saved for User ID: {userId}");
     }
 
     private void LoadObjectsFromFile()
     {
-        string userId = GetSelectedUserId();
-        if (userId == null) return;
-
-        if (!userData.ContainsKey(userId))
+        try
         {
-            Debug.LogWarning($"No data found for User ID: {userId}");
-            return;
-        }
-
-        UserPosts posts = userData[userId];
-
-        // 기존 오브젝트 제거
-        textBoxes.ForEach(Destroy);
-        imageBoxes.ForEach(Destroy);
-        pages.ForEach(Destroy);
-
-        textBoxes.Clear();
-        imageBoxes.Clear();
-        pages.Clear();
-
-        // 저장된 데이터로부터 객체 생성
-        foreach (var post in posts.posts)
-        {
-            GameObject newObj = null;
-
-            if (post.type == "TextBox")
+            if (!File.Exists(savePath))
             {
-                newObj = Instantiate(textBoxPrefab, parent);
-                TMP_Text textComponent = newObj.GetComponentInChildren<TMP_Text>();
-                if (textComponent != null)
+                Debug.LogWarning("Save file not found.");
+                return;
+            }
+
+            string json = File.ReadAllText(savePath);
+            rootData = JsonUtility.FromJson<RootObject>(json);
+
+            if (rootData.posts.Count == 0)
+            {
+                Debug.LogWarning("No posts found.");
+                return;
+            }
+
+            Post post = rootData.posts[0];  // 첫 번째 포스트 로드
+
+            // 기존 오브젝트 삭제
+            textBoxes.ForEach(Destroy);
+            imageBoxes.ForEach(Destroy);
+            pages.ForEach(Destroy);
+
+            textBoxes.Clear();
+            imageBoxes.Clear();
+            pages.Clear();
+
+            // 페이지와 요소 생성
+            foreach (var page in post.pages)
+            {
+                GameObject newPageObj = Instantiate(pagePrefab, pagesParentTransform);
+                AddPage(newPageObj);
+
+                foreach (var element in page.elements)
                 {
-                    textComponent.text = post.content;
+                    GameObject newObj = null;
+
+                    if (element.type == Element.ElementType.Text_Box)
+                    {
+                        newObj = Instantiate(textBoxPrefab, newPageObj.transform);  // 페이지 자식으로 추가
+                        TMP_Text textComponent = newObj.GetComponentInChildren<TMP_Text>();
+                        if (textComponent != null)
+                        {
+                            textComponent.text = element.content;
+                        }
+                        AddTextBox(newObj);
+                    }
+                    else if (element.type == Element.ElementType.Image_Box)
+                    {
+                        newObj = Instantiate(imageBoxPrefab, newPageObj.transform);  // 페이지 자식으로 추가
+                        Image imageComponent = newObj.transform.GetChild(0).GetComponent<Image>();
+
+                        if (!string.IsNullOrEmpty(element.imageData))
+                        {
+                            Texture2D texture = Element.DecodeImageFromBase64(element.imageData);
+                            imageComponent.sprite = Sprite.Create(
+                                texture,
+                                new Rect(0, 0, texture.width, texture.height),
+                                new Vector2(0.5f, 0.5f)
+                            );
+                        }
+                        AddImageBox(newObj);
+                    }
+
+                    if (newObj != null)
+                    {
+                        newObj.transform.localPosition = element.position;  // 로컬 좌표로 복원
+                        newObj.transform.localScale = element.scale;
+                    }
                 }
-                AddTextBox(newObj);
-            }
-            else if (post.type == "ImageBox")
-            {
-                newObj = Instantiate(imageBoxPrefab, parent);
-                Image imageComponent = newObj.transform.GetChild(0).GetComponent<Image>();
-
-                byte[] imageData = post.GetImageData();
-
-                if (imageData != null && imageData.Length > 0)
-                {
-                    Texture2D texture = new Texture2D(2, 2);
-                    texture.LoadImage(imageData);
-                    imageComponent.sprite = Sprite.Create(
-                        texture,
-                        new Rect(0, 0, texture.width, texture.height),
-                        new Vector2(0.5f, 0.5f)
-                    );
-                }
-                AddImageBox(newObj);
-            }
-            else if (post.type == "Page")
-            {
-                // 페이지 프리팹 생성 시 지정된 pagesParentTransform을 부모로 사용
-                newObj = Instantiate(pagePrefab, pagesParentTransform);
-                AddPage(newObj);
             }
 
-            if (newObj != null)
-            {
-                newObj.transform.position = post.position;
-                newObj.transform.localScale = post.scale;
-            }
+            Debug.Log("Data loaded successfully.");
         }
-
-        Debug.Log($"Data loaded for User ID: {userId}");
-    }
-}
-
-[System.Serializable]
-public class PostInfo
-{
-    public string type;
-    public string content;
-    public string imageData; // Base64 문자열로 이미지 데이터 저장
-    public Vector3 position;
-    public Vector3 scale;
-
-    public PostInfo(string type, string content, byte[] imageData, Vector3 position, Vector3 scale)
-    {
-        this.type = type;
-        this.content = content;
-        this.imageData = imageData != null ? Convert.ToBase64String(imageData) : null;
-        this.position = position;
-        this.scale = scale;
-    }
-
-    public byte[] GetImageData()
-    {
-        return string.IsNullOrEmpty(imageData) ? null : Convert.FromBase64String(imageData);
-    }
-}
-
-[System.Serializable]
-public class UserPosts
-{
-    public List<PostInfo> posts = new List<PostInfo>();
-}
-
-[System.Serializable]
-public class SerializableDictionary
-{
-    public List<string> keys = new List<string>();
-    public List<UserPosts> values = new List<UserPosts>();
-
-    public SerializableDictionary(Dictionary<string, UserPosts> dictionary)
-    {
-        foreach (var kvp in dictionary)
+        catch (Exception e)
         {
-            keys.Add(kvp.Key);
-            values.Add(kvp.Value);
+            Debug.LogError($"Load failed: {e.Message}");
         }
-    }
-
-    public Dictionary<string, UserPosts> ToDictionary()
-    {
-        var dict = new Dictionary<string, UserPosts>();
-        for (int i = 0; i < keys.Count; i++)
-        {
-            dict[keys[i]] = values[i];
-        }
-        return dict;
     }
 }
