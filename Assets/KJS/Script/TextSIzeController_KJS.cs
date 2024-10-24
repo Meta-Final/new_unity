@@ -1,56 +1,41 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
+using TMPro;
 
-public class TextSIzeController_KJS : MonoBehaviour, IPointerDownHandler, IDragHandler
+[RequireComponent(typeof(RectTransform))]
+public class TextSIzeController_KJS : MonoBehaviour
 {
-    public RectTransform targetRect; // 조절할 Input Field의 RectTransform
-    private Vector2 originalSize;
-    private Vector2 originalMousePosition;
-    private bool isResizing = false;
+    public TextMeshProUGUI targetText; // 대상 TMP 텍스트
+    private RectTransform rectTransform;
+    private float previousHeight;
 
-    void Start()
+    private void Awake()
     {
-        if (targetRect == null)
+        rectTransform = GetComponent<RectTransform>();
+
+        if (targetText == null)
         {
-            targetRect = GetComponent<RectTransform>();
+            Debug.LogError("Target TextMeshProUGUI를 할당해주세요.");
+            return;
         }
-    }
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        // 우클릭으로 시작
-        if (eventData.button == PointerEventData.InputButton.Right)
-        {
-            isResizing = true;
-            originalSize = targetRect.sizeDelta;
-            originalMousePosition = eventData.position;
-        }
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        if (isResizing)
-        {
-            Vector2 delta = eventData.position - originalMousePosition;
-            Vector2 newSize = new Vector2(originalSize.x + delta.x, originalSize.y + delta.y);
-
-            // 최소 크기 제한 (원하는 값으로 조정 가능)
-            newSize.x = Mathf.Max(newSize.x, 100);
-            newSize.y = Mathf.Max(newSize.y, 30);
-
-            targetRect.sizeDelta = newSize;
-        }
+        previousHeight = targetText.rectTransform.rect.height;
     }
 
     private void Update()
     {
-        // 마우스 우클릭을 떼면 조절 중지
-        if (Input.GetMouseButtonUp(1))
+        float currentHeight = targetText.rectTransform.rect.height;
+
+        if (Mathf.Abs(currentHeight - previousHeight) > Mathf.Epsilon)
         {
-            isResizing = false;
+            AdjustHeight(currentHeight);
+            previousHeight = currentHeight;
         }
+    }
+
+    private void AdjustHeight(float newHeight)
+    {
+        Vector2 sizeDelta = rectTransform.sizeDelta;
+        sizeDelta.y = newHeight;
+        rectTransform.sizeDelta = sizeDelta;
     }
 }

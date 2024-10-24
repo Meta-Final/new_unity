@@ -32,7 +32,8 @@ public class APIManager : MonoBehaviour
             yield return www.SendWebRequest();
 
             if (www.result == UnityWebRequest.Result.Success)
-            {
+            { 
+
                 TResponse responseObject = JsonUtility.FromJson<TResponse>(www.downloadHandler.text);
                 Debug.Log("Response: " + JsonUtility.ToJson(responseObject));
             }

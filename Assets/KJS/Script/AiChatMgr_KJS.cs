@@ -5,6 +5,7 @@ using TMPro; // TextMeshPro 네임스페이스 추가
 
 public class UIManager : MonoBehaviour
 {
+
     public TMP_InputField userInputField; // 사용자가 입력할 TMP 필드
     public TMP_Text chatResponseText;     // AI 응답을 표시할 TMP 텍스트
     public APIManager apiManager;         // APIManager 인스턴스 참조
