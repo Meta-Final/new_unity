@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 public class CameraManager : MonoBehaviour
 {
     public Camera mainCamera;
-   
+    public GameObject frame;
+    
     public float followSpeed = 5f;
     public bool isZoom = false;
 
@@ -19,6 +20,15 @@ public class CameraManager : MonoBehaviour
     {
         mainCamera = Camera.main;
 
+        if (SceneManager.GetActiveScene().name == "PostitTest_Scene")
+        {
+            frame = GameObject.Find("Frame");
+        }
+        else
+        {
+            frame = null;
+        }
+       
         if (mainCamera != null)
         {
             offset = mainCamera.transform.position - transform.position;
@@ -39,11 +49,9 @@ public class CameraManager : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit))
             {
-                if (hit.collider.CompareTag("ContectObject"))
+                if (frame != null && hit.transform == frame.transform)
                 {
-                    isZoom = true;
-
-                    targetPosition = hit.collider.transform.position + Vector3.back * 3f;
+                    CameraGoToFrame();
                 }
                 else
                 {
@@ -61,7 +69,19 @@ public class CameraManager : MonoBehaviour
     // 카메라 이동 
     public void CameraMoving()
     {
-        targetPosition = transform.position + offset;
+        Vector3 playerTargetPos = transform.position + offset;
+
+        targetPosition = playerTargetPos;
+    }
+
+    // 카메라 -> Frame
+    public void CameraGoToFrame()
+    {
+        isZoom = true;
+
+        Vector3 frameTargetPos = frame.transform.position + Vector3.back * 3f;
+
+        targetPosition = frameTargetPos;
     }
 
 }

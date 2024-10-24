@@ -1,13 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PicketManager : MonoBehaviour
 {
     public GameObject picketPrefab;
     public GameObject player;
-    
 
     Vector3 picketPos;
 
@@ -18,11 +16,7 @@ public class PicketManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            PicketAndGoToScene();
-
-        }
+        
     }
 
     public void MakePicket()
@@ -39,27 +33,9 @@ public class PicketManager : MonoBehaviour
 
                 GameObject obj = Instantiate(picketPrefab, picketPos, Quaternion.identity);
                 obj.transform.LookAt(player.transform);
+
             }
         }
         
-    }
-
-    public void PicketAndGoToScene()
-    {
-        Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hitInfo;
-
-        if (Physics.Raycast(cameraRay, out hitInfo))
-        {
-            if (hitInfo.collider.CompareTag("Picket"))
-            {
-                LoadNextScene();
-            }
-        }
-    }
-
-    public void LoadNextScene()
-    {
-        SceneManager.LoadScene("PicketArticle_Scene");
     }
 }
