@@ -32,6 +32,7 @@ public class SaveMgr_KJS : MonoBehaviour
 
     private void Start()
     {
+        saveDirectory = Application.dataPath + "/KJS/UserInfo";
         savePath = Path.Combine(saveDirectory, saveFileName);
 
         saveButton.onClick.AddListener(SaveObjectsToFile);
@@ -43,6 +44,10 @@ public class SaveMgr_KJS : MonoBehaviour
         {
             string json = File.ReadAllText(savePath);
             userData = JsonUtility.FromJson<SerializableDictionary>(json).ToDictionary();
+        }
+        else
+        {
+            Directory.CreateDirectory(saveDirectory);
         }
     }
 

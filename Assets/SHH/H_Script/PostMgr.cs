@@ -70,16 +70,27 @@ public class PostMgr : MonoBehaviour
     }
     public void OnClickMagContent()
     {
-        MagCanvas.SetActive(true);
-        Channelcanvas.SetActive(false);
+        //MagCanvas.SetActive(true);
+        //Channelcanvas.SetActive(false);
+        HttpInfo info = new HttpInfo();
+        info.url = "file:///" + Application.dataPath + "/KJS/UserInfo/Magazine.json";
+        info.onComplete = OncompletePostDetalInfo;
 
+        StartCoroutine(HttpManager.GetInstance().Get(info));
     }
-   
+
+    public void OncompletePostDetalInfo(DownloadHandler downloadhandler)
+    {
+        SerializableDictionary serializableDictionary = JsonUtility.FromJson<SerializableDictionary>(downloadhandler.text);
+        print(downloadhandler.text);
+    }
+
+
     public void OnClickExit()
     {
         MagCanvas.SetActive(false);
         Channelcanvas.SetActive(true);
-
+        
     }
     // Update is called once per frame
     void Update()
