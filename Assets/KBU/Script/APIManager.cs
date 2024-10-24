@@ -18,11 +18,9 @@ public class APIManager : MonoBehaviour
         StartCoroutine(PostHttp<ChatRequest, ChatResponse>(chatRequest, chatUrl));
     }
 
-    //public void CallTrend(string trendReq)
-    public void Start()
+    public void CallTrend(string trendReq)
     {   
-        TrendRequest trendRequest = new TrendRequest {text = "트렌드내놔"};
-        //TrendRequest trendRequest = new TrendRequest {text = trendReq};
+        TrendRequest trendRequest = new TrendRequest {text = trendReq};
         string trendUrl = url.trendUrl;
         StartCoroutine(GetHttp<TrendRequest, TrendResponse>(trendRequest, trendUrl));
     }
