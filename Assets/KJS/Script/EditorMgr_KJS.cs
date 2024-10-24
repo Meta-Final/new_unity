@@ -11,12 +11,21 @@ public class EditorMgr_KJS : MonoBehaviour
     public Button boldButton;
     public Button italicButton;
 
+    // 새로운 버튼들
+    public Button underlineButton;
+    public Button strikethroughButton;
+    public Button alignLeftButton;
+    public Button alignCenterButton;
+    public Button alignRightButton;
+
     public Color pressedColor = new Color(0.8f, 0.8f, 0.8f);
     public Color defaultColor = Color.white;
 
     private int fontSize = 40;
     private bool isBold = false;
     private bool isItalic = false;
+    private bool isUnderline = false;
+    private bool isStrikethrough = false;
     private Button selectedButton;  // 현재 선택된 버튼
 
     private const float FontSizeMultiplier = 1.5f;
@@ -35,14 +44,22 @@ public class EditorMgr_KJS : MonoBehaviour
         fontSizeDropdown.AddOptions(fontSizeOptions);
         fontSizeDropdown.value = fontSizeOptions.IndexOf(fontSize.ToString());
 
-        // 이벤트 연결
+        // 이벤트 동적 연결 (OnClick)
         fontSizeDropdown.onValueChanged.AddListener(OnFontSizeDropdownChanged);
         fontSizeInputField.onEndEdit.AddListener(OnFontSizeInputFieldChanged);
-        boldButton.onClick.AddListener(OnBoldButtonClicked);
-        italicButton.onClick.AddListener(OnItalicButtonClicked);
+
+        boldButton.onClick.AddListener(() => ToggleStyle(ref isBold, boldButton));
+        italicButton.onClick.AddListener(() => ToggleStyle(ref isItalic, italicButton));
+        underlineButton.onClick.AddListener(() => ToggleStyle(ref isUnderline, underlineButton));
+        strikethroughButton.onClick.AddListener(() => ToggleStyle(ref isStrikethrough, strikethroughButton));
+
+        alignLeftButton.onClick.AddListener(() => SetAlignment(TextAlignmentOptions.Left));
+        alignCenterButton.onClick.AddListener(() => SetAlignment(TextAlignmentOptions.Center));
+        alignRightButton.onClick.AddListener(() => SetAlignment(TextAlignmentOptions.Right));
 
         inputField.onValueChanged.AddListener(OnInputFieldTextChanged);
 
+        // 초기 폰트 설정
         inputField.textComponent.fontSize = fontSize;
         fontSizeInputField.text = fontSize.ToString();
     }
@@ -92,18 +109,17 @@ public class EditorMgr_KJS : MonoBehaviour
         }
     }
 
-    public void OnBoldButtonClicked()
+    // 스타일을 토글하는 공통 함수 (Bold, Italic, Underline, Strikethrough)
+    private void ToggleStyle(ref bool styleFlag, Button button)
     {
-        isBold = !isBold;
+        styleFlag = !styleFlag;
         UpdateTextStyle();
-        boldButton.GetComponent<Image>().color = isBold ? pressedColor : defaultColor;
+        button.GetComponent<Image>().color = styleFlag ? pressedColor : defaultColor;
     }
 
-    public void OnItalicButtonClicked()
+    private void SetAlignment(TextAlignmentOptions alignment)
     {
-        isItalic = !isItalic;
-        UpdateTextStyle();
-        italicButton.GetComponent<Image>().color = isItalic ? pressedColor : defaultColor;
+        inputField.textComponent.alignment = alignment;
     }
 
     private void UpdateTextStyle()
@@ -112,10 +128,13 @@ public class EditorMgr_KJS : MonoBehaviour
 
         if (isBold) inputField.textComponent.fontStyle |= FontStyles.Bold;
         if (isItalic) inputField.textComponent.fontStyle |= FontStyles.Italic;
+        if (isUnderline) inputField.textComponent.fontStyle |= FontStyles.Underline;
+        if (isStrikethrough) inputField.textComponent.fontStyle |= FontStyles.Strikethrough;
 
         // 선택된 버튼의 텍스트 스타일도 업데이트
         UpdateButtonTextStyle();
     }
+
     // 버튼의 텍스트를 InputField에 복사하고 스타일 동기화
     public void SetInputFieldTextFromButton(Button button)
     {
