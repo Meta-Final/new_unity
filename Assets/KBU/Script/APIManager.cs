@@ -15,10 +15,19 @@ public class APIManager : MonoBehaviour
     {   
         ChatRequest chatRequest = new ChatRequest { text = chat };
         string chatUrl = url.chatUrl;
-        StartCoroutine(Request<ChatRequest, ChatResponse>(chatRequest, chatUrl));
+        StartCoroutine(PostHttp<ChatRequest, ChatResponse>(chatRequest, chatUrl));
     }
 
-    public IEnumerator Request<TRequest, TResponse>(TRequest requestObject, string url)
+    //public void CallTrend(string trendReq)
+    public void Start()
+    {   
+        TrendRequest trendRequest = new TrendRequest {text = "트렌드내놔"};
+        //TrendRequest trendRequest = new TrendRequest {text = trendReq};
+        string trendUrl = url.trendUrl;
+        StartCoroutine(GetHttp<TrendRequest, TrendResponse>(trendRequest, trendUrl));
+    }
+
+    public IEnumerator PostHttp<TRequest, TResponse>(TRequest requestObject, string url)
     {   
         string json = JsonUtility.ToJson(requestObject);
 
@@ -41,6 +50,29 @@ public class APIManager : MonoBehaviour
                 Debug.LogError($"Error: {www.error}, Status Code: {www.responseCode}, Response: {www.downloadHandler.text}" );
             }
 
+        }
+    }
+
+    public IEnumerator GetHttp<TRequest, TResponse>(TRequest requestObject, string url)
+    {   
+        string json = JsonUtility.ToJson(requestObject);
+        
+        using (UnityWebRequest www = UnityWebRequest.Get(url))
+        {
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.Success)
+            {
+                TResponse responseObject = JsonUtility.FromJson<TResponse>(www.downloadHandler.text);
+                Debug.Log("Response: " + JsonUtility.ToJson(responseObject));
+            }
+            else
+            {
+                Debug.LogError($"Error: {www.error}, Status Code: {www.responseCode}, Response: {www.downloadHandler.text}" );
+            }
         }
     }
 }
