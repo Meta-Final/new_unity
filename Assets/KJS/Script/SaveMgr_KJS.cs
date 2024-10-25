@@ -15,13 +15,25 @@ public class Element
     public Vector3 position;
     public Vector3 scale;
 
-    public Element(ElementType type, string content, string imageData, Vector3 position, Vector3 scale)
+    // 추가된 필드들
+    public int fontSize;
+    public string fontFace;
+    public bool isUnderlined;
+    public bool isStrikethrough;
+
+    public Element(
+        ElementType type, string content, string imageData, Vector3 position, Vector3 scale,
+        int fontSize = 14, string fontFace = "Arial", bool isUnderlined = false, bool isStrikethrough = false)
     {
         this.type = type;
         this.content = content;
         this.imageData = imageData;
         this.position = position;
         this.scale = scale;
+        this.fontSize = fontSize;
+        this.fontFace = fontFace;
+        this.isUnderlined = isUnderlined;
+        this.isStrikethrough = isStrikethrough;
     }
 
     public static string EncodeImageToBase64(Texture2D texture)
@@ -152,12 +164,22 @@ public class SaveMgr_KJS : MonoBehaviour
                     TMP_Text textComponent = textBox.GetComponentInChildren<TMP_Text>();
                     string content = textComponent != null ? textComponent.text : "";
 
+                    // 추가된 텍스트 속성 저장
+                    int fontSize = (int)textComponent.fontSize;  // float -> int 변환
+                    string fontFace = textComponent.font.name;
+                    bool isUnderlined = textComponent.fontStyle.HasFlag(FontStyles.Underline);
+                    bool isStrikethrough = textComponent.fontStyle.HasFlag(FontStyles.Strikethrough);
+
                     newPage.elements.Add(new Element(
                         Element.ElementType.Text_Box,
                         content,
                         null,
                         textBox.transform.localPosition,  // 로컬 좌표로 저장
-                        textBox.transform.localScale
+                        textBox.transform.localScale,
+                        fontSize,
+                        fontFace,
+                        isUnderlined,
+                        isStrikethrough
                     ));
                 }
 
@@ -193,7 +215,6 @@ public class SaveMgr_KJS : MonoBehaviour
             // JSON 직렬화 및 저장
             string json = JsonUtility.ToJson(rootData, true);
             File.WriteAllText(savePath, json);
-
 
             Debug.Log("Data saved successfully.");
         }
@@ -250,6 +271,19 @@ public class SaveMgr_KJS : MonoBehaviour
                         if (textComponent != null)
                         {
                             textComponent.text = element.content;
+                            textComponent.fontSize = (float)element.fontSize;  // int -> float 변환
+
+                            // 폰트 설정 (로드된 폰트 이름과 매칭되는 폰트 사용)
+                            TMP_FontAsset fontAsset = Resources.Load<TMP_FontAsset>($"Fonts/{element.fontFace}");
+                            if (fontAsset != null)
+                            {
+                                textComponent.font = fontAsset;
+                            }
+
+                            // 밑줄과 취소선 적용
+                            textComponent.fontStyle = FontStyles.Normal;
+                            if (element.isUnderlined) textComponent.fontStyle |= FontStyles.Underline;
+                            if (element.isStrikethrough) textComponent.fontStyle |= FontStyles.Strikethrough;
                         }
                         AddTextBox(newObj);
                     }
