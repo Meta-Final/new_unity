@@ -8,7 +8,7 @@ public class UIManager : MonoBehaviour
 
     public TMP_InputField userInputField; // 사용자가 입력할 TMP 필드
     public TMP_Text chatResponseText;     // AI 응답을 표시할 TMP 텍스트
-    //public APIManager apiManager;         // APIManager 인스턴스 참조
+    public APIManager apiManager;         // apimanager 인스턴스 참조
 
     public UnityEngine.UI.Button sendButton; // 전송 버튼 (Button은 TMP 전용이 아님)
 
@@ -24,7 +24,7 @@ public class UIManager : MonoBehaviour
         if (!string.IsNullOrEmpty(userMessage))
         {
             chatResponseText.text = "Thinking..."; // 응답 대기 중 메시지
-            //apiManager.CallLLM(userMessage); // API 호출
+            apiManager.CallLLM(userMessage); // API 호출
         }
     }
 
