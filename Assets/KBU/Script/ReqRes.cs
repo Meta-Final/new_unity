@@ -9,7 +9,7 @@ namespace ReqRes
     public class URL
     {
         public string chatUrl = "http://metaai2.iptime.org:14596/chat";
-        public string trendUrl = "http://metaai2.iptime.org:9000/trend";
+        public string trendUrl = "http://metaai2.iptime.org:14596/trend";
 
     }
 
