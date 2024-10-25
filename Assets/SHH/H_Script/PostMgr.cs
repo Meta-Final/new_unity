@@ -81,7 +81,7 @@ public class PostMgr : MonoBehaviour
 
     public void OncompletePostDetalInfo(DownloadHandler downloadhandler)
     {
-        SerializableDictionary serializableDictionary = JsonUtility.FromJson<SerializableDictionary>(downloadhandler.text);
+        //SerializableDictionary serializableDictionary = JsonUtility.FromJson<SerializableDictionary>(downloadhandler.text);
         print(downloadhandler.text);
     }
 

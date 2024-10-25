@@ -835,6 +835,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40a9697356bb08f4e981d6650af20a3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1872051618 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 235079563079007216, guid: 9fc00af1a8f688040ba0363119b006ad,
+    type: 3}
+  m_PrefabInstance: {fileID: 6928003938853116738}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1921233962
 GameObject:
   m_ObjectHideFlags: 0
@@ -1009,7 +1015,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   userInputField: {fileID: 1314952728}
   chatResponseText: {fileID: 50530577}
-  apiManager: {fileID: 1124606987}
   sendButton: {fileID: 219302314}
 --- !u!224 &38830738747764296 stripped
 RectTransform:
@@ -1126,6 +1131,16 @@ PrefabInstance:
       propertyPath: createPageButton
       value: 
       objectReference: {fileID: 1711713994}
+    - target: {fileID: 4782826722791024812, guid: 38922a62777744644915b5ef29018281,
+        type: 3}
+      propertyPath: pages.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4782826722791024812, guid: 38922a62777744644915b5ef29018281,
+        type: 3}
+      propertyPath: pages.Array.data[0]
+      value: 
+      objectReference: {fileID: 1872051618}
     - target: {fileID: 4782826722791024812, guid: 38922a62777744644915b5ef29018281,
         type: 3}
       propertyPath: pagesParentTransform
