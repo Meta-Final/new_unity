@@ -70,13 +70,13 @@ public class PostMgr : MonoBehaviour
     }
     public void OnClickMagContent()
     {
-        //MagCanvas.SetActive(true);
-        //Channelcanvas.SetActive(false);
-        HttpInfo info = new HttpInfo();
-        info.url = "file:///" + Application.dataPath + "/KJS/UserInfo/Magazine.json";
-        info.onComplete = OncompletePostDetalInfo;
+        MagCanvas.SetActive(true);
+        Channelcanvas.SetActive(false);
+        //HttpInfo info = new HttpInfo();
+        //info.url = "file:///" + Application.dataPath + "/KJS/UserInfo/Magazine.json";
+        //info.onComplete = OncompletePostDetalInfo;
 
-        StartCoroutine(HttpManager.GetInstance().Get(info));
+        //StartCoroutine(HttpManager.GetInstance().Get(info));
     }
 
     public void OncompletePostDetalInfo(DownloadHandler downloadhandler)
