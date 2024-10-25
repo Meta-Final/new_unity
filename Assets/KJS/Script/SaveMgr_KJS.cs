@@ -194,6 +194,7 @@ public class SaveMgr_KJS : MonoBehaviour
             string json = JsonUtility.ToJson(rootData, true);
             File.WriteAllText(savePath, json);
 
+
             Debug.Log("Data saved successfully.");
         }
         catch (Exception e)
