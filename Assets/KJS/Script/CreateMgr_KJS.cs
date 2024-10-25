@@ -26,6 +26,7 @@ public class CreateMgr_KJS : MonoBehaviour
     {
         if (panelPage == null || content == null) return;
         pageWidth = panelPage.GetComponent<RectTransform>().rect.width;
+        UpdateScrollbarSteps();
     }
 
     public void CreatePage()
@@ -55,6 +56,7 @@ public class CreateMgr_KJS : MonoBehaviour
         }
 
         UpdateContentWidth();
+        UpdateScrollbarSteps();
     }
 
     public void CreateTextBox(Transform parent)
@@ -95,11 +97,9 @@ public class CreateMgr_KJS : MonoBehaviour
 
         saveMgr.AddImageBox(newImageBox);
 
-        // 생성된 이미지 박스에서 버튼 컴포넌트 가져오기
         Button buttonContent = newImageBox.GetComponentInChildren<Button>();
         if (buttonContent != null)
         {
-            // 이미지 매니저와 동적으로 연동
             imageMgr.AddButton(buttonContent);
             Debug.Log($"ImageBox button {buttonContent.name} added to ImageMgr_KJS.");
         }
@@ -114,7 +114,9 @@ public class CreateMgr_KJS : MonoBehaviour
         saveMgr.RemovePage(page);
         Destroy(page);
         pageCount = Mathf.Max(1, pageCount - 1);
+
         UpdateContentWidth();
+        UpdateScrollbarSteps();
     }
 
     private void UpdateContentWidth()
@@ -124,5 +126,12 @@ public class CreateMgr_KJS : MonoBehaviour
         RectTransform contentRect = content.GetComponent<RectTransform>();
         float newWidth = pageWidth * pageCount;
         contentRect.sizeDelta = new Vector2(newWidth, contentRect.sizeDelta.y);
+    }
+
+    private void UpdateScrollbarSteps()
+    {
+        if (horizontalScrollbar == null || pageCount <= 1) return;
+
+        horizontalScrollbar.numberOfSteps = pageCount;
     }
 }
