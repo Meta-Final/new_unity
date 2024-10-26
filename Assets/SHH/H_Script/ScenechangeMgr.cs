@@ -10,16 +10,19 @@ public class ScenechangeMgr : MonoBehaviour
 
     void Start()
     {
-        GameObject ChangeScene = GameObject.Find(ChannelCanvas);
-
-        if (ChangeScene != null)
+        if (!string.IsNullOrEmpty(ChannelCanvas))
         {
-            ChangeScene.SetActive(false);
-        }
-       else
-       {
-           Debug.LogWarning("왜안될까말좀들어줘제발");
-       }
+            GameObject ChangeScene = GameObject.Find(ChannelCanvas);
 
+            if (ChangeScene != null)
+            {
+                ChangeScene.SetActive(false);
+            }
+            else
+            {
+                Debug.LogWarning("채널 캔버스를 찾을 수 없습니다. 이름을 확인하세요.");
+            }
+        }
+        
     }
 }

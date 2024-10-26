@@ -16,13 +16,14 @@ public class ButtonConnection : MonoBehaviour
         ChannelCanvas = GameObject.Find("ChannelCanvas");
         Panel_notice = GameObject.Find("Panel_notice");
         Panel_notice.SetActive(false);
+       
+
 
     }
 
     // Update is called once per frame
     void Update()
     {
-
     }
     public void OnButtonClick()
     {
@@ -33,7 +34,7 @@ public class ButtonConnection : MonoBehaviour
     }
     public void OnButtonClicknotice()
     {
-        Panel_notice.SetActive(!Panel_notice.activeSelf);
+        Panel_notice.SetActive(true);
     }
     public void OnClickExit() 
     {
