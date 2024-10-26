@@ -5,12 +5,11 @@ using TMPro; // TextMeshPro 네임스페이스 추가
 
 public class UIManager : MonoBehaviour
 {
-
     public TMP_InputField userInputField; // 사용자가 입력할 TMP 필드
     public TMP_Text chatResponseText;     // AI 응답을 표시할 TMP 텍스트
-    public APIManager apiManager;         // apimanager 인스턴스 참조
+    public APIManager apiManager;         // APIManager 인스턴스 참조
 
-    public UnityEngine.UI.Button sendButton; // 전송 버튼 (Button은 TMP 전용이 아님)
+    public UnityEngine.UI.Button sendButton; // 전송 버튼
 
     void Start()
     {
@@ -21,10 +20,12 @@ public class UIManager : MonoBehaviour
     void OnSendButtonClicked()
     {
         string userMessage = userInputField.text; // 입력된 텍스트 가져오기
+
         if (!string.IsNullOrEmpty(userMessage))
         {
-            chatResponseText.text = "Thinking..."; // 응답 대기 중 메시지
-            apiManager.CallLLM(userMessage); // API 호출
+            chatResponseText.text = userMessage; // 사용자가 입력한 텍스트 표시
+            userInputField.text = "";            // 입력 필드 초기화
+            apiManager.CallLLM(userMessage); // API 호출 (비동기 응답 대기)
         }
     }
 
