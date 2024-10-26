@@ -7,16 +7,15 @@ public class ButtonConnection : MonoBehaviour
 {
    // public GameObject MagCanvas;
     public GameObject ChannelCanvas;
-    //public GameObject exitButton;
-    public Button scarbButton;
-
-    Button btn_Exit;
+    public GameObject Panel_notice;
+    public Button btnnotice;
+    public GameObject btn_Exit;
     void Start()
     {
        // MagCanvas = GameObject.Find("CanvasMag");
         ChannelCanvas = GameObject.Find("ChannelCanvas");
-
-        //MagCanvas.SetActive(false);
+        Panel_notice = GameObject.Find("Panel_notice");
+        Panel_notice.SetActive(false);
 
     }
 
@@ -31,6 +30,14 @@ public class ButtonConnection : MonoBehaviour
         //MagCanvas.SetActive(!MagCanvas.activeSelf);
        // MagCanvas.SetActive(true);
         ChannelCanvas.SetActive(false);
+    }
+    public void OnButtonClicknotice()
+    {
+        Panel_notice.SetActive(!Panel_notice.activeSelf);
+    }
+    public void OnClickExit() 
+    {
+        Panel_notice.SetActive(false);
     }
 }
 
