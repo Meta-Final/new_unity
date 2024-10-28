@@ -39,8 +39,8 @@ public class PostMgr : MonoBehaviour
 
     public void ThumStart()
     {
-        MagCanvas = GameObject.Find("MagazineView");
-        Channelcanvas = GameObject.Find("ChannelCanvas");
+        MagCanvas = GameObject.Find("Tool 2");
+        Channelcanvas = GameObject.Find("H_ChannelCanvas");
 
         HttpInfo info = new HttpInfo();
         info.url = @"C:\Users\Admin\Documents\GitHub\new_unity\Assets\KJS\UserInfo\postinfolist.txt";

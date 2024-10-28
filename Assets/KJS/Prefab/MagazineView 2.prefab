@@ -431,7 +431,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1150097202777944929}
   m_Direction: 0
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.50000006
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -601,7 +601,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5521041699444599785}
   m_Layer: 5
-  m_Name: Tool
+  m_Name: Tool 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1915,7 +1915,11 @@ MonoBehaviour:
   chatResponseText: {fileID: 1396494388779029067}
   apiManager: {fileID: 0}
   sendButton: {fileID: 1401289353056500119}
+  targetRawImage: {fileID: 0}
+  inspectorTexture: {fileID: 0}
   scrollViewContent: {fileID: 0}
+  prefabObject: {fileID: 0}
+  displayDuration: 3
 --- !u!1 &2223490621458314719
 GameObject:
   m_ObjectHideFlags: 0
@@ -4473,7 +4477,6 @@ GameObject:
   - component: {fileID: 6659709578033828742}
   - component: {fileID: 5197157898277691694}
   - component: {fileID: 967024111536742614}
-  - component: {fileID: 3023744308383494847}
   m_Layer: 5
   m_Name: MagazineView 2
   m_TagString: Untagged
@@ -4565,32 +4568,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &3023744308383494847
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4601572110457932306}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdca072da4e710346a97a32f3e6f5b15, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  textBoxPrefab: {fileID: 6731804952794173625, guid: 61695e206d159e344ab703ef5a4dc371,
-    type: 3}
-  imageBoxPrefab: {fileID: 8322938767771967153, guid: 5b693cc20b8ac1246b51bcaf69fb6fb3,
-    type: 3}
-  pagePrefab: {fileID: 9193981295852427034, guid: 8f839e5c640b8bd40adfb0f81ee8c02c,
-    type: 3}
-  parent: {fileID: 3147293639954072863}
-  pagesParentTransform: {fileID: 3526553094548780494}
-  textBoxes: []
-  imageBoxes: []
-  pages:
-  - {fileID: 2511950082663954191}
-  saveButton: {fileID: 8770234851127230264}
-  loadButton: {fileID: 2120907866693035221}
 --- !u!1 &4728452589573888422
 GameObject:
   m_ObjectHideFlags: 0

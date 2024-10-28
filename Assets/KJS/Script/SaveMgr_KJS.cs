@@ -114,7 +114,7 @@ public class SaveMgr_KJS : MonoBehaviour
 
         loadButton.onClick.AddListener(() =>
         {
-            postMgr.ThumStart();  // UI 초기화
+            postMgr.ThumStart();
             LoadObjectsFromFile();  // JSON 데이터 로드
         });
 
