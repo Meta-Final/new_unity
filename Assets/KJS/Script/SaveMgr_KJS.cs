@@ -99,6 +99,7 @@ public class SaveMgr_KJS : MonoBehaviour
 
     private RootObject rootData = new RootObject();
     private int pageCounter = 0;  // 페이지 ID 카운터
+    public PostMgr postMgr;
 
     private void Start()
     {
@@ -109,6 +110,7 @@ public class SaveMgr_KJS : MonoBehaviour
         loadButton.onClick.AddListener(LoadObjectsFromFile);
 
         EnsureDirectoryExists();
+
 
         if (File.Exists(savePath))
         {
