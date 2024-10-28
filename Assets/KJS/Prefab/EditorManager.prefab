@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4782826722791024812}
   - component: {fileID: 333927472848241586}
   - component: {fileID: 3306751923833244994}
+  - component: {fileID: 4374760438772283147}
   m_Layer: 0
   m_Name: EditorManager
   m_TagString: Untagged
@@ -60,19 +61,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdca072da4e710346a97a32f3e6f5b15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textBoxPrefab: {fileID: 6731804952794173625, guid: 45130ec97f3876142a8a5b7603617386,
+  textBoxPrefab: {fileID: 6731804952794173625, guid: 61695e206d159e344ab703ef5a4dc371,
     type: 3}
   imageBoxPrefab: {fileID: 8322938767771967153, guid: 5b693cc20b8ac1246b51bcaf69fb6fb3,
     type: 3}
-  pagePrefab: {fileID: 0}
+  pagePrefab: {fileID: 9193981295852427034, guid: 8f839e5c640b8bd40adfb0f81ee8c02c,
+    type: 3}
+  pageScrollbar: {fileID: 0}
   parent: {fileID: 0}
   pagesParentTransform: {fileID: 0}
   textBoxes: []
   imageBoxes: []
-  pages: []
-  userIds:
-  - 1
-  selectedUserIndex: 0
+  pages:
+  - {fileID: 0}
   saveButton: {fileID: 0}
   loadButton: {fileID: 0}
 --- !u!114 &333927472848241586
@@ -112,3 +113,16 @@ MonoBehaviour:
   toolManager: {fileID: 3089067871811223228}
   editorMgr: {fileID: 0}
   imageMgr: {fileID: 333927472848241586}
+--- !u!114 &4374760438772283147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5407121803447432933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be195c44d3d17aa429c5ca659e55d873, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetUI: {fileID: 0}
