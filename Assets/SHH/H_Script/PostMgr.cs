@@ -24,7 +24,7 @@ public class PostMgr : MonoBehaviour
     public GameObject content;
 
     public GameObject MagCanvas;
-    public GameObject Channelcanvas;
+    public GameObject H_ChannelCanvas;
 
     List<Button> btns = new List<Button>();
 
@@ -40,7 +40,7 @@ public class PostMgr : MonoBehaviour
     public void ThumStart()
     {
         MagCanvas = GameObject.Find("CanvasMag");
-        Channelcanvas = GameObject.Find("ChannelCanvas");
+        H_ChannelCanvas = GameObject.Find("H_ChannelCanvas");
 
         HttpInfo info = new HttpInfo();
         info.url = "C:\\Users\\haqqm\\Desktop\\post\\postinfolist.txt";
@@ -76,7 +76,7 @@ public class PostMgr : MonoBehaviour
     public void OnClickMagContent()
     {
         MagCanvas.SetActive(true);
-        Channelcanvas.SetActive(false);
+        H_ChannelCanvas.SetActive(false);
         //HttpInfo info = new HttpInfo();
         //info.url = "file:///" + Application.dataPath + "/KJS/UserInfo/Magazine.json";
         //info.onComplete = OncompletePostDetalInfo;
@@ -94,7 +94,7 @@ public class PostMgr : MonoBehaviour
     public void OnClickExit()
     {
         MagCanvas.SetActive(false);
-        Channelcanvas.SetActive(true);
+        H_ChannelCanvas.SetActive(true);
         
     }
     // Update is called once per frame
