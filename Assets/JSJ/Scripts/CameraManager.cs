@@ -8,6 +8,7 @@ public class CameraManager : MonoBehaviour
     public Camera mainCamera;
     public GameObject frame;
     
+    
     public float followSpeed = 5f;
     public bool isZoom = false;
 
@@ -28,7 +29,7 @@ public class CameraManager : MonoBehaviour
         {
             frame = null;
         }
-       
+
         if (mainCamera != null)
         {
             offset = mainCamera.transform.position - transform.position;
@@ -40,6 +41,7 @@ public class CameraManager : MonoBehaviour
         if (!isZoom)
         {
             CameraMoving();
+            
         }
         
         if (Input.GetMouseButtonDown(0))
@@ -66,7 +68,7 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    // 카메라 이동 
+    //카메라 이동
     public void CameraMoving()
     {
         Vector3 playerTargetPos = transform.position + offset;
