@@ -1,11 +1,12 @@
 using System;
-using System.IO;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO; // 파일 처리를 위해 필요
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
+using UnityEngine.UI; // UI 사용
+using TMPro; // TextMeshPro 사용
 
-public class Loader : MonoBehaviour
+public class LoadMgr_KJS : MonoBehaviour
 {
     public GameObject textBoxPrefab;
     public GameObject imageBoxPrefab;
@@ -13,6 +14,7 @@ public class Loader : MonoBehaviour
 
     public Transform pagesParentTransform;
     public Scrollbar scrollbar;  // 스크롤바 참조
+    public Button loadButton;    // Load 버튼 추가
 
     public List<GameObject> textBoxes = new List<GameObject>();
     public List<GameObject> imageBoxes = new List<GameObject>();
@@ -20,8 +22,26 @@ public class Loader : MonoBehaviour
 
     public GameObject magazineView;  // MagazineView 오브젝트 참조
 
-    private string savePath = @"C:\Users\Admin\Documents\GitHub\new_unity\Assets\KJS\UserInfo\Magazine.json";  // 고정된 저장 경로
+    private string savePath = @"C:\Users\Admin\Documents\GitHub\new_unity\Assets\KJS\UserInfo\postinfolist.txt";  // 고정된 저장 경로
     private RootObject rootData;
+    private PostMgr postMgr;
+
+    private void Start()
+    {
+        postMgr = FindObjectOfType<PostMgr>();
+
+        // Load 버튼이 null이 아니면 AddListener로 LoadObjectsFromFile 연결
+        if (loadButton != null)
+        {
+            loadButton.onClick.AddListener(LoadObjectsFromFile);
+            loadButton.onClick.AddListener(postMgr.ThumStart);
+            Debug.Log("Load 버튼에 이벤트 리스너가 연결되었습니다.");
+        }
+        else
+        {
+            Debug.LogError("Load 버튼이 설정되지 않았습니다.");
+        }
+    }
 
     public void Initialize(RootObject data)
     {
