@@ -7,7 +7,16 @@ public class ChangeScene : MonoBehaviour
 {
     public string Meta_Town_Scene;
     public string Meta_Studio_Scene;
-    public void SceneChange()
+
+    public void OnClicktown()
+    {
+        TownSceneChange();
+    }
+    public void OnClickStudio()
+    {
+        StudioSceneChange();
+    }
+    public void TownSceneChange()
     {
         SceneManager.LoadScene("Meta_Town_Scene");
         Debug.Log("씬전환성공");
