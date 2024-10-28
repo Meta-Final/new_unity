@@ -33,6 +33,12 @@ public class PostMgr : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        ThumStart();
+
+    }
+
+    public void ThumStart()
+    {
         MagCanvas = GameObject.Find("CanvasMag");
         Channelcanvas = GameObject.Find("ChannelCanvas");
 
@@ -43,7 +49,6 @@ public class PostMgr : MonoBehaviour
         StartCoroutine(HttpManager.GetInstance().Get(info));
 
         btn_Exit.onClick.AddListener(OnClickExit);
-
     }
 
     public void OncompletePostInfo(DownloadHandler downloadhandler)
