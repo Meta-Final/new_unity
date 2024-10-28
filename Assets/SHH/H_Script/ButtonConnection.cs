@@ -13,7 +13,8 @@ public class ButtonConnection : MonoBehaviour
     void Start()
     {
        // MagCanvas = GameObject.Find("CanvasMag");
-        ChannelCanvas = GameObject.Find("ChannelCanvas");
+        
+       ChannelCanvas = GameObject.Find("H_ChannelCanvas");
         Panel_notice = GameObject.Find("Panel_notice");
         Panel_notice.SetActive(false);
        
@@ -30,9 +31,13 @@ public class ButtonConnection : MonoBehaviour
         // 캔버스 활성화/비활성화
         //MagCanvas.SetActive(!MagCanvas.activeSelf);
        // MagCanvas.SetActive(true);
-        ChannelCanvas.SetActive(false);
+       ChannelCanvas.SetActive(false);
     }
-    public void OnButtonClicknotice()
+    public void OnButtonChannel()
+    {
+        ChannelCanvas.SetActive(true);
+    }
+        public void OnButtonClicknotice()
     {
         Panel_notice.SetActive(true);
     }

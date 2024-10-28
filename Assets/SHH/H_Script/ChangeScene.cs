@@ -5,16 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class ChangeScene : MonoBehaviour
 {
-    public string MyRoomScene;
-    public string StartScene;
+    public string Meta_Town_Scene;
+    public string Meta_Studio_Scene;
     public void SceneChange()
     {
-        SceneManager.LoadScene("MyRoomScene");
+        SceneManager.LoadScene("Meta_Town_Scene");
         Debug.Log("씬전환성공");
     }
-    public void ChannelSceneChange()
+    public void StudioSceneChange()
     {
-        SceneManager.LoadScene("StartScene");
+        SceneManager.LoadScene("Meta_Studio_Scene");
         Debug.Log("씬전환성공");
     }
 

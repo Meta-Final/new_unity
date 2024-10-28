@@ -2336,7 +2336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c95892fb94c1d1644a30c0eb3b651b8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ChannelCanvas: 
+  townscene: 
 --- !u!1 &1174739063
 GameObject:
   m_ObjectHideFlags: 0
@@ -2483,6 +2483,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1174739063}
   m_CullTransparentMesh: 1
+--- !u!1 &1315872960
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1315872962}
+  - component: {fileID: 1315872961}
+  m_Layer: 0
+  m_Name: ChangeScene
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1315872961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1315872960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c95892fb94c1d1644a30c0eb3b651b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  townscene: 
+--- !u!4 &1315872962
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1315872960}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -43.21846, y: 38.684067, z: -6.6748276}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1357405223
 GameObject:
   m_ObjectHideFlags: 0
@@ -4728,3 +4773,4 @@ SceneRoots:
   - {fileID: 967716095}
   - {fileID: 5020958958399147155}
   - {fileID: 1885158241}
+  - {fileID: 1315872962}

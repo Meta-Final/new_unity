@@ -6,13 +6,13 @@ using UnityEngine.UI;
 
 public class ScenechangeMgr : MonoBehaviour
 {
-    public string ChannelCanvas;
+    public string townscene;
 
     void Start()
     {
-        if (!string.IsNullOrEmpty(ChannelCanvas))
+        if (!string.IsNullOrEmpty(townscene))
         {
-            GameObject ChangeScene = GameObject.Find(ChannelCanvas);
+            GameObject ChangeScene = GameObject.Find(townscene);
 
             if (ChangeScene != null)
             {
@@ -20,7 +20,7 @@ public class ScenechangeMgr : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("채널 캔버스를 찾을 수 없습니다. 이름을 확인하세요.");
+                Debug.LogWarning("못찾겠다 꾀꼬리!");
             }
         }
         
