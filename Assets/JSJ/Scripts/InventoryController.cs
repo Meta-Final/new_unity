@@ -41,6 +41,4 @@ public class InventoryController : MonoBehaviour
         screenshotBG.SetActive(false);
         textBG.SetActive(true);
     }
-
-
 }

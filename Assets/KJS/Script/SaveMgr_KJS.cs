@@ -229,7 +229,7 @@ public class SaveMgr_KJS : MonoBehaviour
         }
     }
 
-    private void LoadObjectsFromFile()
+    public void LoadObjectsFromFile()
     {
         try
         {
