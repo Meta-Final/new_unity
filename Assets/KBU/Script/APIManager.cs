@@ -8,6 +8,11 @@ using UnityEngine.Networking;
 using ReqRes;
 using UnityEditor.PackageManager.Requests;
 using System.Net.NetworkInformation;
+[System.Serializable]
+public class ChatResponse
+{
+    public string text;  // API 응답의 "text" 필드 매핑
+}
 
 public class APIManager : MonoBehaviour
 {
@@ -44,21 +49,19 @@ public class APIManager : MonoBehaviour
 
             if (www.result == UnityWebRequest.Result.Success)
             {
-                String responseText = www.downloadHandler.text;
-                Debug.Log($"API 응답: {responseText}"); // 디버그 로그 추가
+                // JSON 응답을 ChatResponse 객체로 파싱
+                ChatResponse response = JsonUtility.FromJson<ChatResponse>(www.downloadHandler.text);
 
-                aiChatMgr.UpdateChatResponse(responseText); // AiChatMgr_KJS에 응답 전달
-                // JSON 응답 파싱
-                JsonData jsonResponse = JsonUtility.FromJson<JsonData>(www.downloadHandler.text);
-                Debug.Log("Response: " + www.downloadHandler.text);
-
-                if (jsonResponse.text == "/img.json")
+                // text 필드의 값이 "/img.json"이면 메시지 출력
+                if (response.text == "/img.json")
                 {
-                    LoadImageFromPath(@"C:\Users\Admin\Desktop\요리.jpg");
+                    Debug.Log("이미지를 만들었습니다");
+                    AiChatMgr_KJS.Instance.UpdateChatResponse("이미지를 만들었습니다");
                 }
-                else if (jsonResponse.text == "/object.json")
+                else
                 {
-                    // 다른 로직 처리
+                    Debug.Log($"응답: {response.text}");
+                    AiChatMgr_KJS.Instance.UpdateChatResponse(response.text);
                 }
             }
             else

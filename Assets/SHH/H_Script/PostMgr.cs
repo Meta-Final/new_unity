@@ -39,11 +39,13 @@ public class PostMgr : MonoBehaviour
 
     public void ThumStart()
     {
+        print("???");
+
         MagCanvas = GameObject.Find("MagazineView 2");
-        Channelcanvas = GameObject.Find("ChannelCanvas");
+        Channelcanvas = GameObject.Find("H_ChannelCanvas");
 
         HttpInfo info = new HttpInfo();
-        info.url = @"C:\Users\Admin\Documents\GitHub\new_unity\Assets\KJS\UserInfo\Magazine.json";
+        info.url = @"C:\Users\Admin\Documents\GitHub\new_unity\Assets\KJS\UserInfo\postinfolist.txt";
         info.onComplete = OncompletePostInfo;
 
         StartCoroutine(HttpManager.GetInstance().Get(info));

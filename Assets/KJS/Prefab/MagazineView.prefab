@@ -1164,7 +1164,8 @@ MonoBehaviour:
   m_text: "\uBCF4\uB0B4\uAE30"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c5d511da6de0f2e418392914994facb6, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: -6546284589043739323, guid: c5d511da6de0f2e418392914994facb6,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2498,7 +2499,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 3344733718731980702}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.5
+  m_Size: 0.50000006
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3892,7 +3893,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -400, y: 216.50003}
+  m_AnchoredPosition: {x: -399.99997, y: 216.50003}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1431513309061555433
@@ -4673,6 +4674,78 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 1
+--- !u!1 &6298622265444283480
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5147642491474727344}
+  - component: {fileID: 677129109296963286}
+  - component: {fileID: 2144804801679008195}
+  m_Layer: 5
+  m_Name: RawImage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &5147642491474727344
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6298622265444283480}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3476195909750464496}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 253, y: -73}
+  m_SizeDelta: {x: 300, y: 300}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &677129109296963286
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6298622265444283480}
+  m_CullTransparentMesh: 1
+--- !u!114 &2144804801679008195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6298622265444283480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 0}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!1 &6723356099723434889
 GameObject:
   m_ObjectHideFlags: 0
@@ -5981,7 +6054,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: AIChatToggle_KJS, Assembly-CSharp
-        m_MethodName: ToggleUI
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6967,7 +7040,7 @@ PrefabInstance:
     - target: {fileID: 798512717729268802, guid: 1fcd1f1e6801b2b4ab6f33fbca8e382d,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: -360.06
       objectReference: {fileID: 0}
     - target: {fileID: 798512717729268802, guid: 1fcd1f1e6801b2b4ab6f33fbca8e382d,
         type: 3}
@@ -6977,17 +7050,17 @@ PrefabInstance:
     - target: {fileID: 1126135482821800413, guid: 1fcd1f1e6801b2b4ab6f33fbca8e382d,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1126135482821800413, guid: 1fcd1f1e6801b2b4ab6f33fbca8e382d,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1126135482821800413, guid: 1fcd1f1e6801b2b4ab6f33fbca8e382d,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: -17
       objectReference: {fileID: 0}
     - target: {fileID: 1471885396397940250, guid: 1fcd1f1e6801b2b4ab6f33fbca8e382d,
         type: 3}
@@ -7181,12 +7254,12 @@ PrefabInstance:
     - target: {fileID: 6286448179123105864, guid: 1fcd1f1e6801b2b4ab6f33fbca8e382d,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6286448179123105864, guid: 1fcd1f1e6801b2b4ab6f33fbca8e382d,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7867634005616573821, guid: 1fcd1f1e6801b2b4ab6f33fbca8e382d,
         type: 3}
@@ -7222,6 +7295,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2697313226925851517}
+    - targetCorrespondingSourceObject: {fileID: 1634398553046540126, guid: 1fcd1f1e6801b2b4ab6f33fbca8e382d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5147642491474727344}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1849402317966442800, guid: 1fcd1f1e6801b2b4ab6f33fbca8e382d,
         type: 3}
@@ -7286,4 +7363,9 @@ MonoBehaviour:
   chatResponseText: {fileID: 3674461104588037812}
   apiManager: {fileID: 0}
   sendButton: {fileID: 3669721115825911144}
+  targetRawImage: {fileID: 2144804801679008195}
+  inspectorTexture: {fileID: 2800000, guid: 7df76bfdeef5cbe47ba656b04718255d, type: 3}
   scrollViewContent: {fileID: 3280733816875205868}
+  prefabObject: {fileID: 591002103162764212, guid: 08e3898f7c343a94592a5efcc348e7c3,
+    type: 3}
+  displayDuration: 3

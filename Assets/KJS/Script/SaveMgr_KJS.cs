@@ -82,6 +82,8 @@ public class SaveMgr_KJS : MonoBehaviour
     public GameObject textBoxPrefab;
     public GameObject imageBoxPrefab;
     public GameObject pagePrefab;
+    public Scrollbar pageScrollbar;  // 스크롤바 변수
+    private int totalPages;          // 페이지 총 수
 
     public Transform parent;                // 텍스트와 이미지 부모
     public Transform pagesParentTransform;  // 페이지 부모
@@ -99,18 +101,28 @@ public class SaveMgr_KJS : MonoBehaviour
 
     private RootObject rootData = new RootObject();
     private int pageCounter = 0;  // 페이지 ID 카운터
-    //public PostMgr postMgr;
+    private PostMgr postMgr;
 
     private void Start()
     {
+        postMgr = FindObjectOfType<PostMgr>();  // PostMgr 참조
+
         saveDirectory = Application.dataPath + "/KJS/UserInfo";
         savePath = Path.Combine(saveDirectory, saveFileName);
 
         saveButton.onClick.AddListener(SaveObjectsToFile);
-        loadButton.onClick.AddListener(LoadObjectsFromFile);
+
+        loadButton.onClick.AddListener(() =>
+        {
+            LoadObjectsFromFile();  // JSON 데이터 로드
+        });
+
+        loadButton.onClick.AddListener(() =>
+        {
+            postMgr.ThumStart();
+        });
 
         EnsureDirectoryExists();
-
 
         if (File.Exists(savePath))
         {
@@ -121,6 +133,10 @@ public class SaveMgr_KJS : MonoBehaviour
         {
             Directory.CreateDirectory(saveDirectory);
         }
+    }
+    public void SetLoadButton(Button button)
+    {
+        loadButton = button;
     }
 
     private void EnsureDirectoryExists()
@@ -152,22 +168,19 @@ public class SaveMgr_KJS : MonoBehaviour
 
             Post newPost = new Post();
 
-            // 페이지 데이터 저장
             for (int i = 0; i < pages.Count; i++)
             {
                 Page newPage = new Page(i);
 
-                // 텍스트 박스 저장
                 textBoxes.RemoveAll(item => item == null);
                 foreach (var textBox in textBoxes)
                 {
-                    if (textBox.transform.parent != pages[i].transform) continue; // 부모 페이지 매칭
+                    if (textBox.transform.parent != pages[i].transform) continue;
 
                     TMP_Text textComponent = textBox.GetComponentInChildren<TMP_Text>();
                     string content = textComponent != null ? textComponent.text : "";
 
-                    // 추가된 텍스트 속성 저장
-                    int fontSize = (int)textComponent.fontSize;  // float -> int 변환
+                    int fontSize = (int)textComponent.fontSize;
                     string fontFace = textComponent.font.name;
                     bool isUnderlined = textComponent.fontStyle.HasFlag(FontStyles.Underline);
                     bool isStrikethrough = textComponent.fontStyle.HasFlag(FontStyles.Strikethrough);
@@ -176,7 +189,7 @@ public class SaveMgr_KJS : MonoBehaviour
                         Element.ElementType.Text_Box,
                         content,
                         null,
-                        textBox.transform.localPosition,  // 로컬 좌표로 저장
+                        textBox.transform.localPosition,
                         textBox.transform.localScale,
                         fontSize,
                         fontFace,
@@ -185,11 +198,10 @@ public class SaveMgr_KJS : MonoBehaviour
                     ));
                 }
 
-                // 이미지 박스 저장
                 imageBoxes.RemoveAll(item => item == null);
                 foreach (var imageBox in imageBoxes)
                 {
-                    if (imageBox.transform.parent != pages[i].transform) continue; // 부모 페이지 매칭
+                    if (imageBox.transform.parent != pages[i].transform) continue;
 
                     Image imageComponent = imageBox.transform.GetChild(0).GetComponent<Image>();
                     string imageData = null;
@@ -204,7 +216,7 @@ public class SaveMgr_KJS : MonoBehaviour
                         Element.ElementType.Image_Box,
                         "",
                         imageData,
-                        imageBox.transform.localPosition,  // 로컬 좌표로 저장
+                        imageBox.transform.localPosition,
                         imageBox.transform.localScale
                     ));
                 }
@@ -214,7 +226,6 @@ public class SaveMgr_KJS : MonoBehaviour
 
             rootData.posts.Add(newPost);
 
-            // JSON 직렬화 및 저장
             string json = JsonUtility.ToJson(rootData, true);
             File.WriteAllText(savePath, json);
 
@@ -226,10 +237,13 @@ public class SaveMgr_KJS : MonoBehaviour
         }
     }
 
-    private void LoadObjectsFromFile()
+    public void LoadObjectsFromFile()
     {
+        print("!!!!!");
         try
         {
+            Debug.Log("LoadObjectsFromFile() called.");
+
             if (!File.Exists(savePath))
             {
                 Debug.LogWarning("Save file not found.");
@@ -239,15 +253,10 @@ public class SaveMgr_KJS : MonoBehaviour
             string json = File.ReadAllText(savePath);
             rootData = JsonUtility.FromJson<RootObject>(json);
 
-            if (rootData.posts.Count == 0)
-            {
-                Debug.LogWarning("No posts found.");
-                return;
-            }
+            if (rootData.posts.Count == 0) return;
 
-            Post post = rootData.posts[0];  // 첫 번째 포스트 로드
+            Post post = rootData.posts[0];
 
-            // 기존 오브젝트 삭제
             textBoxes.ForEach(Destroy);
             imageBoxes.ForEach(Destroy);
             pages.ForEach(Destroy);
@@ -256,7 +265,6 @@ public class SaveMgr_KJS : MonoBehaviour
             imageBoxes.Clear();
             pages.Clear();
 
-            // 페이지와 요소 생성
             foreach (var page in post.pages)
             {
                 GameObject newPageObj = Instantiate(pagePrefab, pagesParentTransform);
@@ -268,21 +276,16 @@ public class SaveMgr_KJS : MonoBehaviour
 
                     if (element.type == Element.ElementType.Text_Box)
                     {
-                        newObj = Instantiate(textBoxPrefab, newPageObj.transform);  // 페이지 자식으로 추가
+                        newObj = Instantiate(textBoxPrefab, newPageObj.transform);
                         TMP_Text textComponent = newObj.GetComponentInChildren<TMP_Text>();
                         if (textComponent != null)
                         {
                             textComponent.text = element.content;
-                            textComponent.fontSize = (float)element.fontSize;  // int -> float 변환
+                            textComponent.fontSize = element.fontSize;
 
-                            // 폰트 설정 (로드된 폰트 이름과 매칭되는 폰트 사용)
                             TMP_FontAsset fontAsset = Resources.Load<TMP_FontAsset>($"Fonts/{element.fontFace}");
-                            if (fontAsset != null)
-                            {
-                                textComponent.font = fontAsset;
-                            }
+                            if (fontAsset != null) textComponent.font = fontAsset;
 
-                            // 밑줄과 취소선 적용
                             textComponent.fontStyle = FontStyles.Normal;
                             if (element.isUnderlined) textComponent.fontStyle |= FontStyles.Underline;
                             if (element.isStrikethrough) textComponent.fontStyle |= FontStyles.Strikethrough;
@@ -291,28 +294,27 @@ public class SaveMgr_KJS : MonoBehaviour
                     }
                     else if (element.type == Element.ElementType.Image_Box)
                     {
-                        newObj = Instantiate(imageBoxPrefab, newPageObj.transform);  // 페이지 자식으로 추가
+                        newObj = Instantiate(imageBoxPrefab, newPageObj.transform);
                         Image imageComponent = newObj.transform.GetChild(0).GetComponent<Image>();
 
                         if (!string.IsNullOrEmpty(element.imageData))
                         {
                             Texture2D texture = Element.DecodeImageFromBase64(element.imageData);
-                            imageComponent.sprite = Sprite.Create(
-                                texture,
-                                new Rect(0, 0, texture.width, texture.height),
-                                new Vector2(0.5f, 0.5f)
-                            );
+                            imageComponent.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
                         }
                         AddImageBox(newObj);
                     }
 
                     if (newObj != null)
                     {
-                        newObj.transform.localPosition = element.position;  // 로컬 좌표로 복원
+                        newObj.transform.localPosition = element.position;
                         newObj.transform.localScale = element.scale;
                     }
                 }
             }
+
+            totalPages = pages.Count;
+            UpdateScrollbar();
 
             Debug.Log("Data loaded successfully.");
         }
@@ -320,5 +322,34 @@ public class SaveMgr_KJS : MonoBehaviour
         {
             Debug.LogError($"Load failed: {e.Message}");
         }
+    }
+
+    private void UpdateScrollbar()
+    {
+        if (totalPages <= 1)
+        {
+            pageScrollbar.size = 1f;
+            pageScrollbar.value = 1f;
+            pageScrollbar.interactable = false;
+        }
+        else
+        {
+            pageScrollbar.size = 1f / totalPages;
+            pageScrollbar.value = 1f;
+            pageScrollbar.interactable = true;
+
+            pageScrollbar.onValueChanged.AddListener(OnScrollbarValueChanged);
+        }
+    }
+
+    private void OnScrollbarValueChanged(float value)
+    {
+        float step = 1f / (totalPages - 1);
+        int currentPage = Mathf.RoundToInt(value / step);
+        float targetValue = currentPage * step;
+
+        pageScrollbar.value = targetValue;
+
+        Debug.Log($"Current Page: {currentPage + 1}/{totalPages}");
     }
 }
