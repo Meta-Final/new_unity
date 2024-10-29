@@ -52,7 +52,7 @@ public class PicketManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out hitInfo))
         {
-            if (hitInfo.collider.name.Contains("Picket"))
+            if (hitInfo.collider.gameObject.layer == 18)
             {
                 SceneManager.LoadScene("Meta_Picket_Scene");
             }
