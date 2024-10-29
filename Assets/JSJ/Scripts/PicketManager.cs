@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PicketManager : MonoBehaviour
 {
@@ -11,14 +12,19 @@ public class PicketManager : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.Find("Player");
+        player = GameObject.Find("PlayerPrefab");
     }
 
     void Update()
     {
+        if (Input.GetMouseButtonDown(0))
+        {
+            ClickPicket();
+        }
         
     }
 
+    // 지정된 구역에서만 Picket 생성 가능
     public void MakePicket()
     {
         Ray ray = new Ray(player.transform.position, Vector3.down);
@@ -36,6 +42,20 @@ public class PicketManager : MonoBehaviour
 
             }
         }
-        
+    }
+
+    // Picket 클릭시, 씬 이동
+    public void ClickPicket()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hitInfo;
+
+        if (Physics.Raycast(ray, out hitInfo))
+        {
+            if (hitInfo.collider.name.Contains("Picket"))
+            {
+                SceneManager.LoadScene("Meta_Picket_Scene");
+            }
+        }
     }
 }
