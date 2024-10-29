@@ -118,7 +118,7 @@ public class SaveMgr_KJS : MonoBehaviour
         foreach (var button in loadButtons)
         {
             button.onClick.AddListener(() => LoadObjectsFromFile());
-            button.onClick.AddListener(() => postMgr.ThumStart());
+            //button.onClick.AddListener(() => postMgr.ThumStart());
         }
 
         EnsureDirectoryExists();
@@ -142,7 +142,7 @@ public class SaveMgr_KJS : MonoBehaviour
 
         // 동적으로 추가된 버튼에 클릭 이벤트 등록
         button.onClick.AddListener(() => LoadObjectsFromFile());
-        button.onClick.AddListener(() => postMgr.ThumStart());
+        //button.onClick.AddListener(() => postMgr.ThumStart());
     }
 
     private void EnsureDirectoryExists()

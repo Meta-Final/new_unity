@@ -9,14 +9,16 @@ public class ButtonConnection : MonoBehaviour
     public GameObject ChannelCanvas;
     public GameObject Panel_notice;
     public GameObject MagCanvas;
+    public GameObject Magazine;
     public Button btnnotice;
     public GameObject btn_Exit;
     void Start()
     {
 
         ChannelCanvas = GameObject.Find("H_ChannelCanvas");
+        Magazine = GameObject.Find("MagazineView 2");
 
-        if(Panel_notice)
+        if (Panel_notice)
         {
             Panel_notice.SetActive(false);
         }
@@ -38,6 +40,11 @@ public class ButtonConnection : MonoBehaviour
         //MagCanvas.SetActive(!MagCanvas.activeSelf);
        MagCanvas.SetActive(false);
        ChannelCanvas.SetActive(false);
+    }
+
+    public void OnButtonMagazine()
+    {
+        Magazine.SetActive(true);
     }
     public void OnButtonChannel()
     {
