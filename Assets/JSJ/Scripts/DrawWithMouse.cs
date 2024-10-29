@@ -26,7 +26,7 @@ public class DrawWithMouse : MonoBehaviour
         //lineRenderer.startWidth = lineWidth;
         //lineRenderer.endWidth = lineWidth;
         //lineRenderer.material = material;
-        lineRenderer.positionCount = 0;
+        //lineRenderer.positionCount = 0;
 
         drawButton.onClick.AddListener(StartDrawing);
     }
@@ -46,6 +46,7 @@ public class DrawWithMouse : MonoBehaviour
             lineRenderer.material = material;
 
             lineRenderer.positionCount = 0;
+
             points.Clear();
         }    
 
@@ -84,11 +85,4 @@ public class DrawWithMouse : MonoBehaviour
             points.Clear();
         }
     }
-
-
-
-
-
-
-
 }
