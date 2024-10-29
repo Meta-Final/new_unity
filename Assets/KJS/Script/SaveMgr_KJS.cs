@@ -82,45 +82,43 @@ public class SaveMgr_KJS : MonoBehaviour
     public GameObject textBoxPrefab;
     public GameObject imageBoxPrefab;
     public GameObject pagePrefab;
-    public Scrollbar pageScrollbar;  // 스크롤바 변수
-    private int totalPages;          // 페이지 총 수
+    public Scrollbar pageScrollbar;
 
-    public Transform parent;                // 텍스트와 이미지 부모
-    public Transform pagesParentTransform;  // 페이지 부모
+    private int totalPages;
+
+    public Transform parent;
+    public Transform pagesParentTransform;
 
     public List<GameObject> textBoxes = new List<GameObject>();
     public List<GameObject> imageBoxes = new List<GameObject>();
-    public List<GameObject> pages = new List<GameObject>();  // 페이지 관리
+    public List<GameObject> pages = new List<GameObject>();
 
     public Button saveButton;
-    public Button loadButton;
+    public List<Button> loadButtons = new List<Button>();  // Load 버튼을 List로 관리
 
     private string saveDirectory = @"C:\Users\Admin\Documents\GitHub\new_unity\Assets\KJS\UserInfo";
     private string saveFileName = "Magazine.json";
     private string savePath;
 
     private RootObject rootData = new RootObject();
-    private int pageCounter = 0;  // 페이지 ID 카운터
+    private int pageCounter = 0;
     private PostMgr postMgr;
 
     private void Start()
     {
-        postMgr = FindObjectOfType<PostMgr>();  // PostMgr 참조
+        postMgr = FindObjectOfType<PostMgr>();
 
         saveDirectory = Application.dataPath + "/KJS/UserInfo";
         savePath = Path.Combine(saveDirectory, saveFileName);
 
         saveButton.onClick.AddListener(SaveObjectsToFile);
 
-        loadButton.onClick.AddListener(() =>
+        // 저장된 모든 Load 버튼에 이벤트 리스너 추가
+        foreach (var button in loadButtons)
         {
-            LoadObjectsFromFile();  // JSON 데이터 로드
-        });
-
-        loadButton.onClick.AddListener(() =>
-        {
-            postMgr.ThumStart();
-        });
+            button.onClick.AddListener(() => LoadObjectsFromFile());
+            button.onClick.AddListener(() => postMgr.ThumStart());
+        }
 
         EnsureDirectoryExists();
 
@@ -134,9 +132,16 @@ public class SaveMgr_KJS : MonoBehaviour
             Directory.CreateDirectory(saveDirectory);
         }
     }
+
+    // 버튼을 List에 추가하고 이벤트 리스너를 연결하는 메서드
     public void SetLoadButton(Button button)
     {
-        loadButton = button;
+        loadButtons.Add(button);  // List<Button>에 추가
+        Debug.Log($"버튼 {button.name}이 추가되었습니다.");
+
+        // 동적으로 추가된 버튼에 클릭 이벤트 등록
+        button.onClick.AddListener(() => LoadObjectsFromFile());
+        button.onClick.AddListener(() => postMgr.ThumStart());
     }
 
     private void EnsureDirectoryExists()
@@ -157,14 +162,14 @@ public class SaveMgr_KJS : MonoBehaviour
     {
         GameObject newPageObj = Instantiate(pagePrefab, pagesParentTransform);
         AddPage(newPageObj);
-        pageCounter++;  // 새 페이지 생성 시 ID 증가
+        pageCounter++;
     }
 
     private void SaveObjectsToFile()
     {
         try
         {
-            rootData.posts.Clear();  // 기존 데이터 초기화
+            rootData.posts.Clear();
 
             Post newPost = new Post();
 
