@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class H_PlayerMove : MonoBehaviour
 {
-    public float MoveSpeed = 5f;
+    public float MoveSpeed = 30f;
     CharacterController H_cc;
 
     void Start()

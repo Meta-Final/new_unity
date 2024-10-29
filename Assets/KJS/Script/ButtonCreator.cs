@@ -5,6 +5,7 @@ public class ButtonCreator : MonoBehaviour
 {
     private SaveMgr_KJS saveMgr;  // SaveMgr 참조
     private Button buttonComponent;  // 버튼 컴포넌트
+    public GameObject Roomobject;
 
     void Awake()
     {
@@ -29,5 +30,9 @@ public class ButtonCreator : MonoBehaviour
     {
         Debug.Log("버튼이 클릭되었습니다!");
         // 여기서 원하는 동작을 수행합니다.
+        Roomobject = GameObject.Find("H_MyStudio");
+        Roomobject.SetActive(false);
+
+
     }
 }
