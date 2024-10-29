@@ -37,8 +37,8 @@ public class PostMgr : MonoBehaviour
     void Start()
     {
         ThumStart();
-        ButtonConnection bc = btn_Pos.GetComponent<ButtonConnection>();
-        MagCanvas = bc.MagCanvas.transform.GetChild(0).gameObject;
+        //ButtonConnection bc = btn_Pos.GetComponent<ButtonConnection>();
+        //MagCanvas = bc.MagCanvas.transform.GetChild(0).gameObject;
     }
 
     public void ThumStart()
