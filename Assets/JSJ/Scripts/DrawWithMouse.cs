@@ -5,72 +5,36 @@ using UnityEngine.UI;
 
 public class DrawWithMouse : MonoBehaviour
 {
-    public RawImage rawImage;          // 그림을 그릴 RawImage
-    public Color brushColor = Color.red; // 브러시 색상
-    public int brushSize = 5;           // 브러시 크기
+    private LineRenderer lineRenderer;
+    private List<Vector3> points = new List<Vector3>();
 
-    private Texture2D texture;
-    private RectTransform rawImageRect;
+    public Color lineColor = Color.black;
+    public float lineWidth = 0.1f;
 
     private void Start()
     {
-        rawImageRect = rawImage.GetComponent<RectTransform>();
-
-        // Texture2D 초기화 및 RawImage에 설정
-        texture = new Texture2D((int)rawImageRect.rect.width, (int)rawImageRect.rect.height);
-        rawImage.texture = texture;
-        ClearTexture();
+        lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.startColor = lineColor;
+        lineRenderer.endColor = lineColor;
+        lineRenderer.startWidth = lineWidth;
+        lineRenderer.endWidth = lineWidth;
     }
 
     private void Update()
     {
         if (Input.GetMouseButton(0))
         {
-            Vector2 localPoint;
+            Vector3 mousePos = Input.mousePosition;
+            mousePos.z = Camera.main.nearClipPlane; // 카메라 근접 클립 평면의 깊이
 
-            // 마우스 위치를 RawImage 좌표로 변환
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(rawImageRect, Input.mousePosition, null, out localPoint);
+            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
 
-            // 텍스처 좌표로 변환
-            int x = (int)(localPoint.x + rawImageRect.rect.width * 0.5f);
-            int y = (int)(localPoint.y + rawImageRect.rect.height * 0.5f);
-
-            DrawCircle(x, y);
-        }
-    }
-
-    private void DrawCircle(int centerX, int centerY)
-    {
-        for (int y = -brushSize; y <= brushSize; y++)
-        {
-            for (int x = -brushSize; x <= brushSize; x++)
+            if (points.Count == 0 || Vector3.Distance(points[points.Count - 1], worldPosition) > 0.1f)
             {
-                if (x * x + y * y <= brushSize * brushSize)
-                {
-                    int pixelX = centerX + x;
-                    int pixelY = centerY + y;
-
-                    // 텍스처 경계 내에 있을 경우 픽셀 색상 변경
-                    if (pixelX >= 0 && pixelX < texture.width && pixelY >= 0 && pixelY < texture.height)
-                    {
-                        texture.SetPixel(pixelX, pixelY, brushColor);
-                    }
-                }
+                points.Add(worldPosition);
+                lineRenderer.positionCount = points.Count;
+                lineRenderer.SetPosition(points.Count - 1, worldPosition);
             }
         }
-        texture.Apply(); // 텍스처 업데이트
-    }
-
-    private void ClearTexture()
-    {
-        // 텍스처 초기화
-        for (int x = 0; x < texture.width; x++)
-        {
-            for (int y = 0; y < texture.height; y++)
-            {
-                texture.SetPixel(x, y, Color.white);
-            }
-        }
-        texture.Apply();
     }
 }
