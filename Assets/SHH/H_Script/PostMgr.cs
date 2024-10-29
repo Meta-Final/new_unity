@@ -41,11 +41,11 @@ public class PostMgr : MonoBehaviour
     {
         print("???");
 
-        MagCanvas = GameObject.Find("Tool 2");
+        MagCanvas = GameObject.Find("CanvasMag");
         Channelcanvas = GameObject.Find("H_ChannelCanvas");
 
         HttpInfo info = new HttpInfo();
-        info.url = @"C:\Users\Admin\Documents\GitHub\new_unity\Assets\KJS\UserInfo\postinfolist.txt";
+        info.url = "C:\\Users\\haqqm\\Desktop\\post\\postinfolist.txt";
         info.onComplete = OncompletePostInfo;
 
         StartCoroutine(HttpManager.GetInstance().Get(info));
