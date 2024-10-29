@@ -114,8 +114,12 @@ public class SaveMgr_KJS : MonoBehaviour
 
         loadButton.onClick.AddListener(() =>
         {
-            postMgr.ThumStart();
             LoadObjectsFromFile();  // JSON 데이터 로드
+        });
+
+        loadButton.onClick.AddListener(() =>
+        {
+            postMgr.ThumStart();
         });
 
         EnsureDirectoryExists();
@@ -129,6 +133,10 @@ public class SaveMgr_KJS : MonoBehaviour
         {
             Directory.CreateDirectory(saveDirectory);
         }
+    }
+    public void SetLoadButton(Button button)
+    {
+        loadButton = button;
     }
 
     private void EnsureDirectoryExists()
@@ -231,6 +239,7 @@ public class SaveMgr_KJS : MonoBehaviour
 
     public void LoadObjectsFromFile()
     {
+        print("!!!!!");
         try
         {
             Debug.Log("LoadObjectsFromFile() called.");

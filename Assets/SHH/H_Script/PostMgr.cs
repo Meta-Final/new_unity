@@ -39,7 +39,9 @@ public class PostMgr : MonoBehaviour
 
     public void ThumStart()
     {
-        MagCanvas = GameObject.Find("Tool 2");
+        print("???");
+
+        MagCanvas = GameObject.Find("MagazineView 2");
         Channelcanvas = GameObject.Find("H_ChannelCanvas");
 
         HttpInfo info = new HttpInfo();
