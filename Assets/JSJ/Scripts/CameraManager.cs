@@ -23,7 +23,7 @@ public class CameraManager : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "Meta_Studio_Scene")
         {
-            noticeFrame = GameObject.Find("Frame");
+            noticeFrame = GameObject.Find("noticeFrame");
         }
         else
         {
@@ -51,7 +51,7 @@ public class CameraManager : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit))
             {
-                if (frame != null && hit.transform == frame.transform)
+                if (noticeFrame != null && hit.transform == noticeFrame.transform)
                 {
                     CameraGoToFrame();
                 }
@@ -81,7 +81,7 @@ public class CameraManager : MonoBehaviour
     {
         isZoom = true;
 
-        Vector3 frameTargetPos = frame.transform.position + Vector3.back * 3f;
+        Vector3 frameTargetPos = noticeFrame.transform.position + Vector3.back * 3f;
 
         targetPosition = frameTargetPos;
     }
