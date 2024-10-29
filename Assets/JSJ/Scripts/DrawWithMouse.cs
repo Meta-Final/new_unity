@@ -1,44 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DrawWithMouse : MonoBehaviour
 {
-    LineRenderer line;
-    Vector3 previousPosition;
+    private LineRenderer lineRenderer;
+    private List<Vector3> points = new List<Vector3>();
 
-    float minDistance = 0.1f;
+    public Color lineColor = Color.black;
+    public float lineWidth = 0.1f;
 
     private void Start()
     {
-        line = GetComponent<LineRenderer>();
-        line.positionCount = 0;
-        previousPosition = transform.position;
+        lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.startColor = lineColor;
+        lineRenderer.endColor = lineColor;
+        lineRenderer.startWidth = lineWidth;
+        lineRenderer.endWidth = lineWidth;
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            line.positionCount = 1;
-            Vector3 currentPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            currentPosition.z = 0f;
-            line.SetPosition(0, currentPosition);
-            previousPosition = currentPosition;
-        }
-
         if (Input.GetMouseButton(0))
         {
-            Vector3 currentPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            currentPosition.z = 0f;
+            Vector3 mousePos = Input.mousePosition;
+            mousePos.z = Camera.main.nearClipPlane; // 카메라 근접 클립 평면의 깊이
 
-            if (Vector3.Distance(currentPosition, previousPosition) > minDistance)
+            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
+
+            if (points.Count == 0 || Vector3.Distance(points[points.Count - 1], worldPosition) > 0.1f)
             {
-                line.positionCount++;
-                line.SetPosition(line.positionCount - 1, currentPosition);
-                previousPosition = currentPosition;
+                points.Add(worldPosition);
+                lineRenderer.positionCount = points.Count;
+                lineRenderer.SetPosition(points.Count - 1, worldPosition);
             }
         }
-        
     }
 }

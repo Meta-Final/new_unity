@@ -67,9 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a191f651e2e0ebd40943b9d06f913cc1, type: 2}
-  m_sharedMaterial: {fileID: 3019527390332262305, guid: a191f651e2e0ebd40943b9d06f913cc1,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -147,6 +146,7 @@ GameObject:
   - component: {fileID: 6751447042079431850}
   - component: {fileID: 5144570182761659542}
   - component: {fileID: 3802649557174565124}
+  - component: {fileID: -7629272549014425384}
   m_Layer: 5
   m_Name: Btn_SlotItem
   m_TagString: Untagged
@@ -256,3 +256,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &-7629272549014425384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1597832865248041017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22fa30f798997f24c805fd5787701ee8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 2942513239859350657, guid: f9777681206e3e342921fc48744efb85, type: 3}
