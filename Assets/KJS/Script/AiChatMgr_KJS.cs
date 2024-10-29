@@ -102,7 +102,7 @@ public class AiChatMgr_KJS : MonoBehaviour
                 Debug.Log("오브젝트를 생성합니다.");
 
                 // 오브젝트를 (-41.9, 19.5, -27) 위치에 생성하고 스케일을 25로 설정
-                CreateObjectAtPositionAndScale(new Vector3(-41.9f, 19.5f, -27f), new Vector3(25f, 25f, 25f));
+                CreateObjectAtPositionAndScale(new Vector3(0f, 0f, 0f), new Vector3(1f, 1f, 1f));
             }
             else
             {
