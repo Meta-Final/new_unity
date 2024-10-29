@@ -4,36 +4,73 @@ using UnityEngine;
 
 public class GeT_KJS : MonoBehaviour
 {
-    public float detectionRange = 5.0f; // 검사할 거리 범위
+    public float detectionRange = 5.0f; // 감지 범위
+    private GameObject targetFood = null; // 현재 들고 있는 food 오브젝트
+    private bool isCarrying = false; // 오브젝트를 들고 있는지 여부
 
-    // 매 프레임 호출
     void Update()
     {
-        // G 키가 눌렸을 때 실행
+        // G 키가 눌리면 감지된 오브젝트를 들기/놓기 처리
         if (Input.GetKeyDown(KeyCode.G))
         {
-            DestroyNearbyFood();
+            if (!isCarrying)
+                DetectAndPickUpFood(); // 범위 내 오브젝트 감지 및 집기
+            else
+                DropFood(); // 들고 있는 오브젝트 놓기
+        }
+
+        // 오브젝트를 들고 있을 때, 플레이어의 앞쪽으로 이동시킴
+        if (isCarrying && targetFood != null)
+        {
+            CarryFoodWithPlayer();
         }
     }
 
-    // 가까운 food 태그를 가진 오브젝트를 찾아 파괴하는 메서드
-    void DestroyNearbyFood()
+    // 범위 내의 가장 가까운 food 오브젝트를 찾고 집는 메서드
+    void DetectAndPickUpFood()
     {
-        // 모든 food 태그를 가진 오브젝트를 배열로 가져오기
         GameObject[] foods = GameObject.FindGameObjectsWithTag("food");
+        float closestDistance = detectionRange;
+        targetFood = null;
 
         foreach (GameObject food in foods)
         {
-            // 플레이어(현재 오브젝트)와 food 사이의 거리 계산
             float distance = Vector3.Distance(transform.position, food.transform.position);
-
-            // 설정된 범위 내에 있을 경우 오브젝트 파괴
-            if (distance <= detectionRange)
+            if (distance <= closestDistance)
             {
-                Destroy(food);
-                Debug.Log($"{food.name} 오브젝트가 파괴되었습니다.");
-                break; // 한 번에 하나의 오브젝트만 파괴하고 종료
+                closestDistance = distance;
+                targetFood = food; // 가장 가까운 food 저장
             }
         }
+
+        if (targetFood != null)
+        {
+            isCarrying = true;
+            Debug.Log($"{targetFood.name}을(를) 집었습니다.");
+        }
+    }
+
+    // 들고 있는 오브젝트를 플레이어의 앞쪽으로 이동시키는 메서드
+    void CarryFoodWithPlayer()
+    {
+        // 플레이어가 바라보는 방향으로 약간 앞에 위치하도록 설정
+        Vector3 carryPosition = transform.position + transform.forward * 1f + new Vector3(0, 1, 0);
+        targetFood.transform.position = carryPosition;
+    }
+
+    // 들고 있는 오브젝트를 현재 위치의 Y축 0인 지점에 내려놓는 메서드
+    void DropFood()
+    {
+        if (targetFood != null)
+        {
+            // 현재 위치의 y축을 0으로 설정하여 오브젝트를 놓음
+            Vector3 dropPosition = targetFood.transform.position;
+            dropPosition.y = 0;
+            targetFood.transform.position = dropPosition;
+
+            Debug.Log($"{targetFood.name}을(를) 내려놓았습니다.");
+            targetFood = null; // 참조 해제
+        }
+        isCarrying = false;
     }
 }
