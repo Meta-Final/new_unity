@@ -503,12 +503,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2389167260031314554}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &788010064 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4601572110457932306, guid: 89986293668bc864b99cffb29bd8b504,
-    type: 3}
-  m_PrefabInstance: {fileID: 1366918082}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &880828602 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4328795804895273555, guid: af0321e937495ee4d95d4710931ff113,
@@ -1054,6 +1048,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1638436685 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 615890974656450922, guid: 89986293668bc864b99cffb29bd8b504,
+    type: 3}
+  m_PrefabInstance: {fileID: 1366918082}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1687328605 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 288689201895166833, guid: c24b73f0fec7e6e44be2747018c0a50b,
@@ -1577,7 +1577,7 @@ PrefabInstance:
         type: 3}
       propertyPath: MagCanvas
       value: 
-      objectReference: {fileID: 788010064}
+      objectReference: {fileID: 1638436685}
     - target: {fileID: 4328795804895273555, guid: af0321e937495ee4d95d4710931ff113,
         type: 3}
       propertyPath: Channelcanvas
@@ -1716,6 +1716,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3644986185264320945, guid: af197a691f1992f46b26c58777af7a36,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 673459253}
+    - target: {fileID: 3644986185264320945, guid: af197a691f1992f46b26c58777af7a36,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnButtonClick
+      objectReference: {fileID: 0}
+    - target: {fileID: 3644986185264320945, guid: af197a691f1992f46b26c58777af7a36,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ButtonConnection, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 5213787234291168438, guid: af197a691f1992f46b26c58777af7a36,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -1731,6 +1746,11 @@ PrefabInstance:
       propertyPath: btn_Exit
       value: 
       objectReference: {fileID: 6909892152941948903}
+    - target: {fileID: 6313483248519088089, guid: af197a691f1992f46b26c58777af7a36,
+        type: 3}
+      propertyPath: MagCanvas
+      value: 
+      objectReference: {fileID: 1638436685}
     - target: {fileID: 6313483248519088089, guid: af197a691f1992f46b26c58777af7a36,
         type: 3}
       propertyPath: Panel_notice
@@ -1792,7 +1812,7 @@ PrefabInstance:
     - target: {fileID: 228166012357677042, guid: 6f0b63c158c0a884aa4074eba8706179,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8182297717030448400, guid: 6f0b63c158c0a884aa4074eba8706179,
         type: 3}
@@ -2002,7 +2022,7 @@ PrefabInstance:
     - target: {fileID: 8577805284023451062, guid: 8e4846340d9427a428585a4a47ff3930,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8772611289632922696, guid: 8e4846340d9427a428585a4a47ff3930,
         type: 3}
