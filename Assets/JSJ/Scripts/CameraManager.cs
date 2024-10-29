@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class CameraManager : MonoBehaviour
 {
     public Camera mainCamera;
-    public GameObject frame;
+    public GameObject noticeFrame;
     
     
     public float followSpeed = 5f;
@@ -21,13 +21,13 @@ public class CameraManager : MonoBehaviour
     {
         mainCamera = Camera.main;
 
-        if (SceneManager.GetActiveScene().name == "PostitTest_Scene")
+        if (SceneManager.GetActiveScene().name == "Meta_Studio_Scene")
         {
-            frame = GameObject.Find("Frame");
+            noticeFrame = GameObject.Find("Frame");
         }
         else
         {
-            frame = null;
+            noticeFrame = null;
         }
 
         if (mainCamera != null)
