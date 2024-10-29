@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class UIToggleOnProximity : MonoBehaviour
 {
-    public GameObject uiTool; // UI 오브젝트 할당
+    public GameObject uiTool; // UI 오브젝트 (MagazineView 2의 자식)
     public float detectionRange = 5f; // 감지 범위
 
     private GameObject player;
@@ -18,15 +18,18 @@ public class UIToggleOnProximity : MonoBehaviour
         // SaveMgr_KJS 스크립트가 부착된 오브젝트 찾기
         saveMgr = FindObjectOfType<SaveMgr_KJS>();
 
-        // "Tool"이라는 이름의 오브젝트를 찾아서 uiTool에 할당
-        if (uiTool == null)
+        // "MagazineView 2" 오브젝트를 찾고, 그 자식 중 "Tool 2"를 찾아 할당
+        GameObject magazineView = GameObject.Find("MagazineView 2");
+        if (magazineView != null)
         {
-            uiTool = GameObject.Find("Tool");
+            uiTool = magazineView.transform.Find("Tool 2")?.gameObject;
         }
 
         // UI가 정상적으로 할당되었으면 비활성화
         if (uiTool != null)
             uiTool.SetActive(false);
+        else
+            Debug.LogWarning("uiTool을 찾을 수 없습니다.");
     }
 
     void Update()
