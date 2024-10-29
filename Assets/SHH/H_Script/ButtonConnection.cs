@@ -15,10 +15,15 @@ public class ButtonConnection : MonoBehaviour
     {
 
         ChannelCanvas = GameObject.Find("H_ChannelCanvas");
-        Panel_notice = GameObject.Find("Panel_notice");
-        MagCanvas = GameObject.Find("MagazineView 2");
-        Panel_notice.SetActive(false);
-       
+
+        if(Panel_notice)
+        {
+            Panel_notice.SetActive(false);
+        }
+        if(MagCanvas)
+        {
+            MagCanvas.SetActive(false);
+        }
 
 
     }

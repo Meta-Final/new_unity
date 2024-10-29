@@ -26,6 +26,9 @@ public class PostMgr : MonoBehaviour
     public GameObject MagCanvas;
     public GameObject Channelcanvas;
 
+    public GameObject btn_Pos;
+
+
     List<Button> btns = new List<Button>();
 
     public Button btn_Exit;
@@ -34,14 +37,15 @@ public class PostMgr : MonoBehaviour
     void Start()
     {
         ThumStart();
-
+        ButtonConnection bc = btn_Pos.GetComponent<ButtonConnection>();
+        MagCanvas = bc.MagCanvas.transform.GetChild(0).gameObject;
     }
 
     public void ThumStart()
     {
         print("???");
 
-        MagCanvas = GameObject.Find("CanvasMag");
+        //MagCanvas = GameObject.Find("Tool 2");
         Channelcanvas = GameObject.Find("H_ChannelCanvas");
 
         HttpInfo info = new HttpInfo();
@@ -69,9 +73,11 @@ public class PostMgr : MonoBehaviour
 
             post.SetInfo(allPost[i]);
         }
-       
-        print(MagCanvas);
-        MagCanvas.SetActive(false);
+       if(MagCanvas)
+        {
+            print(MagCanvas);
+            MagCanvas.SetActive(false);
+        }
 
        
     }
