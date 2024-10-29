@@ -30,6 +30,7 @@ public class InventoryController : MonoBehaviour
         }
     }
 
+    // 버튼 클릭시, 해당 UI 화면이 뜸
     public void OnClickScreenshotInven()
     {
         screenshotBG.SetActive(true);
