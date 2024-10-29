@@ -84,7 +84,6 @@ GameObject:
   - component: {fileID: 3921089828924530438}
   - component: {fileID: 6704271068434798432}
   - component: {fileID: 8459886632073672212}
-  - component: {fileID: 350320439892606363}
   m_Layer: 0
   m_Name: PostIt
   m_TagString: Untagged
@@ -101,9 +100,9 @@ Transform:
   m_GameObject: {fileID: 4516370248963823536}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.3}
-  m_LocalScale: {x: 1, y: 0.8, z: 0.05}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0, z: -0.8}
+  m_LocalScale: {x: 0.2, y: 0.16, z: 0.01}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8746089327917151177}
   m_Father: {fileID: 0}
@@ -179,18 +178,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &350320439892606363
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4516370248963823536}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8540bcb53f8c58d48b2d73a4a29c83a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5120036909585682151
 GameObject:
   m_ObjectHideFlags: 0
