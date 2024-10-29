@@ -79,6 +79,7 @@ public class RootObject
 
 public class SaveMgr_KJS : MonoBehaviour
 {
+    public GameObject toolButton;  // 인스펙터에서 툴 버튼 연결
     public GameObject textBoxPrefab;
     public GameObject imageBoxPrefab;
     public GameObject pagePrefab;
@@ -169,27 +170,32 @@ public class SaveMgr_KJS : MonoBehaviour
     {
         try
         {
-            rootData.posts.Clear();
+            rootData.posts.Clear();  // 기존 데이터 초기화
 
-            Post newPost = new Post();
+            Post newPost = new Post();  // 새 게시물 생성
 
+            // 페이지별로 데이터 저장
             for (int i = 0; i < pages.Count; i++)
             {
-                Page newPage = new Page(i);
+                Page newPage = new Page(i);  // 새 페이지 생성
 
-                textBoxes.RemoveAll(item => item == null);
+                // 텍스트 박스 처리
+                textBoxes.RemoveAll(item => item == null);  // Null 오브젝트 제거
                 foreach (var textBox in textBoxes)
                 {
+                    // 올바른 부모-자식 관계인지 확인
                     if (textBox.transform.parent != pages[i].transform) continue;
 
                     TMP_Text textComponent = textBox.GetComponentInChildren<TMP_Text>();
-                    string content = textComponent != null ? textComponent.text : "";
+                    if (textComponent == null) continue;  // 텍스트 컴포넌트가 없으면 스킵
 
+                    string content = textComponent.text;
                     int fontSize = (int)textComponent.fontSize;
                     string fontFace = textComponent.font.name;
                     bool isUnderlined = textComponent.fontStyle.HasFlag(FontStyles.Underline);
                     bool isStrikethrough = textComponent.fontStyle.HasFlag(FontStyles.Strikethrough);
 
+                    // 텍스트 요소 추가
                     newPage.elements.Add(new Element(
                         Element.ElementType.Text_Box,
                         content,
@@ -201,11 +207,15 @@ public class SaveMgr_KJS : MonoBehaviour
                         isUnderlined,
                         isStrikethrough
                     ));
+
+                    Debug.Log($"TextBox 저장됨: {content}");
                 }
 
-                imageBoxes.RemoveAll(item => item == null);
+                // 이미지 박스 처리
+                imageBoxes.RemoveAll(item => item == null);  // Null 오브젝트 제거
                 foreach (var imageBox in imageBoxes)
                 {
+                    // 올바른 부모-자식 관계인지 확인
                     if (imageBox.transform.parent != pages[i].transform) continue;
 
                     Image imageComponent = imageBox.transform.GetChild(0).GetComponent<Image>();
@@ -217,6 +227,7 @@ public class SaveMgr_KJS : MonoBehaviour
                         imageData = Element.EncodeImageToBase64(texture);
                     }
 
+                    // 이미지 요소 추가
                     newPage.elements.Add(new Element(
                         Element.ElementType.Image_Box,
                         "",
@@ -224,14 +235,23 @@ public class SaveMgr_KJS : MonoBehaviour
                         imageBox.transform.localPosition,
                         imageBox.transform.localScale
                     ));
+
+                    Debug.Log($"ImageBox 저장됨: {imageData != null}");
                 }
 
+                // 페이지를 게시물에 추가
                 newPost.pages.Add(newPage);
             }
 
+            // 게시물을 루트 데이터에 추가
             rootData.posts.Add(newPost);
 
+
+            // JSON 직렬화 및 저장
             string json = JsonUtility.ToJson(rootData, true);
+
+            print(json);
+
             File.WriteAllText(savePath, json);
 
             Debug.Log("Data saved successfully.");
@@ -241,6 +261,7 @@ public class SaveMgr_KJS : MonoBehaviour
             Debug.LogError($"Save failed: {e.Message}");
         }
     }
+
 
     public void LoadObjectsFromFile()
     {
@@ -320,6 +341,13 @@ public class SaveMgr_KJS : MonoBehaviour
 
             totalPages = pages.Count;
             UpdateScrollbar();
+
+            // === 여기서 툴 버튼 끄기 ===
+            if (toolButton != null)
+            {
+                toolButton.SetActive(false);  // 버튼 비활성화
+                Debug.Log("Tool button has been disabled.");
+            }
 
             Debug.Log("Data loaded successfully.");
         }
