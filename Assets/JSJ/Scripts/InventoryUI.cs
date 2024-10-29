@@ -16,7 +16,7 @@ public class InventoryUI : MonoBehaviour
 
     [Header("포스트잇")]
     public GameObject postItPrefab;
-    public Transform framePos;
+    public Transform noticePos;
     public Button btn_PostIt;
 
     int selectIndex = -1;
@@ -24,13 +24,13 @@ public class InventoryUI : MonoBehaviour
 
     private void Start()
     {
-        if (SceneManager.GetActiveScene().name == "PostitTest_Scene")
+        if (SceneManager.GetActiveScene().name == "Meta_Studio_Scene")
         {
-            framePos = GameObject.Find("FramePos").transform;
+            noticePos = GameObject.Find("NoticeFrame").transform;
         }
         else
         {
-            framePos = null;
+            noticePos = null;
         }
 
         btn_Delete.interactable = false;
@@ -115,7 +115,7 @@ public class InventoryUI : MonoBehaviour
     {
         if (selectScreenshot != null)
         {
-            GameObject newPostIt = Instantiate(postItPrefab, framePos);
+            GameObject newPostIt = Instantiate(postItPrefab, noticePos);
 
             RawImage postItImage = newPostIt.GetComponentInChildren<RawImage>();
 
