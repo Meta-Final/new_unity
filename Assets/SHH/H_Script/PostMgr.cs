@@ -41,7 +41,7 @@ public class PostMgr : MonoBehaviour
     {
         print("???");
 
-        MagCanvas = GameObject.Find("Tool 2");
+        MagCanvas = GameObject.Find("CanvasMag");
         Channelcanvas = GameObject.Find("H_ChannelCanvas");
 
         HttpInfo info = new HttpInfo();

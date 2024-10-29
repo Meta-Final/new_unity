@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class UIToggleOnProximity : MonoBehaviour
+public class PrefabManager_KJS : MonoBehaviour
 {
     public GameObject uiTool; // UI 오브젝트 (MagazineView 2의 자식)
     public float detectionRange = 5f; // 감지 범위
@@ -9,6 +9,7 @@ public class UIToggleOnProximity : MonoBehaviour
     private bool isPlayerInRange = false;
 
     private SaveMgr_KJS saveMgr;  // SaveMgr_KJS 인스턴스 참조
+    private bool isUIActive = false; // UI의 현재 상태를 추적
 
     void Start()
     {
@@ -36,25 +37,41 @@ public class UIToggleOnProximity : MonoBehaviour
     {
         if (player != null)
         {
+            // 플레이어와의 거리 계산
             float distance = Vector3.Distance(player.transform.position, transform.position);
 
-            if (distance <= detectionRange && !isPlayerInRange)
+            // 범위 안에 들어오면 isPlayerInRange를 true로 설정
+            if (distance <= detectionRange)
             {
-                ToggleUI(true);  // 플레이어가 범위 안에 들어오면 UI 활성화
                 isPlayerInRange = true;
             }
-            else if (distance > detectionRange && isPlayerInRange)
+            else
             {
-                ToggleUI(false);  // 플레이어가 범위를 벗어나면 UI 비활성화
                 isPlayerInRange = false;
+
+                // 플레이어가 범위를 벗어나면 UI를 자동으로 비활성화
+                if (isUIActive)
+                {
+                    ToggleUI(false);
+                }
+            }
+
+            // 범위 내에 있을 때 V 키를 누르면 UI를 토글
+            if (isPlayerInRange && Input.GetKeyDown(KeyCode.V))
+            {
+                ToggleUI(!isUIActive);  // 현재 상태 반전
             }
         }
     }
 
+    // UI 활성화/비활성화 처리
     private void ToggleUI(bool isActive)
     {
         if (uiTool != null)
+        {
             uiTool.SetActive(isActive);
+            isUIActive = isActive;
+        }
 
         if (isActive)
         {

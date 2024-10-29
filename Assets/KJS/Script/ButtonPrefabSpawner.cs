@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class ButtonPrefabSpawner : MonoBehaviour
 {
     public GameObject prefab; // 각 버튼마다 설정할 프리팹
+    private GameObject player; // 플레이어 오브젝트 참조
 
     private Button button; // 버튼 컴포넌트 참조
 
@@ -21,15 +22,30 @@ public class ButtonPrefabSpawner : MonoBehaviour
         {
             Debug.LogError("Button 컴포넌트를 찾을 수 없습니다.");
         }
+
+        // Player 태그를 가진 오브젝트 자동 검색
+        player = GameObject.FindGameObjectWithTag("Player");
+
+        if (player == null)
+        {
+            Debug.LogError("Player 태그를 가진 오브젝트를 찾을 수 없습니다.");
+        }
     }
 
     // 버튼 클릭 시 호출되는 메서드
     private void SpawnPrefab()
     {
-        if (prefab != null)
+        if (prefab != null && player != null)
         {
-            // (0, 0, 0) 위치에 프리팹 생성
-            Instantiate(prefab, Vector3.zero, Quaternion.identity);
+            // 플레이어 위치에서 (1, 1, 1) 오프셋 적용
+            Vector3 spawnPosition = player.transform.position + new Vector3(1, 0, 0);
+
+            // 프리팹 생성
+            Instantiate(prefab, spawnPosition, Quaternion.identity);
+        }
+        else if (player == null)
+        {
+            Debug.LogWarning("Player 오브젝트를 찾을 수 없습니다.");
         }
         else
         {
