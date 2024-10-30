@@ -41,20 +41,14 @@ public class PicketSceneManager : MonoBehaviour
 
     public void MakeSticker()
     {
-        Vector2 mousePosition = Input.mousePosition;
-
+        Vector3 mousePosition = Input.mousePosition;
         RectTransformUtility.ScreenPointToWorldPointInRectangle(
-           boardCanvas.GetComponent<RectTransform>(),
-           mousePosition,
-           Camera.main, // 월드 공간에 사용할 카메라
-           out Vector3 worldPosition
-       );
+            boardCanvas.GetComponent<RectTransform>(),
+            mousePosition,
+            Camera.main,
+            out Vector3 worldPosition);
 
-        GameObject sticker = Instantiate(stickerPrefab);
-        sticker.transform.SetParent(boardCanvas.transform, false);
-
-        Transform stickerPos = sticker.GetComponent<Transform>();
-        stickerPos.transform.position = mousePosition;
+        Instantiate(stickerPrefab, worldPosition, Quaternion.identity, boardCanvas.transform);
 
 
     }
