@@ -37,15 +37,15 @@ public class PostMgr : MonoBehaviour
     void Start()
     {
         ThumStart();
-        ButtonConnection bc = btn_Pos.GetComponent<ButtonConnection>();
-        MagCanvas = bc.MagCanvas.transform.GetChild(0).gameObject;
+        //ButtonConnection bc = btn_Pos.GetComponent<ButtonConnection>();
+        //MagCanvas = bc.MagCanvas.transform.GetChild(0).gameObject;
     }
 
     public void ThumStart()
     {
         print("???");
 
-        //MagCanvas = GameObject.Find("Tool 2");
+        //MagCanvas = GameObject.Find("MagazineView 2");
         Channelcanvas = GameObject.Find("H_ChannelCanvas");
 
         HttpInfo info = new HttpInfo();
