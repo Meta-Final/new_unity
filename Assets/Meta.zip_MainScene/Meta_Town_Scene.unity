@@ -153,6 +153,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &145372751
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 145372752}
+  m_Layer: 0
+  m_Name: Lines
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &145372752
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145372751}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &199333059
 GameObject:
   m_ObjectHideFlags: 0
@@ -887,7 +918,6 @@ GameObject:
   m_Component:
   - component: {fileID: 436700298}
   - component: {fileID: 436700299}
-  - component: {fileID: 436700300}
   m_Layer: 0
   m_Name: Picket_Zone
   m_TagString: Untagged
@@ -930,23 +960,6 @@ MonoBehaviour:
   panelLinkNews: {fileID: 298994952}
   btn_Picket: {fileID: 1605939674}
   picketUIManager: {fileID: 1109771324}
---- !u!114 &436700300
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 436700297}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7152c7ec6c8e8344a873812a31111e57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  points: []
-  lineColor: {r: 1, g: 0, b: 0, a: 1}
-  lineWidth: 0.3
-  material: {fileID: 2100000, guid: 8db992ba2ae12194db76747def009f10, type: 2}
-  uiCam: {fileID: 1304667241}
 --- !u!1 &445537976
 GameObject:
   m_ObjectHideFlags: 0
@@ -2159,6 +2172,7 @@ GameObject:
   - component: {fileID: 1109771322}
   - component: {fileID: 1109771321}
   - component: {fileID: 1109771324}
+  - component: {fileID: 1109771325}
   m_Layer: 5
   m_Name: Canvas_Picket
   m_TagString: Untagged
@@ -2271,6 +2285,29 @@ MonoBehaviour:
   btn_X: {fileID: 1515515724}
   newsTexture: {fileID: 2800000, guid: b914e3bc7e859cd4a9c1ddf3ed835591, type: 3}
   img_News: {fileID: 1794850323}
+--- !u!114 &1109771325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1109771319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7152c7ec6c8e8344a873812a31111e57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  points: []
+  canvasPicket: {fileID: 1109771323}
+  uiCamera: {fileID: 1304667241}
+  stickerPrefab: {fileID: 3220649105213807139, guid: ddf7af138a8f5d3489bf026aa6e65bbe,
+    type: 3}
+  lineParent: {fileID: 145372752}
+  drawButton: {fileID: 689068412}
+  stickerButton: {fileID: 1417851652}
+  lineWidth: 0.1
+  material: {fileID: 2100000, guid: 8db992ba2ae12194db76747def009f10, type: 2}
+  lineColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &1112095262
 GameObject:
   m_ObjectHideFlags: 0
@@ -2706,8 +2743,8 @@ Transform:
   m_GameObject: {fileID: 1240051911}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -57.83, y: 0.6, z: -244.43}
-  m_LocalScale: {x: 1.248, y: 0.28, z: 0.71}
+  m_LocalPosition: {x: -51.75, y: 0.61, z: 2}
+  m_LocalScale: {x: 1.247, y: 0.28, z: 0.71}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -2834,7 +2871,7 @@ Transform:
   m_GameObject: {fileID: 1304667238}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -56.1, y: 0, z: -249}
+  m_LocalPosition: {x: -50, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3856,7 +3893,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1761407091
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7423,7 +7460,8 @@ SceneRoots:
   - {fileID: 986935326}
   - {fileID: 436700298}
   - {fileID: 287633077}
-  - {fileID: 1173090461}
-  - {fileID: 2138619708}
   - {fileID: 1304667242}
   - {fileID: 1240051915}
+  - {fileID: 145372752}
+  - {fileID: 2138619708}
+  - {fileID: 1173090461}
