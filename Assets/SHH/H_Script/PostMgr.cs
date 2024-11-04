@@ -46,7 +46,7 @@ public class PostMgr : MonoBehaviour
         print("???");
 
         //MagCanvas = GameObject.Find("MagazineView 2");
-        Channelcanvas = GameObject.Find("H_ChannelCanvas");
+        Channelcanvas = GameObject.Find("ChannelCanvas");
 
         HttpInfo info = new HttpInfo();
         info.url = "C:\\Users\\haqqm\\Desktop\\post\\postinfolist.txt";
