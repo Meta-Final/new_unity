@@ -118,10 +118,10 @@ public class SaveMgr_KJS : MonoBehaviour
         saveButton.onClick.AddListener(SaveObjectsToFile);
 
         // 저장된 모든 Load 버튼에 이벤트 리스너 추가
-        foreach (var button in loadButtons)
-        {
-            button.onClick.AddListener(() => CreateObjectsFromFile());
-        }
+        //foreach (var button in loadButtons)
+        //{
+        //    button.onClick.AddListener(() => CreateObjectsFromFile());
+        //}
 
         EnsureDirectoryExists();
 

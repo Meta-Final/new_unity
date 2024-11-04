@@ -2091,7 +2091,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &330022603
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6760,6 +6760,7 @@ MonoBehaviour:
   content: {fileID: 0}
   horizontalScrollbar: {fileID: 940666661}
   scrollRect: {fileID: 505386192}
+  pageCount: 1
   toolManager: {fileID: 1106585037}
   editorMgr: {fileID: 0}
   imageMgr: {fileID: 1106585035}
@@ -6795,13 +6796,16 @@ MonoBehaviour:
   pagePrefab: {fileID: 9193981295852427034, guid: 8f839e5c640b8bd40adfb0f81ee8c02c,
     type: 3}
   pageScrollbar: {fileID: 0}
+  toolManager: {fileID: 0}
+  editorMgr: {fileID: 0}
+  imageMgr: {fileID: 0}
   parent: {fileID: 0}
   pagesParentTransform: {fileID: 0}
   textBoxes: []
   imageBoxes: []
   pages:
   - {fileID: 0}
-  saveButton: {fileID: 0}
+  saveButton: {fileID: 330022604}
   loadButtons:
   - {fileID: 0}
 --- !u!114 &1106585037
@@ -8031,7 +8035,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1266871293
 RectTransform:
   m_ObjectHideFlags: 0
