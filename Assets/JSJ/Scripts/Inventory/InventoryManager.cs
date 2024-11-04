@@ -8,6 +8,7 @@ using UnityEngine.UI;
 [System.Serializable]
 public class ScreenshotData
 {
+    // 스크린샷 경로 List
     public List<string> screenshotList = new List<string>();
 }
 

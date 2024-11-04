@@ -18,6 +18,8 @@ public class DrawWithMouse : MonoBehaviour
     bool isDrawing = false;
     float timestep;
 
+    public Camera uiCam;
+
     private void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
@@ -34,7 +36,7 @@ public class DrawWithMouse : MonoBehaviour
     private void Update()
     {
         // 마우스를 눌렀을 때
-        if (isDrawing && Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             GameObject go = new GameObject("Line");
             lineRenderer = go.transform.AddComponent<LineRenderer>();
@@ -51,9 +53,9 @@ public class DrawWithMouse : MonoBehaviour
         }    
 
         // 마우스를 누르고 있을 때
-        if (isDrawing && Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = uiCam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;
 
             if (Physics.Raycast(ray, out hitInfo))
