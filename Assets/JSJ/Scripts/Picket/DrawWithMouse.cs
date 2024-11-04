@@ -13,7 +13,7 @@ public class DrawWithMouse : MonoBehaviour
     public Color lineColor = Color.red;
     public float lineWidth = 0.3f;
     public Material material;
-    public Button drawButton;
+    //public Button drawButton;
 
     bool isDrawing = false;
     float timestep;
@@ -30,7 +30,7 @@ public class DrawWithMouse : MonoBehaviour
         //lineRenderer.material = material;
         //lineRenderer.positionCount = 0;
 
-        drawButton.onClick.AddListener(StartDrawing);
+        //drawButton.onClick.AddListener(StartDrawing);
     }
 
     private void Update()
