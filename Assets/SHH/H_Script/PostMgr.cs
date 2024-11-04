@@ -49,7 +49,7 @@ public class PostMgr : MonoBehaviour
         Channelcanvas = GameObject.Find("ChannelCanvas");
 
         HttpInfo info = new HttpInfo();
-        info.url = "C:\\Users\\haqqm\\Desktop\\post\\postinfolist.txt";
+        info.url = "C:\\Users\\Admin\\Desktop\\post\\postinfolist.txt";
         info.onComplete = OncompletePostInfo;
 
         StartCoroutine(HttpManager.GetInstance().Get(info));

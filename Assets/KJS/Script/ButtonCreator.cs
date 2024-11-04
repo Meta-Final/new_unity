@@ -18,7 +18,7 @@ public class ButtonCreator : MonoBehaviour
         // SaveMgr에 이 버튼을 할당
         if (saveMgr != null)
         {
-            saveMgr.SetLoadButton(buttonComponent);  // SaveMgr의 loadButton에 이 버튼을 등록
+            /*saveMgr.SetLoadButton(buttonComponent);*/  // SaveMgr의 loadButton에 이 버튼을 등록
         }
 
         // 버튼 클릭 이벤트 추가

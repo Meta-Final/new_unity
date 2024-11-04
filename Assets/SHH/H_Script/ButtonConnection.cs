@@ -16,7 +16,7 @@ public class ButtonConnection : MonoBehaviour
     {
 
         ChannelCanvas = GameObject.Find("H_ChannelCanvas");
-        Magazine = GameObject.Find("MagazineView 2");
+        Magazine = GameObject.Find("Tool 2");
 
         if (Panel_notice)
         {
@@ -58,6 +58,13 @@ public class ButtonConnection : MonoBehaviour
     {
         Panel_notice.SetActive(false);
     }
+
+    public void OnClicMapkExit()
+    {
+        Magazine.SetActive(true);
+        ChannelCanvas.SetActive(true);
+    }
+
 }
 
 

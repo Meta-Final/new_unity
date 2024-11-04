@@ -41,7 +41,10 @@ public class ButtonPrefabSpawner : MonoBehaviour
             Vector3 spawnPosition = player.transform.position + new Vector3(1, 0, 0);
 
             // 프리팹 생성
-            Instantiate(prefab, spawnPosition, Quaternion.identity);
+            GameObject spawnedPrefab = Instantiate(prefab, spawnPosition, Quaternion.identity);
+
+            // 생성된 프리팹의 크기를 15로 조정
+            spawnedPrefab.transform.localScale = Vector3.one * 15;
         }
         else if (player == null)
         {
