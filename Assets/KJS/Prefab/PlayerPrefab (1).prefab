@@ -1353,7 +1353,7 @@ MonoBehaviour:
   btn_Delete: {fileID: 2484886324033709923}
   postItPrefab: {fileID: 4516370248963823536, guid: 431904c52a75b0c439bffd25b5ef1cfd,
     type: 3}
-  framePos: {fileID: 0}
+  noticePos: {fileID: 0}
   btn_PostIt: {fileID: 7259544453060008863}
 --- !u!1 &4769357143107708913
 GameObject:
@@ -1496,6 +1496,7 @@ GameObject:
   - component: {fileID: 7673208501192762698}
   - component: {fileID: 775932708888603644}
   - component: {fileID: 408072459606136375}
+  - component: {fileID: -9086873282933666871}
   m_Layer: 0
   m_Name: PlayerPrefab (1)
   m_TagString: Player
@@ -1583,7 +1584,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 0}
-  frame: {fileID: 0}
+  noticeFrame: {fileID: 0}
   followSpeed: 5
   isZoom: 0
 --- !u!114 &7673208501192762698
@@ -1632,6 +1633,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryUI: {fileID: 6016914682135633819}
+--- !u!114 &-9086873282933666871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4844309809147619323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8530653d2dc5dba42ac36b87ffdad32e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textBoxPrefab: {fileID: 0}
+  imageBoxPrefab: {fileID: 0}
+  pagePrefab: {fileID: 0}
+  pageScrollbar: {fileID: 0}
+  parent: {fileID: 0}
+  pagesParentTransform: {fileID: 0}
+  textBoxes: []
+  imageBoxes: []
+  pages: []
 --- !u!1 &5540933313354300050
 GameObject:
   m_ObjectHideFlags: 0

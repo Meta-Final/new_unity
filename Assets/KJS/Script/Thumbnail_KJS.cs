@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using System.IO;  // 파일 읽기/쓰기
 using UnityEngine.Networking;  // 이미지 로드 시 사용
 
-
 public class Thumbnail_KJS : MonoBehaviour
 {
     public Button spawnButton;  // 스폰 버튼 (Inspector에서 연결)
@@ -46,8 +45,10 @@ public class Thumbnail_KJS : MonoBehaviour
         {
             // UI의 자식으로 프리팹 인스턴스 생성
             GameObject spawnedObject = Instantiate(prefabToSpawn, uiParent);
-            spawnedObject.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-            spawnedObject.GetComponent<RectTransform>().localScale = Vector3.one;
+
+            // RectTransform 설정을 제거하여 프리팹에 저장된 위치와 크기를 유지
+            // spawnedObject.GetComponent<RectTransform>().anchoredPosition = Vector2.zero; // 제거
+            // spawnedObject.GetComponent<RectTransform>().localScale = Vector3.one;       // 제거
 
             // 생성된 오브젝트에 데이터 적용 (텍스트와 이미지)
             Text editorNameText = spawnedObject.transform.Find("EditorName").GetComponent<Text>();

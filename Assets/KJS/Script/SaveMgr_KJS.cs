@@ -1,9 +1,10 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
+using TMPro;
+using UnityEditor.EditorTools;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using System.Collections.Generic;
-using System;
 
 [System.Serializable]
 public class Element
@@ -83,6 +84,9 @@ public class SaveMgr_KJS : MonoBehaviour
     public GameObject imageBoxPrefab;
     public GameObject pagePrefab;
     public Scrollbar pageScrollbar;
+    public ToolMgr_KJS toolManager;
+    public EditorMgr_KJS editorMgr;
+    public ImageMgr_KJS imageMgr;
 
     private int totalPages;
 
@@ -116,8 +120,7 @@ public class SaveMgr_KJS : MonoBehaviour
         // 저장된 모든 Load 버튼에 이벤트 리스너 추가
         foreach (var button in loadButtons)
         {
-            button.onClick.AddListener(() => LoadObjectsFromFile());
-            button.onClick.AddListener(() => postMgr.ThumStart());
+            button.onClick.AddListener(() => CreateObjectsFromFile());
         }
 
         EnsureDirectoryExists();
@@ -140,8 +143,7 @@ public class SaveMgr_KJS : MonoBehaviour
         Debug.Log($"버튼 {button.name}이 추가되었습니다.");
 
         // 동적으로 추가된 버튼에 클릭 이벤트 등록
-        button.onClick.AddListener(() => LoadObjectsFromFile());
-        button.onClick.AddListener(() => postMgr.ThumStart());
+        button.onClick.AddListener(() => CreateObjectsFromFile());
     }
 
     private void EnsureDirectoryExists()
@@ -262,92 +264,171 @@ public class SaveMgr_KJS : MonoBehaviour
     }
 
 
-    public void LoadObjectsFromFile()
+    public void CreateObjectsFromFile()
+{
+    try
     {
-        print("!!!!!");
-        try
+        Debug.Log("LoadObjectsFromFile() called.");
+
+        if (!File.Exists(savePath))
         {
-            Debug.Log("LoadObjectsFromFile() called.");
+            Debug.LogWarning("Save file not found.");
+            return;
+        }
 
-            if (!File.Exists(savePath))
+        string json = File.ReadAllText(savePath);
+        rootData = JsonUtility.FromJson<RootObject>(json);
+
+        if (rootData.posts.Count == 0) return;
+
+        Post post = rootData.posts[0];
+
+        // 기존에 생성된 오브젝트들 제거
+        textBoxes.ForEach(Destroy);
+        imageBoxes.ForEach(Destroy);
+        pages.ForEach(Destroy);
+
+        textBoxes.Clear();
+        imageBoxes.Clear();
+        pages.Clear();
+
+        foreach (var page in post.pages)
+        {
+            GameObject newPage = Instantiate(pagePrefab, pagesParentTransform);
+            InitializePage(newPage);
+
+            foreach (var element in page.elements)
             {
-                Debug.LogWarning("Save file not found.");
-                return;
-            }
-
-            string json = File.ReadAllText(savePath);
-            rootData = JsonUtility.FromJson<RootObject>(json);
-
-            if (rootData.posts.Count == 0) return;
-
-            Post post = rootData.posts[0];
-
-            textBoxes.ForEach(Destroy);
-            imageBoxes.ForEach(Destroy);
-            pages.ForEach(Destroy);
-
-            textBoxes.Clear();
-            imageBoxes.Clear();
-            pages.Clear();
-
-            foreach (var page in post.pages)
-            {
-                GameObject newPageObj = Instantiate(pagePrefab, pagesParentTransform);
-                AddPage(newPageObj);
-
-                foreach (var element in page.elements)
+                if (element.type == Element.ElementType.Text_Box)
                 {
-                    GameObject newObj = null;
+                    GameObject newTextBox = Instantiate(textBoxPrefab, newPage.transform);
+                    InitializeTextBox(newTextBox);
 
-                    if (element.type == Element.ElementType.Text_Box)
+                    newTextBox.transform.localPosition = element.position;
+                    newTextBox.transform.localScale = element.scale;
+
+                    TMP_Text textComponent = newTextBox.GetComponentInChildren<TMP_Text>();
+                    if (textComponent != null)
                     {
-                        newObj = Instantiate(textBoxPrefab, newPageObj.transform);
-                        TMP_Text textComponent = newObj.GetComponentInChildren<TMP_Text>();
-                        if (textComponent != null)
-                        {
-                            textComponent.text = element.content;
-                            textComponent.fontSize = element.fontSize;
+                        textComponent.text = element.content;
+                        textComponent.fontSize = element.fontSize;
 
-                            TMP_FontAsset fontAsset = Resources.Load<TMP_FontAsset>($"Fonts/{element.fontFace}");
-                            if (fontAsset != null) textComponent.font = fontAsset;
+                        TMP_FontAsset fontAsset = Resources.Load<TMP_FontAsset>($"Fonts/{element.fontFace}");
+                        if (fontAsset != null) textComponent.font = fontAsset;
 
-                            textComponent.fontStyle = FontStyles.Normal;
-                            if (element.isUnderlined) textComponent.fontStyle |= FontStyles.Underline;
-                            if (element.isStrikethrough) textComponent.fontStyle |= FontStyles.Strikethrough;
-                        }
-                        AddTextBox(newObj);
+                        textComponent.fontStyle = FontStyles.Normal;
+                        if (element.isUnderlined) textComponent.fontStyle |= FontStyles.Underline;
+                        if (element.isStrikethrough) textComponent.fontStyle |= FontStyles.Strikethrough;
                     }
-                    else if (element.type == Element.ElementType.Image_Box)
-                    {
-                        newObj = Instantiate(imageBoxPrefab, newPageObj.transform);
-                        Image imageComponent = newObj.transform.GetChild(0).GetComponent<Image>();
+                }
+                else if (element.type == Element.ElementType.Image_Box)
+                {
+                    GameObject newImageBox = Instantiate(imageBoxPrefab, newPage.transform);
+                    InitializeImageBox(newImageBox);
 
-                        if (!string.IsNullOrEmpty(element.imageData))
-                        {
-                            Texture2D texture = Element.DecodeImageFromBase64(element.imageData);
-                            imageComponent.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-                        }
-                        AddImageBox(newObj);
-                    }
+                    newImageBox.transform.localPosition = element.position;
+                    newImageBox.transform.localScale = element.scale;
 
-                    if (newObj != null)
+                    Image imageComponent = newImageBox.transform.GetChild(0).GetComponent<Image>();
+                    if (imageComponent != null && !string.IsNullOrEmpty(element.imageData))
                     {
-                        newObj.transform.localPosition = element.position;
-                        newObj.transform.localScale = element.scale;
+                        Texture2D texture = Element.DecodeImageFromBase64(element.imageData);
+                        imageComponent.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
                     }
                 }
             }
-
-            totalPages = pages.Count;
-            UpdateScrollbar();
-
-            Debug.Log("Data loaded successfully.");
         }
-        catch (Exception e)
+
+        // 페이지 수 업데이트 및 스크롤바 설정
+        totalPages = pages.Count;
+        UpdateScrollbar();
+
+        Debug.Log("Data loaded successfully.");
+    }
+    catch (Exception e)
+    {
+        Debug.LogError($"Load failed: {e.Message}");
+    }
+}
+
+    private void InitializePage(GameObject page)
+    {
+        page.name = $"Page_{System.Guid.NewGuid()}";
+        pages.Add(page);
+
+        // 페이지 내의 버튼 연결
+        Button btn_TextBox = page.transform.Find("btn_TextBox")?.GetComponent<Button>();
+        if (btn_TextBox != null)
         {
-            Debug.LogError($"Load failed: {e.Message}");
+            btn_TextBox.onClick.AddListener(() =>
+            {
+                GameObject newTextBox = Instantiate(textBoxPrefab, page.transform);
+                InitializeTextBox(newTextBox); // 텍스트 박스 초기화
+            });
+        }
+
+        Button btn_ImageBox = page.transform.Find("btn_Image")?.GetComponent<Button>();
+        if (btn_ImageBox != null)
+        {
+            btn_ImageBox.onClick.AddListener(() =>
+            {
+                GameObject newImageBox = Instantiate(imageBoxPrefab, page.transform);
+                InitializeImageBox(newImageBox); // 이미지 박스 초기화
+            });
+        }
+
+        Button deleteButton = page.transform.Find("btn_Delete")?.GetComponent<Button>();
+        if (deleteButton != null)
+        {
+            deleteButton.onClick.AddListener(() => RemovePage(page));
         }
     }
+
+    private void InitializeTextBox(GameObject textBox)
+    {
+        textBox.name = $"TextBox_{System.Guid.NewGuid()}";
+        textBoxes.Add(textBox);
+
+        Button buttonContent = textBox.GetComponentInChildren<Button>();
+        if (buttonContent != null)
+        {
+            buttonContent.name = $"{textBox.name}_Button";
+            buttonContent.onClick.AddListener(toolManager.OnClickTogglePanel);
+            buttonContent.onClick.AddListener(() =>
+            {
+                if (editorMgr != null)
+                {
+                    editorMgr.SetInputFieldTextFromButton(buttonContent);
+                }
+                else
+                {
+                    Debug.LogError("EditorMgr_KJS가 할당되지 않았습니다.");
+                }
+            });
+        }
+        else
+        {
+            Debug.LogError("텍스트 박스 프리팹에 Button 컴포넌트가 없습니다.");
+        }
+    }
+
+    private void InitializeImageBox(GameObject imageBox)
+    {
+        imageBox.name = $"ImageBox_{System.Guid.NewGuid()}";
+        imageBoxes.Add(imageBox);
+
+        Button buttonContent = imageBox.GetComponentInChildren<Button>();
+        if (buttonContent != null)
+        {
+            imageMgr.AddButton(buttonContent);
+            Debug.Log($"ImageBox button {buttonContent.name} added to ImageMgr_KJS.");
+        }
+        else
+        {
+            Debug.LogError("ImageBox 프리팹에 Button 컴포넌트가 없습니다.");
+        }
+    }
+
 
     private void UpdateScrollbar()
     {
