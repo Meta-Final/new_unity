@@ -111,13 +111,13 @@ public class SaveMgr_KJS : MonoBehaviour
         saveDirectory = Application.dataPath + "/KJS/UserInfo";
         savePath = Path.Combine(saveDirectory, saveFileName);
 
-        saveButton.onClick.AddListener(SaveObjectsToFile);
+        //saveButton.onClick.AddListener(SaveObjectsToFile);
 
         // 저장된 모든 Load 버튼에 이벤트 리스너 추가
         foreach (var button in loadButtons)
         {
-            button.onClick.AddListener(() => LoadObjectsFromFile());
-            button.onClick.AddListener(() => postMgr.ThumStart());
+            //button.onClick.AddListener(() => LoadObjectsFromFile());
+            //button.onClick.AddListener(() => postMgr.ThumStart());
         }
 
         EnsureDirectoryExists();
