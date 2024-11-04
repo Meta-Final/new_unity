@@ -15,7 +15,7 @@ public class CreateMgr_KJS : MonoBehaviour
     public Scrollbar horizontalScrollbar;
     public ScrollRect scrollRect;
 
-    private int pageCount = 1;
+    public int pageCount = 1;
     private float pageWidth;
 
     public ToolMgr_KJS toolManager;
