@@ -2,17 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PicketManager : MonoBehaviour
 {
     public GameObject picketPrefab;
     public GameObject player;
+    public GameObject panelPicket;
+
+    public Button btn_Picket;
 
     Vector3 picketPos;
 
     void Start()
     {
         player = GameObject.Find("PlayerPrefab");
+
+        btn_Picket.onClick.AddListener(MakePicket);
     }
 
     void Update()
@@ -44,7 +50,7 @@ public class PicketManager : MonoBehaviour
         }
     }
 
-    // Picket 클릭시, 씬 이동
+    // Picket 클릭시, 해당 기사 UI 화면 뜸
     public void ClickPicket()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -54,7 +60,9 @@ public class PicketManager : MonoBehaviour
         {
             if (hitInfo.collider.gameObject.layer == 18)
             {
-                SceneManager.LoadScene("Meta_Picket_Scene");
+                //SceneManager.LoadScene("Meta_Picket_Scene");
+
+                panelPicket.SetActive(true);
             }
         }
     }
