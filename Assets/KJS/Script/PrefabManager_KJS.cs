@@ -8,7 +8,7 @@ public class PrefabManager_KJS : MonoBehaviour
     private GameObject player;
     private bool isPlayerInRange = false;
 
-    private CreateMgr_KJS createMgr;  // SaveMgr_KJS 인스턴스 참조
+    private SaveMgr_KJS saveMgr;  // SaveMgr_KJS 인스턴스 참조
     private bool isUIActive = false; // UI의 현재 상태를 추적
 
     void Start()
@@ -17,7 +17,7 @@ public class PrefabManager_KJS : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
 
         // SaveMgr_KJS 스크립트가 부착된 오브젝트 찾기
-        createMgr = FindObjectOfType<CreateMgr_KJS>();
+        saveMgr = FindObjectOfType<SaveMgr_KJS>();
 
         // "MagazineView 2" 오브젝트를 찾고, 그 자식 중 "Tool 2"를 찾아 할당
         GameObject magazineView = GameObject.Find("MagazineView 2");
@@ -76,7 +76,7 @@ public class PrefabManager_KJS : MonoBehaviour
         if (isActive)
         {
             // UI가 활성화될 때 SaveMgr_KJS의 LoadObjectsFromFile 호출
-            createMgr.CreateObjectsFromFile();
+            saveMgr.CreateObjectsFromFile();
         }
     }
 }
