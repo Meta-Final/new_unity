@@ -79,7 +79,6 @@ public class RootObject
 
 public class SaveMgr_KJS : MonoBehaviour
 {
-    public GameObject toolButton;  // 인스펙터에서 툴 버튼 연결
     public GameObject textBoxPrefab;
     public GameObject imageBoxPrefab;
     public GameObject pagePrefab;
@@ -118,7 +117,7 @@ public class SaveMgr_KJS : MonoBehaviour
         foreach (var button in loadButtons)
         {
             button.onClick.AddListener(() => LoadObjectsFromFile());
-            //button.onClick.AddListener(() => postMgr.ThumStart());
+            button.onClick.AddListener(() => postMgr.ThumStart());
         }
 
         EnsureDirectoryExists();
@@ -142,7 +141,7 @@ public class SaveMgr_KJS : MonoBehaviour
 
         // 동적으로 추가된 버튼에 클릭 이벤트 등록
         button.onClick.AddListener(() => LoadObjectsFromFile());
-        //button.onClick.AddListener(() => postMgr.ThumStart());
+        button.onClick.AddListener(() => postMgr.ThumStart());
     }
 
     private void EnsureDirectoryExists()
@@ -341,13 +340,6 @@ public class SaveMgr_KJS : MonoBehaviour
 
             totalPages = pages.Count;
             UpdateScrollbar();
-
-            // === 여기서 툴 버튼 끄기 ===
-            if (toolButton != null)
-            {
-                toolButton.SetActive(false);  // 버튼 비활성화
-                Debug.Log("Tool button has been disabled.");
-            }
 
             Debug.Log("Data loaded successfully.");
         }

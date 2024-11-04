@@ -54,7 +54,7 @@ public class GeT_KJS : MonoBehaviour
     void CarryFoodWithPlayer()
     {
         // 플레이어가 바라보는 방향으로 약간 앞에 위치하도록 설정
-        Vector3 carryPosition = transform.position + transform.forward * 0.5f + new Vector3(0, 1, 0);
+        Vector3 carryPosition = transform.position + transform.forward * 5f + new Vector3(0, 5, 0);
         targetFood.transform.position = carryPosition;
     }
 

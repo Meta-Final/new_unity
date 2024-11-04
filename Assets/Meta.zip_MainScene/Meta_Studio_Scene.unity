@@ -447,7 +447,7 @@ MonoBehaviour:
   Panel_notice: {fileID: 0}
   MagCanvas: {fileID: 0}
   Magazine: {fileID: 0}
-  btn_Exit: {fileID: 0}
+  btn_Exit: {fileID: 1927890653}
 --- !u!4 &235390431
 Transform:
   m_ObjectHideFlags: 0
@@ -494,6 +494,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &517941116 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2001275767085409263, guid: 8e4846340d9427a428585a4a47ff3930,
+    type: 3}
+  m_PrefabInstance: {fileID: 8019896369992758180}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &517941120
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 517941116}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.15833427, y: 0.077173434, z: 0.008150192}
+  m_Center: {x: -0.013790881, y: 0.0000000038146974, z: -0.062223416}
 --- !u!1 &530162759
 GameObject:
   m_ObjectHideFlags: 0
@@ -583,7 +610,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1890515688}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1768269118}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 475e109f177cc43449483133a45525f5, type: 3}
@@ -657,7 +684,7 @@ PrefabInstance:
         type: 3}
       propertyPath: editorPanel
       value: 
-      objectReference: {fileID: 1751259771}
+      objectReference: {fileID: 1768269118}
     - target: {fileID: 3306751923833244994, guid: 38922a62777744644915b5ef29018281,
         type: 3}
       propertyPath: content
@@ -1135,6 +1162,7 @@ GameObject:
   - component: {fileID: 1173090457}
   - component: {fileID: 1173090456}
   - component: {fileID: 1173090455}
+  - component: {fileID: 1173090462}
   m_Layer: 16
   m_Name: PlayerPrefab
   m_TagString: Player
@@ -1271,6 +1299,19 @@ Transform:
   - {fileID: 5032392689139979102}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1173090462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173090454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 618d9088c8b6fe544b352459e72acd89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRange: 10
 --- !u!1 &1210735260
 GameObject:
   m_ObjectHideFlags: 0
@@ -1918,6 +1959,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 615890974656450922, guid: 89986293668bc864b99cffb29bd8b504,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 653075057636904247, guid: 89986293668bc864b99cffb29bd8b504,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 235390430}
+    - target: {fileID: 653075057636904247, guid: 89986293668bc864b99cffb29bd8b504,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClicMapkExit
+      objectReference: {fileID: 0}
+    - target: {fileID: 653075057636904247, guid: 89986293668bc864b99cffb29bd8b504,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ButtonConnection, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 1150097202777944929, guid: 89986293668bc864b99cffb29bd8b504,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -2234,6 +2295,12 @@ Transform:
   - {fileID: 1077186723}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 34.149, z: 0}
+--- !u!1 &1768269118 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 615515315376559812, guid: 9fc00af1a8f688040ba0363119b006ad,
+    type: 3}
+  m_PrefabInstance: {fileID: 1890515688}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1885158241
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2460,6 +2527,12 @@ PrefabInstance:
       propertyPath: apiManager
       value: 
       objectReference: {fileID: 671643501}
+    - target: {fileID: 3019176762085567756, guid: 9fc00af1a8f688040ba0363119b006ad,
+        type: 3}
+      propertyPath: prefabObject
+      value: 
+      objectReference: {fileID: 2942513239859350657, guid: f9777681206e3e342921fc48744efb85,
+        type: 3}
     - target: {fileID: 3344733718731980702, guid: 9fc00af1a8f688040ba0363119b006ad,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -2651,6 +2724,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9fc00af1a8f688040ba0363119b006ad, type: 3}
+--- !u!1 &1927890653 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5810443710730505396, guid: 89986293668bc864b99cffb29bd8b504,
+    type: 3}
+  m_PrefabInstance: {fileID: 1511937876}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1987509374 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7345395692036855999, guid: 8e4846340d9427a428585a4a47ff3930,
@@ -5473,6 +5552,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 16
       objectReference: {fileID: 0}
+    - target: {fileID: 7676186964626791045, guid: 2fcb8bdd097d4d64ea4822b55f208bba,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7775683206900918181, guid: 2fcb8bdd097d4d64ea4822b55f208bba,
         type: 3}
       propertyPath: m_Layer
@@ -6137,6 +6221,10 @@ PrefabInstance:
       insertIndex: 4
       addedObject: {fileID: 91593803}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2001275767085409263, guid: 8e4846340d9427a428585a4a47ff3930,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 517941120}
     - targetCorrespondingSourceObject: {fileID: 5229540233262288939, guid: 8e4846340d9427a428585a4a47ff3930,
         type: 3}
       insertIndex: -1
