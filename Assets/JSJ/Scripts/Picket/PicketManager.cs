@@ -1,32 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PicketManager : MonoBehaviour
 {
-    public GameObject picketPrefab;
+    public GameObject picketPrefab;   
     public GameObject player;
-    public GameObject panelPicket;
-
-    public Button btn_Picket;
+    public GameObject panelLinkNews;   // Picket이랑 기사 링크 여부 Panel
+    
+    public Button btn_Picket;          // Picket 생성 버튼
 
     Vector3 picketPos;
+
+    public PicketUIManager picketUIManager;
 
     void Start()
     {
         player = GameObject.Find("PlayerPrefab");
 
         btn_Picket.onClick.AddListener(MakePicket);
+
+        panelLinkNews.SetActive(false);
     }
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            ClickPicket();
-        }
         
     }
 
@@ -45,24 +44,10 @@ public class PicketManager : MonoBehaviour
 
                 GameObject obj = Instantiate(picketPrefab, picketPos, Quaternion.identity);
                 obj.transform.LookAt(player.transform);
+                picketUIManager.currentPicket = obj;
 
-            }
-        }
-    }
-
-    // Picket 클릭시, 해당 기사 UI 화면 뜸
-    public void ClickPicket()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hitInfo;
-
-        if (Physics.Raycast(ray, out hitInfo))
-        {
-            if (hitInfo.collider.gameObject.layer == 18)
-            {
-                //SceneManager.LoadScene("Meta_Picket_Scene");
-
-                panelPicket.SetActive(true);
+                // "피켓에 기사를 링크하시겠습니까?" UI 뜸
+                panelLinkNews.SetActive(true);
             }
         }
     }

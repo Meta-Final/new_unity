@@ -9,21 +9,22 @@ using UnityEngine.UI;
 public class InventoryUI : MonoBehaviour
 {
     [Header("인벤토리")]
-    public Transform slot;
-    public RawImage img_Preview;
-    public Button btn_SlotItemPrefab;
-    public Button btn_Delete;
+    public Transform slot;            
+    public RawImage img_Preview;        // 스크린샷 미리보기 화면
+    public Button btn_SlotItemPrefab;   // 스크린샷 프리팹
+    public Button btn_Delete;           // 스크린샷 삭제 버튼
 
     [Header("포스트잇")]
-    public GameObject postItPrefab;
-    public Transform noticePos;
-    public Button btn_PostIt;
+    public GameObject postItPrefab;     // 포스트잇 프리팹
+    public Transform noticePos;         // 액자 위치
+    public Button btn_PostIt;           // 포스트잇 생성 버튼
 
     int selectIndex = -1;
     Texture2D selectScreenshot;
 
     private void Start()
     {
+        // 지금 'Meta_Studio_Scene'이라면, 액자를 찾아라.
         if (SceneManager.GetActiveScene().name == "Meta_Studio_Scene")
         {
             noticePos = GameObject.Find("NoticeFrame").transform;
@@ -58,7 +59,7 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    // 클릭하면 발동하는 함수
+    // 스크린샷 클릭하면 발동하는 함수
     public void OnSlotClick(int index)
     {
         selectIndex = index;
@@ -71,7 +72,7 @@ public class InventoryUI : MonoBehaviour
         btn_Delete.onClick.AddListener(() => OnSlotDeleteClick(selectIndex));
     }
 
-    // 삭제 기능
+    // 스크린샷 삭제 버튼 기능
     public void OnSlotDeleteClick(int index)
     {
         InventoryManager.instance.DeleteScreenshot(index);
@@ -110,7 +111,7 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    // 포스트잇 기능
+    // 포스트잇 생성 버튼 기능
     public void OnPostitButtionClick()
     {
         if (selectScreenshot != null)
@@ -127,28 +128,6 @@ public class InventoryUI : MonoBehaviour
                 float originWidth = selectScreenshot.width;
                 float originHeight = selectScreenshot.height;
                 float aspectRatio = originWidth / originHeight;
-
-                //RectTransform postItRectTransform = newPostIt.GetComponent<RectTransform>();
-
-                //if (postItRectTransform != null)
-                //{
-                //    print("22222");
-                //    float baseWidth = 0.8f;
-                //    float baseHeight = baseWidth / aspectRatio;
-
-
-                //    postItRectTransform.sizeDelta = new Vector2(baseWidth, baseHeight);
-
-                //    RectTransform imageRectTransform = postItImage.GetComponent<RectTransform>();
-                //    if (imageRectTransform != null)
-                //    {
-                //        print("33333");
-                //        imageRectTransform.sizeDelta = new Vector2(baseWidth, baseHeight);
-                //    }
-                //}
-
-                // Scale
-                
             }
         }
 
