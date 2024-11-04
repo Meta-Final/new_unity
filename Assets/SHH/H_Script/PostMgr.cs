@@ -15,7 +15,7 @@ public class H_PostInfo
 [System.Serializable]
 public class PostInfoList
 {
-    public List<H_PostInfo> postData;
+    public List<H_PostInfo> postData = new List<H_PostInfo>();  // 리스트를 빈 상태로 초기화
 }
 
 public class PostMgr : MonoBehaviour
@@ -55,7 +55,7 @@ public class PostMgr : MonoBehaviour
     public void ThumStart()
     {
         HttpInfo info = new HttpInfo();
-        info.url = "C:\\Users\\Admin\\Desktop\\post\\postinfolist.txt";
+        info.url = "C:/Users/Admin/Documents/GitHub/new_unity/Assets/KJS/UserInfo/thumbnail.json";  // JSON 파일의 절대 경로를 직접 할당
         info.onComplete = OncompletePostInfo;
 
         StartCoroutine(HttpManager.GetInstance().Get(info));
