@@ -5,8 +5,9 @@ using UnityEngine.UI;
 
 public class PicketManager : MonoBehaviour
 {
-    public GameObject picketPrefab;   
     public GameObject player;
+    public GameObject picketPrefab;   
+    
     public GameObject panelLinkNews;   // Picket이랑 기사 링크 여부 Panel
     
     public Button btn_Picket;          // Picket 생성 버튼
@@ -17,7 +18,7 @@ public class PicketManager : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.Find("PlayerPrefab");
+        player = FindObjectOfType<GameManager>().player;
 
         btn_Picket.onClick.AddListener(MakePicket);
 

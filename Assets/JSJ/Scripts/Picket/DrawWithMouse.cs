@@ -8,13 +8,13 @@ public class DrawWithMouse : MonoBehaviour
 {
     public List<Vector3> points = new List<Vector3>();
 
-    public Canvas canvasPicket;
-
     public Camera uiCamera;
+
+    public Canvas canvasPicket;   // Picket UI Canvas
 
     public GameObject stickerPrefab;
 
-    public Transform lineParent;
+    public Transform lineParent;   // Line들이 모인 오브젝트
     
     public Button drawButton;
     public Button stickerButton;
@@ -103,7 +103,6 @@ public class DrawWithMouse : MonoBehaviour
             {
                 AttachSticker();
             }
-
         }
     }
 
@@ -131,9 +130,5 @@ public class DrawWithMouse : MonoBehaviour
         {
             rectTransform.anchoredPosition = localPoint;
         }
-
-        
-
-
     }
 }

@@ -5,8 +5,10 @@ using UnityEngine.UI;
 
 public class PicketUIManager : MonoBehaviour
 {
-    public GameObject panelLinkNews;    // Picket이랑 기사 링크 여부 Panel
+    public GameObject player;
+
     public GameObject panelInventory;   // 인벤토리 UI
+    public GameObject panelLinkNews;    // Picket이랑 기사 링크 여부 Panel
     public GameObject panelPicket;      // Picket UI
     public GameObject currentPicket;    // 방금 생성된 Picket Prefab
 
@@ -20,12 +22,19 @@ public class PicketUIManager : MonoBehaviour
 
     void Start()
     {
+        player = FindObjectOfType<GameManager>().player;
+
+        if (player != null)
+        {
+            panelInventory = player.transform.Find("Canvas_Inventory/Panel_Inventory")?.gameObject;
+        }
+
         btn_Yes.onClick.AddListener(OnClickYesBtn);
         btn_No.onClick.AddListener(OnClickNoBtn);
         btn_X.onClick.AddListener(OnClickXBtn);
 
-        panelLinkNews.SetActive(false);
         panelInventory.SetActive(false);
+        panelLinkNews.SetActive(false);
         panelPicket.SetActive(false);
 
         if (newsTexture != null)
