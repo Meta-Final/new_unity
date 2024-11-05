@@ -40,11 +40,12 @@ public class LoadMgr_KJS : MonoBehaviour
         }
     }
 
-    public void LoadObjectsFromFile()
+    // 특정 postId에 맞는 데이터를 로드하는 메서드
+    public void LoadObjectsFromFile(string postId)
     {
         try
         {
-            Debug.Log("LoadObjectsFromFile() called.");
+            Debug.Log($"LoadObjectsFromFile() called for postId: {postId}");
 
             if (!File.Exists(savePath))
             {
@@ -55,10 +56,15 @@ public class LoadMgr_KJS : MonoBehaviour
             string json = File.ReadAllText(savePath);
             rootData = JsonUtility.FromJson<RootObject>(json);
 
-            if (rootData.posts.Count == 0) return;
+            // 특정 postId에 맞는 Post 객체 찾기
+            Post post = rootData.posts.Find(p => p.postId == postId);
+            if (post == null)
+            {
+                Debug.LogWarning($"postId '{postId}'에 해당하는 게시물이 없습니다.");
+                return;
+            }
 
-            Post post = rootData.posts[0];
-
+            // 기존에 생성된 오브젝트들 제거
             textBoxes.ForEach(Destroy);
             imageBoxes.ForEach(Destroy);
             pages.ForEach(Destroy);
@@ -67,6 +73,7 @@ public class LoadMgr_KJS : MonoBehaviour
             imageBoxes.Clear();
             pages.Clear();
 
+            // 페이지와 요소를 생성
             foreach (var page in post.pages)
             {
                 GameObject newPageObj = Instantiate(pagePrefab, pagesParentTransform);
@@ -117,6 +124,9 @@ public class LoadMgr_KJS : MonoBehaviour
 
             totalPages = pages.Count;
             UpdateScrollbar();
+
+            // Scrollbar의 value를 0으로 초기화
+            pageScrollbar.value = 0f;
 
             Debug.Log("Data loaded successfully.");
         }

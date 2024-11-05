@@ -76,7 +76,7 @@ public class PrefabManager_KJS : MonoBehaviour
         if (isActive)
         {
             // UI가 활성화될 때 SaveMgr_KJS의 LoadObjectsFromFile 호출
-            saveMgr.CreateObjectsFromFile();
+            //saveMgr.CreateObjectsFromFile();
         }
     }
 }

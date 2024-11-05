@@ -3,31 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using TMPro;
 
 public class Thumbnail_KJS : MonoBehaviour
 {
-    public Button spawnButton;  // 스폰 버튼 (Inspector에서 연결)
     public Button saveButton;   // 저장 버튼 (Inspector에서 연결)
-    public Transform uiParent;  // UI 패널 (활성화/비활성화 토글 대상)
     public Image targetImage;   // 저장할 이미지가 할당된 Image 컴포넌트 (Inspector에서 할당)
+    public TMP_InputField postIdInputField; // 사용자 입력을 통해 postId를 설정할 InputField (Inspector에서 할당)
+
     private string jsonFilePath = "C:/Users/Admin/Documents/GitHub/new_unity/Assets/KJS/UserInfo/thumbnail.json";  // JSON 파일 저장 경로
     private string imageSavePath = "C:/Users/Admin/Documents/GitHub/new_unity/Assets/KJS/UserInfo";  // 이미지 저장 폴더 경로
 
     private PostInfoList postInfoList = new PostInfoList();  // 빈 리스트로 초기화
-    private int editorNameCounter = 1;  // editorname 숫자 카운터 초기값 설정
 
     void Start()
     {
-        // 스폰 버튼 설정
-        if (spawnButton != null)
-        {
-            spawnButton.onClick.AddListener(ToggleUIVisibility);  // 스폰 버튼 클릭 시 UI 활성화/비활성화
-        }
-        else
-        {
-            Debug.LogError("spawnButton이 할당되지 않았습니다.");
-        }
-
         // 저장 버튼 설정
         if (saveButton != null)
         {
@@ -37,20 +27,18 @@ public class Thumbnail_KJS : MonoBehaviour
         {
             Debug.LogError("saveButton이 할당되지 않았습니다.");
         }
+
+        if (postIdInputField == null)
+        {
+            Debug.LogError("postIdInputField가 할당되지 않았습니다. Inspector에서 postIdInputField를 설정하세요.");
+        }
     }
 
-    // UI의 활성화/비활성화를 토글하는 메서드
-    void ToggleUIVisibility()
+    // 스폰 버튼 클릭 시 호출되는 메서드 (현재 빈 메서드로 유지)
+    void OnSpawnButtonClicked()
     {
-        if (uiParent != null)
-        {
-            uiParent.gameObject.SetActive(!uiParent.gameObject.activeSelf);  // UI 패널 활성화/비활성화 토글
-            Debug.Log($"UI 패널이 {(uiParent.gameObject.activeSelf ? "활성화" : "비활성화")}되었습니다.");
-        }
-        else
-        {
-            Debug.LogWarning("UI 부모가 설정되지 않았습니다.");
-        }
+        // 필요 시 스폰 버튼 클릭 시 수행할 동작을 추가할 수 있습니다.
+        Debug.Log("스폰 버튼이 클릭되었습니다.");
     }
 
     // 이미지와 JSON 데이터를 저장하는 메서드
@@ -75,6 +63,13 @@ public class Thumbnail_KJS : MonoBehaviour
             return;
         }
 
+        // postIdInputField가 비어 있는지 확인
+        if (postIdInputField == null || string.IsNullOrWhiteSpace(postIdInputField.text))
+        {
+            Debug.LogError("postId를 입력하세요. postIdInputField가 비어 있거나 할당되지 않았습니다.");
+            return;
+        }
+
         // 폴더가 없으면 생성
         if (!Directory.Exists(imageSavePath))
         {
@@ -91,16 +86,13 @@ public class Thumbnail_KJS : MonoBehaviour
         // postData에 새 항목 추가 및 경로 설정
         H_PostInfo newPost = new H_PostInfo
         {
-            postid = "Editor" + editorNameCounter,  // editorname에 카운터 추가
+            postid = postIdInputField.text,  // InputField에 입력된 텍스트를 postId로 사용
             thumburl = filePath  // 파일 경로를 thumburl에 저장
         };
         postInfoList.postData.Add(newPost);
 
         // JSON 데이터 저장
         SaveJsonData();
-
-        // editorNameCounter 증가
-        editorNameCounter++;
     }
 
     // Texture2D를 PNG 파일로 저장하는 메서드

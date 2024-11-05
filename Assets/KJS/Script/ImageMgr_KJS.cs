@@ -8,6 +8,7 @@ using SFB;   // StandaloneFileBrowser 네임스페이스 사용
 public class ImageMgr_KJS : MonoBehaviour
 {
     public List<Button> buttons = new List<Button>();  // 동적으로 생성된 버튼들
+    private HashSet<Button> buttonsWithHiddenText = new HashSet<Button>();  // 텍스트가 숨겨진 버튼들 추적
 
     // 새로 생성된 버튼을 리스트에 추가하고 이벤트 연결
     public void AddButton(Button newButton)
@@ -53,9 +54,22 @@ public class ImageMgr_KJS : MonoBehaviour
 
         // 버튼의 Image 컴포넌트에 Sprite 할당
         button.GetComponent<Image>().sprite = newSprite;
+    }
 
-        // 버튼의 텍스트 숨기기
-        HideButtonText(button);
+    // 매 프레임마다 버튼들을 체크하여 이미지가 할당된 경우 텍스트를 숨김
+    private void Update()
+    {
+        foreach (Button button in buttons)
+        {
+            Image buttonImage = button.GetComponent<Image>();
+
+            // 이미지가 할당되어 있고, 아직 텍스트가 숨겨지지 않은 버튼만 처리
+            if (buttonImage.sprite != null && !buttonsWithHiddenText.Contains(button))
+            {
+                HideButtonText(button);
+                buttonsWithHiddenText.Add(button);  // 텍스트가 숨겨진 버튼으로 등록
+            }
+        }
     }
 
     // 버튼의 Text 또는 TMP_Text 컴포넌트를 숨기는 메서드
