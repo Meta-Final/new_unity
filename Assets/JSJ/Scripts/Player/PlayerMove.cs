@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class PlayerMove : MonoBehaviour
+public class PlayerMove : MonoBehaviourPun
 {
     [Header("이동")]
     public float moveSpeed = 5f;
@@ -26,7 +27,11 @@ public class PlayerMove : MonoBehaviour
 
     void Update()
     {
-        Moving();
+        // 내 것일 때만 컨트롤하자!
+        if (photonView.IsMine)
+        {
+            Moving();
+        }
     }
 
     public void Moving()
