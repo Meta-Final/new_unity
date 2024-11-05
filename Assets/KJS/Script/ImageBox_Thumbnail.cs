@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;  // UI 사용
 using System.IO;  // 파일 입출력 사용
+using TMPro;  // TextMeshPro 사용
 #if UNITY_EDITOR
 using UnityEditor;  // 파일 탐색기 사용을 위한 네임스페이스
 #endif
@@ -11,6 +12,7 @@ public class ImageBox_Thumbnail : MonoBehaviour
 {
     private Button button;  // 버튼 컴포넌트 참조
     public Image targetImage;  // 선택된 이미지를 표시할 Image 컴포넌트 (Inspector에서 할당)
+    public TextMeshProUGUI placeholderText;  // 이미지가 할당되면 비활성화할 TextMeshProUGUI 컴포넌트 (Inspector에서 할당)
 
     void Start()
     {
@@ -30,6 +32,11 @@ public class ImageBox_Thumbnail : MonoBehaviour
         if (targetImage == null)
         {
             Debug.LogError("Target Image가 할당되지 않았습니다. Inspector에서 Image 컴포넌트를 연결하세요.");
+        }
+
+        if (placeholderText == null)
+        {
+            Debug.LogError("Placeholder Text가 할당되지 않았습니다. Inspector에서 TextMeshProUGUI 컴포넌트를 연결하세요.");
         }
     }
 
@@ -85,6 +92,12 @@ public class ImageBox_Thumbnail : MonoBehaviour
             // Image 컴포넌트에 새 Sprite 적용
             targetImage.sprite = newSprite;
             Debug.Log("이미지가 성공적으로 로드되었습니다.");
+
+            // 이미지가 할당되었으므로 Text 비활성화
+            if (placeholderText != null)
+            {
+                placeholderText.gameObject.SetActive(false);
+            }
         }
         else
         {

@@ -2,25 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.IO;  // 파일 읽기/쓰기
-using UnityEngine.Networking;  // 이미지 로드 시 사용
+using System.IO;
 
 public class Thumbnail_KJS : MonoBehaviour
 {
     public Button spawnButton;  // 스폰 버튼 (Inspector에서 연결)
     public Button saveButton;   // 저장 버튼 (Inspector에서 연결)
-    public GameObject prefabToSpawn;  // 생성할 프리팹 (Inspector에서 할당)
-    public Transform uiParent;  // 생성된 오브젝트의 부모 (UI Panel 등)
-    public string jsonFilePath = "C:/Users/haqqm/Desktop/postData.json";  // JSON 파일 경로
+    public Transform uiParent;  // UI 패널 (활성화/비활성화 토글 대상)
+    public Image targetImage;   // 저장할 이미지가 할당된 Image 컴포넌트 (Inspector에서 할당)
+    private string jsonFilePath = "C:/Users/Admin/Documents/GitHub/new_unity/Assets/KJS/UserInfo/thumbnail.json";  // JSON 파일 저장 경로
+    private string imageSavePath = "C:/Users/Admin/Documents/GitHub/new_unity/Assets/KJS/UserInfo";  // 이미지 저장 폴더 경로
 
-    private PostInfoList postInfoList = new PostInfoList();  // 생성된 데이터를 저장할 리스트
+    private PostInfoList postInfoList = new PostInfoList();  // 빈 리스트로 초기화
+    private int editorNameCounter = 1;  // editorname 숫자 카운터 초기값 설정
 
     void Start()
     {
         // 스폰 버튼 설정
         if (spawnButton != null)
         {
-            spawnButton.onClick.AddListener(SpawnObject);  // 스폰 버튼 클릭 시 오브젝트 생성
+            spawnButton.onClick.AddListener(ToggleUIVisibility);  // 스폰 버튼 클릭 시 UI 활성화/비활성화
         }
         else
         {
@@ -30,7 +31,7 @@ public class Thumbnail_KJS : MonoBehaviour
         // 저장 버튼 설정
         if (saveButton != null)
         {
-            saveButton.onClick.AddListener(SaveJsonData);  // 저장 버튼 클릭 시 JSON 저장
+            saveButton.onClick.AddListener(SaveImageAndData);  // 저장 버튼 클릭 시 이미지와 데이터를 저장
         }
         else
         {
@@ -38,70 +39,86 @@ public class Thumbnail_KJS : MonoBehaviour
         }
     }
 
-    // 프리팹을 UI의 자식으로 생성하고 데이터를 적용하는 메서드
-    void SpawnObject()
+    // UI의 활성화/비활성화를 토글하는 메서드
+    void ToggleUIVisibility()
     {
-        if (prefabToSpawn != null && uiParent != null)
+        if (uiParent != null)
         {
-            // UI의 자식으로 프리팹 인스턴스 생성
-            GameObject spawnedObject = Instantiate(prefabToSpawn, uiParent);
-
-            // RectTransform 설정을 제거하여 프리팹에 저장된 위치와 크기를 유지
-            // spawnedObject.GetComponent<RectTransform>().anchoredPosition = Vector2.zero; // 제거
-            // spawnedObject.GetComponent<RectTransform>().localScale = Vector3.one;       // 제거
-
-            // 생성된 오브젝트에 데이터 적용 (텍스트와 이미지)
-            Text editorNameText = spawnedObject.transform.Find("EditorName").GetComponent<Text>();
-            Image thumbnailImage = spawnedObject.transform.Find("Thumbnail").GetComponent<Image>();
-
-            // 예시 데이터 생성 (임의로 할당)
-            string editorName = "새 에디터";
-            string imagePath = "file:///C:/Users/haqqm/Desktop/post/tiramisu.png";  // 임시 이미지 경로
-
-            if (editorNameText != null)
-            {
-                editorNameText.text = editorName;  // 에디터 이름 설정
-            }
-
-            if (thumbnailImage != null)
-            {
-                StartCoroutine(LoadImage(imagePath, thumbnailImage));  // 이미지 로드 및 적용
-            }
-
-            // 데이터 저장을 위한 리스트에 추가
-            H_PostInfo newPost = new H_PostInfo { editorname = editorName, thumburl = imagePath };
-            postInfoList.postData.Add(newPost);  // H_PostInfo로 통일된 리스트에 추가
-
-            Debug.Log($"{editorName}의 오브젝트가 생성되었습니다.");
+            uiParent.gameObject.SetActive(!uiParent.gameObject.activeSelf);  // UI 패널 활성화/비활성화 토글
+            Debug.Log($"UI 패널이 {(uiParent.gameObject.activeSelf ? "활성화" : "비활성화")}되었습니다.");
         }
         else
         {
-            Debug.LogWarning("생성할 프리팹 또는 UI 부모가 설정되지 않았습니다.");
+            Debug.LogWarning("UI 부모가 설정되지 않았습니다.");
         }
     }
 
-    // URL 경로에서 이미지를 로드하여 Image 컴포넌트에 적용하는 코루틴
-    IEnumerator LoadImage(string url, Image image)
+    // 이미지와 JSON 데이터를 저장하는 메서드
+    void SaveImageAndData()
     {
-        using (UnityWebRequest request = UnityWebRequestTexture.GetTexture(url))
+        // targetImage 또는 targetImage.sprite가 null인지 확인
+        if (targetImage == null)
         {
-            yield return request.SendWebRequest();
+            Debug.LogError("저장할 Image 컴포넌트가 할당되지 않았습니다. Inspector에서 targetImage를 설정하세요.");
+            return;
+        }
 
-            if (request.result == UnityWebRequest.Result.Success)
-            {
-                Texture2D texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
-                Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-                image.sprite = sprite;
-                Debug.Log("이미지가 성공적으로 로드되었습니다.");
-            }
-            else
-            {
-                Debug.LogError($"이미지 로드 실패: {request.error}");
-            }
+        if (targetImage.sprite == null)
+        {
+            Debug.LogError("targetImage에 할당된 Sprite가 없습니다. 이미지가 지정되었는지 확인하세요.");
+            return;
+        }
+
+        if (targetImage.sprite.texture == null)
+        {
+            Debug.LogError("targetImage에 Sprite가 있지만, Texture가 없습니다.");
+            return;
+        }
+
+        // 폴더가 없으면 생성
+        if (!Directory.Exists(imageSavePath))
+        {
+            Directory.CreateDirectory(imageSavePath);
+        }
+
+        // 이미지 파일 이름 생성
+        string fileName = "UserImage_" + System.DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".png";
+        string filePath = Path.Combine(imageSavePath, fileName);
+
+        // 이미지 저장
+        SaveImageAsPNG(targetImage.sprite.texture, filePath);
+
+        // postData에 새 항목 추가 및 경로 설정
+        H_PostInfo newPost = new H_PostInfo
+        {
+            postid = "Editor" + editorNameCounter,  // editorname에 카운터 추가
+            thumburl = filePath  // 파일 경로를 thumburl에 저장
+        };
+        postInfoList.postData.Add(newPost);
+
+        // JSON 데이터 저장
+        SaveJsonData();
+
+        // editorNameCounter 증가
+        editorNameCounter++;
+    }
+
+    // Texture2D를 PNG 파일로 저장하는 메서드
+    void SaveImageAsPNG(Texture2D texture, string filePath)
+    {
+        byte[] pngData = texture.EncodeToPNG();
+        if (pngData != null)
+        {
+            File.WriteAllBytes(filePath, pngData);
+            Debug.Log($"이미지가 {filePath}에 저장되었습니다.");
+        }
+        else
+        {
+            Debug.LogError("이미지를 PNG 형식으로 인코딩하는데 실패했습니다.");
         }
     }
 
-    // 현재 게시물 데이터를 JSON 파일로 저장하는 메서드
+    // JSON 파일에 데이터를 저장하는 메서드
     void SaveJsonData()
     {
         try
@@ -109,7 +126,7 @@ public class Thumbnail_KJS : MonoBehaviour
             // JSON 형식으로 직렬화
             string json = JsonUtility.ToJson(postInfoList, true);  // 들여쓰기 포함 직렬화
 
-            // 파일 저장
+            // JSON 파일 저장
             File.WriteAllText(jsonFilePath, json);
             Debug.Log($"JSON 데이터가 {jsonFilePath}에 저장되었습니다.");
         }

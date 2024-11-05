@@ -6,7 +6,6 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 using ReqRes;
-using UnityEditor.PackageManager.Requests;
 using System.Net.NetworkInformation;
 [System.Serializable]
 public class ChatResponse
