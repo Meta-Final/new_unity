@@ -672,7 +672,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputemail: {fileID: 669858911}
   inputpassword: {fileID: 1144439945}
-  Joinbox: {fileID: 3217384870049343916, guid: 8c920721fcd964f45a78b83fedd7208f, type: 3}
+  Joinbox: {fileID: 993768715}
 --- !u!114 &808558156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -760,6 +760,27 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &993768715 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3217384870049343916, guid: 8c920721fcd964f45a78b83fedd7208f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1580959341}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &993768723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 993768715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fae0d2775fd04242a6ff589e0694e36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputemail: {fileID: 669858911}
+  inputpassword: {fileID: 1144439945}
+  Joinbox: {fileID: 993768715}
 --- !u!1 &1105689734
 GameObject:
   m_ObjectHideFlags: 0
@@ -845,7 +866,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 808558155}
         m_TargetAssemblyTypeName: ButtonMgr, Assembly-CSharp
-        m_MethodName: OnClickSignUp
+        m_MethodName: OnClickJoinbox
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1470,7 +1491,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1475516554
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1601,7 +1622,17 @@ PrefabInstance:
     - target: {fileID: 3217384870049343916, guid: 8c920721fcd964f45a78b83fedd7208f,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6365340892032075190, guid: 8c920721fcd964f45a78b83fedd7208f,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 808558155}
+    - target: {fileID: 6365340892032075190, guid: 8c920721fcd964f45a78b83fedd7208f,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickSignUp
       objectReference: {fileID: 0}
     - target: {fileID: 6642402678395423640, guid: 8c920721fcd964f45a78b83fedd7208f,
         type: 3}
@@ -1703,10 +1734,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 7415917783718093391, guid: 8c920721fcd964f45a78b83fedd7208f,
+        type: 3}
+      propertyPath: Joinbox
+      value: 
+      objectReference: {fileID: 993768715}
+    m_RemovedComponents:
+    - {fileID: 7415917783718093391, guid: 8c920721fcd964f45a78b83fedd7208f, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3217384870049343916, guid: 8c920721fcd964f45a78b83fedd7208f,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 993768723}
   m_SourcePrefab: {fileID: 100100000, guid: 8c920721fcd964f45a78b83fedd7208f, type: 3}
 --- !u!1 &1624133783
 GameObject:
