@@ -8,7 +8,7 @@ using UnityEngine.UI;
 [System.Serializable]
 public class H_PostInfo
 {
-    public string editorname;
+    public string postid;
     public string thumburl;
 }
 

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
-using UnityEditor.EditorTools;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -69,7 +68,13 @@ public class Page
 [System.Serializable]
 public class Post
 {
+    public string postId;  // postId를 string으로 변경
     public List<Page> pages = new List<Page>();
+
+    public Post(string id)
+    {
+        postId = id;
+    }
 }
 
 [System.Serializable]
@@ -108,20 +113,18 @@ public class SaveMgr_KJS : MonoBehaviour
     private int pageCounter = 0;
     private PostMgr postMgr;
 
+    private int postCounter = 0;  // 추가된 필드: 저장될 때마다 증가할 Post ID
+    public TMP_InputField inputPostIdField;
+
     private void Start()
     {
-        postMgr = FindObjectOfType<PostMgr>();
 
         saveDirectory = Application.dataPath + "/KJS/UserInfo";
         savePath = Path.Combine(saveDirectory, saveFileName);
 
+        // 중복된 이벤트 리스너 방지를 위해 기존 리스너 모두 제거
+        saveButton.onClick.RemoveAllListeners();
         saveButton.onClick.AddListener(SaveObjectsToFile);
-
-        // 저장된 모든 Load 버튼에 이벤트 리스너 추가
-        //foreach (var button in loadButtons)
-        //{
-        //    button.onClick.AddListener(() => CreateObjectsFromFile());
-        //}
 
         EnsureDirectoryExists();
 
@@ -169,11 +172,26 @@ public class SaveMgr_KJS : MonoBehaviour
 
     private void SaveObjectsToFile()
     {
+        string targetPostId = inputPostIdField.text;
+
+        if (string.IsNullOrWhiteSpace(targetPostId))
+        {
+            Debug.LogError("유효한 postId를 입력하세요.");
+            return;
+        }
+
         try
         {
-            rootData.posts.Clear();  // 기존 데이터 초기화
+            // 기존 데이터에서 동일한 postId의 게시물이 있는지 확인
+            Post existingPost = rootData.posts.Find(post => post.postId == targetPostId);
+            if (existingPost != null)
+            {
+                Debug.LogError($"postId '{targetPostId}'에 해당하는 게시물이 이미 존재합니다. 다른 ID를 사용하세요.");
+                return;
+            }
 
-            Post newPost = new Post();  // 새 게시물 생성
+            // 새 게시물 생성 및 입력된 postId 사용
+            Post newPost = new Post(targetPostId);
 
             // 페이지별로 데이터 저장
             for (int i = 0; i < pages.Count; i++)
@@ -184,11 +202,10 @@ public class SaveMgr_KJS : MonoBehaviour
                 textBoxes.RemoveAll(item => item == null);  // Null 오브젝트 제거
                 foreach (var textBox in textBoxes)
                 {
-                    // 올바른 부모-자식 관계인지 확인
                     if (textBox.transform.parent != pages[i].transform) continue;
 
                     TMP_Text textComponent = textBox.GetComponentInChildren<TMP_Text>();
-                    if (textComponent == null) continue;  // 텍스트 컴포넌트가 없으면 스킵
+                    if (textComponent == null) continue;
 
                     string content = textComponent.text;
                     int fontSize = (int)textComponent.fontSize;
@@ -196,7 +213,6 @@ public class SaveMgr_KJS : MonoBehaviour
                     bool isUnderlined = textComponent.fontStyle.HasFlag(FontStyles.Underline);
                     bool isStrikethrough = textComponent.fontStyle.HasFlag(FontStyles.Strikethrough);
 
-                    // 텍스트 요소 추가
                     newPage.elements.Add(new Element(
                         Element.ElementType.Text_Box,
                         content,
@@ -208,15 +224,12 @@ public class SaveMgr_KJS : MonoBehaviour
                         isUnderlined,
                         isStrikethrough
                     ));
-
-                    Debug.Log($"TextBox 저장됨: {content}");
                 }
 
                 // 이미지 박스 처리
-                imageBoxes.RemoveAll(item => item == null);  // Null 오브젝트 제거
+                imageBoxes.RemoveAll(item => item == null);
                 foreach (var imageBox in imageBoxes)
                 {
-                    // 올바른 부모-자식 관계인지 확인
                     if (imageBox.transform.parent != pages[i].transform) continue;
 
                     Image imageComponent = imageBox.transform.GetChild(0).GetComponent<Image>();
@@ -228,7 +241,6 @@ public class SaveMgr_KJS : MonoBehaviour
                         imageData = Element.EncodeImageToBase64(texture);
                     }
 
-                    // 이미지 요소 추가
                     newPage.elements.Add(new Element(
                         Element.ElementType.Image_Box,
                         "",
@@ -236,34 +248,24 @@ public class SaveMgr_KJS : MonoBehaviour
                         imageBox.transform.localPosition,
                         imageBox.transform.localScale
                     ));
-
-                    Debug.Log($"ImageBox 저장됨: {imageData != null}");
                 }
 
-                // 페이지를 게시물에 추가
-                newPost.pages.Add(newPage);
+                newPost.pages.Add(newPage);  // 페이지를 게시물에 추가
             }
 
-            // 게시물을 루트 데이터에 추가
-            rootData.posts.Add(newPost);
-
+            rootData.posts.Add(newPost);  // 새 게시물을 기존 데이터에 추가
 
             // JSON 직렬화 및 저장
             string json = JsonUtility.ToJson(rootData, true);
-
-            print(json);
-
             File.WriteAllText(savePath, json);
 
-            Debug.Log("Data saved successfully.");
+            Debug.Log($"Data saved successfully. Post ID: {newPost.postId}");
         }
         catch (Exception e)
         {
             Debug.LogError($"Save failed: {e.Message}");
         }
     }
-
-
     public void CreateObjectsFromFile()
 {
     try
@@ -350,6 +352,88 @@ public class SaveMgr_KJS : MonoBehaviour
         Debug.LogError($"Load failed: {e.Message}");
     }
 }
+    public void LoadSpecificPostById()
+    {
+        string targetPostId = inputPostIdField.text;
+
+        if (string.IsNullOrWhiteSpace(targetPostId))
+        {
+            Debug.LogError("유효한 postId를 입력하세요.");
+            return;
+        }
+
+        // 해당 postId의 게시물을 찾습니다.
+        Post targetPost = rootData.posts.Find(post => post.postId == targetPostId);
+
+        if (targetPost == null)
+        {
+            Debug.LogWarning($"postId '{targetPostId}'에 해당하는 게시물이 없습니다.");
+            return;
+        }
+
+        // 기존에 생성된 오브젝트들 제거
+        textBoxes.ForEach(Destroy);
+        imageBoxes.ForEach(Destroy);
+        pages.ForEach(Destroy);
+
+        textBoxes.Clear();
+        imageBoxes.Clear();
+        pages.Clear();
+
+        // 찾은 게시물에 맞는 오브젝트 생성
+        foreach (var page in targetPost.pages)
+        {
+            GameObject newPage = Instantiate(pagePrefab, pagesParentTransform);
+            InitializePage(newPage);
+
+            foreach (var element in page.elements)
+            {
+                if (element.type == Element.ElementType.Text_Box)
+                {
+                    GameObject newTextBox = Instantiate(textBoxPrefab, newPage.transform);
+                    InitializeTextBox(newTextBox);
+
+                    newTextBox.transform.localPosition = element.position;
+                    newTextBox.transform.localScale = element.scale;
+
+                    TMP_Text textComponent = newTextBox.GetComponentInChildren<TMP_Text>();
+                    if (textComponent != null)
+                    {
+                        textComponent.text = element.content;
+                        textComponent.fontSize = element.fontSize;
+
+                        TMP_FontAsset fontAsset = Resources.Load<TMP_FontAsset>($"Fonts/{element.fontFace}");
+                        if (fontAsset != null) textComponent.font = fontAsset;
+
+                        textComponent.fontStyle = FontStyles.Normal;
+                        if (element.isUnderlined) textComponent.fontStyle |= FontStyles.Underline;
+                        if (element.isStrikethrough) textComponent.fontStyle |= FontStyles.Strikethrough;
+                    }
+                }
+                else if (element.type == Element.ElementType.Image_Box)
+                {
+                    GameObject newImageBox = Instantiate(imageBoxPrefab, newPage.transform);
+                    InitializeImageBox(newImageBox);
+
+                    newImageBox.transform.localPosition = element.position;
+                    newImageBox.transform.localScale = element.scale;
+
+                    Image imageComponent = newImageBox.transform.GetChild(0).GetComponent<Image>();
+                    if (imageComponent != null && !string.IsNullOrEmpty(element.imageData))
+                    {
+                        Texture2D texture = Element.DecodeImageFromBase64(element.imageData);
+                        imageComponent.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+                    }
+                }
+            }
+        }
+
+        // 페이지 수 업데이트 및 스크롤바 설정
+        totalPages = pages.Count;
+        UpdateScrollbar();
+
+        Debug.Log($"Data loaded successfully for postId '{targetPostId}'.");
+    }
 
     private void InitializePage(GameObject page)
     {

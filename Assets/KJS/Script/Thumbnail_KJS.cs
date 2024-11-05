@@ -91,7 +91,7 @@ public class Thumbnail_KJS : MonoBehaviour
         // postData에 새 항목 추가 및 경로 설정
         H_PostInfo newPost = new H_PostInfo
         {
-            editorname = "Editor" + editorNameCounter,  // editorname에 카운터 추가
+            postid = "Editor" + editorNameCounter,  // editorname에 카운터 추가
             thumburl = filePath  // 파일 경로를 thumburl에 저장
         };
         postInfoList.postData.Add(newPost);
