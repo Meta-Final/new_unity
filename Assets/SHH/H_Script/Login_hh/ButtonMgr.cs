@@ -6,31 +6,31 @@ using UnityEngine.UI;
 
 public class ButtonMgr : MonoBehaviour
 {
- //  public TMP_InputField texttId;
- //  public TMP_InputField textPassword;
- //  public TMP_InputField textPassword2;
+
  //  public TMP_InputField textName;
 
     public InputField inputemail;
     public InputField inputpassword;
+    public InputField inputpassword2;
 
     //public GameObject Loginbox;
     public GameObject Joinbox;
 
     void Start()
     {
-        
+        Joinbox.SetActive(false);
     }
 
-    // Update is called once per frame
     void Update()
     {
         
     }
-    public void OnClickSignbox()
+    public void OnClickJoinbox()
     {
         
-        print("회원가입창 까꿍");
+        //print("회원가입창 까꿍");
+        Joinbox.SetActive(true);
+     
     }
     public void OnClickSignUp()
     {
