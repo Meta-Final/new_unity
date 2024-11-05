@@ -27,7 +27,7 @@ public class PlayerMove : MonoBehaviourPun
 
     void Update()
     {
-        // 내 것일 때만 컨트롤하자!
+        // 내 것일 때만 컨트롤하자
         if (photonView.IsMine)
         {
             Moving();

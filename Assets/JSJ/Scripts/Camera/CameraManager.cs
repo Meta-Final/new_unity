@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class CameraManager : MonoBehaviour
+public class CameraManager : MonoBehaviourPun
 {
     public Camera mainCamera;
     
@@ -22,7 +23,11 @@ public class CameraManager : MonoBehaviour
 
     void Update()
     {
-        CameraMoving();
+        // 내 것일 때만 컨트롤하자
+        if (photonView.IsMine)
+        {
+            CameraMoving();
+        }
     }
 
     //카메라 이동

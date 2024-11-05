@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Photon.Pun;
 using UnityEngine.UI;
+using Unity.Mathematics;
 
-public class DrawWithMouse : MonoBehaviour
+public class DrawWithMouse : MonoBehaviourPun
 {
     public List<Vector3> points = new List<Vector3>();
 
@@ -14,8 +16,10 @@ public class DrawWithMouse : MonoBehaviour
 
     public GameObject stickerPrefab;
 
-    public Transform lineParent;   // Line들이 모인 오브젝트
-    
+    public GameObject lineParent;      // Line들이 모인 오브젝트
+    public GameObject stickerParent;   // Sticker들이 모인 오브젝트
+
+    [Header("Tool 버튼")]
     public Button drawButton;
     public Button stickerButton;
 
@@ -24,8 +28,8 @@ public class DrawWithMouse : MonoBehaviour
     public Material material;
     public Color lineColor = Color.red;
     
-    bool isDrawing = false;
-    bool isAttaching = false;
+    public bool isDrawing = false;
+    public bool isAttaching = false;
     float timestep;
 
     LineRenderer lineRenderer;
@@ -41,41 +45,30 @@ public class DrawWithMouse : MonoBehaviour
     // 그리기
     void StartDrawing()
     {
-        isDrawing = !isDrawing;
-        isAttaching = false;   // 붙이기 비활성화
+        // 그리기 활성화
+        isDrawing = true;
 
-        if (!isDrawing)
-        {
-            lineRenderer.positionCount = 0;
-            points.Clear();
-        }
+        // 붙이기 비활성화
+        isAttaching = false;   
     }
 
     // 붙이기
     void StartAttaching()
     {
-        isAttaching = !isAttaching;
-        isDrawing = false;   // 그리기 비활성화
+        // 붙이기 활성화
+        isAttaching = true;
+
+        // 그리기 비활성화
+        isDrawing = false;   
     }
+
 
     private void Update()
     {
         // 그리기가 true이고, 마우스를 눌렀을 때
         if (Input.GetMouseButtonDown(0) && isDrawing == true)
         {
-            GameObject go = new GameObject("Line");
-            go.transform.SetParent(lineParent);
-            lineRenderer = go.transform.AddComponent<LineRenderer>();
-
-            lineRenderer.startColor = lineColor;
-            lineRenderer.endColor = lineColor;
-            lineRenderer.startWidth = lineWidth;
-            lineRenderer.endWidth = lineWidth;
-            lineRenderer.material = material;
-
-            lineRenderer.positionCount = 0;
-
-            points.Clear();
+            CreateLine();
         }    
 
         // 그리기가 true이고, 마우스를 누르고 있을 때
@@ -89,11 +82,15 @@ public class DrawWithMouse : MonoBehaviour
                 if (Time.time - timestep > 0.01f)
                 {
                     points.Add(hitInfo.point + new Vector3 (0, 0, -0.1f));
+
                     timestep = Time.time;
-                    CreateLine();
+
+                    lineRenderer.positionCount = points.Count;
+                    lineRenderer.SetPositions(points.ToArray());
                 }
             }
         }
+
 
         // 붙이기가 true이고, 마우스를 눌렀을 때
         if (Input.GetMouseButtonDown(0) && isAttaching == true)
@@ -106,11 +103,21 @@ public class DrawWithMouse : MonoBehaviour
         }
     }
 
-    // 라인 생성 함수
+
     void CreateLine()
     {
-        lineRenderer.positionCount = points.Count;
-        lineRenderer.SetPositions(points.ToArray());
+        GameObject go = new GameObject("Line");
+        go.transform.SetParent(lineParent.transform);
+        lineRenderer = go.transform.AddComponent<LineRenderer>();
+
+        lineRenderer.startColor = lineColor;
+        lineRenderer.endColor = lineColor;
+        lineRenderer.startWidth = lineWidth;
+        lineRenderer.endWidth = lineWidth;
+        lineRenderer.material = material;
+
+        lineRenderer.positionCount = 0;
+        points.Clear();
     }
 
     // 스티커 생성 함수
@@ -123,7 +130,7 @@ public class DrawWithMouse : MonoBehaviour
             out Vector2 localPoint
             );
 
-        GameObject stickerInstance = Instantiate(stickerPrefab, canvasPicket.transform);
+        GameObject stickerInstance = Instantiate(stickerPrefab, stickerParent.transform);
         RectTransform rectTransform = stickerInstance.GetComponent<RectTransform>();
 
         if (rectTransform != null)

@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 using UnityEngine.UI;
 
-public class InventoryController : MonoBehaviour
+public class InventoryController : MonoBehaviourPun
 {
     public GameObject inventoryPanel;   // 인벤토리 창
     
@@ -22,8 +23,8 @@ public class InventoryController : MonoBehaviour
 
     void Update()
     {
-        // 인벤토리 UI Toggle (키보드 I 누를때마다 인벤토리 UI 활성화/비활성화)
-        if (Input.GetKeyDown(KeyCode.I))
+        // 내 것이고, 키보드 I키를 누를 때마다 인벤토리 UI Toggle
+        if (photonView.IsMine && Input.GetKeyDown(KeyCode.I))
         {
             inventoryPanel.SetActive(!inventoryPanel.activeSelf);
         }
