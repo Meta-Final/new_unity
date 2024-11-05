@@ -4,20 +4,21 @@ public class PrefabManager_KJS : MonoBehaviour
 {
     public GameObject uiTool; // UI 오브젝트 (MagazineView 2의 자식)
     public float detectionRange = 5f; // 감지 범위
+    public string postId; // LoadObjectsFromFile에 전달할 postId
 
     private GameObject player;
     private bool isPlayerInRange = false;
-
-    private SaveMgr_KJS saveMgr;  // SaveMgr_KJS 인스턴스 참조
     private bool isUIActive = false; // UI의 현재 상태를 추적
+
+    private LoadMgr_KJS loadMgr; // LoadMgr_KJS 인스턴스 참조
 
     void Start()
     {
         // "Player" 태그가 붙은 오브젝트 찾기
         player = GameObject.FindGameObjectWithTag("Player");
 
-        // SaveMgr_KJS 스크립트가 부착된 오브젝트 찾기
-        saveMgr = FindObjectOfType<SaveMgr_KJS>();
+        // LoadMgr_KJS 스크립트가 부착된 오브젝트 찾기
+        loadMgr = FindObjectOfType<LoadMgr_KJS>();
 
         // "MagazineView 2" 오브젝트를 찾고, 그 자식 중 "Tool 2"를 찾아 할당
         GameObject magazineView = GameObject.Find("MagazineView 2");
@@ -56,10 +57,16 @@ public class PrefabManager_KJS : MonoBehaviour
                 }
             }
 
-            // 범위 내에 있을 때 V 키를 누르면 UI를 토글
+            // 범위 내에 있을 때 V 키를 누르면 UI를 토글하고 LoadObjectsFromFile 호출
             if (isPlayerInRange && Input.GetKeyDown(KeyCode.V))
             {
                 ToggleUI(!isUIActive);  // 현재 상태 반전
+
+                // UI가 활성화될 때 LoadMgr_KJS의 LoadObjectsFromFile 호출
+                if (isUIActive && loadMgr != null)
+                {
+                    loadMgr.LoadObjectsFromFile(postId);
+                }
             }
         }
     }
@@ -71,12 +78,6 @@ public class PrefabManager_KJS : MonoBehaviour
         {
             uiTool.SetActive(isActive);
             isUIActive = isActive;
-        }
-
-        if (isActive)
-        {
-            // UI가 활성화될 때 SaveMgr_KJS의 LoadObjectsFromFile 호출
-            //saveMgr.CreateObjectsFromFile();
         }
     }
 }
