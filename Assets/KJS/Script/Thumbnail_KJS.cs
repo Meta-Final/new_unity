@@ -14,6 +14,7 @@ public class Thumbnail_KJS : MonoBehaviour
     private string imageSavePath = "C:/Users/Admin/Documents/GitHub/new_unity/Assets/KJS/UserInfo";  // 이미지 저장 폴더 경로
 
     private PostInfoList postInfoList = new PostInfoList();  // 빈 리스트로 초기화
+    private int editorNameCounter = 1;  // editorname 숫자 카운터 초기값 설정
 
     void Start()
     {
@@ -90,13 +91,16 @@ public class Thumbnail_KJS : MonoBehaviour
         // postData에 새 항목 추가 및 경로 설정
         H_PostInfo newPost = new H_PostInfo
         {
-            editorname = "DefaultName",  // 필요 시 다른 이름으로 변경 가능
+            editorname = "Editor" + editorNameCounter,  // editorname에 카운터 추가
             thumburl = filePath  // 파일 경로를 thumburl에 저장
         };
         postInfoList.postData.Add(newPost);
 
         // JSON 데이터 저장
         SaveJsonData();
+
+        // editorNameCounter 증가
+        editorNameCounter++;
     }
 
     // Texture2D를 PNG 파일로 저장하는 메서드
