@@ -6,9 +6,10 @@ using Photon.Pun;
 using UnityEngine.UI;
 using Unity.Mathematics;
 
-public class DrawWithMouse : MonoBehaviourPun
+public class DrawWithMouse : MonoBehaviourPun, IPunObservable
 {
-    public List<Vector3> points = new List<Vector3>();
+    public List<List<Vector3>> allLines = new List<List<Vector3>>();   // 모든 라인 점들의 리스트
+    public List<Vector3> points = new List<Vector3>();                 // 현재 라인 점들의 리스트
 
     public Camera uiCamera;
 
@@ -40,6 +41,8 @@ public class DrawWithMouse : MonoBehaviourPun
 
         drawButton.onClick.AddListener(StartDrawing);
         stickerButton.onClick.AddListener(StartAttaching);
+
+        
     }
 
     // 그리기
@@ -68,7 +71,7 @@ public class DrawWithMouse : MonoBehaviourPun
         // 그리기가 true이고, 마우스를 눌렀을 때
         if (Input.GetMouseButtonDown(0) && isDrawing == true)
         {
-            CreateLine();
+            CreateNewLine();
         }    
 
         // 그리기가 true이고, 마우스를 누르고 있을 때
@@ -91,7 +94,6 @@ public class DrawWithMouse : MonoBehaviourPun
             }
         }
 
-
         // 붙이기가 true이고, 마우스를 눌렀을 때
         if (Input.GetMouseButtonDown(0) && isAttaching == true)
         {
@@ -103,8 +105,8 @@ public class DrawWithMouse : MonoBehaviourPun
         }
     }
 
-
-    void CreateLine()
+    // 라인 생성 함수
+    void CreateNewLine()
     {
         GameObject go = new GameObject("Line");
         go.transform.SetParent(lineParent.transform);
@@ -137,5 +139,46 @@ public class DrawWithMouse : MonoBehaviourPun
         {
             rectTransform.anchoredPosition = localPoint;
         }
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            // 리스트의 point 갯수 보냄
+            stream.SendNext(points.Count);
+
+            // 리스트의 point 좌표 보냄
+            foreach (Vector3 point in points)
+            {
+                stream.SendNext(point);
+            }
+
+        }
+        else
+        {
+            // 리스트의 point 갯수 받음
+            int count = (int)stream.ReceiveNext();
+            
+            // 리스트의 point 좌표를 받고 추가함
+            for (int i = 0; i < count; i++)
+            {
+                points.Add((Vector3)stream.ReceiveNext());
+            }
+
+            // 받은 데이터를 통해 LineRenderer 업데이트
+            UpdateLineRenderer();
+        }
+    }
+
+    private void UpdateLineRenderer()
+    {
+        if (lineRenderer == null)
+        {
+            CreateNewLine();
+        }
+
+        lineRenderer.positionCount = points.Count;
+        lineRenderer.SetPositions(points.ToArray());
     }
 }
