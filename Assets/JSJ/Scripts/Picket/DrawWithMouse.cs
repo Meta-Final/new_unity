@@ -12,7 +12,6 @@ public class DrawWithMouse : MonoBehaviourPun
 
     public Canvas canvasPicket;   // Picket UI Canvas
 
-    //public GameObject linePrefab;
     public GameObject stickerPrefab;
 
     public GameObject lineParent;      // Line들이 모인 오브젝트
@@ -22,27 +21,17 @@ public class DrawWithMouse : MonoBehaviourPun
     public Button drawButton;
     public Button stickerButton;
 
-    [Header("그리기")]
-    public float lineWidth = 0.1f;
-    public Material material;
-    public Color lineColor = Color.red;
-    
     public bool isDrawing = false;
     public bool isAttaching = false;
+
     float timestep;
 
     public Line line;
 
-    
-
     private void Start()
     {
-        
-
         drawButton.onClick.AddListener(StartDrawing);
         stickerButton.onClick.AddListener(StartAttaching);
-
-        
     }
 
     // 그리기
@@ -90,7 +79,6 @@ public class DrawWithMouse : MonoBehaviourPun
 
                     timestep = Time.time;
 
-                    
                 }
             }
         }
@@ -110,6 +98,7 @@ public class DrawWithMouse : MonoBehaviourPun
     void CreateNewLine()
     {
         GameObject lineObject = PhotonNetwork.Instantiate("Line", Vector3.zero, quaternion.identity);
+
         lineObject.transform.SetParent(lineParent.transform);
 
         line = lineObject.GetComponent<Line>();
