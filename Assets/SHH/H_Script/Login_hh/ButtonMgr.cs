@@ -12,10 +12,12 @@ public class ButtonMgr : MonoBehaviour
     public InputField inputpassword;
     //public GameObject Loginbox;
     public GameObject Joinbox;
+    public GameObject Accountbox;
 
     void Start()
     {
         Joinbox.SetActive(false);
+        Accountbox.SetActive(false);
     }
 
     void Update()
@@ -38,6 +40,12 @@ public class ButtonMgr : MonoBehaviour
     public void OnClickSignOut()
     {
         MetazipAuth.instance.SignOut();
+    }
+
+    public void OnClickNextSignUp()
+    {
+        Joinbox.SetActive(false);
+        Accountbox.SetActive(true);
     }
 
 }
