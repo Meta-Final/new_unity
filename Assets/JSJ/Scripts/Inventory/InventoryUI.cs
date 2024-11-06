@@ -25,7 +25,7 @@ public class InventoryUI : MonoBehaviour
     private void Start()
     {
         // 지금 'Meta_Studio_Scene'이라면, 액자를 찾아라.
-        if (SceneManager.GetActiveScene().name == "Meta_Studio_Scene")
+        if (SceneManager.GetActiveScene().name == "Meta_Studio_Scene_shh")
         {
             noticePos = GameObject.Find("NoticeFrame").transform;
         }
@@ -112,11 +112,62 @@ public class InventoryUI : MonoBehaviour
     }
 
     // 포스트잇 생성 버튼 기능
+    //  public void OnPostitButtionClick()
+    //  {
+    //      if (selectScreenshot != null)
+    //      {
+    //          GameObject newPostIt = Instantiate(postItPrefab, noticePos);
+    //
+    //          RawImage postItImage = newPostIt.GetComponentInChildren<RawImage>();
+    //
+    //          if (postItImage != null)
+    //          {
+    //              postItImage.texture = selectScreenshot;
+    //
+    //              print("1");
+    //              float originWidth = selectScreenshot.width;
+    //              float originHeight = selectScreenshot.height;
+    //              float aspectRatio = originWidth / originHeight;
+    //          }
+    //      }
+    //
+    //      btn_Delete.interactable = false;
+    //      btn_PostIt.interactable = false;
+    //  }
+
+    // 정렬을 위한 위치 값 설정
+    private int postItColumnCount = 3;      // 한 행에 들어갈 포스트잇 개수 (3으로 설정)
+    private int postItRowCount = 3;         // 총 행 개수 (3으로 설정)
+    private float postItSpacing = 30f;      // 포스트잇 간 간격 (픽셀 단위)
+    private int postItIndex = 0;            // 생성된 포스트잇의 인덱스
+
+    public Material matPostIt;
+    public Color postItColor = Color.white;
     public void OnPostitButtionClick()
     {
         if (selectScreenshot != null)
         {
-            GameObject newPostIt = Instantiate(postItPrefab, noticePos);
+            // 열과 행 계산
+            int row = postItIndex / postItColumnCount;
+            int column = postItIndex % postItColumnCount;
+
+            // 정렬된 위치 계산, y축으로 65만큼 위로 이동
+            Vector3 offset = new Vector3(
+                column * postItSpacing,
+                -(row * postItSpacing) + 65f,  // 기존 y 위치에서 65만큼 위로 이동
+                0f
+            );
+
+            // 새 포스트잇 생성 위치 지정
+            Vector3 spawnPosition = noticePos.position + offset;
+
+            // 포스트잇 생성
+            GameObject newPostIt = Instantiate(postItPrefab, spawnPosition, Quaternion.identity, noticePos);
+            Material mat = new Material(matPostIt);
+            mat.color = postItColor;
+            MeshRenderer mr = newPostIt.GetComponent<MeshRenderer>();
+            mr.material = mat;
+
 
             RawImage postItImage = newPostIt.GetComponentInChildren<RawImage>();
 
@@ -124,14 +175,20 @@ public class InventoryUI : MonoBehaviour
             {
                 postItImage.texture = selectScreenshot;
 
-                print("1");
                 float originWidth = selectScreenshot.width;
                 float originHeight = selectScreenshot.height;
                 float aspectRatio = originWidth / originHeight;
+            }
+
+            // 인덱스 증가 및 3x3 제한 검사
+            postItIndex++;
+            if (postItIndex >= postItColumnCount * postItRowCount)
+            {
+                postItIndex = 0; // 3x3 칸을 다 채우면 다시 초기화하여 첫 위치로 돌아감
             }
         }
 
         btn_Delete.interactable = false;
         btn_PostIt.interactable = false;
     }
-}                
+}

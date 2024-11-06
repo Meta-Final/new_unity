@@ -1,18 +1,15 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class ButtonMgr : MonoBehaviour
 {
-
- //  public TMP_InputField textName;
-
     public InputField inputemail;
     public InputField inputpassword;
-    public InputField inputpassword2;
-
     //public GameObject Loginbox;
     public GameObject Joinbox;
 
@@ -32,12 +29,6 @@ public class ButtonMgr : MonoBehaviour
         Joinbox.SetActive(true);
      
     }
-    public void OnClickSignUp()
-    {
-        MetazipAuth.instance.SignUp(inputemail.text, inputpassword.text);
-
-      
-    }
 
     public void OnClickSignIn()
     {
@@ -48,4 +39,5 @@ public class ButtonMgr : MonoBehaviour
     {
         MetazipAuth.instance.SignOut();
     }
+
 }
