@@ -20,6 +20,7 @@ public class ButtonMgr2 : MonoBehaviour
 {
     public InputField Joinemail;
     public InputField Joinpassword;
+    //public InputField Joinpassword2;
     public GameObject Joinbox;
     public GameObject Accountbox;
     void Start()
@@ -35,12 +36,19 @@ public class ButtonMgr2 : MonoBehaviour
     public void OnclicksignUp()
     {
         MetazipAuth.instance.SignUp(Joinemail.text, Joinpassword.text);
-        print("가입계정이 등록되었쪙");
-
+      // if (Joinpassword.text != Joinpassword2.text)
+      // {
+      //     print("일치하지 않아용");
+      //     return;
+      // }
+      // else
+      // {
+      // print("가입계정이 등록되었쪙");
+      // }
+      //
         Joinbox.SetActive(false);
         Accountbox.SetActive(true);
     }
-
 
     public void OnClickSaveAccount()
     {

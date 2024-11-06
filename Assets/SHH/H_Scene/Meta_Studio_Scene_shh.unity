@@ -328,6 +328,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3678064410602533088, guid: 61680cdcb6d60c2459ab6261dff78e04,
+        type: 3}
+      propertyPath: noticePos
+      value: 
+      objectReference: {fileID: 1760741675}
+    - target: {fileID: 3678064410602533088, guid: 61680cdcb6d60c2459ab6261dff78e04,
+        type: 3}
+      propertyPath: postItPrefab
+      value: 
+      objectReference: {fileID: 4329809477305025136, guid: 9894321160f7ace4d82a95df67513e42,
+        type: 3}
     - target: {fileID: 4998874896019826535, guid: 61680cdcb6d60c2459ab6261dff78e04,
         type: 3}
       propertyPath: m_Name
@@ -1061,11 +1072,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1c36cfe4d8f4fa40a3684740c8e49a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  distance: 10
-  height: 5
-  scrollSpeed: 2
-  mouseSensitivity: 5
 --- !u!1 &967716092
 GameObject:
   m_ObjectHideFlags: 0

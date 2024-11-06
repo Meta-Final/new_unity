@@ -33,6 +33,11 @@ public class ButtonMgr : MonoBehaviour
     public void OnClickSignIn()
     {
         MetazipAuth.instance.SignIn(inputemail.text, inputpassword.text);
+        if (string.IsNullOrEmpty(inputemail.text) || string.IsNullOrEmpty(inputpassword.text))
+        {
+            print("칸이 비었음");
+            return;
+        }
     }
 
     public void OnClickSignOut()

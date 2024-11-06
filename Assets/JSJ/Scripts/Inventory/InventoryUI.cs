@@ -143,6 +143,10 @@ public class InventoryUI : MonoBehaviour
 
     public Material matPostIt;
     public Color postItColor = Color.white;
+    public void SetPostItColor(Color color)
+    {
+        postItColor = color;
+    }
     public void OnPostitButtionClick()
     {
         if (selectScreenshot != null)
