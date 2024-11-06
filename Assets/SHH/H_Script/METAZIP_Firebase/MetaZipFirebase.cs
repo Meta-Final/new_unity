@@ -30,33 +30,33 @@ public class MetaZipFirebase : MonoBehaviour
     public InputField nicknameInput;
     public InputField workplace;
 
-    public Button SignUpButton;
+   // public Button SignUpButton;
     public Text feedbackText;
 
     void Awake()
     {
         instance = this;
-        InitializeFirebase();
+        //InitializeFirebase();
     }
 
-    private async void InitializeFirebase()
-    {
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
-        {
-            DependencyStatus dependencyStatus = task.Result;
-            if (dependencyStatus == DependencyStatus.Available)
-            {
-                auth = FirebaseAuth.DefaultInstance;
-                store = FirebaseFirestore.DefaultInstance;
-                Debug.Log("Firebase 초기화 성공!");
-            }
-            else
-            {
-                Debug.LogError($"Firebase 초기화 실패: {dependencyStatus}");
-                feedbackText.text = "Firebase 초기화 실패: " + dependencyStatus;
-            }
-        });
-    }
+   //private async void InitializeFirebase()
+   //{
+   //    FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
+   //    {
+   //        DependencyStatus dependencyStatus = task.Result;
+   //        if (dependencyStatus == DependencyStatus.Available)
+   //        {
+   //            auth = FirebaseAuth.DefaultInstance;
+   //            store = FirebaseFirestore.DefaultInstance;
+   //            Debug.Log("Firebase 초기화 성공!");
+   //        }
+   //        else
+   //        {
+   //            Debug.LogError($"Firebase 초기화 실패: {dependencyStatus}");
+   //            feedbackText.text = "Firebase 초기화 실패: " + dependencyStatus;
+   //        }
+   //    });
+   //}
 
     public void OnClickSignUp()
     {
@@ -87,6 +87,13 @@ public class MetaZipFirebase : MonoBehaviour
         }
 
         StartCoroutine(CoSignUp(email, password, name, nickname));
+
+        h_info userInfo = new h_info
+        {
+            name = name,
+            nickname = nickname
+        };
+        SaveUserInfo(userInfo);
     }
 
     IEnumerator CoSignUp(string email, string password, string name, string nickname)
@@ -98,12 +105,6 @@ public class MetaZipFirebase : MonoBehaviour
         {
             Debug.Log("회원가입 성공!");
 
-            h_info userInfo = new h_info
-            {
-                name = name,
-                nickname = nickname
-            };
-            SaveUserInfo(userInfo);
         }
         else
         {
