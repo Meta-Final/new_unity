@@ -9,6 +9,7 @@ public class Line : MonoBehaviour, IPunObservable
 
     public LineRenderer lineRenderer;
 
+    [Header("±×¸®±â")]
     public float lineWidth = 0.1f;
     public Color lineColor = Color.red;
     public Material lineMaterial;
@@ -29,12 +30,6 @@ public class Line : MonoBehaviour, IPunObservable
         points.Add(point);
 
         UpdateLineRenderer();
-    }
-
-    public void UpdateLineRenderer()
-    {
-        lineRenderer.positionCount = points.Count;
-        lineRenderer.SetPositions(points.ToArray());
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -65,5 +60,11 @@ public class Line : MonoBehaviour, IPunObservable
 
             UpdateLineRenderer();
         }
+    }
+
+    public void UpdateLineRenderer()
+    {
+        lineRenderer.positionCount = points.Count;
+        lineRenderer.SetPositions(points.ToArray());
     }
 }

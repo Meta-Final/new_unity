@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 39936043}
   - component: {fileID: 39936042}
   m_Layer: 0
-  m_Name: DrawLine
+  m_Name: DrawWithMouse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -176,20 +176,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiCamera: {fileID: 1304667241}
   canvasPicket: {fileID: 1109771323}
-  linePrefab: {fileID: 6734165032486915819, guid: 1ebb2d4fbf086774785c4392ae95e341,
-    type: 3}
-  stickerPrefab: {fileID: 3220649105213807139, guid: ddf7af138a8f5d3489bf026aa6e65bbe,
+  stickerprefab: {fileID: 4029001222032175188, guid: 7b501c81b9454264d9df3bbbd6f25933,
     type: 3}
   lineParent: {fileID: 145372751}
   stickerParent: {fileID: 1709480984}
   drawButton: {fileID: 689068412}
   stickerButton: {fileID: 1417851652}
-  lineWidth: 0.1
-  material: {fileID: 0}
-  lineColor: {r: 1, g: 0, b: 0, a: 1}
   isDrawing: 0
   isAttaching: 0
   line: {fileID: 0}
+  sticker: {fileID: 0}
 --- !u!4 &39936044
 Transform:
   m_ObjectHideFlags: 0
@@ -4936,84 +4932,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1001 &1441618782546460834
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 881845703296439115, guid: 61680cdcb6d60c2459ab6261dff78e04,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 881845703296439115, guid: 61680cdcb6d60c2459ab6261dff78e04,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 881845703296439115, guid: 61680cdcb6d60c2459ab6261dff78e04,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 881845703296439115, guid: 61680cdcb6d60c2459ab6261dff78e04,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 881845703296439115, guid: 61680cdcb6d60c2459ab6261dff78e04,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 881845703296439115, guid: 61680cdcb6d60c2459ab6261dff78e04,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 881845703296439115, guid: 61680cdcb6d60c2459ab6261dff78e04,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 881845703296439115, guid: 61680cdcb6d60c2459ab6261dff78e04,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 881845703296439115, guid: 61680cdcb6d60c2459ab6261dff78e04,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 881845703296439115, guid: 61680cdcb6d60c2459ab6261dff78e04,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4998874896019826535, guid: 61680cdcb6d60c2459ab6261dff78e04,
-        type: 3}
-      propertyPath: m_Name
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 4998874896019826535, guid: 61680cdcb6d60c2459ab6261dff78e04,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6229091592516016793, guid: 61680cdcb6d60c2459ab6261dff78e04,
-        type: 3}
-      propertyPath: sceneViewId
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 61680cdcb6d60c2459ab6261dff78e04, type: 3}
 --- !u!65 &6377865605331822675
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5097,4 +5015,3 @@ SceneRoots:
   - {fileID: 39936044}
   - {fileID: 145372752}
   - {fileID: 437565079}
-  - {fileID: 1441618782546460834}

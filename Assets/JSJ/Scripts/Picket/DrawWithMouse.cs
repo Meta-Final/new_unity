@@ -12,7 +12,7 @@ public class DrawWithMouse : MonoBehaviourPun
 
     public Canvas canvasPicket;   // Picket UI Canvas
 
-    public GameObject stickerPrefab;
+    public GameObject stickerprefab;
 
     public GameObject lineParent;      // Line들이 모인 오브젝트
     public GameObject stickerParent;   // Sticker들이 모인 오브젝트
@@ -27,6 +27,7 @@ public class DrawWithMouse : MonoBehaviourPun
     float timestep;
 
     public Line line;
+    public Sticker sticker;
 
     private void Start()
     {
@@ -98,7 +99,6 @@ public class DrawWithMouse : MonoBehaviourPun
     void CreateNewLine()
     {
         GameObject lineObject = PhotonNetwork.Instantiate("Line", Vector3.zero, quaternion.identity);
-
         lineObject.transform.SetParent(lineParent.transform);
 
         line = lineObject.GetComponent<Line>();
@@ -114,17 +114,19 @@ public class DrawWithMouse : MonoBehaviourPun
             out Vector2 localPoint
             );
 
-        GameObject stickerObject = PhotonNetwork.Instantiate("Img_Star", canvasPicket.transform.position, quaternion.identity);
-        stickerObject.transform.SetParent(stickerParent.transform);
-        RectTransform rectTransform = stickerObject.GetComponent<RectTransform>();
+        
+       
+        photonView.RPC("Sticker", RpcTarget.AllBuffered, localPoint);
 
-        if (rectTransform != null)
-        {
-            rectTransform.anchoredPosition = localPoint;
-        }
+       
     }
 
+    //public PhotonView pv;
     
-
-    
+    [PunRPC]
+    void Sticker(Vector2 localPoint)
+    {
+        GameObject go = Instantiate(stickerprefab, canvasPicket.transform);
+        go.transform.localPosition = localPoint;
+    }
 }
