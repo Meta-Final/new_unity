@@ -119,7 +119,7 @@ public class CreateMgr_KJS : MonoBehaviour
         UpdateScrollbarSteps();
     }
 
-    private void UpdateContentWidth()
+    public void UpdateContentWidth()
     {
         if (content == null) return;
 
@@ -128,7 +128,7 @@ public class CreateMgr_KJS : MonoBehaviour
         contentRect.sizeDelta = new Vector2(newWidth, contentRect.sizeDelta.y);
     }
 
-    private void UpdateScrollbarSteps()
+    public void UpdateScrollbarSteps()
     {
         if (horizontalScrollbar == null || pageCount <= 1) return;
 

@@ -40,11 +40,12 @@ public class LoadMgr_KJS : MonoBehaviour
         }
     }
 
-    public void LoadObjectsFromFile()
+    // 특정 postId에 맞는 데이터를 로드하는 메서드
+    public void LoadObjectsFromFile(string postId)
     {
         try
         {
-            Debug.Log("LoadObjectsFromFile() called.");
+            Debug.Log($"LoadObjectsFromFile() called for postId: {postId}");
 
             if (!File.Exists(savePath))
             {
@@ -55,9 +56,12 @@ public class LoadMgr_KJS : MonoBehaviour
             string json = File.ReadAllText(savePath);
             rootData = JsonUtility.FromJson<RootObject>(json);
 
-            if (rootData.posts.Count == 0) return;
-
-            Post post = rootData.posts[0];
+            Post post = rootData.posts.Find(p => p.postId == postId);
+            if (post == null)
+            {
+                Debug.LogWarning($"postId '{postId}'에 해당하는 게시물이 없습니다.");
+                return;
+            }
 
             textBoxes.ForEach(Destroy);
             imageBoxes.ForEach(Destroy);
@@ -118,6 +122,9 @@ public class LoadMgr_KJS : MonoBehaviour
             totalPages = pages.Count;
             UpdateScrollbar();
 
+            // UpdateScrollbar 이후에 스크롤바를 0으로 설정
+            pageScrollbar.value = 0f;
+
             Debug.Log("Data loaded successfully.");
         }
         catch (Exception e)
@@ -146,6 +153,9 @@ public class LoadMgr_KJS : MonoBehaviour
 
             pageScrollbar.onValueChanged.AddListener(OnScrollbarValueChanged);
         }
+
+        // 항상 로드 시 스크롤바를 0으로 초기화
+        pageScrollbar.value = 0f;
     }
 
     private void OnScrollbarValueChanged(float value)
