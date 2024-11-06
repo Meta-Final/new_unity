@@ -61,10 +61,10 @@ public class MetazipAuth : MonoBehaviour
             print("회원가입 실패! :" + task.Exception);
         }
     }
-    public void Checkpassword()
-    {
-        
-    }
+  //  public void Checkpassword()
+  //  {
+  //      
+  //  }
     void Start()
     {
     }

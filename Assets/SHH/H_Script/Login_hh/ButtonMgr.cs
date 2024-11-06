@@ -1,6 +1,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,12 +11,13 @@ public class ButtonMgr : MonoBehaviour
 {
     public InputField inputemail;
     public InputField inputpassword;
-    //public GameObject Loginbox;
     public GameObject Joinbox;
+    public GameObject Accountbox;
 
     void Start()
     {
         Joinbox.SetActive(false);
+        Accountbox.SetActive(false);
     }
 
     void Update()
@@ -24,8 +26,6 @@ public class ButtonMgr : MonoBehaviour
     }
     public void OnClickJoinbox()
     {
-        
-        //print("회원가입창 까꿍");
         Joinbox.SetActive(true);
      
     }
@@ -39,5 +39,7 @@ public class ButtonMgr : MonoBehaviour
     {
         MetazipAuth.instance.SignOut();
     }
+
+   
 
 }
