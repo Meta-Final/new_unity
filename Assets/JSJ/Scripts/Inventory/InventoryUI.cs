@@ -191,4 +191,9 @@ public class InventoryUI : MonoBehaviour
         btn_Delete.interactable = false;
         btn_PostIt.interactable = false;
     }
+
+    public void SetPostItColor(Color color)
+    {
+        postItColor = color;
+    }
 }
