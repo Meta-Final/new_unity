@@ -6,15 +6,13 @@ using Photon.Pun;
 using UnityEngine.UI;
 using Unity.Mathematics;
 
-public class DrawWithMouse : MonoBehaviourPun, IPunObservable
+public class DrawWithMouse : MonoBehaviourPun
 {
-    public List<List<Vector3>> allLines = new List<List<Vector3>>();   // 모든 라인 점들의 리스트
-    public List<Vector3> points = new List<Vector3>();                 // 현재 라인 점들의 리스트
-
     public Camera uiCamera;
 
     public Canvas canvasPicket;   // Picket UI Canvas
 
+    //public GameObject linePrefab;
     public GameObject stickerPrefab;
 
     public GameObject lineParent;      // Line들이 모인 오브젝트
@@ -33,11 +31,13 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
     public bool isAttaching = false;
     float timestep;
 
-    LineRenderer lineRenderer;
+    public Line line;
+
+    
 
     private void Start()
     {
-        lineRenderer = GetComponent<LineRenderer>();
+        
 
         drawButton.onClick.AddListener(StartDrawing);
         stickerButton.onClick.AddListener(StartAttaching);
@@ -84,12 +84,13 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
             {
                 if (Time.time - timestep > 0.01f)
                 {
-                    points.Add(hitInfo.point + new Vector3 (0, 0, -0.1f));
+                    Vector3 point = hitInfo.point + new Vector3(0, 0, -0.1f);
+
+                    line.AddPoint(point);
 
                     timestep = Time.time;
 
-                    lineRenderer.positionCount = points.Count;
-                    lineRenderer.SetPositions(points.ToArray());
+                    
                 }
             }
         }
@@ -108,18 +109,10 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
     // 라인 생성 함수
     void CreateNewLine()
     {
-        GameObject go = new GameObject("Line");
-        go.transform.SetParent(lineParent.transform);
-        lineRenderer = go.transform.AddComponent<LineRenderer>();
+        GameObject lineObject = PhotonNetwork.Instantiate("Line", Vector3.zero, quaternion.identity);
+        lineObject.transform.SetParent(lineParent.transform);
 
-        lineRenderer.startColor = lineColor;
-        lineRenderer.endColor = lineColor;
-        lineRenderer.startWidth = lineWidth;
-        lineRenderer.endWidth = lineWidth;
-        lineRenderer.material = material;
-
-        lineRenderer.positionCount = 0;
-        points.Clear();
+        line = lineObject.GetComponent<Line>();
     }
 
     // 스티커 생성 함수
@@ -141,44 +134,7 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
         }
     }
 
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.IsWriting)
-        {
-            // 리스트의 point 갯수 보냄
-            stream.SendNext(points.Count);
+    
 
-            // 리스트의 point 좌표 보냄
-            foreach (Vector3 point in points)
-            {
-                stream.SendNext(point);
-            }
-
-        }
-        else
-        {
-            // 리스트의 point 갯수 받음
-            int count = (int)stream.ReceiveNext();
-            
-            // 리스트의 point 좌표를 받고 추가함
-            for (int i = 0; i < count; i++)
-            {
-                points.Add((Vector3)stream.ReceiveNext());
-            }
-
-            // 받은 데이터를 통해 LineRenderer 업데이트
-            UpdateLineRenderer();
-        }
-    }
-
-    private void UpdateLineRenderer()
-    {
-        if (lineRenderer == null)
-        {
-            CreateNewLine();
-        }
-
-        lineRenderer.positionCount = points.Count;
-        lineRenderer.SetPositions(points.ToArray());
-    }
+    
 }

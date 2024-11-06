@@ -174,9 +174,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7152c7ec6c8e8344a873812a31111e57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  points: []
   uiCamera: {fileID: 1304667241}
   canvasPicket: {fileID: 1109771323}
+  linePrefab: {fileID: 6734165032486915819, guid: 1ebb2d4fbf086774785c4392ae95e341,
+    type: 3}
   stickerPrefab: {fileID: 3220649105213807139, guid: ddf7af138a8f5d3489bf026aa6e65bbe,
     type: 3}
   lineParent: {fileID: 145372751}
@@ -186,6 +187,9 @@ MonoBehaviour:
   lineWidth: 0.1
   material: {fileID: 0}
   lineColor: {r: 1, g: 0, b: 0, a: 1}
+  isDrawing: 0
+  isAttaching: 0
+  line: {fileID: 0}
 --- !u!4 &39936044
 Transform:
   m_ObjectHideFlags: 0
