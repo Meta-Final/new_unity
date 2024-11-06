@@ -114,8 +114,9 @@ public class DrawWithMouse : MonoBehaviourPun
             out Vector2 localPoint
             );
 
-        GameObject stickerInstance = Instantiate(stickerPrefab, stickerParent.transform);
-        RectTransform rectTransform = stickerInstance.GetComponent<RectTransform>();
+        GameObject stickerObject = PhotonNetwork.Instantiate("Img_Star", canvasPicket.transform.position, quaternion.identity);
+        stickerObject.transform.SetParent(stickerParent.transform);
+        RectTransform rectTransform = stickerObject.GetComponent<RectTransform>();
 
         if (rectTransform != null)
         {
