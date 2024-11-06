@@ -134,13 +134,15 @@ public class InventoryUI : MonoBehaviour
     //      btn_Delete.interactable = false;
     //      btn_PostIt.interactable = false;
     //  }
-    // 포스트잇 생성 버튼 기능
+
     // 정렬을 위한 위치 값 설정
     private int postItColumnCount = 3;      // 한 행에 들어갈 포스트잇 개수 (3으로 설정)
     private int postItRowCount = 3;         // 총 행 개수 (3으로 설정)
     private float postItSpacing = 30f;      // 포스트잇 간 간격 (픽셀 단위)
     private int postItIndex = 0;            // 생성된 포스트잇의 인덱스
 
+    public Material matPostIt;
+    public Color postItColor = Color.white;
     public void OnPostitButtionClick()
     {
         if (selectScreenshot != null)
@@ -149,10 +151,10 @@ public class InventoryUI : MonoBehaviour
             int row = postItIndex / postItColumnCount;
             int column = postItIndex % postItColumnCount;
 
-            // 정렬된 위치 계산, y축으로 60만큼 위로 이동
+            // 정렬된 위치 계산, y축으로 65만큼 위로 이동
             Vector3 offset = new Vector3(
                 column * postItSpacing,
-                -(row * postItSpacing) + 60f,  // 기존 y 위치에서 60만큼 위로 이동
+                -(row * postItSpacing) + 65f,  // 기존 y 위치에서 65만큼 위로 이동
                 0f
             );
 
@@ -161,6 +163,11 @@ public class InventoryUI : MonoBehaviour
 
             // 포스트잇 생성
             GameObject newPostIt = Instantiate(postItPrefab, spawnPosition, Quaternion.identity, noticePos);
+            Material mat = new Material(matPostIt);
+            mat.color = postItColor;
+            MeshRenderer mr = newPostIt.GetComponent<MeshRenderer>();
+            mr.material = mat;
+
 
             RawImage postItImage = newPostIt.GetComponentInChildren<RawImage>();
 
