@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 public class FolderPreview : MonoBehaviour
 {
     public GameObject previewImage;
+
     public Vector2 offset = new Vector2(200, -200);
 
     RectTransform previewRect;

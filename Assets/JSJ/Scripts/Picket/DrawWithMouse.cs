@@ -12,8 +12,7 @@ public class DrawWithMouse : MonoBehaviourPun
 
     public Canvas canvasPicket;   // Picket UI Canvas
 
-    //public GameObject linePrefab;
-    public GameObject stickerPrefab;
+    public GameObject stickerprefab;
 
     public GameObject lineParent;      // Line들이 모인 오브젝트
     public GameObject stickerParent;   // Sticker들이 모인 오브젝트
@@ -22,27 +21,18 @@ public class DrawWithMouse : MonoBehaviourPun
     public Button drawButton;
     public Button stickerButton;
 
-    [Header("그리기")]
-    public float lineWidth = 0.1f;
-    public Material material;
-    public Color lineColor = Color.red;
-    
     public bool isDrawing = false;
     public bool isAttaching = false;
+
     float timestep;
 
     public Line line;
-
+   
     
-
     private void Start()
     {
-        
-
         drawButton.onClick.AddListener(StartDrawing);
         stickerButton.onClick.AddListener(StartAttaching);
-
-        
     }
 
     // 그리기
@@ -52,7 +42,7 @@ public class DrawWithMouse : MonoBehaviourPun
         isDrawing = true;
 
         // 붙이기 비활성화
-        isAttaching = false;   
+        isAttaching = false;
     }
 
     // 붙이기
@@ -90,7 +80,6 @@ public class DrawWithMouse : MonoBehaviourPun
 
                     timestep = Time.time;
 
-                    
                 }
             }
         }
@@ -109,10 +98,25 @@ public class DrawWithMouse : MonoBehaviourPun
     // 라인 생성 함수
     void CreateNewLine()
     {
-        GameObject lineObject = PhotonNetwork.Instantiate("Line", Vector3.zero, quaternion.identity);
-        lineObject.transform.SetParent(lineParent.transform);
+        GameObject lineInstance = PhotonNetwork.Instantiate("Line", Vector3.zero, quaternion.identity);
 
-        line = lineObject.GetComponent<Line>();
+        // 로컬에서 라인 오브젝트의 부모 설정
+        lineInstance.transform.SetParent(lineParent.transform);
+
+        PhotonView linePhotonView = lineInstance.GetComponent<PhotonView>();
+
+        // 상대방에게도 라인 오브젝트의 부모를 동기화
+        photonView.RPC("SetLineParent", RpcTarget.OthersBuffered, linePhotonView.ViewID);
+
+        line = lineInstance.GetComponent<Line>();
+    }
+
+    // 라인 오브젝트 부모 동기화 함수
+    [PunRPC]
+    void SetLineParent(int lineViewID)
+    {
+        GameObject lineObject = PhotonView.Find(lineViewID).gameObject;
+        lineObject.transform.SetParent(lineParent.transform);
     }
 
     // 스티커 생성 함수
@@ -125,16 +129,27 @@ public class DrawWithMouse : MonoBehaviourPun
             out Vector2 localPoint
             );
 
-        GameObject stickerInstance = Instantiate(stickerPrefab, stickerParent.transform);
-        RectTransform rectTransform = stickerInstance.GetComponent<RectTransform>();
-
-        if (rectTransform != null)
-        {
-            rectTransform.anchoredPosition = localPoint;
-        }
+        photonView.RPC("Sticker", RpcTarget.AllBuffered, localPoint);
     }
 
     
+    // 스티커 생성 동기화
+    [PunRPC]
+    void Sticker(Vector2 localPoint)
+    {
+        GameObject stickerInstance = Instantiate(stickerprefab, canvasPicket.transform);
+        stickerInstance.transform.localPosition = localPoint;
 
-    
+        
+
+        photonView.RPC("SetStickerParent", RpcTarget.AllBuffered, stickerInstance.GetComponent<PhotonView>().ViewID);
+    }
+
+    // 스티커 오브젝트 부모 동기화 함수
+    [PunRPC]
+    void SetStickerParent(int stickerViewID)
+    {
+        GameObject stickerObject = PhotonView.Find(stickerViewID).gameObject;
+        stickerObject.transform.SetParent(stickerParent.transform);
+    }
 }
