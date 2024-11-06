@@ -21,6 +21,8 @@ public class PicketUIManager : MonoBehaviour
     public Texture newsTexture;   // 기사 스크린샷
     public RawImage img_News;     // 기사 스크린샷을 보여주는 이미지
 
+    public bool isShowPicketUI = false;
+
     public DrawWithMouse drawWithMouse;
 
     void Start()
@@ -66,6 +68,8 @@ public class PicketUIManager : MonoBehaviour
 
     public void ShowPicketUI()
     {
+        isShowPicketUI = true;
+
         // Picket UI 활성화
         panelPicket.SetActive(true);
 
