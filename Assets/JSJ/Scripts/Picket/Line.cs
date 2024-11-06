@@ -55,6 +55,8 @@ public class Line : MonoBehaviour, IPunObservable
             // 점의 개수 받음
             int count = (int)stream.ReceiveNext();
 
+            points.Clear();
+
             for (int i = 0; i < count; i++)
             {
                 // 점의 좌표를 리스트에 추가
