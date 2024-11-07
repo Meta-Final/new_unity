@@ -846,7 +846,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 20
+    m_Left: 10
     m_Right: 0
     m_Top: 30
     m_Bottom: 0
@@ -854,7 +854,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 160, y: 180}
-  m_Spacing: {x: 10, y: 0}
+  m_Spacing: {x: 10, y: 10}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!1 &763343927
@@ -1527,6 +1527,16 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6982906319933690202, guid: 3fee5af2aaee44649aa041e835ea3887,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6982906319933690202, guid: 3fee5af2aaee44649aa041e835ea3887,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 9.09
+      objectReference: {fileID: 0}
     - target: {fileID: 7741945506818105849, guid: 3fee5af2aaee44649aa041e835ea3887,
         type: 3}
       propertyPath: m_IsActive
@@ -1553,6 +1563,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1018771084}
+    - targetCorrespondingSourceObject: {fileID: 4998874896019826535, guid: 3fee5af2aaee44649aa041e835ea3887,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1018771093}
   m_SourcePrefab: {fileID: 100100000, guid: 3fee5af2aaee44649aa041e835ea3887, type: 3}
 --- !u!1 &1018771083 stripped
 GameObject:
@@ -1577,6 +1591,19 @@ MonoBehaviour:
   - "\uC694\uB9AC"
   inventorySlotPrefabPath: Btn_SlotItem _K
   inventoryPanel: {fileID: 750656144}
+--- !u!114 &1018771093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1018771083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 618d9088c8b6fe544b352459e72acd89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRange: 5
 --- !u!1 &1083345154
 GameObject:
   m_ObjectHideFlags: 0
@@ -3056,7 +3083,12 @@ PrefabInstance:
     - target: {fileID: 3795816740137130549, guid: 6ee6cb3ca8c290d4ab933c0f496f697e,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3795816740137130549, guid: 6ee6cb3ca8c290d4ab933c0f496f697e,
+        type: 3}
+      propertyPath: m_TagString
+      value: Item
       objectReference: {fileID: 0}
     - target: {fileID: 3795816740137289237, guid: 6ee6cb3ca8c290d4ab933c0f496f697e,
         type: 3}
