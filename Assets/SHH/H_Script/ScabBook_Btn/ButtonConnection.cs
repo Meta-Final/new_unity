@@ -14,6 +14,7 @@ public class ButtonConnection : MonoBehaviour
     public Button btnnotice;
     public Button btnprofile;
     public Button btnPoweroff;
+    public Button btnexit;
     void Start()
     {
         //ChannelCanvas = GameObject.Find("H_ChannelCanvas");
@@ -27,9 +28,15 @@ public class ButtonConnection : MonoBehaviour
         //    MagCanvas.SetActive(false);
         //}
         btnPoweroff.onClick.AddListener(Onclickpoweroff);
-        
+        btnprofile.onClick.AddListener(OnClickprofile);
+        btnnotice.onClick.AddListener(OnClicknotice);
+        btnexit.onClick.AddListener(OnClicknoticeExit);
     }
-
+    private void Update()
+    {
+        ExitKey();
+    }
+    #region 버튼클릭함수
     public void OnButtonClick()
     {
         // 캔버스 활성화/비활성화
@@ -37,22 +44,25 @@ public class ButtonConnection : MonoBehaviour
        //ChannelCanvas.SetActive(false);
     }
 
-        public void OnClicknotice()
+    public void OnClicknotice()
     {
         notice.SetActive(true);
         
     }
+    public void ExitKey() 
+    {
+        if (profile != null && Input.GetKeyDown(KeyCode.Escape))
+        {
+            profile.SetActive(false);
+        }
+    }
     public void OnClickprofile()
     {
-        notice.SetActive(true);
+        profile.SetActive(true);
+        
 
     }
-    public void OnClickprofileExit()
-    {
-       // Magazine.SetActive(true);
-       // ChannelCanvas.SetActive(true);
-    }
-        public void OnClicknoiticeExit() 
+    public void OnClicknoticeExit()
     {
         notice.SetActive(false);
     }
@@ -70,7 +80,7 @@ public class ButtonConnection : MonoBehaviour
     // {
     //     ChannelCanvas.SetActive(true);
     // }
-
+    #endregion
 }
 
 

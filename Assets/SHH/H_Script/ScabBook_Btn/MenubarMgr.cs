@@ -5,11 +5,11 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 public class MenubarMgr : MonoBehaviour
 {
-
-    public GameObject panelMenu;
+    public GameObject MenuPanel;
+    public GameObject roomMenu;
     void Start()
     {
-       Transform roomMenu = panelMenu.transform.Find("RoomMenu");
+        Transform roomMenu = MenuPanel.transform.Find("RoomBar");
 
         if(roomMenu != null)
         {
@@ -20,12 +20,9 @@ public class MenubarMgr : MonoBehaviour
 
     void Update()
     {
-        if (panelMenu != null && Input.GetKeyDown(KeyCode.Tab))
+        if (roomMenu != null && Input.GetKeyDown(KeyCode.Tab))
         {
-            panelMenu.SetActive(!panelMenu.activeSelf);
-
-            
-
+            roomMenu.SetActive(!roomMenu.activeSelf);
         }
     }
    
