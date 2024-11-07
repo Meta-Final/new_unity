@@ -59,7 +59,7 @@ public class ButtonConnection : MonoBehaviour
     public void OnClickprofile()
     {
         profile.SetActive(true);
-        btnprofile.S
+        
 
     }
     public void OnClicknoticeExit()
