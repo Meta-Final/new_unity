@@ -183,19 +183,6 @@ public class SaveMgr_KJS : MonoBehaviour
             return;
         }
 
-        var currentUser = FirebaseAuth.DefaultInstance.CurrentUser;
-        if (currentUser == null)
-        {
-            Debug.LogError("Firebase 사용자 인증 정보가 없습니다. 로그인 상태를 확인하세요.");
-            return;
-        }
-
-        if (MetaZip_FireStorage.instance == null)
-        {
-            Debug.LogError("MetaZip_FireStorage 인스턴스가 초기화되지 않았습니다.");
-            return;
-        }
-
         try
         {
             Post existingPost = rootData.posts.Find(post => post.postId == targetPostId);
@@ -268,16 +255,11 @@ public class SaveMgr_KJS : MonoBehaviour
 
             rootData.posts.Add(newPost);
 
-            // JSON 데이터를 직렬화하고 Firebase Storage에 업로드
+            // JSON 데이터를 직렬화하고 로컬 파일에 저장
             string json = JsonUtility.ToJson(rootData, true);
-            byte[] jsonData = Encoding.UTF8.GetBytes(json);
+            File.WriteAllText(savePath, json);
 
-            // 경로
-            string path = $"POST/{currentUser.UserId}/post_{targetPostId}.json";
-
-            MetaZip_FireStorage.instance.Upload(jsonData, path);
-
-            Debug.Log($"Data saved and uploaded successfully at {path}. Post ID: {newPost.postId}");
+            Debug.Log($"Data saved locally at {savePath}. Post ID: {newPost.postId}");
         }
         catch (Exception e)
         {
