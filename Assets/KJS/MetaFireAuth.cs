@@ -1,95 +1,83 @@
+using Firebase;
 using Firebase.Auth;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class MetaFireAuth : MonoBehaviour
 {
-
     public static MetaFireAuth instance;
 
-    public FirebaseAuth auth;
+    private FirebaseAuth auth;
+    private FirebaseUser user;
+
+    // 임시 로그인 정보
+    private const string TEMP_EMAIL = "hxh@gmail.com";
+    private const string TEMP_PASSWORD = "123456"; // 실제 등록된 비밀번호를 입력하세요.
+
+    public bool IsLoggedIn => user != null;
 
     private void Awake()
     {
-        instance = this;
-
-     
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject); // 다른 씬으로 이동해도 객체 유지
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
-    // Start is called before the first frame update
-    void Start()
+
+    private void Start()
+    {
+        InitializeFirebase();
+    }
+
+    private void InitializeFirebase()
     {
         auth = FirebaseAuth.DefaultInstance;
+        auth.StateChanged += OnAuthStateChanged;
+        OnAuthStateChanged(this, null);
 
-        //로그인 상태 체크 이벤트 등록
-        auth.StateChanged += OnChangedAuthState;
-    } 
+        // Firebase 초기화 후 자동 로그인 시도
+        SignInWithTemporaryAccount();
+    }
 
-    void OnChangedAuthState(object sender, EventArgs e)
+    private void OnAuthStateChanged(object sender, System.EventArgs eventArgs)
     {
-        //만약에 현재 유저정보(내정보)가 있다면 로그인
-        if(auth.CurrentUser != null)
+        if (auth.CurrentUser != user)
         {
-            print("로그인 되었습니다.");
-        }
-        //그렇지 않으면 로그아웃
-        else
-        {
-            print("로그 아웃 되었습니다.");
-            SignIn("a@gmail.com", "123456");
+            bool signedIn = user != auth.CurrentUser && auth.CurrentUser != null;
+            if (!signedIn && user != null)
+            {
+                Debug.Log("User signed out.");
+            }
+            user = auth.CurrentUser;
+            if (signedIn)
+            {
+                Debug.Log("User signed in: " + user.DisplayName);
+            }
         }
     }
 
-    public void SignUp(string email, string password)
+    public void SignInWithTemporaryAccount()
     {
-        StartCoroutine(CoSignUp(email, password));
-    }
-
-    IEnumerator CoSignUp(string email, string password)
-    {
-        // 회원가입 시도
-        Task<AuthResult> task = auth.CreateUserWithEmailAndPasswordAsync(email, password);
-        // 통신이 완료될때까지 기다리자.
-        yield return new WaitUntil(() => { return task.IsCompleted; });
-
-        // 만약에 예외가 없다면
-        if(task.Exception == null)
+        auth.SignInWithEmailAndPasswordAsync(TEMP_EMAIL, TEMP_PASSWORD).ContinueWith(task =>
         {
-            print("회원가입 성공");
-        }
-        else
-        {
-            print("화원가입 실패 : " + task.Exception);
-        }
-     }
+            if (task.IsCanceled)
+            {
+                Debug.LogError("SignInWithEmailPassword was canceled.");
+                return;
+            }
+            if (task.IsFaulted)
+            {
+                Debug.LogError("SignInWithEmailPassword encountered an error: " + task.Exception);
+                return;
+            }
 
-    public void SignIn(string email, string password)
-    {
-        StartCoroutine(CoSignIn(email, password));
-    }
-
-    IEnumerator CoSignIn(string email, string password)
-    {
-        // 로그인 시도
-        Task<AuthResult> task = auth.SignInWithEmailAndPasswordAsync(email, password);
-        // 통신이 완료될때까지 기다리자.
-        yield return new WaitUntil(() => { return task.IsCompleted; });
-
-        // 만약에 예외가 없다면
-        if (task.Exception == null)
-        {
-            print("로그인 성공");
-        }
-        else
-        {
-            print("로그인 실패 : " + task.Exception);
-        }
-    }
-
-    public void SignOut()
-    {
-        auth.SignOut();
+            user = auth.CurrentUser;
+            Debug.Log("User signed in successfully: " + user.Email);
+        });
     }
 }

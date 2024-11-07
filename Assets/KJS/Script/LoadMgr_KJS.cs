@@ -23,7 +23,7 @@ public class LoadMgr_KJS : MonoBehaviour
     public List<GameObject> pages = new List<GameObject>();
 
     private string saveDirectory = @"C:\Users\Admin\Documents\GitHub\new_unity\Assets\KJS\UserInfo";
-    private string saveFileName = "Magazine.json";
+    private string saveFileName = "Magazine.dat"; // 확장자를 .json에서 .dat로 변경
     private string savePath;
 
     private RootObject rootData = new RootObject();
@@ -35,8 +35,7 @@ public class LoadMgr_KJS : MonoBehaviour
 
         if (File.Exists(savePath))
         {
-            string json = File.ReadAllText(savePath);
-            rootData = JsonUtility.FromJson<RootObject>(json);
+            LoadDataFromBinaryFile();
         }
     }
 
@@ -53,8 +52,7 @@ public class LoadMgr_KJS : MonoBehaviour
                 return;
             }
 
-            string json = File.ReadAllText(savePath);
-            rootData = JsonUtility.FromJson<RootObject>(json);
+            LoadDataFromBinaryFile();
 
             Post post = rootData.posts.Find(p => p.postId == postId);
             if (post == null)
@@ -103,9 +101,9 @@ public class LoadMgr_KJS : MonoBehaviour
                         newObj = Instantiate(imageBoxPrefab, newPageObj.transform);
                         Image imageComponent = newObj.transform.GetChild(0).GetComponent<Image>();
 
-                        if (!string.IsNullOrEmpty(element.imageData))
+                        if (element.imageData != null && element.imageData.Length > 0)
                         {
-                            Texture2D texture = Element.DecodeImageFromBase64(element.imageData);
+                            Texture2D texture = Element.DecodeImageFromBytes(element.imageData);
                             imageComponent.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
                         }
                         AddImageBox(newObj);
@@ -122,7 +120,6 @@ public class LoadMgr_KJS : MonoBehaviour
             totalPages = pages.Count;
             UpdateScrollbar();
 
-            // UpdateScrollbar 이후에 스크롤바를 0으로 설정
             pageScrollbar.value = 0f;
 
             Debug.Log("Data loaded successfully.");
@@ -154,7 +151,6 @@ public class LoadMgr_KJS : MonoBehaviour
             pageScrollbar.onValueChanged.AddListener(OnScrollbarValueChanged);
         }
 
-        // 항상 로드 시 스크롤바를 0으로 초기화
         pageScrollbar.value = 0f;
     }
 
@@ -167,5 +163,61 @@ public class LoadMgr_KJS : MonoBehaviour
         pageScrollbar.value = targetValue;
 
         Debug.Log($"Current Page: {currentPage + 1}/{totalPages}");
+    }
+
+    // 바이너리 파일로부터 데이터를 로드하는 메서드
+    private void LoadDataFromBinaryFile()
+    {
+        try
+        {
+            using (FileStream fs = new FileStream(savePath, FileMode.Open))
+            {
+                using (BinaryReader reader = new BinaryReader(fs))
+                {
+                    int postCount = reader.ReadInt32();
+                    rootData.posts = new List<Post>();
+
+                    for (int i = 0; i < postCount; i++)
+                    {
+                        string postId = reader.ReadString();
+                        Post post = new Post(postId);
+
+                        int pageCount = reader.ReadInt32();
+                        for (int j = 0; j < pageCount; j++)
+                        {
+                            Page page = new Page(j);
+                            int elementCount = reader.ReadInt32();
+
+                            for (int k = 0; k < elementCount; k++)
+                            {
+                                Element.ElementType type = (Element.ElementType)reader.ReadInt32();
+                                string content = type == Element.ElementType.Text_Box ? reader.ReadString() : null;
+
+                                int imageDataLength = reader.ReadInt32();
+                                byte[] imageData = imageDataLength > 0 ? reader.ReadBytes(imageDataLength) : null;
+
+                                Vector3 position = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+                                Vector3 scale = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+
+                                int fontSize = reader.ReadInt32();
+                                string fontFace = reader.ReadString();
+                                bool isUnderlined = reader.ReadBoolean();
+                                bool isStrikethrough = reader.ReadBoolean();
+
+                                Element element = new Element(type, content, imageData, position, scale, fontSize, fontFace, isUnderlined, isStrikethrough);
+                                page.elements.Add(element);
+                            }
+                            post.pages.Add(page);
+                        }
+                        rootData.posts.Add(post);
+                    }
+                }
+            }
+            Debug.Log("Data loaded from binary file successfully.");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Failed to load data from binary file: {e.Message}");
+        }
     }
 }
