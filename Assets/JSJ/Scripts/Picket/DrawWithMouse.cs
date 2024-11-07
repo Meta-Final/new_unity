@@ -98,7 +98,7 @@ public class DrawWithMouse : MonoBehaviourPun
     // 라인 생성 함수
     void CreateNewLine()
     {
-        GameObject lineInstance = PhotonNetwork.Instantiate("Line", Vector3.zero, quaternion.identity);
+        GameObject lineInstance = PhotonNetwork.Instantiate("Line", Vector3.zero, Quaternion.identity);
 
         // 로컬에서 라인 오브젝트의 부모 설정
         lineInstance.transform.SetParent(lineParent.transform);
@@ -138,18 +138,10 @@ public class DrawWithMouse : MonoBehaviourPun
     void Sticker(Vector2 localPoint)
     {
         GameObject stickerInstance = Instantiate(stickerprefab, canvasPicket.transform);
+        stickerInstance.transform.SetParent(stickerParent.transform);
         stickerInstance.transform.localPosition = localPoint;
 
-        
-
-        photonView.RPC("SetStickerParent", RpcTarget.AllBuffered, stickerInstance.GetComponent<PhotonView>().ViewID);
     }
 
-    // 스티커 오브젝트 부모 동기화 함수
-    [PunRPC]
-    void SetStickerParent(int stickerViewID)
-    {
-        GameObject stickerObject = PhotonView.Find(stickerViewID).gameObject;
-        stickerObject.transform.SetParent(stickerParent.transform);
-    }
+    
 }
