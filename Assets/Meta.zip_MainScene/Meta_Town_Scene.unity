@@ -185,7 +185,6 @@ MonoBehaviour:
   isDrawing: 0
   isAttaching: 0
   line: {fileID: 0}
-  sticker: {fileID: 0}
 --- !u!4 &39936044
 Transform:
   m_ObjectHideFlags: 0
@@ -952,7 +951,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c7859f4944a120145ab24da1dd1515be, type: 2}
+  - {fileID: 2100000, guid: c36764931aae72f4285cbd524ee00c03, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2465,6 +2464,7 @@ MonoBehaviour:
   btn_X: {fileID: 1515515724}
   newsTexture: {fileID: 2800000, guid: b914e3bc7e859cd4a9c1ddf3ed835591, type: 3}
   img_News: {fileID: 1794850323}
+  isShowPicketUI: 0
   drawWithMouse: {fileID: 39936043}
 --- !u!1 &1112095262
 GameObject:
