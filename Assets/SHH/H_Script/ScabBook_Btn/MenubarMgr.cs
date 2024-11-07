@@ -9,7 +9,7 @@ public class MenubarMgr : MonoBehaviour
     public GameObject roomMenu;
     void Start()
     {
-       Transform roomMenu = MenuPanel.transform.Find("RoomBar");
+        Transform roomMenu = MenuPanel.transform.Find("RoomBar");
 
         if(roomMenu != null)
         {
