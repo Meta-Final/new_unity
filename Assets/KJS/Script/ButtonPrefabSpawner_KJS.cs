@@ -123,6 +123,24 @@ public class ButtonPrefabSpawner_KJS : MonoBehaviour
             {
                 Debug.LogWarning("생성된 프리팹에 Text 컴포넌트가 없습니다.");
             }
+
+            // 생성된 오브젝트의 모든 Material을 URP의 Lit 쉐이더로 설정
+            Shader urpLitShader = Shader.Find("Universal Render Pipeline/Lit");
+            if (urpLitShader != null)
+            {
+                MeshRenderer[] meshRenderers = loadedObject.GetComponentsInChildren<MeshRenderer>();
+                foreach (MeshRenderer renderer in meshRenderers)
+                {
+                    foreach (Material mat in renderer.materials)
+                    {
+                        mat.shader = urpLitShader;
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogError("URP의 Lit 쉐이더를 찾을 수 없습니다. URP가 프로젝트에 적용되었는지 확인하세요.");
+            }
         }
         else
         {
