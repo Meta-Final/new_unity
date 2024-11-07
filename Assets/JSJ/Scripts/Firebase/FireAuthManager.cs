@@ -10,7 +10,7 @@ public class FireAuthManager : MonoBehaviour
 {
     public static FireAuthManager instance;
 
-    FirebaseAuth auth;
+    public FirebaseAuth auth;
 
     private void Awake()
     {
@@ -23,11 +23,6 @@ public class FireAuthManager : MonoBehaviour
 
         // 로그인 상태 체크 이벤트 등록
         auth.StateChanged += OnChangedAuthState;
-        
-    }
-
-    void Update()
-    {
         
     }
 
@@ -47,12 +42,13 @@ public class FireAuthManager : MonoBehaviour
         }
     }
 
-    public void OnSignUp(string email, string password)
+    // 회원 가입 진행
+    public void OnSignUp(string email, string password, UserInfo userInfo)
     {
-        StartCoroutine(SignUp(email, password));
+        StartCoroutine(SignUp(email, password, userInfo));
     }
 
-    IEnumerator SignUp(string email, string password)
+    IEnumerator SignUp(string email, string password, UserInfo userInfo)
     {
         // 회원가입 시도
         Task<AuthResult> task = auth.CreateUserWithEmailAndPasswordAsync(email, password);
@@ -62,6 +58,9 @@ public class FireAuthManager : MonoBehaviour
         if (task.Exception == null)
         {
             print("회원가입 성공");
+
+            // 회원가입 성공 후 유저 정보 저장
+            FireStore.instance.SaveUserInfo(userInfo);
         }
         else
         {
@@ -69,6 +68,7 @@ public class FireAuthManager : MonoBehaviour
         }
     }
 
+    // 로그인 진행
     public void OnSignIn(string email, string password)
     {
         StartCoroutine(SignIn(email, password));
@@ -93,6 +93,7 @@ public class FireAuthManager : MonoBehaviour
 
     }
 
+    // 로그아웃 진행
     public void LogOut()
     {
         auth.SignOut();
