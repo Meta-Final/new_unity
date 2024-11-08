@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using UnityEngine.UI;
 public class StartManager : MonoBehaviour
 {
     public RawImage img_Logo;
+    public RawImage img_Black;
 
     public float fadeDuration;
 
@@ -28,6 +30,7 @@ public class StartManager : MonoBehaviour
         StartCoroutine(FadeInAndOut());
     }
 
+    // 로고 이미지 페이드 인/아웃
     IEnumerator FadeInAndOut()
     {
         yield return StartCoroutine(FadeTo(0f, 1f, fadeDuration));
@@ -35,9 +38,11 @@ public class StartManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
         yield return StartCoroutine(FadeTo(1f, 0f, fadeDuration));
-        
-        // Scene 이동
-        SceneManager.LoadScene("Meta_LogIn_Scene");
+
+        yield return new WaitForSeconds(1f);
+
+        // 오프닝 활성화
+        MaskOffAndMoving();
     }
 
     IEnumerator FadeTo(float startAlpha, float endAlpha, float duration)
@@ -53,5 +58,11 @@ public class StartManager : MonoBehaviour
             SetAlpha(newAlpha);
             yield return null;
         }
+    }
+
+    // 오프닝
+    public void MaskOffAndMoving()
+    {
+        img_Black.transform.DOScale(1920, 3f).SetEase(Ease.OutQuart);
     }
 }
