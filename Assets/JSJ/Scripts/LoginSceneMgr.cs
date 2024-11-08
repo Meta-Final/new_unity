@@ -46,13 +46,10 @@ public class LoginSceneMgr : MonoBehaviour
     public TMP_InputField userBirth;    
     
 
-
-
     void Start()
     {
         signInEmail.onValueChanged.AddListener(SignInValueChanged);
         signInPassword.onValueChanged.AddListener(SignInValueChanged);
-        
     }
 
     void SignInValueChanged(string s)
