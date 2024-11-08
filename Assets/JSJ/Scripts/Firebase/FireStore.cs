@@ -69,12 +69,11 @@ public class FireStore : MonoBehaviour
             // 불러온 정보를 UserInfo 변수에 저장
             UserInfo loadInfo = task.Result.ConvertTo<UserInfo>();
 
-            // 불러온 정보를 전달
-            if (PhotonNetwork.IsConnected)
-            {
-                PhotonNetwork.NickName = loadInfo.nickName;
-                print(PhotonNetwork.NickName);
-            }
+            // 불러온 정보 전달
+            MetaConnectionMgr.instance.JoinLobby(loadInfo);
+           
+
+           
         }
         else
         {

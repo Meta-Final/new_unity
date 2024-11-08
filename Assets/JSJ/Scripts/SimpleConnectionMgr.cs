@@ -10,6 +10,7 @@ public class SimpleConnectionMgr : MonoBehaviourPunCallbacks
     {
         // Photon 환경설정을 기반으로 마스터 서버에 접속 시도
         PhotonNetwork.ConnectUsingSettings();
+        PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     void Update()
@@ -76,7 +77,10 @@ public class SimpleConnectionMgr : MonoBehaviourPunCallbacks
 
         // 멀티플레이 컨텐츠 즐길 수 있는 상태
         // ChannelScene으로 이동!
-        PhotonNetwork.LoadLevel("Meta_Town_Scene");
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LoadLevel("Meta_Town_Scene");
+        }
     }
 
 }

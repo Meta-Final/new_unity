@@ -13,6 +13,7 @@ public class FireAuthManager : MonoBehaviour
     public FirebaseAuth auth;
 
     public LoginSceneMgr loginSceneMgr;
+    
 
     private void Awake()
     {
@@ -62,6 +63,7 @@ public class FireAuthManager : MonoBehaviour
 
             // 회원 정보 불러오기
             FireStore.instance.LoadUserInfo();
+
         }
         else
         {
