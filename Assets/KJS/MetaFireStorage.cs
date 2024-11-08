@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class MetaFireStorage : MonoBehaviour
+public class MetaZip_FireStorage : MonoBehaviour
 {
-    public static MetaFireStorage instance;
+    public static MetaZip_FireStorage instance;
     FirebaseStorage storage;
 
     private void Awake()
@@ -42,11 +42,6 @@ public class MetaFireStorage : MonoBehaviour
             });
         }
     }
-    
-    
-    
-
-
     // Update is called once per frame
     public void Upload(byte[] data, string path)
     {

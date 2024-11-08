@@ -1,6 +1,8 @@
+using Firebase.Auth;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,7 +13,7 @@ public class Element
     public string content;
     public enum ElementType { Text_Box, Image_Box }
     public ElementType type;
-    public string imageData;
+    public byte[] imageData; // string 대신 byte[]로 변경
     public Vector3 position;
     public Vector3 scale;
 
@@ -21,7 +23,7 @@ public class Element
     public bool isStrikethrough;
 
     public Element(
-        ElementType type, string content, string imageData, Vector3 position, Vector3 scale,
+        ElementType type, string content, byte[] imageData, Vector3 position, Vector3 scale,
         int fontSize = 14, string fontFace = "Arial", bool isUnderlined = false, bool isStrikethrough = false)
     {
         this.type = type;
@@ -35,17 +37,14 @@ public class Element
         this.isStrikethrough = isStrikethrough;
     }
 
-    public static string EncodeImageToBase64(Texture2D texture)
+    public static byte[] EncodeImageToBytes(Texture2D texture)
     {
-        if (texture == null) return null;
-        byte[] imageData = texture.EncodeToPNG();
-        return Convert.ToBase64String(imageData);
+        return texture != null ? texture.EncodeToPNG() : null;
     }
 
-    public static Texture2D DecodeImageFromBase64(string base64String)
+    public static Texture2D DecodeImageFromBytes(byte[] imageData)
     {
-        if (string.IsNullOrEmpty(base64String)) return null;
-        byte[] imageData = Convert.FromBase64String(base64String);
+        if (imageData == null || imageData.Length == 0) return null;
         Texture2D texture = new Texture2D(2, 2);
         texture.LoadImage(imageData);
         return texture;
@@ -139,8 +138,6 @@ public class SaveMgr_KJS : MonoBehaviour
     {
         loadButtons.Add(button);
         Debug.Log($"버튼 {button.name}이 추가되었습니다.");
-
-        //button.onClick.AddListener(() => CreateObjectsFromFile());
     }
 
     private void EnsureDirectoryExists()
@@ -170,6 +167,14 @@ public class SaveMgr_KJS : MonoBehaviour
 
     private void SaveObjectsToFile()
     {
+        // 로그인 확인
+        if (!MetaFireAuth.instance.IsLoggedIn)
+        {
+            Debug.LogError("Firebase에 로그인되어 있지 않습니다. 자동 로그인을 시도합니다.");
+            MetaFireAuth.instance.SignInWithTemporaryAccount();
+            return;
+        }
+
         string targetPostId = inputPostIdField.text;
 
         if (string.IsNullOrWhiteSpace(targetPostId))
@@ -189,11 +194,14 @@ public class SaveMgr_KJS : MonoBehaviour
 
             Post newPost = new Post(targetPostId);
 
+            textBoxes.RemoveAll(item => item == null);
+            imageBoxes.RemoveAll(item => item == null);
+            pages.RemoveAll(item => item == null);
+
             for (int i = 0; i < pages.Count; i++)
             {
                 Page newPage = new Page(i);
 
-                textBoxes.RemoveAll(item => item == null);
                 foreach (var textBox in textBoxes)
                 {
                     if (textBox.transform.parent != pages[i].transform) continue;
@@ -220,18 +228,17 @@ public class SaveMgr_KJS : MonoBehaviour
                     ));
                 }
 
-                imageBoxes.RemoveAll(item => item == null);
                 foreach (var imageBox in imageBoxes)
                 {
                     if (imageBox.transform.parent != pages[i].transform) continue;
 
                     Image imageComponent = imageBox.transform.GetChild(0).GetComponent<Image>();
-                    string imageData = null;
+                    byte[] imageData = null;
 
                     if (imageComponent != null && imageComponent.sprite != null)
                     {
                         Texture2D texture = imageComponent.sprite.texture;
-                        imageData = Element.EncodeImageToBase64(texture);
+                        imageData = Element.EncodeImageToBytes(texture);
                     }
 
                     newPage.elements.Add(new Element(
@@ -248,104 +255,17 @@ public class SaveMgr_KJS : MonoBehaviour
 
             rootData.posts.Add(newPost);
 
+            // JSON 데이터를 직렬화하고 로컬 파일에 저장
             string json = JsonUtility.ToJson(rootData, true);
             File.WriteAllText(savePath, json);
 
-            Debug.Log($"Data saved successfully. Post ID: {newPost.postId}");
+            Debug.Log($"Data saved locally at {savePath}. Post ID: {newPost.postId}");
         }
         catch (Exception e)
         {
             Debug.LogError($"Save failed: {e.Message}");
         }
     }
-
-    //public void CreateObjectsFromFile()
-    //{
-    //    try
-    //    {
-    //        Debug.Log("LoadObjectsFromFile() called.");
-
-    //        if (!File.Exists(savePath))
-    //        {
-    //            Debug.LogWarning("Save file not found.");
-    //            return;
-    //        }
-
-    //        string json = File.ReadAllText(savePath);
-    //        rootData = JsonUtility.FromJson<RootObject>(json);
-
-    //        if (rootData.posts.Count == 0) return;
-
-    //        Post post = rootData.posts[0];
-
-    //        textBoxes.ForEach(Destroy);
-    //        imageBoxes.ForEach(Destroy);
-    //        pages.ForEach(Destroy);
-
-    //        textBoxes.Clear();
-    //        imageBoxes.Clear();
-    //        pages.Clear();
-
-    //        foreach (var page in post.pages)
-    //        {
-    //            GameObject newPage = Instantiate(pagePrefab, pagesParentTransform);
-    //            InitializePage(newPage);
-
-    //            foreach (var element in page.elements)
-    //            {
-    //                if (element.type == Element.ElementType.Text_Box)
-    //                {
-    //                    GameObject newTextBox = Instantiate(textBoxPrefab, newPage.transform);
-    //                    InitializeTextBox(newTextBox);
-
-    //                    newTextBox.transform.localPosition = element.position;
-    //                    newTextBox.transform.localScale = element.scale;
-
-    //                    TMP_Text textComponent = newTextBox.GetComponentInChildren<TMP_Text>();
-    //                    if (textComponent != null)
-    //                    {
-    //                        textComponent.text = element.content;
-    //                        textComponent.fontSize = element.fontSize;
-
-    //                        TMP_FontAsset fontAsset = Resources.Load<TMP_FontAsset>($"Fonts/{element.fontFace}");
-    //                        if (fontAsset != null) textComponent.font = fontAsset;
-
-    //                        textComponent.fontStyle = FontStyles.Normal;
-    //                        if (element.isUnderlined) textComponent.fontStyle |= FontStyles.Underline;
-    //                        if (element.isStrikethrough) textComponent.fontStyle |= FontStyles.Strikethrough;
-    //                    }
-    //                }
-    //                else if (element.type == Element.ElementType.Image_Box)
-    //                {
-    //                    GameObject newImageBox = Instantiate(imageBoxPrefab, newPage.transform);
-    //                    InitializeImageBox(newImageBox);
-
-    //                    newImageBox.transform.localPosition = element.position;
-    //                    newImageBox.transform.localScale = element.scale;
-
-    //                    Image imageComponent = newImageBox.transform.GetChild(0).GetComponent<Image>();
-    //                    if (imageComponent != null && !string.IsNullOrEmpty(element.imageData))
-    //                    {
-    //                        Texture2D texture = Element.DecodeImageFromBase64(element.imageData);
-    //                        imageComponent.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-    //                    }
-    //                }
-    //            }
-    //        }
-
-    //        totalPages = pages.Count;
-    //        UpdateScrollbar();
-
-    //        // 스크롤바의 value를 0으로 초기화
-    //        pageScrollbar.value = 0f;
-
-    //        Debug.Log("Data loaded successfully.");
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        Debug.LogError($"Load failed: {e.Message}");
-    //    }
-    //}
 
     public void LoadSpecificPostById()
     {
@@ -411,9 +331,9 @@ public class SaveMgr_KJS : MonoBehaviour
                     newImageBox.transform.localScale = element.scale;
 
                     Image imageComponent = newImageBox.transform.GetChild(0).GetComponent<Image>();
-                    if (imageComponent != null && !string.IsNullOrEmpty(element.imageData))
+                    if (imageComponent != null && element.imageData != null && element.imageData.Length > 0)
                     {
-                        Texture2D texture = Element.DecodeImageFromBase64(element.imageData);
+                        Texture2D texture = Element.DecodeImageFromBytes(element.imageData);
                         imageComponent.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
                     }
                 }
@@ -422,14 +342,12 @@ public class SaveMgr_KJS : MonoBehaviour
 
         totalPages = pages.Count;
 
-        // pageCount를 totalPages와 동일하게 설정
-        createMgr.pageCount = totalPages; // createMgr는 CreateMgr_KJS 클래스의 인스턴스 참조
+        createMgr.pageCount = totalPages;
         createMgr.UpdateContentWidth();
         createMgr.UpdateScrollbarSteps();
 
         UpdateScrollbar();
 
-        // 스크롤바의 value를 0으로 초기화
         pageScrollbar.value = 0f;
 
         Debug.Log($"Data loaded successfully for postId '{targetPostId}'.");

@@ -11,8 +11,6 @@ public class MetazipAuth : MonoBehaviour
     public static MetazipAuth instance;
     public FirebaseAuth auth;
 
- 
-
     public void Awake()
     {
         instance = this;
