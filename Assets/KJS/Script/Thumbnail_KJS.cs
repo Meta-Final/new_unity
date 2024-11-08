@@ -69,12 +69,14 @@ public class Thumbnail_KJS : MonoBehaviour
         // 이미지 파일을 로컬 경로에 저장
         SaveImageToLocal(targetImage.sprite.texture, imagePath);
 
-        // postData에 새 항목 추가 및 이미지 경로 설정
+        // 새로운 postId 데이터 추가
         H_PostInfo newPost = new H_PostInfo
         {
             postid = postIdInputField.text,  // InputField에 입력된 텍스트를 postId로 사용
             thumburl = imagePath             // 로컬 이미지 경로를 thumburl에 저장
         };
+
+        // postData에 새로운 항목 추가
         postInfoList.postData.Add(newPost);
 
         // JSON 데이터 저장
