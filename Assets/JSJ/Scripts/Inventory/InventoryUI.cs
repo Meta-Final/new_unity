@@ -22,12 +22,17 @@ public class InventoryUI : MonoBehaviour
     int selectIndex = -1;
     Texture2D selectScreenshot;
 
+    //Vector3 로 배열만들기
+    public Vector3[] spawnPositions = new Vector3[9];
+    int count = 0;
+
+
     private void Start()
     {
-        // 지금 'Meta_Studio_Scene'이라면, 액자를 찾아라.
-        if (SceneManager.GetActiveScene().name == "Meta_Studio_Scene_shh")
+        // 지금 'Meta_ScrapBook_Scene'이라면, 액자를 찾아라.
+        if (SceneManager.GetActiveScene().name == "Meta_ScrapBook_Scene")
         {
-            noticePos = GameObject.Find("NoticeFrame").transform;
+            noticePos = GameObject.Find("CorkBoard").transform;
         }
         else
         {
@@ -166,7 +171,14 @@ public class InventoryUI : MonoBehaviour
             Vector3 spawnPosition = noticePos.position + offset;
 
             // 포스트잇 생성
+            if (count > 8) return; 
+            
             GameObject newPostIt = Instantiate(postItPrefab, spawnPosition, Quaternion.identity, noticePos);
+
+            
+            newPostIt.transform.localPosition = spawnPositions[count];
+            count++;
+            newPostIt.transform.eulerAngles = new Vector3(0, 180, 0);
             Material mat = new Material(matPostIt);
             mat.color = postItColor;
             MeshRenderer mr = newPostIt.GetComponent<MeshRenderer>();
@@ -184,12 +196,12 @@ public class InventoryUI : MonoBehaviour
                 float aspectRatio = originWidth / originHeight;
             }
 
-            // 인덱스 증가 및 3x3 제한 검사
-            postItIndex++;
-            if (postItIndex >= postItColumnCount * postItRowCount)
-            {
-                postItIndex = 0; // 3x3 칸을 다 채우면 다시 초기화하여 첫 위치로 돌아감
-            }
+          // 인덱스 증가 및 3x3 제한 검사
+          // postItIndex++;
+          // if (postItIndex >= postItColumnCount * postItRowCount)
+          // {
+          //     postItIndex = 0; // 3x3 칸을 다 채우면 다시 초기화하여 첫 위치로 돌아감
+          // }
         }
 
         btn_Delete.interactable = false;

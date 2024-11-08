@@ -12,10 +12,15 @@ public class FireAuthManager : MonoBehaviour
 
     public FirebaseAuth auth;
 
+    public LoginSceneMgr loginSceneMgr;
+
+
     private void Awake()
     {
         instance = this;
     }
+
+    
 
     void Start()
     {
@@ -61,6 +66,8 @@ public class FireAuthManager : MonoBehaviour
 
             // 회원가입 성공 후 유저 정보 저장
             FireStore.instance.SaveUserInfo(userInfo);
+
+            loginSceneMgr.ShowSignUpSuccess();
         }
         else
         {
@@ -89,6 +96,8 @@ public class FireAuthManager : MonoBehaviour
         else
         {
             print("로그인 실패 : " + task.Exception);
+
+            loginSceneMgr.ShowSignInFail();
         }
 
     }
