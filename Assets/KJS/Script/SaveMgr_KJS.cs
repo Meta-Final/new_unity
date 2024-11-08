@@ -185,19 +185,27 @@ public class SaveMgr_KJS : MonoBehaviour
 
         try
         {
+            // 동일한 postId가 이미 있는지 확인
             Post existingPost = rootData.posts.Find(post => post.postId == targetPostId);
-            if (existingPost != null)
+
+            // 동일한 ID의 게시물이 있다면 덮어쓰고, 없으면 새로 생성
+            Post targetPost = existingPost ?? new Post(targetPostId);
+            if (existingPost == null)
             {
-                Debug.LogError($"postId '{targetPostId}'에 해당하는 게시물이 이미 존재합니다. 다른 ID를 사용하세요.");
-                return;
+                rootData.posts.Add(targetPost);
+            }
+            else
+            {
+                // 기존 게시물 내용을 비웁니다.
+                targetPost.pages.Clear();
             }
 
-            Post newPost = new Post(targetPostId);
-
+            // 유효한 textBox와 imageBox만 필터링
             textBoxes.RemoveAll(item => item == null);
             imageBoxes.RemoveAll(item => item == null);
             pages.RemoveAll(item => item == null);
 
+            // 페이지 및 요소 생성
             for (int i = 0; i < pages.Count; i++)
             {
                 Page newPage = new Page(i);
@@ -250,16 +258,14 @@ public class SaveMgr_KJS : MonoBehaviour
                     ));
                 }
 
-                newPost.pages.Add(newPage);
+                targetPost.pages.Add(newPage);
             }
-
-            rootData.posts.Add(newPost);
 
             // JSON 데이터를 직렬화하고 로컬 파일에 저장
             string json = JsonUtility.ToJson(rootData, true);
             File.WriteAllText(savePath, json);
 
-            Debug.Log($"Data saved locally at {savePath}. Post ID: {newPost.postId}");
+            Debug.Log($"Data saved locally at {savePath}. Post ID: {targetPost.postId}");
         }
         catch (Exception e)
         {

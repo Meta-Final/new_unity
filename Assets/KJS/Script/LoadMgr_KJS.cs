@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-[System.Serializable]
 public class LoadMgr_KJS : MonoBehaviour
 {
     public GameObject textBoxPrefab;
@@ -23,7 +22,7 @@ public class LoadMgr_KJS : MonoBehaviour
     public List<GameObject> pages = new List<GameObject>();
 
     private string saveDirectory = @"C:\Users\Admin\Documents\GitHub\new_unity\Assets\KJS\UserInfo";
-    private string saveFileName = "Magazine.dat"; // 확장자를 .json에서 .dat로 변경
+    private string saveFileName = "Magazine.json"; // 확장자를 .json으로 변경
     private string savePath;
 
     private RootObject rootData = new RootObject();
@@ -35,7 +34,7 @@ public class LoadMgr_KJS : MonoBehaviour
 
         if (File.Exists(savePath))
         {
-            LoadDataFromBinaryFile();
+            LoadDataFromJsonFile(); // JSON 파일 로드 메서드로 변경
         }
     }
 
@@ -52,7 +51,7 @@ public class LoadMgr_KJS : MonoBehaviour
                 return;
             }
 
-            LoadDataFromBinaryFile();
+            LoadDataFromJsonFile();
 
             Post post = rootData.posts.Find(p => p.postId == postId);
             if (post == null)
@@ -165,59 +164,18 @@ public class LoadMgr_KJS : MonoBehaviour
         Debug.Log($"Current Page: {currentPage + 1}/{totalPages}");
     }
 
-    // 바이너리 파일로부터 데이터를 로드하는 메서드
-    private void LoadDataFromBinaryFile()
+    // JSON 파일로부터 데이터를 로드하는 메서드
+    private void LoadDataFromJsonFile()
     {
         try
         {
-            using (FileStream fs = new FileStream(savePath, FileMode.Open))
-            {
-                using (BinaryReader reader = new BinaryReader(fs))
-                {
-                    int postCount = reader.ReadInt32();
-                    rootData.posts = new List<Post>();
-
-                    for (int i = 0; i < postCount; i++)
-                    {
-                        string postId = reader.ReadString();
-                        Post post = new Post(postId);
-
-                        int pageCount = reader.ReadInt32();
-                        for (int j = 0; j < pageCount; j++)
-                        {
-                            Page page = new Page(j);
-                            int elementCount = reader.ReadInt32();
-
-                            for (int k = 0; k < elementCount; k++)
-                            {
-                                Element.ElementType type = (Element.ElementType)reader.ReadInt32();
-                                string content = type == Element.ElementType.Text_Box ? reader.ReadString() : null;
-
-                                int imageDataLength = reader.ReadInt32();
-                                byte[] imageData = imageDataLength > 0 ? reader.ReadBytes(imageDataLength) : null;
-
-                                Vector3 position = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-                                Vector3 scale = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-
-                                int fontSize = reader.ReadInt32();
-                                string fontFace = reader.ReadString();
-                                bool isUnderlined = reader.ReadBoolean();
-                                bool isStrikethrough = reader.ReadBoolean();
-
-                                Element element = new Element(type, content, imageData, position, scale, fontSize, fontFace, isUnderlined, isStrikethrough);
-                                page.elements.Add(element);
-                            }
-                            post.pages.Add(page);
-                        }
-                        rootData.posts.Add(post);
-                    }
-                }
-            }
-            Debug.Log("Data loaded from binary file successfully.");
+            string json = File.ReadAllText(savePath);
+            rootData = JsonUtility.FromJson<RootObject>(json);
+            Debug.Log("Data loaded from JSON file successfully.");
         }
         catch (Exception e)
         {
-            Debug.LogError($"Failed to load data from binary file: {e.Message}");
+            Debug.LogError($"Failed to load data from JSON file: {e.Message}");
         }
     }
 }

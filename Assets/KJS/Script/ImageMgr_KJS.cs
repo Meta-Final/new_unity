@@ -59,12 +59,19 @@ public class ImageMgr_KJS : MonoBehaviour
     // 매 프레임마다 버튼들을 체크하여 이미지가 할당된 경우 텍스트를 숨김
     private void Update()
     {
-        foreach (Button button in buttons)
+        for (int i = buttons.Count - 1; i >= 0; i--)  // 리스트를 역순으로 순회하여 삭제 안전성 확보
         {
+            Button button = buttons[i];
+            if (button == null)  // 버튼이 삭제된 경우 리스트에서 제거하고 다음으로
+            {
+                buttons.RemoveAt(i);
+                continue;
+            }
+
             Image buttonImage = button.GetComponent<Image>();
 
             // 이미지가 할당되어 있고, 아직 텍스트가 숨겨지지 않은 버튼만 처리
-            if (buttonImage.sprite != null && !buttonsWithHiddenText.Contains(button))
+            if (buttonImage != null && buttonImage.sprite != null && !buttonsWithHiddenText.Contains(button))
             {
                 HideButtonText(button);
                 buttonsWithHiddenText.Add(button);  // 텍스트가 숨겨진 버튼으로 등록
