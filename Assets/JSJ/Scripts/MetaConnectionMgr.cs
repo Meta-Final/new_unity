@@ -25,4 +25,14 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
 
         print("마스터 서버에 접속 성공!");
     }
+
+    public void ConnectedServerSuccess()
+    {
+        if (PhotonNetwork.IsConnected)
+        {
+
+        }
+    }
+
+    
 }

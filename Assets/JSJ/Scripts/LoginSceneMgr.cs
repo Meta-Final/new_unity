@@ -121,12 +121,29 @@ public class LoginSceneMgr : MonoBehaviour
         img_SignUpSuccess.SetActive(false);
     }
 
+    // 회원정보 불러오기
+    public void OnLoadUserInfo()
+    {
+        FireStore.instance.LoadUserInfo(onCompleteLoadUserInfo);
+    }
+
+    void onCompleteLoadUserInfo(UserInfo info)
+    {
+        print(info.name);
+        print(info.nickName);
+        print(info.userBirth);
+    }
+
     // X 버튼
     public void OnClickX()
     {
         canvasJoin.SetActive(false);
         canvasAccount.SetActive(false);
     }
+
+
+
+    
 
 
 
