@@ -22,12 +22,11 @@ public class ButtonConnection : MonoBehaviour
       //  if (notice)
       //  {
             notice.SetActive(false);
-       // }
-        //if(MagCanvas)
-        //{
-        //    MagCanvas.SetActive(false);
-        //}
-        btnPoweroff.onClick.AddListener(Onclickpoweroff);
+        // }
+
+        
+
+        btnPoweroff.onClick.AddListener(Onclickpoweroff);  
         btnprofile.onClick.AddListener(OnClickprofile);
         btnnotice.onClick.AddListener(OnClicknotice);
         btnexit.onClick.AddListener(OnClicknoticeExit);
@@ -47,24 +46,32 @@ public class ButtonConnection : MonoBehaviour
     public void OnClicknotice()
     {
         notice.SetActive(true);
-        
+        btnnotice.gameObject.SetActive(false);
+        btnprofile.gameObject.SetActive(false);
     }
     public void ExitKey() 
     {
         if (profile != null && Input.GetKeyDown(KeyCode.Escape))
         {
             profile.SetActive(false);
+            btnnotice.gameObject.SetActive(true);
+            btnprofile.gameObject.SetActive(true);
         }
     }
     public void OnClickprofile()
     {
         profile.SetActive(true);
-        
+        btnnotice.gameObject.SetActive(false);
+        btnprofile.gameObject.SetActive(false);
+
+
 
     }
     public void OnClicknoticeExit()
     {
         notice.SetActive(false);
+        btnnotice.gameObject.SetActive(true);
+        btnprofile.gameObject.SetActive(true);
     }
     public void Onclickpoweroff()
     {
@@ -72,7 +79,7 @@ public class ButtonConnection : MonoBehaviour
         print("´Ù ²ö´Ù");
     }
 
-    // public void OnButtonMagazine()
+    // public void OnButtonTown()
     // {
     //     Magazine.SetActive(true);
     // }

@@ -6,7 +6,7 @@ using Photon.Pun;
 public class PlayerMove : MonoBehaviourPun
 {
     [Header("이동")]
-    public float moveSpeed = 20f;
+    public float moveSpeed = 5f;
 
     [Header("회전")]
     public float rotSpeed = 200f;
