@@ -23,16 +23,16 @@ public class InventoryUI : MonoBehaviour
     Texture2D selectScreenshot;
 
     //Vector3 로 배열만들기
-    public Vector3[] spawnPositions = new Vector3[9];
-    int count = 0;
+    //public Vector3[] spawnPositions = new Vector3[9];
+    //int count = 0;
 
 
     private void Start()
     {
         // 지금 'Meta_ScrapBook_Scene'이라면, 액자를 찾아라.
-        if (SceneManager.GetActiveScene().name == "Meta_ScrapBook_Scene")
+        if (SceneManager.GetActiveScene().name == "Meta_ScrapBook_Scene_shh")
         {
-            noticePos = GameObject.Find("CorkBoard").transform;
+            noticePos = GameObject.Find("CorkBoard 1").transform;
         }
         else
         {
@@ -143,7 +143,7 @@ public class InventoryUI : MonoBehaviour
     // 정렬을 위한 위치 값 설정
     private int postItColumnCount = 3;      // 한 행에 들어갈 포스트잇 개수 (3으로 설정)
     private int postItRowCount = 3;         // 총 행 개수 (3으로 설정)
-    private float postItSpacing = 30f;      // 포스트잇 간 간격 (픽셀 단위)
+    private float postItSpacing = 8f;      // 포스트잇 간 간격 (픽셀 단위)
     private int postItIndex = 0;            // 생성된 포스트잇의 인덱스
 
     public Material matPostIt;
@@ -160,25 +160,25 @@ public class InventoryUI : MonoBehaviour
             int row = postItIndex / postItColumnCount;
             int column = postItIndex % postItColumnCount;
 
-            // 정렬된 위치 계산, y축으로 65만큼 위로 이동
+            // 정렬된 위치 계산, y축으로 10만큼 위로 이동
             Vector3 offset = new Vector3(
-                column * postItSpacing,
-                -(row * postItSpacing) + 65f,  // 기존 y 위치에서 65만큼 위로 이동
-                0f
+                column * postItSpacing -10f,
+                -(row * postItSpacing) + 8f,  // 기존 y 위치에서 10만큼 위로 이동
+                -0.5f
             );
 
             // 새 포스트잇 생성 위치 지정
             Vector3 spawnPosition = noticePos.position + offset;
 
-            // 포스트잇 생성
-            if (count > 8) return; 
-            
-            GameObject newPostIt = Instantiate(postItPrefab, spawnPosition, Quaternion.identity, noticePos);
-
-            
-            newPostIt.transform.localPosition = spawnPositions[count];
-            count++;
-            newPostIt.transform.eulerAngles = new Vector3(0, 180, 0);
+         //  // 포스트잇 생성
+         //  if (count > 8) return; 
+         //  
+              GameObject newPostIt = Instantiate(postItPrefab, spawnPosition, Quaternion.identity, noticePos);
+         //
+         //  
+         //  newPostIt.transform.localPosition = spawnPositions[count];
+         //  count++;
+            newPostIt.transform.eulerAngles = new Vector3(0, 0, 0);
             Material mat = new Material(matPostIt);
             mat.color = postItColor;
             MeshRenderer mr = newPostIt.GetComponent<MeshRenderer>();
@@ -196,12 +196,12 @@ public class InventoryUI : MonoBehaviour
                 float aspectRatio = originWidth / originHeight;
             }
 
-          // 인덱스 증가 및 3x3 제한 검사
-          // postItIndex++;
-          // if (postItIndex >= postItColumnCount * postItRowCount)
-          // {
-          //     postItIndex = 0; // 3x3 칸을 다 채우면 다시 초기화하여 첫 위치로 돌아감
-          // }
+          //인덱스 증가 및 3x3 제한 검사
+          postItIndex++;
+          if (postItIndex >= postItColumnCount * postItRowCount)
+          {
+              postItIndex = 0; // 3x3 칸을 다 채우면 다시 초기화하여 첫 위치로 돌아감
+          }
         }
 
         btn_Delete.interactable = false;
