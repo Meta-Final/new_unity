@@ -1,4 +1,5 @@
 using Firebase.Firestore;
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,8 +11,6 @@ public class FireStore : MonoBehaviour
     public static FireStore instance;
 
     FirebaseFirestore store;
-
-    
 
     private void Awake()
     {
@@ -48,14 +47,13 @@ public class FireStore : MonoBehaviour
         }
     }
 
-    
     // 회원 정보 불러오기 진행
-    public void LoadUserInfo(Action<UserInfo> onComplete)
+    public void LoadUserInfo()
     {
-        StartCoroutine(CoLoadUserInfo(onComplete)); 
+        StartCoroutine(CoLoadUserInfo()); 
     }
 
-    IEnumerator CoLoadUserInfo(Action<UserInfo> onComplete)
+    IEnumerator CoLoadUserInfo()
     {
         // 저장 경로
         string path = "USER/" + FireAuthManager.instance.auth.CurrentUser.UserId;
@@ -70,10 +68,12 @@ public class FireStore : MonoBehaviour
 
             // 불러온 정보를 UserInfo 변수에 저장
             UserInfo loadInfo = task.Result.ConvertTo<UserInfo>();
+
             // 불러온 정보를 전달
-            if (onComplete != null)
+            if (PhotonNetwork.IsConnected)
             {
-                onComplete(loadInfo);
+                PhotonNetwork.NickName = loadInfo.nickName;
+                print(PhotonNetwork.NickName);
             }
         }
         else

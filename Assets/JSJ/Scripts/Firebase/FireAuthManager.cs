@@ -14,13 +14,10 @@ public class FireAuthManager : MonoBehaviour
 
     public LoginSceneMgr loginSceneMgr;
 
-
     private void Awake()
     {
         instance = this;
     }
-
-    
 
     void Start()
     {
@@ -28,7 +25,6 @@ public class FireAuthManager : MonoBehaviour
 
         // 로그인 상태 체크 이벤트 등록
         auth.StateChanged += OnChangedAuthState;
-        
     }
 
     void OnChangedAuthState(object sender, EventArgs e)
@@ -45,6 +41,41 @@ public class FireAuthManager : MonoBehaviour
             // 로그아웃
             print("로그아웃 상태");
         }
+    }
+
+    // 로그인 진행
+    public void OnSignIn(string email, string password)
+    {
+        StartCoroutine(SignIn(email, password));
+    }
+
+    IEnumerator SignIn(string email, string password)
+    {
+        // 로그인 시도
+        Task<AuthResult> task = auth.SignInWithEmailAndPasswordAsync(email, password);
+        // 통신이 완료될 때까지 기다린다.
+        yield return new WaitUntil(() => task.IsCompleted);
+        // 만약에 예외가 없다면
+        if (task.Exception == null)
+        {
+            print("로그인 성공");
+
+            // 회원 정보 불러오기
+            FireStore.instance.LoadUserInfo();
+        }
+        else
+        {
+            print("로그인 실패 : " + task.Exception);
+
+            // 로그인 실패 UI 활성화
+            loginSceneMgr.ShowSignInFail();
+        }
+    }
+
+    // 로그아웃 진행
+    public void LogOut()
+    {
+        auth.SignOut();
     }
 
     // 회원 가입 진행
@@ -64,9 +95,10 @@ public class FireAuthManager : MonoBehaviour
         {
             print("회원가입 성공");
 
-            // 회원가입 성공 후 유저 정보 저장
+            // 회원 정보 저장
             FireStore.instance.SaveUserInfo(userInfo);
 
+            // 회원 가입 성공 UI 활성화
             loginSceneMgr.ShowSignUpSuccess();
         }
         else
@@ -75,36 +107,4 @@ public class FireAuthManager : MonoBehaviour
         }
     }
 
-    // 로그인 진행
-    public void OnSignIn(string email, string password)
-    {
-        StartCoroutine(SignIn(email, password));
-        
-    }
-
-    IEnumerator SignIn(string email, string password)
-    {
-        // 로그인 시도
-        Task<AuthResult> task = auth.SignInWithEmailAndPasswordAsync(email, password);
-        // 통신이 완료될 때까지 기다린다.
-        yield return new WaitUntil(() => task.IsCompleted);
-        // 만약에 예외가 없다면
-        if (task.Exception == null)
-        {
-            print("로그인 성공");
-        }
-        else
-        {
-            print("로그인 실패 : " + task.Exception);
-
-            loginSceneMgr.ShowSignInFail();
-        }
-
-    }
-
-    // 로그아웃 진행
-    public void LogOut()
-    {
-        auth.SignOut();
-    }
 }
