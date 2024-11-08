@@ -1,4 +1,5 @@
 using Firebase.Firestore;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,6 +10,8 @@ public class FireStore : MonoBehaviour
     public static FireStore instance;
 
     FirebaseFirestore store;
+
+    
 
     private void Awake()
     {
@@ -42,6 +45,40 @@ public class FireStore : MonoBehaviour
         else
         {
             print("회원정보 저장 실패 : " + task.Exception);
+        }
+    }
+
+    
+    // 회원 정보 불러오기 진행
+    public void LoadUserInfo(Action<UserInfo> onComplete)
+    {
+        StartCoroutine(CoLoadUserInfo(onComplete)); 
+    }
+
+    IEnumerator CoLoadUserInfo(Action<UserInfo> onComplete)
+    {
+        // 저장 경로
+        string path = "USER/" + FireAuthManager.instance.auth.CurrentUser.UserId;
+        // 정보 조회 요청
+        Task<DocumentSnapshot> task = store.Document(path).GetSnapshotAsync();
+        // 통신이 완료될 때까지 기다린다.
+        yield return new WaitUntil(() => task.IsCompleted);
+        // 만약에 예외가 없다면
+        if (task.Exception == null)
+        {
+            print("회원정보 불러오기 성공");
+
+            // 불러온 정보를 UserInfo 변수에 저장
+            UserInfo loadInfo = task.Result.ConvertTo<UserInfo>();
+            // 불러온 정보를 전달
+            if (onComplete != null)
+            {
+                onComplete(loadInfo);
+            }
+        }
+        else
+        {
+            print("회원정보 불러오기 실패 : " + task.Exception);
         }
     }
 }

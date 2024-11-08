@@ -23,12 +23,14 @@ public class LoginSceneMgr : MonoBehaviour
     public Button btn_SignIn;   // 로그인 버튼
     public Button btn_SignOut;  // 로그아웃 버튼
     public Button btn_Join;     // 회원가입 UI 버튼
-    public Button btn_Next;     // 넘기기 버튼
     public Button btn_SignUp;   // 회원가입 진행 버튼
-
-    public GameObject img_SignInFail;   // 로그인 실패 UI
-    public GameObject canvasJoin;       // 회원가입 UI
-    public GameObject canvasAccount;    // User 정보기입 창
+    public Button btn_Next;     // 넘기기 버튼
+    
+    [Header("GameObject")]
+    public GameObject img_SignInFail;      // 로그인 실패 UI
+    public GameObject canvasJoin;          // 회원가입 UI
+    public GameObject canvasAccount;       // User 정보기입 창
+    public GameObject img_SignUpSuccess;   // 회원 가입 성공 UI
 
     [Header("로그인")]
     public TMP_InputField signInEmail;       // 로그인 이메일
@@ -53,11 +55,6 @@ public class LoginSceneMgr : MonoBehaviour
         
     }
 
-    void Update()
-    {
-        
-    }
-
     void SignInValueChanged(string s)
     {
         btn_SignIn.interactable = s.Length > 0;
@@ -69,10 +66,17 @@ public class LoginSceneMgr : MonoBehaviour
         FireAuthManager.instance.OnSignIn(signInEmail.text, signInPassword.text);
     }
 
-    // 로그인 실패
-    public void SignInFail()
+    // 로그인 실패 UI
+    public void ShowSignInFail()
+    {
+        StartCoroutine(SignInFail(2f));
+    }
+
+    IEnumerator SignInFail(float duration)
     {
         img_SignInFail.SetActive(true);
+        yield return new WaitForSeconds(duration);
+        img_SignInFail.SetActive(false);
     }
 
     // 로그아웃
@@ -104,7 +108,44 @@ public class LoginSceneMgr : MonoBehaviour
         FireAuthManager.instance.OnSignUp(signUpEmail.text, signUpPassword.text, userInfo);
     }
 
-    
+    // 회원 가입 성공 UI
+    public void ShowSignUpSuccess()
+    {
+        StartCoroutine(SignUpSuccess(2f));
+    }
+
+    IEnumerator SignUpSuccess(float duration)
+    {
+        img_SignUpSuccess.SetActive(true);
+        yield return new WaitForSeconds(duration);
+        img_SignUpSuccess.SetActive(false);
+    }
+
+    // 회원정보 불러오기
+    public void OnLoadUserInfo()
+    {
+        FireStore.instance.LoadUserInfo(onCompleteLoadUserInfo);
+    }
+
+    void onCompleteLoadUserInfo(UserInfo info)
+    {
+        print(info.name);
+        print(info.nickName);
+        print(info.userBirth);
+    }
+
+    // X 버튼
+    public void OnClickX()
+    {
+        canvasJoin.SetActive(false);
+        canvasAccount.SetActive(false);
+    }
+
+
 
     
+
+
+
+
 }
