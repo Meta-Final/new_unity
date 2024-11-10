@@ -6,21 +6,34 @@ using UnityEngine.UI;
 
 public class MapManager : MonoBehaviour
 {
-    public Button btn_F1;
-
     void Start()
     {
-        btn_F1.onClick.AddListener(GoToF1);
-        
+
     }
 
     void Update()
     {
-        
+        if (Input.GetMouseButtonDown(0))
+        {
+            FolderClick();
+        }
     }
 
-    void GoToF1()
+    public void FolderClick()
     {
-        SceneManager.LoadScene("Meta_Town_Scene");
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hitInfo;
+
+        if (Physics.Raycast(ray, out hitInfo))
+        {
+            if (hitInfo.collider.CompareTag("Folder"))
+            {
+                //MetaConnectionMgr.instance.JoinOrCreateTown();
+            }
+        }
     }
+
+    
+
+
 }
