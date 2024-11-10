@@ -25,7 +25,7 @@ public class StartManager : MonoBehaviour
     void Start()
     {
         // 로고 이미지 초기 알파값
-        SetAlpha(0f);
+        //SetAlpha(0f);
 
         StartCoroutine(FadeInAndOut());
     }
@@ -33,13 +33,15 @@ public class StartManager : MonoBehaviour
     // 로고 이미지 페이드 인/아웃
     IEnumerator FadeInAndOut()
     {
-        yield return StartCoroutine(FadeTo(0f, 1f, fadeDuration));
+        //yield return new WaitForSeconds(2f);
 
-        yield return new WaitForSeconds(2f);
+        //yield return StartCoroutine(FadeTo(0f, 1f, fadeDuration));
 
-        yield return StartCoroutine(FadeTo(1f, 0f, fadeDuration));
+        //yield return new WaitForSeconds(2f);
 
-        yield return new WaitForSeconds(1f);
+        //yield return StartCoroutine(FadeTo(1f, 0f, fadeDuration));
+
+        yield return new WaitForSeconds(0.5f);
 
         // 오프닝 활성화
         MaskOffAndMoving();
@@ -63,6 +65,6 @@ public class StartManager : MonoBehaviour
     // 오프닝
     public void MaskOffAndMoving()
     {
-        img_Black.transform.DOScale(1920, 3f).SetEase(Ease.OutQuart);
+        img_Black.transform.DOScale(900, 3f).SetEase(Ease.OutQuart);
     }
 }
