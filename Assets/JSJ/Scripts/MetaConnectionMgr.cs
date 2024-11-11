@@ -12,42 +12,41 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
     public static MetaConnectionMgr instance;
 
     public string loadLevelName;
+
+    int roomNumber = 0;
     
     private void Awake()
     {
-        instance = this;
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
     }
 
     void Start()
     {
-        if (PhotonNetwork.IsConnected)
+        if (!PhotonNetwork.IsConnected)
         {
             // 마스터 서버에 접속 시도
             PhotonNetwork.ConnectUsingSettings();
             print("마스터 서버에 접속 성공!");
 
-            PhotonNetwork.AutomaticallySyncScene = true;
+            //PhotonNetwork.AutomaticallySyncScene = true;
         }
         else
         {
-            // 마스터 서버에 접속 시도
-            PhotonNetwork.ConnectUsingSettings();
-            print("마스터 서버에 접속 성공!");
+            print("마스터 서버에 접속 되어 있음");
         }
     }
 
-    void Update()
-    {
 
-    }
-
-    
+    // Lobby 입장
     public void JoinLobby(UserInfo userInfo)
     {
         PhotonNetwork.NickName = userInfo.nickName;
         print(PhotonNetwork.NickName);
 
-        // Lobby 입장
         PhotonNetwork.JoinLobby();
     }
 
@@ -57,14 +56,25 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         base.OnJoinedLobby();
         print("로비 입장 완료!");
 
-        // Channel 씬으로 이동
-        SceneManager.LoadScene("Meta_Channel_Scene");
+        JoinChannel();
     }
 
-    // Room 에 입장하자. 만일, 해당 Room 이 없으면 Room 을 만들겠다.
-    public void JoinOrCreateRoom(string mapName)
+
+    // Channel 입장
+    public void JoinChannel()
     {
-        loadLevelName = mapName;
+        // 채널씬으로 이동
+        PhotonNetwork.LoadLevel("Meta_Channel_Scene");
+    }
+
+
+    // [Room]-------------------------------------------------------------------------------------------------------
+    // ScrapBook 생성 후 입장
+    public void JoinOrCreateRoom()
+    {
+        loadLevelName = "Meta_ScrapBook_Scene";
+
+        string roomName = PhotonNetwork.NickName + "'s ScrapBook";
 
         // 방 생성 옵션
         RoomOptions roomOptions = new RoomOptions();
@@ -76,19 +86,31 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         roomOptions.IsOpen = true;
 
         // Room 참여 or 생성
-        PhotonNetwork.JoinOrCreateRoom("My_ScrapBook : " + PhotonNetwork.NickName, roomOptions, TypedLobby.Default);
+        PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, TypedLobby.Default);
     }
 
+    // ScrapBook 입장
+    public void JoinRoom()
+    {
+        string roomName = PhotonNetwork.NickName + "'s ScrapBook";
+
+        PhotonNetwork.JoinRoom(roomName);
+    }
+
+
+    // [Map]----------------------------------------------------------------------------------------------------------
+    // Map 입장
     public void JoinMap()
     {
-
-
+        PhotonNetwork.LoadLevel("Meta_Map_Scene");
     }
 
-    // Town 에 입장하자. 
-    public void JoinOrCreateTown(string mapName)
+
+    // [Town]----------------------------------------------------------------------------------------------------------
+    // Town 생성 후 입장
+    public void CreateAndJoinTown()
     {
-        loadLevelName = mapName;
+        loadLevelName = "Meta_Town_Scene";
 
         // 방 생성 옵션
         RoomOptions roomOptions = new RoomOptions();
@@ -103,6 +125,13 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinOrCreateRoom("Town", roomOptions, TypedLobby.Default);
     }
 
+    // Town 입장
+    public void JoinTown()
+    {
+        PhotonNetwork.JoinRoom("Town");
+    }
+
+
     // 방 생성 성공했을 때 호출되는 함수
     public override void OnCreatedRoom()
     {
@@ -116,12 +145,52 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         base.OnJoinedRoom();
         print("방 입장 완료");
 
+        print("현재 방 이름 : " + PhotonNetwork.CurrentRoom.Name);
+
         PhotonNetwork.LoadLevel(loadLevelName);
         // 멀티플레이 컨텐츠 즐길 수 있는 상태
-        if (PhotonNetwork.IsMasterClient)
-        {
-            
-        }
     }
+
+
+    // [Room 에서 나가기]--------------------------------------------------------------------------------------------------
+    // ScrapBook -> Channel
+    public void ScrapBookToChannel()
+    {
+        PhotonNetwork.LeaveRoom();
+        roomNumber = 1;
+    }
+
+    // ScrapBook -> Map
+    public void ScrapBookToMap()
+    {
+        PhotonNetwork.LeaveRoom();
+        roomNumber = 2;
+    }
+
+    // Room 에서 나오면 호출되는 함수
+    public override void OnLeftRoom()
+    {
+        base.OnLeftRoom();
+        print("방 나와서 이동");
+
+        // 만약 룸넘버가 1이면, Channel 로 이동한다.
+        if (roomNumber == 1)
+        {
+            JoinChannel();
+        }
+        // 만약 룸넘버가 2면, Map 으로 이동한다.
+        if (roomNumber == 2)
+        {
+            JoinMap();
+        }
+        
+    }
+
+
+    
+
+    
+
+    
 
 }

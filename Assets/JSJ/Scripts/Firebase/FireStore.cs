@@ -72,8 +72,6 @@ public class FireStore : MonoBehaviour
             // 불러온 정보 전달
             MetaConnectionMgr.instance.JoinLobby(loadInfo);
            
-
-           
         }
         else
         {

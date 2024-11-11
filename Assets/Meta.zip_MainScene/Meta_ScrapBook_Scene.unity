@@ -122,12 +122,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!4 &54174153 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8965446685946567051, guid: 4de4361c9c1b6864fa85b7d862385ad9,
-    type: 3}
-  m_PrefabInstance: {fileID: 1352400178}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &136698498 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3264523768726124401, guid: dbcb96bc5e755514f95ba9c7fd388f8f,
@@ -255,6 +249,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 139327084}
   m_CullTransparentMesh: 1
+--- !u!1 &156637663
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 156637664}
+  m_Layer: 0
+  m_Name: --------------JSJ
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &156637664
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 156637663}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -23.53003, y: 1.0700073, z: 14.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &183669079
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -405,10 +430,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 1
+  m_UiScaleMode: 0
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1920, y: 1080}
+  m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -1199,7 +1224,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 483996, guid: d5f70b90e384543769ad8c5839dbbb59, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -20.5
+      value: 5.5
       objectReference: {fileID: 0}
     - target: {fileID: 483996, guid: d5f70b90e384543769ad8c5839dbbb59, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1466,12 +1491,12 @@ PrefabInstance:
         type: 3}
       propertyPath: noticePos
       value: 
-      objectReference: {fileID: 54174153}
+      objectReference: {fileID: 0}
     - target: {fileID: 3678064410602533088, guid: 61680cdcb6d60c2459ab6261dff78e04,
         type: 3}
       propertyPath: postItPrefab
       value: 
-      objectReference: {fileID: 4216831411660120749, guid: c1401aa3b94e80844b9f9a72553b9f1b,
+      objectReference: {fileID: 3389262395994630104, guid: e3c4d3f9f3f68ff48a7628ca95af45bf,
         type: 3}
     - target: {fileID: 3678064410602533088, guid: 61680cdcb6d60c2459ab6261dff78e04,
         type: 3}
@@ -2080,10 +2105,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 1
+  m_UiScaleMode: 0
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1920, y: 1080}
+  m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -2201,7 +2226,7 @@ Transform:
   m_GameObject: {fileID: 1170490310}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.07, y: 9.5, z: -18.9}
+  m_LocalPosition: {x: 0.07, y: 4.38, z: -11.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2295,7 +2320,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 454498, guid: fe6653c66e8d341e2afb34108f50ff16, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 26.3
+      value: 18.7
       objectReference: {fileID: 0}
     - target: {fileID: 454498, guid: fe6653c66e8d341e2afb34108f50ff16, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2566,17 +2591,17 @@ PrefabInstance:
     - target: {fileID: 8965446685946567051, guid: 4de4361c9c1b6864fa85b7d862385ad9,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.94
+      value: -17.4
       objectReference: {fileID: 0}
     - target: {fileID: 8965446685946567051, guid: 4de4361c9c1b6864fa85b7d862385ad9,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 14.8
+      value: 16.3
       objectReference: {fileID: 0}
     - target: {fileID: 8965446685946567051, guid: 4de4361c9c1b6864fa85b7d862385ad9,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 17
+      value: 16.5
       objectReference: {fileID: 0}
     - target: {fileID: 8965446685946567051, guid: 4de4361c9c1b6864fa85b7d862385ad9,
         type: 3}
@@ -3418,6 +3443,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1829412948}
   m_CullTransparentMesh: 1
+--- !u!1 &1831532020
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1831532022}
+  - component: {fileID: 1831532021}
+  m_Layer: 0
+  m_Name: AllButtonMgr
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1831532021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1831532020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de4bba8757fd0a049b4be474f00c6d19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1831532022
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1831532020}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1968812473
 GameObject:
   m_ObjectHideFlags: 0
@@ -3665,10 +3734,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 1
+  m_UiScaleMode: 0
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1920, y: 1080}
+  m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -4096,7 +4165,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 454419950433143973}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1831532021}
+        m_TargetAssemblyTypeName: AllButtonMgr, Assembly-CSharp
+        m_MethodName: ScrapBookToMap
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &871819264190432301
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5673,7 +5754,7 @@ GameObject:
   - component: {fileID: 454419950433143973}
   - component: {fileID: 681675650207988769}
   m_Layer: 5
-  m_Name: Btn_Town
+  m_Name: Btn_Map
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6045,7 +6126,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 14829256137554683}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1831532021}
+        m_TargetAssemblyTypeName: AllButtonMgr, Assembly-CSharp
+        m_MethodName: GameOff
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &6296547026225219102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6089,7 +6182,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2172986273118365410}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1831532021}
+        m_TargetAssemblyTypeName: AllButtonMgr, Assembly-CSharp
+        m_MethodName: ScrapBookToChannel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!223 &6487482735923337694
 Canvas:
   m_ObjectHideFlags: 0
@@ -6275,10 +6380,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 1
+  m_UiScaleMode: 0
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1920, y: 1080}
+  m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -6745,3 +6850,5 @@ SceneRoots:
   - {fileID: 1001568040}
   - {fileID: 938601110}
   - {fileID: 1352400178}
+  - {fileID: 156637664}
+  - {fileID: 1831532022}
