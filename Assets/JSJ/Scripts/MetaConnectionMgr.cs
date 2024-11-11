@@ -98,17 +98,17 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
     }
 
 
-    // [Map]----------------------------------------------------------------------------------------------------------
-    // Map 입장
-    public void JoinMap()
+    // [Folder]----------------------------------------------------------------------------------------------------------
+    // Folder 입장
+    public void JoinFolder()
     {
-        PhotonNetwork.LoadLevel("Meta_Map_Scene");
+        PhotonNetwork.LoadLevel("Meta_Folder_Scene");
     }
 
 
     // [Town]----------------------------------------------------------------------------------------------------------
     // Town 생성 후 입장
-    public void CreateAndJoinTown()
+    public void JoinOrCreateTown()
     {
         loadLevelName = "Meta_Town_Scene";
 
@@ -160,8 +160,8 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         roomNumber = 1;
     }
 
-    // ScrapBook -> Map
-    public void ScrapBookToMap()
+    // ScrapBook -> Folder
+    public void ScrapBookToFolder()
     {
         PhotonNetwork.LeaveRoom();
         roomNumber = 2;
@@ -171,17 +171,17 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         base.OnLeftRoom();
-        print("방 나와서 이동");
+        print("방 나와서 이동 : " + roomNumber);
 
         // 만약 룸넘버가 1이면, Channel 로 이동한다.
         if (roomNumber == 1)
         {
             JoinChannel();
         }
-        // 만약 룸넘버가 2면, Map 으로 이동한다.
+        // 만약 룸넘버가 2면, Folder 로 이동한다.
         if (roomNumber == 2)
         {
-            JoinMap();
+            JoinFolder();
         }
         
     }

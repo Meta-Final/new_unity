@@ -28,7 +28,7 @@ public class MapManager : MonoBehaviour
         {
             if (hitInfo.collider.CompareTag("Folder"))
             {
-                //MetaConnectionMgr.instance.JoinOrCreateTown();
+                MetaConnectionMgr.instance.JoinOrCreateTown();
             }
         }
     }

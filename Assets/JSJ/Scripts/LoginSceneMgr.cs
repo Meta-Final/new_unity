@@ -21,7 +21,7 @@ public class LoginSceneMgr : MonoBehaviour
 {
     [Header("Button")]
     public Button btn_SignIn;   // 로그인 버튼
-    public Button btn_SignOut;  // 로그아웃 버튼
+    public Button btn_Quit;     // 게임 종료 버튼
     public Button btn_Join;     // 회원가입 UI 버튼
     public Button btn_SignUp;   // 회원가입 진행 버튼
     public Button btn_Next;     // 넘기기 버튼
@@ -76,12 +76,16 @@ public class LoginSceneMgr : MonoBehaviour
         img_SignInFail.SetActive(false);
     }
 
-    // 로그아웃
-    public void OnClickSignOut()
+    // 종료
+    public void Quit()
     {
-        FireAuthManager.instance.LogOut();
-    }
+        Application.Quit();
 
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
+    }
+    
     public void OnClickJoin()
     {
         // 회원가입 UI 활성화
