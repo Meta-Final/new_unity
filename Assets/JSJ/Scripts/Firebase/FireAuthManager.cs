@@ -74,12 +74,6 @@ public class FireAuthManager : MonoBehaviour
         }
     }
 
-    // 로그아웃 진행
-    public void LogOut()
-    {
-        auth.SignOut();
-    }
-
     // 회원 가입 진행
     public void OnSignUp(string email, string password, UserInfo userInfo)
     {
@@ -109,4 +103,8 @@ public class FireAuthManager : MonoBehaviour
         }
     }
 
+    public string GetCurrentUserId()
+    {
+        return auth.CurrentUser.UserId;
+    }
 }

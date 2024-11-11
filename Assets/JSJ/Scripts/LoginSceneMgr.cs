@@ -25,11 +25,14 @@ public class LoginSceneMgr : MonoBehaviour
     public Button btn_Join;     // 회원가입 UI 버튼
     public Button btn_SignUp;   // 회원가입 진행 버튼
     public Button btn_Next;     // 넘기기 버튼
-    
-    [Header("GameObject")]
-    public GameObject img_SignInFail;      // 로그인 실패 UI
+
+    [Header("Canvas")]
+    public GameObject canvas_Signin;        // 로그인 UI
     public GameObject canvasJoin;          // 회원가입 UI
     public GameObject canvasAccount;       // User 정보기입 창
+
+    [Header("GameObject")]
+    public GameObject img_SignInFail;      // 로그인 실패 UI
     public GameObject img_SignUpSuccess;   // 회원 가입 성공 UI
 
     [Header("로그인")]
@@ -50,6 +53,9 @@ public class LoginSceneMgr : MonoBehaviour
     {
         signInEmail.onValueChanged.AddListener(SignInValueChanged);
         signInPassword.onValueChanged.AddListener(SignInValueChanged);
+
+        canvasJoin.SetActive(false);
+        canvasAccount.SetActive(false);
     }
 
     void SignInValueChanged(string s)
@@ -57,7 +63,7 @@ public class LoginSceneMgr : MonoBehaviour
         btn_SignIn.interactable = s.Length > 0;
     }
 
-    // 로그인
+    // [로그인]-----------------------------------------------------------------------------------
     public void OnClickSignIn()
     {
         FireAuthManager.instance.OnSignIn(signInEmail.text, signInPassword.text);
@@ -76,7 +82,8 @@ public class LoginSceneMgr : MonoBehaviour
         img_SignInFail.SetActive(false);
     }
 
-    // 종료
+
+    // [종료]---------------------------------------------------------------------------------------
     public void Quit()
     {
         Application.Quit();
@@ -85,15 +92,25 @@ public class LoginSceneMgr : MonoBehaviour
         UnityEditor.EditorApplication.isPlaying = false;
 #endif
     }
-    
+
+
+    // [회원가입]------------------------------------------------------------------------------------
     public void OnClickJoin()
     {
+        // 로그인 UI 비활성화
+        canvas_Signin.SetActive(false);
+        print("가입창 끔");
+
         // 회원가입 UI 활성화
         canvasJoin.SetActive(true);
     }
 
+    // 다음
     public void OnClickNext()
     {
+        // 회원가입 UI 비활성화
+        canvasJoin.SetActive(false);
+
         // User 정보기입 창 활성화
         canvasAccount.SetActive(true);
     }
@@ -122,10 +139,15 @@ public class LoginSceneMgr : MonoBehaviour
         img_SignUpSuccess.SetActive(false);
     }
 
-    // X 버튼
+
+    // [X]-------------------------------------------------------------------------------------------
     public void OnClickX()
     {
+        // 회원가입 / 정보 기입 UI 비활성화
         canvasJoin.SetActive(false);
         canvasAccount.SetActive(false);
+
+        // 로그인 UI 활성화
+        canvas_Signin.SetActive(true);
     }
 }
