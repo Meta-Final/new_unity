@@ -15,28 +15,28 @@ public class AllButtonMgr : MonoBehaviour
 
     }
 
-    // Ã¤³Î -> ½ºÅ©·¦ ºÏ
+    // Channel -> ScrapBook
     public void ChannelToScrapBook()
     {
         MetaConnectionMgr.instance.JoinOrCreateRoom();
     }
 
-    // Ã¤³Î -> ¸Ê
-    public void ChannelToMap()
+    // Channel -> Folder
+    public void ChannelToFolder()
     {
-        MetaConnectionMgr.instance.JoinMap();
+        MetaConnectionMgr.instance.JoinFolder();
     }
 
-    // ½ºÅ©·¦ ºÏ -> Ã¤³Î
+    // ScrapBook -> Channel
     public void ScrapBookToChannel()
     {
         MetaConnectionMgr.instance.ScrapBookToChannel();
     }
 
-    // ½ºÅ©·¦ ºÏ -> ¸Ê
-    public void ScrapBookToMap()
+    // ScrapBook -> Folder
+    public void ScrapBookToFolder()
     {
-        MetaConnectionMgr.instance.ScrapBookToMap();
+        MetaConnectionMgr.instance.ScrapBookToFolder();
     }
 
 

@@ -46,6 +46,8 @@ public class ZoomOnClick : MonoBehaviour
             yield return null;
         }
 
+        yield return new WaitForSeconds(1f);
+
         // 로그인 UI 활성화
         canvasSignIn.SetActive(true);
     }
