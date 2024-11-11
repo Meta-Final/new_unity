@@ -1,40 +1,72 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 using ReqRes;
-using System.Net.NetworkInformation;
-[System.Serializable]
-public class ChatResponse
-{
-    public string text;  // API ¿¿¥‰¿« "text" « µÂ ∏≈«Œ
-}
+using UnityEditor.PackageManager.Requests;
 
 public class APIManager : MonoBehaviour
 {
-    URL url = new URL();
-    public AiChatMgr_KJS aiChatMgr;
+    ArticleURL articleURL = new ArticleURL();
+    AIURL aiUrl = new AIURL();
 
-
-    public void CallLLM(String chat)
+    //Í∏∞ÏÇ¨ Ìò∏Ï∂ú Í¥ÄÎ†® Ìï®Ïàò
+    public void SearhArticle(string text)
     {   
-        ChatRequest chatRequest = new ChatRequest { text = chat };
-        string chatUrl = url.chatUrl;
-        StartCoroutine(PostHttp<ChatRequest, ChatResponse>(chatRequest, chatUrl));
+        SearchRequest searchRequest = new SearchRequest();
+        string searchUrl = articleURL.searchURL;
+        StartCoroutine(PostHttp<SearchRequest, SearchResponse>(searchRequest, searchUrl));
+    }
+    
+    public void CreateArticle(string text)
+    {   
+        Article article = new Article();
+        string createUrl = articleURL.createURL;
+        StartCoroutine(PostHttp<Article, Article>(article, createUrl));
     }
 
-    public void CallTrend(string trendReq)
+    public void GetArticle(string text)
     {   
-        TrendRequest trendRequest = new TrendRequest {text = trendReq};
-        string trendUrl = url.trendUrl;
-        StartCoroutine(GetHttp<TrendRequest, TrendResponse>(trendRequest, trendUrl));
+        Article article = new Article();
+        string getUrl = articleURL.getURL;
+        StartCoroutine(PostHttp<Article, Article>(article, getUrl));
     }
 
-    public IEnumerator PostHttp<TRequest, TResponse>(TRequest requestObject, string url)
+    //LLM Ìò∏Ï∂ú Î©îÏÑúÎìú
+
+    //Cover ÏÉùÏÑ±/Ìò∏Ï∂ú Î©îÏÑúÎìú
+    public void GenCover(string prompt)
     {
+        GenCoverRequest genCoverRequest = new GenCoverRequest {text = prompt};
+        string genCoverUrl = aiUrl.genCoverURL;
+        StartCoroutine(PostHttp<GenCoverRequest, GenCoverResponse>(genCoverRequest, genCoverUrl));
+    }
+    public void LoadCover(string path)
+    {
+        LoadCoverRequest loadCoverRequest = new LoadCoverRequest {imgPath = path};
+        string loadCoverUrl = aiUrl.loadCoverURL;
+        StartCoroutine(PostHttp<LoadCoverRequest, LoadCoverResponse>(loadCoverRequest, loadCoverUrl)); 
+    }
+    
+    //Object ÏÉùÏÑ±/Ìò∏Ï∂ú Î©îÏÑúÎìú
+    public void GenObject(string prompt)
+    {
+        GenObjectRequest genObjectRequest = new GenObjectRequest {text = prompt};
+        string genObjectUrl = aiUrl.genObjectURL;
+        StartCoroutine(PostHttp<GenObjectRequest, GenObjectResponse>(genObjectRequest, genObjectUrl));
+    }
+    public void loadobject(string objPath, string mtlPath)
+    {
+        LoadObjectRequest loadObjectRequest = new LoadObjectRequest {objFilePath = objPath, mtlFilePath = mtlPath};
+        string loadObjectUrl = aiUrl.loadObjectURL;
+        StartCoroutine(PostHttp<LoadObjectRequest, LoadObjectResponse>(loadObjectRequest, loadObjectUrl));
+    }
+
+    //Http Î©îÏÑúÎìú post
+    public IEnumerator Request<TRequest, TResponse>(TRequest requestObject, string url)
+    {   
         string json = JsonUtility.ToJson(requestObject);
 
         using (UnityWebRequest www = new UnityWebRequest(url, "POST"))
@@ -43,33 +75,23 @@ public class APIManager : MonoBehaviour
             www.uploadHandler = new UploadHandlerRaw(jsonToSend);
             www.downloadHandler = new DownloadHandlerBuffer();
             www.SetRequestHeader("Content-Type", "application/json");
-
+            
             yield return www.SendWebRequest();
 
             if (www.result == UnityWebRequest.Result.Success)
             {
-                // JSON ¿¿¥‰¿ª ChatResponse ∞¥√º∑Œ ∆ƒΩÃ
-                ChatResponse response = JsonUtility.FromJson<ChatResponse>(www.downloadHandler.text);
-
-                // text « µÂ¿« ∞™¿Ã "/img.json"¿Ã∏È ∏ﬁΩ√¡ˆ √‚∑¬
-                if (response.text == "/img.json")
-                {
-                    Debug.Log("¿ÃπÃ¡ˆ∏¶ ∏∏µÈæ˙Ω¿¥œ¥Ÿ");
-                    AiChatMgr_KJS.Instance.UpdateChatResponse("¿ÃπÃ¡ˆ∏¶ ∏∏µÈæ˙Ω¿¥œ¥Ÿ");
-                }
-                else
-                {
-                    Debug.Log($"¿¿¥‰: {response.text}");
-                    AiChatMgr_KJS.Instance.UpdateChatResponse(response.text);
-                }
+                TResponse responseObject = JsonUtility.FromJson<TResponse>(www.downloadHandler.text);
+                Debug.Log("Response: " + JsonUtility.ToJson(responseObject));
             }
             else
             {
-                Debug.LogError($"Error: {www.error}, Status Code: {www.responseCode}, Response: {www.downloadHandler.text}");
+                Debug.LogError($"Error: {www.error}, Status Code: {www.responseCode}, Response: {www.downloadHandler.text}" );
             }
+
         }
     }
 
+    //Http Î©îÏÑúÎìú get
     public IEnumerator GetHttp<TRequest, TResponse>(TRequest requestObject, string url)
     {   
         string json = JsonUtility.ToJson(requestObject);
@@ -91,35 +113,5 @@ public class APIManager : MonoBehaviour
                 Debug.LogError($"Error: {www.error}, Status Code: {www.responseCode}, Response: {www.downloadHandler.text}" );
             }
         }
-    }
-    private void LoadImageFromPath(string path)
-    {
-        if (File.Exists(path))
-        {
-            byte[] fileData = File.ReadAllBytes(path);
-            Texture2D tex = new Texture2D(2, 2); // ¿”Ω√∑Œ 2x2 ≈ÿΩ∫√≥ ª˝º∫
-            if (tex.LoadImage(fileData))
-            {
-                Debug.Log("¿ÃπÃ¡ˆ ∑ŒµÂ º∫∞¯!");
-
-                // ≈ÿΩ∫√≥∏¶ ¿˚øÎ«“ ºˆ ¿÷¥¬ øπ¡¶ (øπ: UI ∂«¥¬ ø¿∫Í¡ß∆Æ¿« ∏”∆º∏ÆæÛø° ¿˚øÎ)
-                // øπΩ√: RawImage ∂«¥¬ Renderer ªÁøÎ
-                // GetComponent<Renderer>().material.mainTexture = tex;
-            }
-            else
-            {
-                Debug.LogError("¿ÃπÃ¡ˆ ∑ŒµÂ Ω«∆–!");
-            }
-        }
-        else
-        {
-            Debug.LogError($"¿ÃπÃ¡ˆ ∆ƒ¿œ¿ª √£¿ª ºˆ æ¯Ω¿¥œ¥Ÿ: {path}");
-        }
-    }
-
-    [Serializable]
-    public class JsonData
-    {
-        public string text;
     }
 }
