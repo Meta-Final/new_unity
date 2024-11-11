@@ -5,7 +5,6 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 using ReqRes;
-using UnityEditor.PackageManager.Requests;
 
 public class APIManager : MonoBehaviour
 {
@@ -13,7 +12,7 @@ public class APIManager : MonoBehaviour
     AIURL aiUrl = new AIURL();
 
     //기사 호출 관련 함수
-    public void SearhArticle(string text)
+    public void SearchArticle()
     {   
         SearchRequest searchRequest = new SearchRequest();
         string searchUrl = articleURL.searchURL;
