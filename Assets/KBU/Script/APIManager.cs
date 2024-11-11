@@ -65,7 +65,7 @@ public class APIManager : MonoBehaviour
     }
 
     //Http 메서드 post
-    public IEnumerator Request<TRequest, TResponse>(TRequest requestObject, string url)
+    public IEnumerator PostHttp<TRequest, TResponse>(TRequest requestObject, string url)
     {   
         string json = JsonUtility.ToJson(requestObject);
 
