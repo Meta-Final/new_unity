@@ -167,13 +167,13 @@ public class SaveMgr_KJS : MonoBehaviour
 
     private void SaveObjectsToFile()
     {
-        // 로그인 확인
-        if (!MetaFireAuth.instance.IsLoggedIn)
-        {
-            Debug.LogError("Firebase에 로그인되어 있지 않습니다. 자동 로그인을 시도합니다.");
-            MetaFireAuth.instance.SignInWithTemporaryAccount();
-            return;
-        }
+        //// 로그인 확인
+        //if (!MetaFireAuth.instance.IsLoggedIn)
+        //{
+        //    Debug.LogError("Firebase에 로그인되어 있지 않습니다. 자동 로그인을 시도합니다.");
+        //    MetaFireAuth.instance.SignInWithTemporaryAccount();
+        //    return;
+        //}
 
         string targetPostId = inputPostIdField.text;
 
@@ -261,11 +261,13 @@ public class SaveMgr_KJS : MonoBehaviour
                 targetPost.pages.Add(newPage);
             }
 
-            // JSON 데이터를 직렬화하고 로컬 파일에 저장
-            string json = JsonUtility.ToJson(rootData, true);
-            File.WriteAllText(savePath, json);
+            // 포스트 ID를 파일명으로 사용하여 JSON 데이터를 직렬화하고 개별 파일에 저장
+            string postFileName = $"{targetPostId}.json";
+            string postSavePath = Path.Combine(saveDirectory, postFileName);
+            string json = JsonUtility.ToJson(targetPost, true);
+            File.WriteAllText(postSavePath, json);
 
-            Debug.Log($"Data saved locally at {savePath}. Post ID: {targetPost.postId}");
+            Debug.Log($"Data saved locally at {postSavePath}. Post ID: {targetPost.postId}");
         }
         catch (Exception e)
         {

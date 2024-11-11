@@ -2,30 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Photon.Pun;
 
-public class AI_Movement_KJS : MonoBehaviour
+public class AI_Movement_KJS : MonoBehaviourPun
 {
     private NavMeshAgent agent;
     private Transform playerTransform;
     private Vector3 offset = new Vector3(1, 3, -1);
 
-    // Start is called before the first frame update
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
 
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null)
-        {
-            playerTransform = player.transform;
-        }
-        else
-        {
-            Debug.LogError("Player object with tag 'Player' not found.");
-        }
+        // 클라이언트의 로컬 플레이어 찾기
+        FindLocalPlayer();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (playerTransform != null)
@@ -35,6 +27,28 @@ public class AI_Movement_KJS : MonoBehaviour
             Vector3 targetPosition = playerTransform.position + rotatedOffset;
 
             agent.SetDestination(targetPosition);
+        }
+    }
+
+    private void FindLocalPlayer()
+    {
+        // 모든 플레이어 오브젝트를 찾아 로컬 플레이어를 설정
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject player in players)
+        {
+            PhotonView photonView = player.GetComponent<PhotonView>();
+
+            // 이 클라이언트에 속한 플레이어인지 확인
+            if (photonView != null && photonView.IsMine)
+            {
+                playerTransform = player.transform;
+                break;
+            }
+        }
+
+        if (playerTransform == null)
+        {
+            Debug.LogError("Local player object with tag 'Player' not found.");
         }
     }
 }
