@@ -12,6 +12,8 @@ public class ZoomOnClick : MonoBehaviour
 
     public float zoomSpeed = 2f;
 
+    public bool isZoom = true;
+
     void Start()
     {
         
@@ -26,8 +28,8 @@ public class ZoomOnClick : MonoBehaviour
 
             if (Physics.Raycast(ray, out hitInfo))
             {
-                // ZoomObject 를 클릭했다면,
-                if (hitInfo.collider.gameObject.layer == 20)
+                // Zoom 가능 상태이고 ZoomObject 를 클릭했다면,
+                if (isZoom == true && hitInfo.collider.gameObject.layer == 20)
                 {
                     StartCoroutine(ZoomInTarget());
                 }
@@ -50,5 +52,8 @@ public class ZoomOnClick : MonoBehaviour
 
         // 로그인 UI 활성화
         canvasSignIn.SetActive(true);
+
+        isZoom = false;
+
     }
 }
