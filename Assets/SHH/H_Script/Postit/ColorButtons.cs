@@ -8,6 +8,7 @@ public class ColorButtons : MonoBehaviour
 {
     public InventoryUI inventoryUI;
     Color myColor;
+    public GameObject colorbtn;
     void Start()
     {
         myColor = GetComponent<Image>().color;
@@ -19,5 +20,9 @@ public class ColorButtons : MonoBehaviour
     void TransferMyColor()
     {
         inventoryUI.SetPostItColor(myColor);
+    }
+    void CloseColorbtn()
+    {
+        colorbtn.SetActive(false);
     }
 }
