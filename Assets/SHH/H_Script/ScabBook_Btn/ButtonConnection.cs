@@ -17,13 +17,10 @@ public class ButtonConnection : MonoBehaviour
     public Button btnexit;
     void Start()
     {
-        //ChannelCanvas = GameObject.Find("H_ChannelCanvas");
-        //Magazine = GameObject.Find("Tool 2");
-      //  if (notice)
-      //  {
-            notice.SetActive(false);
-        // }
-
+     
+  
+        notice.SetActive(false);
+    
         
 
         btnPoweroff.onClick.AddListener(Onclickpoweroff);  

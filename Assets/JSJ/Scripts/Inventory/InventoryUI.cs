@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -9,7 +10,7 @@ using UnityEngine.UI;
 public class InventoryUI : MonoBehaviour
 {
     [Header("인벤토리")]
-    public Transform slot;            
+    public Transform slot;
     public RawImage img_Preview;        // 스크린샷 미리보기 화면
     public Button btn_SlotItemPrefab;   // 스크린샷 프리팹
     public Button btn_Delete;           // 스크린샷 삭제 버튼
@@ -18,21 +19,19 @@ public class InventoryUI : MonoBehaviour
     public GameObject postItPrefab;     // 포스트잇 프리팹
     public Transform noticePos;         // 액자 위치
     public Button btn_PostIt;           // 포스트잇 생성 버튼
-
     int selectIndex = -1;
     Texture2D selectScreenshot;
 
-    //Vector3 로 배열만들기
-    public Vector3[] spawnPositions = new Vector3[9];
-    int count = 0;
-
-
+    [Header("큰 이미지로 보기")]
+    public GameObject largeImagePreviewPanel; // 큰 이미지 패널
+    public RawImage largeImagePreview;        // 확대 이미지를 표시할 RawImage
+    public Button closeButton;                // 큰 이미지 닫기
     private void Start()
     {
         // 지금 'Meta_ScrapBook_Scene'이라면, 액자를 찾아라.
-        if (SceneManager.GetActiveScene().name == "Meta_ScrapBook_Scene")
+        if (SceneManager.GetActiveScene().name == "Meta_ScrapBook_Scene_shh")
         {
-            noticePos = GameObject.Find("CorkBoard").transform;
+            noticePos = GameObject.Find("CorkBoard 1").transform;
         }
         else
         {
@@ -42,7 +41,9 @@ public class InventoryUI : MonoBehaviour
         btn_Delete.interactable = false;
         btn_PostIt.interactable = false;
 
+        largeImagePreviewPanel.SetActive(false);
         btn_PostIt.onClick.AddListener(() => OnPostitButtionClick());
+        closeButton.onClick.AddListener(HideLargeImage);
     }
 
     // 인벤토리 UI 업데이트
@@ -92,6 +93,7 @@ public class InventoryUI : MonoBehaviour
         UpdateInventoryUI();
     }
 
+
     // 이미지 로드
     public void DisplayScreenshot(string path)
     {
@@ -116,34 +118,11 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    // 포스트잇 생성 버튼 기능
-    //  public void OnPostitButtionClick()
-    //  {
-    //      if (selectScreenshot != null)
-    //      {
-    //          GameObject newPostIt = Instantiate(postItPrefab, noticePos);
-    //
-    //          RawImage postItImage = newPostIt.GetComponentInChildren<RawImage>();
-    //
-    //          if (postItImage != null)
-    //          {
-    //              postItImage.texture = selectScreenshot;
-    //
-    //              print("1");
-    //              float originWidth = selectScreenshot.width;
-    //              float originHeight = selectScreenshot.height;
-    //              float aspectRatio = originWidth / originHeight;
-    //          }
-    //      }
-    //
-    //      btn_Delete.interactable = false;
-    //      btn_PostIt.interactable = false;
-    //  }
-
+ 
     // 정렬을 위한 위치 값 설정
     private int postItColumnCount = 3;      // 한 행에 들어갈 포스트잇 개수 (3으로 설정)
     private int postItRowCount = 3;         // 총 행 개수 (3으로 설정)
-    private float postItSpacing = 30f;      // 포스트잇 간 간격 (픽셀 단위)
+    private float postItSpacing = 8f;      // 포스트잇 간 간격 (픽셀 단위)
     private int postItIndex = 0;            // 생성된 포스트잇의 인덱스
 
     public Material matPostIt;
@@ -156,55 +135,58 @@ public class InventoryUI : MonoBehaviour
     {
         if (selectScreenshot != null)
         {
-            // 열과 행 계산
+            // 3x3 배치의 행과 열 계산
             int row = postItIndex / postItColumnCount;
             int column = postItIndex % postItColumnCount;
 
-            // 정렬된 위치 계산, y축으로 65만큼 위로 이동
             Vector3 offset = new Vector3(
-                column * postItSpacing,
-                -(row * postItSpacing) + 65f,  // 기존 y 위치에서 65만큼 위로 이동
-                0f
+                column * postItSpacing - 10f,
+                -(row * postItSpacing) + 8f,
+                -0.5f
             );
 
-            // 새 포스트잇 생성 위치 지정
             Vector3 spawnPosition = noticePos.position + offset;
-
-            // 포스트잇 생성
-            if (count > 8) return; 
-            
             GameObject newPostIt = Instantiate(postItPrefab, spawnPosition, Quaternion.identity, noticePos);
 
-            
-            newPostIt.transform.localPosition = spawnPositions[count];
-            count++;
-            newPostIt.transform.eulerAngles = new Vector3(0, 180, 0);
+            // 색상 및 텍스처 설정
             Material mat = new Material(matPostIt);
             mat.color = postItColor;
-            MeshRenderer mr = newPostIt.GetComponent<MeshRenderer>();
-            mr.material = mat;
-
+            newPostIt.GetComponent<MeshRenderer>().material = mat;
 
             RawImage postItImage = newPostIt.GetComponentInChildren<RawImage>();
-
             if (postItImage != null)
             {
                 postItImage.texture = selectScreenshot;
-
-                float originWidth = selectScreenshot.width;
-                float originHeight = selectScreenshot.height;
-                float aspectRatio = originWidth / originHeight;
             }
 
-          // 인덱스 증가 및 3x3 제한 검사
-          // postItIndex++;
-          // if (postItIndex >= postItColumnCount * postItRowCount)
-          // {
-          //     postItIndex = 0; // 3x3 칸을 다 채우면 다시 초기화하여 첫 위치로 돌아감
-          // }
-        }
+            // 새 포스트잇에 클릭 리스너 추가하여 이미지를 확대함
+            Button postItButton = newPostIt.AddComponent<Button>();
+            Texture2D currentScreenshot = selectScreenshot;
+            postItButton.onClick.AddListener(() => ShowLargeImage(currentScreenshot));
 
-        btn_Delete.interactable = false;
-        btn_PostIt.interactable = false;
+            // 포스트잇 인덱스 증가
+            postItIndex++;
+            if (postItIndex >= postItColumnCount * postItRowCount)
+            {
+                postItIndex = 0;
+            }
+
+            // 버튼 인터랙션 초기화
+            btn_Delete.interactable = false;
+            btn_PostIt.interactable = false;
+        }
+    }
+
+    private void ShowLargeImage(Texture2D screenshot)
+    {
+        // 큰 이미지 텍스처 설정
+        largeImagePreview.texture = screenshot;
+        largeImagePreviewPanel.SetActive(true);
+    }
+
+    // 큰 이미지 닫기
+    public void HideLargeImage()
+    {
+        largeImagePreviewPanel.SetActive(false);
     }
 }
