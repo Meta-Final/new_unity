@@ -58,7 +58,7 @@ public class AiChatMgr_KJS : MonoBehaviour
             }
             else
             {
-                apiManager.CallLLM(userMessage); // API 호출 (비동기 응답 대기)
+                //apiManager.CallLLM(userMessage); // API 호출 (비동기 응답 대기)
             }
         }
     }
