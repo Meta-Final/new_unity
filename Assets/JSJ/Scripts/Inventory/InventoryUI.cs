@@ -66,6 +66,14 @@ public class InventoryUI : MonoBehaviour
 
         }
     }
+    public void OnClickColoroff()
+    {
+        Colorbtn.gameObject.SetActive(false);
+    }
+    public void OnClickColoron()
+    {
+        Colorbtn.gameObject.SetActive(true);
+    }
    
 
     // 스크린샷 클릭하면 발동하는 함수
