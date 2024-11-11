@@ -5897,7 +5897,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 2035540061069590949}
-  sceneViewId: 1
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &2035540061069590949
@@ -6423,6 +6423,7 @@ GameObject:
   - component: {fileID: 2445524371339201725}
   - component: {fileID: 3915990585544053406}
   - component: {fileID: 3678064410602533088}
+  - component: {fileID: 2945048639361669581}
   m_Layer: 16
   m_Name: Canvas_Inventory
   m_TagString: Untagged
@@ -6530,7 +6531,7 @@ MonoBehaviour:
   btn_SlotItemPrefab: {fileID: 3802649557174565124, guid: e553570ee8727cc469164fa7c73b4e79,
     type: 3}
   btn_Delete: {fileID: 6838299189940864471}
-  postItPrefab: {fileID: 4516370248963823536, guid: 431904c52a75b0c439bffd25b5ef1cfd,
+  postItPrefab: {fileID: 4216831411660120749, guid: c1401aa3b94e80844b9f9a72553b9f1b,
     type: 3}
   noticePos: {fileID: 0}
   btn_PostIt: {fileID: 5454752433803995010}
@@ -6540,6 +6541,28 @@ MonoBehaviour:
   Colorbtn: {fileID: 6491434227171081241}
   matPostIt: {fileID: 2100000, guid: c62fbf7f53d914a4fba7d2b7bc8958e0, type: 2}
   postItColor: {r: 0, g: 0.072042465, b: 1, a: 1}
+--- !u!114 &2945048639361669581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5481744956923837317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 0
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &5574048254893290583
 GameObject:
   m_ObjectHideFlags: 0

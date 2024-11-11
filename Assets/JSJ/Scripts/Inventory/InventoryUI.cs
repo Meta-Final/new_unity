@@ -6,8 +6,10 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Photon.Pun;
 
-public class InventoryUI : MonoBehaviour
+[RequireComponent(typeof(PhotonView))]
+public class InventoryUI : MonoBehaviourPun
 {
     [Header("인벤토리")]
     public Transform slot;
@@ -28,6 +30,11 @@ public class InventoryUI : MonoBehaviour
     public Button closeButton;                // 큰 이미지 닫기
 
     public GameObject Colorbtn;
+
+    private void Awake()
+    {
+    }
+    [PunRPC]
     private void Start()
     {
         // 지금 'Meta_ScrapBook_Scene'이라면, 액자를 찾아라.
@@ -74,9 +81,14 @@ public class InventoryUI : MonoBehaviour
     {
         Colorbtn.gameObject.SetActive(true);
     }
-   
+
+    public void RPC_getpostit()
+    {
+        photonView.RPC("OnSlotClick", RpcTarget.MasterClient);
+    }
 
     // 스크린샷 클릭하면 발동하는 함수
+    [PunRPC]
     public void OnSlotClick(int index)
     {
         selectIndex = index;
@@ -88,7 +100,12 @@ public class InventoryUI : MonoBehaviour
 
         btn_Delete.onClick.AddListener(() => OnSlotDeleteClick(selectIndex));
     }
+    public void RPC_deletepostit()
+    {
+        photonView.RPC("OnSlotDeleteClick", RpcTarget.MasterClient);
+    }
 
+    [PunRPC]
     // 스크린샷 삭제 버튼 기능
     public void OnSlotDeleteClick(int index)
     {
@@ -103,8 +120,11 @@ public class InventoryUI : MonoBehaviour
 
         UpdateInventoryUI();
     }
-
-
+    public void RPC_displaypostit()
+    {
+        photonView.RPC("DisplayScreenshot", RpcTarget.All);
+    }
+    [PunRPC]
     // 이미지 로드
     public void DisplayScreenshot(string path)
     {
@@ -129,7 +149,7 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
- 
+    [PunRPC]
     // 정렬을 위한 위치 값 설정
     private int postItColumnCount = 3;      // 한 행에 들어갈 포스트잇 개수 (3으로 설정)
     private int postItRowCount = 3;         // 총 행 개수 (3으로 설정)
@@ -142,7 +162,7 @@ public class InventoryUI : MonoBehaviour
     {
         postItColor = color;
     }
-   
+    [PunRPC]
     public void OnPostitButtionClick()
     {
         if (selectScreenshot != null)
