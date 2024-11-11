@@ -16,31 +16,45 @@ public class AllButtonMgr : MonoBehaviour
     }
 
     // Ã¤³Î -> ½ºÅ©·¦ ºÏ
-    //public void ChannelToScrapBook()
-    //{
-    //    MetaConnectionMgr.instance.JoinOrCreateRoom();
-    //}
+    public void ChannelToScrapBook()
+    {
+        MetaConnectionMgr.instance.JoinOrCreateRoom();
+    }
 
-    //// Ã¤³Î -> ¸Ê
-    //public void ChannelToMap()
-    //{
-    //    MetaConnectionMgr.instance.JoinMap();
+    // Ã¤³Î -> ¸Ê
+    public void ChannelToMap()
+    {
+        MetaConnectionMgr.instance.JoinMap();
+    }
 
-    //}
+    // ½ºÅ©·¦ ºÏ -> Ã¤³Î
+    public void ScrapBookToChannel()
+    {
+        MetaConnectionMgr.instance.ScrapBookToChannel();
+    }
 
-    //// ½ºÅ©·¦ ºÏ -> Ã¤³Î
-    //public void ScrapBookToChannel()
-    //{
-    //    MetaConnectionMgr.instance.JoinChannel();
-    //}
+    // ½ºÅ©·¦ ºÏ -> ¸Ê
+    public void ScrapBookToMap()
+    {
+        MetaConnectionMgr.instance.ScrapBookToMap();
+    }
 
-    //// ½ºÅ©·¦ ºÏ -> ¸Ê
-    //public void ScrapBookToMap()
-    //{
-    //    MetaConnectionMgr.instance.JoinMap();
-    //}
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //// °ÔÀÓ Á¾·á
     //public void GameOff()
     //{

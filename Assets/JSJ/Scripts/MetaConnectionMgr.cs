@@ -12,6 +12,8 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
     public static MetaConnectionMgr instance;
 
     public string loadLevelName;
+
+    int roomNumber = 0;
     
     private void Awake()
     {
@@ -38,6 +40,7 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         }
     }
 
+
     // Lobby 입장
     public void JoinLobby(UserInfo userInfo)
     {
@@ -56,6 +59,7 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         JoinChannel();
     }
 
+
     // Channel 입장
     public void JoinChannel()
     {
@@ -63,8 +67,10 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         PhotonNetwork.LoadLevel("Meta_Channel_Scene");
     }
 
-    // Room 생성 후 입장
-    public void CreateRoom()
+
+    // [Room]-------------------------------------------------------------------------------------------------------
+    // ScrapBook 생성 후 입장
+    public void JoinOrCreateRoom()
     {
         loadLevelName = "Meta_ScrapBook_Scene";
 
@@ -83,7 +89,7 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, TypedLobby.Default);
     }
 
-    // Room 입장
+    // ScrapBook 입장
     public void JoinRoom()
     {
         string roomName = PhotonNetwork.NickName + "'s ScrapBook";
@@ -92,14 +98,17 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
     }
 
 
+    // [Map]----------------------------------------------------------------------------------------------------------
     // Map 입장
     public void JoinMap()
     {
         PhotonNetwork.LoadLevel("Meta_Map_Scene");
     }
 
+
+    // [Town]----------------------------------------------------------------------------------------------------------
     // Town 생성 후 입장
-    public void CreateTown()
+    public void CreateAndJoinTown()
     {
         loadLevelName = "Meta_Town_Scene";
 
@@ -122,7 +131,6 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRoom("Town");
     }
 
-    
 
     // 방 생성 성공했을 때 호출되는 함수
     public override void OnCreatedRoom()
@@ -142,5 +150,47 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         PhotonNetwork.LoadLevel(loadLevelName);
         // 멀티플레이 컨텐츠 즐길 수 있는 상태
     }
+
+
+    // [Room 에서 나가기]--------------------------------------------------------------------------------------------------
+    // ScrapBook -> Channel
+    public void ScrapBookToChannel()
+    {
+        PhotonNetwork.LeaveRoom();
+        roomNumber = 1;
+    }
+
+    // ScrapBook -> Map
+    public void ScrapBookToMap()
+    {
+        PhotonNetwork.LeaveRoom();
+        roomNumber = 2;
+    }
+
+    // Room 에서 나오면 호출되는 함수
+    public override void OnLeftRoom()
+    {
+        base.OnLeftRoom();
+        print("방 나와서 이동");
+
+        // 만약 룸넘버가 1이면, Channel 로 이동한다.
+        if (roomNumber == 1)
+        {
+            JoinChannel();
+        }
+        // 만약 룸넘버가 2면, Map 으로 이동한다.
+        if (roomNumber == 2)
+        {
+            JoinMap();
+        }
+        
+    }
+
+
+    
+
+    
+
+    
 
 }
