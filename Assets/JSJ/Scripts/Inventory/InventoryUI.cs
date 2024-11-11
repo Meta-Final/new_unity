@@ -26,6 +26,8 @@ public class InventoryUI : MonoBehaviour
     public GameObject largeImagePreviewPanel; // 큰 이미지 패널
     public RawImage largeImagePreview;        // 확대 이미지를 표시할 RawImage
     public Button closeButton;                // 큰 이미지 닫기
+
+    public GameObject Colorbtn;
     private void Start()
     {
         // 지금 'Meta_ScrapBook_Scene'이라면, 액자를 찾아라.
@@ -64,6 +66,7 @@ public class InventoryUI : MonoBehaviour
 
         }
     }
+   
 
     // 스크린샷 클릭하면 발동하는 함수
     public void OnSlotClick(int index)
@@ -131,6 +134,7 @@ public class InventoryUI : MonoBehaviour
     {
         postItColor = color;
     }
+   
     public void OnPostitButtionClick()
     {
         if (selectScreenshot != null)

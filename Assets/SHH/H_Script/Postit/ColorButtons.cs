@@ -8,21 +8,20 @@ public class ColorButtons : MonoBehaviour
 {
     public InventoryUI inventoryUI;
     Color myColor;
-    public GameObject colorbtn;
+
     void Start()
     {
         myColor = GetComponent<Image>().color;
         GetComponent<Button>().onClick.AddListener(TransferMyColor);
-    }
+    }    
+
 
 
 
     void TransferMyColor()
     {
-        inventoryUI.SetPostItColor(myColor);
+       inventoryUI.SetPostItColor(myColor);
     }
-    void CloseColorbtn()
-    {
-        colorbtn.SetActive(false);
-    }
+
+
 }
