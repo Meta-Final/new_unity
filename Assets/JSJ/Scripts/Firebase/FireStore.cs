@@ -85,13 +85,36 @@ public class FireStore : MonoBehaviour
             // 불러온 정보를 UserInfo 변수에 저장
             UserInfo loadInfo = task.Result.ConvertTo<UserInfo>();
 
+            string userId = loadInfo.userId;
+            string userNickName = loadInfo.nickName;
+
+            SaveUserInfo(userId, userNickName);
+
             // 불러온 정보 전달
             MetaConnectionMgr.instance.JoinLobby(loadInfo);
-           
+
         }
         else
         {
             print("회원정보 불러오기 실패 : " + task.Exception);
         }
     }
+
+    // 유저 아이디 / 닉네임 저장하는 함수
+    public void SaveUserInfo(string userId, string userNickName)
+    {
+        PlayerPrefs.SetString("UserId", userId);
+        PlayerPrefs.SetString("Nickname", userNickName);
+        PlayerPrefs.Save();
+        print("유저 아이디와 닉네임이 저장되었습니다.");
+
+    }
+
+    // 유저 아이디 / 닉네임을 불러오는 함수
+    //public void GetUserId()
+    //{
+    //    string userId = PlayerPrefs.GetString("UserId", "DefaultUserId");
+    //    string userNickName = PlayerPrefs.GetString("Nickname", "DefaultNickname");
+    //}
+
 }
