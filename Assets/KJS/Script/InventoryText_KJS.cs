@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using Photon.Pun;
 
-public class InventoryText_KJS : MonoBehaviour
+public class InventoryText_KJS : MonoBehaviourPun
 {
     public List<string> inventoryPostIds = new List<string>(); // 인스펙터에서 할당할 postId 리스트
     public string inventorySlotPrefabPath = "Prefabs/InventorySlotUI"; // Resources 폴더 내 프리팹 경로
@@ -80,16 +81,16 @@ public class InventoryText_KJS : MonoBehaviour
         // 해당 postId가 딕셔너리에 있는지 확인
         if (postInfoDict.TryGetValue(postId, out H_PostInfo postInfo))
         {
-            // Resources 폴더에서 프리팹 로드
-            GameObject inventorySlotPrefab = Resources.Load<GameObject>(inventorySlotPrefabPath);
-            if (inventorySlotPrefab == null)
+            // PhotonNetwork.Instantiate로 네트워크를 통해 프리팹 생성
+            GameObject newSlot = PhotonNetwork.Instantiate(inventorySlotPrefabPath, Vector3.zero, Quaternion.identity);
+            if (newSlot == null)
             {
                 Debug.LogError("Inventory Slot UI 프리팹을 Resources 폴더에서 찾을 수 없습니다. 경로를 확인하세요: " + inventorySlotPrefabPath);
                 return;
             }
 
-            // 새로운 슬롯 UI 생성
-            GameObject newSlot = Instantiate(inventorySlotPrefab, inventoryPanel);
+            // 슬롯 UI를 인벤토리 패널 아래에 배치
+            newSlot.transform.SetParent(inventoryPanel, false);
             inventorySlots.Add(newSlot);
 
             // 해당 postInfo의 thumburl을 사용하여 이미지를 로드하여 슬롯에 설정
