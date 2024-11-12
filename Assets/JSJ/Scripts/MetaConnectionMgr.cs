@@ -210,10 +210,24 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
     }
 
 
+    public TMP_InputField emial;
+    public TMP_InputField password;
     
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.F1))
+        {
+            emial.text = "emflazlwm@naver.com";
+            password.text = "jkogji4102!";
+        }
 
-    
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            emial.text = "1@naver.com";
+            password.text = "111111";
+        }
+    }
 
-    
+
 
 }
