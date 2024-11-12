@@ -6,6 +6,7 @@ public class ZoomOnClick : MonoBehaviour
 {
     public Camera mainCamera;
 
+    public GameObject canvasGlitch;
     public GameObject canvasSignIn;
    
     public Transform targetPos;
@@ -50,9 +51,13 @@ public class ZoomOnClick : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
+        // 글리치 로고 비활성화
+        canvasGlitch.SetActive(false);
+
         // 로그인 UI 활성화
         canvasSignIn.SetActive(true);
 
+        // Zoom 불가능 상태
         isZoom = false;
 
     }
