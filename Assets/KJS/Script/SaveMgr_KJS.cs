@@ -261,13 +261,11 @@ public class SaveMgr_KJS : MonoBehaviour
                 targetPost.pages.Add(newPage);
             }
 
-            // 포스트 ID를 파일명으로 사용하여 JSON 데이터를 직렬화하고 개별 파일에 저장
-            string postFileName = $"{targetPostId}.json";
-            string postSavePath = Path.Combine(saveDirectory, postFileName);
-            string json = JsonUtility.ToJson(targetPost, true);
-            File.WriteAllText(postSavePath, json);
+            // 모든 데이터를 하나의 파일(magazine.json)로 저장
+            string json = JsonUtility.ToJson(rootData, true);
+            File.WriteAllText(savePath, json);
 
-            Debug.Log($"Data saved locally at {postSavePath}. Post ID: {targetPost.postId}");
+            Debug.Log($"All data saved locally in magazine.json at {savePath}");
         }
         catch (Exception e)
         {
