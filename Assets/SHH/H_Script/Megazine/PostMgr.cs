@@ -33,7 +33,6 @@ public class PostMgr : MonoBehaviour
 
     void Start()
     {
-        return;
         GameObject editorManagerObj = GameObject.Find("EditorManager");
         if (editorManagerObj != null)
         {

@@ -5,6 +5,7 @@ using UnityEngine;
 public class ToolbtnMgr : MonoBehaviour
 {
     public static ToolbtnMgr instance;
+
     private void Awake()
     {
         if (instance == null)
