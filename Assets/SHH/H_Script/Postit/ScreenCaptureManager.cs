@@ -41,14 +41,15 @@ public class ScreenCaptureManager : MonoBehaviour
         //마우스를 떼면 드래그 끝
             if (Input.GetMouseButtonUp(0) && isDragging)
         {
-            EndDrag();
+            EndDrag();  
+            StartCoroutine(CaptureScreen());
         }
 
         // 스페이스바 입력 처리
-        if (Input.GetKeyDown(KeyCode.Space) && !isDragging)
-        {
-            StartCoroutine(CaptureScreen());
-        }
+       // if (Input.GetKeyDown(KeyCode.Space) && !isDragging)
+        //{
+          
+      //  }
     }
 
     private void StartDrag()
