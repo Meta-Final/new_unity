@@ -121,6 +121,14 @@ public class Thumbnail_KJS : MonoBehaviour
     {
         try
         {
+            // 경로가 존재하지 않으면 생성
+            string directoryPath = Path.GetDirectoryName(jsonFilePath);
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+                Debug.Log($"JSON 파일 저장 경로 생성됨: {directoryPath}");
+            }
+
             string json = JsonUtility.ToJson(postInfoList, true);
 
             File.WriteAllText(jsonFilePath, json);
