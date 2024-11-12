@@ -182,19 +182,47 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         roomNumber = 4;
     }
 
+
     // Room 에서 나오면 호출되는 함수
     public override void OnLeftRoom()
     {
         base.OnLeftRoom();
         print("방 나와서 이동 : " + roomNumber);
 
+        // 마스터 서버에 접속해있지 않다면,
+        if (!PhotonNetwork.IsConnectedAndReady)
+        {
+            // 접속 시도
+            PhotonNetwork.ConnectUsingSettings();
+        }
+        // 이미 마스터 서버에 접속해있다면,
+        else
+        {
+            // 룸 이동
+            RoomTransition();
+        }
+    }
+
+    // 마스터 서버에 접속하면 호출되는 함수
+    public override void OnConnectedToMaster()
+    {
+        base.OnConnectedToMaster();
+        Debug.Log("마스터 서버에 재접속했습니다.");
+
+        // 룸 이동
+        RoomTransition();
+    }
+
+    // 룸 이동 함수
+    public void RoomTransition()
+    {
         // 만약 룸넘버가 1이면, Channel 로 이동한다.
         if (roomNumber == 1)
         {
             JoinChannel();
         }
         // 만약 룸넘버가 2이거나 4면, Folder 로 이동한다.
-        if (roomNumber == 2 || roomNumber ==4)
+        if (roomNumber == 2 || roomNumber == 4)
         {
             JoinFolder();
         }
@@ -204,10 +232,17 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
             JoinOrCreateRoom();
         }
 
-
-        
-        
+        // 이동 후 초기화
+        roomNumber = 0;
     }
+
+
+
+
+
+
+
+
 
 
     public TMP_InputField emial;
