@@ -8,27 +8,47 @@ using ReqRes;
 
 public class APIManager : MonoBehaviour
 {
+    FireStore firestore;
+
+    AuthURL authURL = new AuthURL();
     ArticleURL articleURL = new ArticleURL();
     AIURL aiUrl = new AIURL();
+    
+    public void Start()
+    {
+        GameObject firebase = GameObject.Find("Firebase");
+        firestore = firebase.GetComponent<FireStore>();
+    }
+    
+    //회원가입
+    public void Auth()
+    {
+        string id = firestore.UserInfo().userid;
+        AuthRequest auth = new AuthRequest {userid = id};
+        string authUrl = authURL.authURL;
+        StartCoroutine(GetHttp<AuthRequest>(auth, authUrl));
+    }
 
     //기사 호출 관련 함수
-    public void SearchArticle()
+    public void SearchArticle(string query, int limit)
     {   
-        SearchRequest searchRequest = new SearchRequest();
+        SearchRequest searchRequest = new SearchRequest{query = query, limit = limit};
         string searchUrl = articleURL.searchURL;
         StartCoroutine(PostHttp<SearchRequest, SearchResponse>(searchRequest, searchUrl));
     }
     
-    public void CreateArticle(string text)
+    public void CreateArticle()
     {   
-        Article article = new Article();
+        string id = firestore.UserInfo().userid;
+        Article article = new Article{userid = id};
         string createUrl = articleURL.createURL;
         StartCoroutine(PostHttp<Article, Article>(article, createUrl));
     }
 
-    public void GetArticle(string text)
+    public void GetArticle()
     {   
-        Article article = new Article();
+        string id = firestore.UserInfo().userid;
+        Article article = new Article{userid = id};
         string getUrl = articleURL.getURL;
         StartCoroutine(PostHttp<Article, Article>(article, getUrl));
     }
@@ -91,10 +111,10 @@ public class APIManager : MonoBehaviour
     }
 
     //Http 메서드 get
-    public IEnumerator GetHttp<TRequest, TResponse>(TRequest requestObject, string url)
+    public IEnumerator GetHttp<TRequest>(TRequest requestObject, string url)
     {   
         string json = JsonUtility.ToJson(requestObject);
-        
+    
         using (UnityWebRequest www = UnityWebRequest.Get(url))
         {
             www.downloadHandler = new DownloadHandlerBuffer();
@@ -104,12 +124,11 @@ public class APIManager : MonoBehaviour
 
             if (www.result == UnityWebRequest.Result.Success)
             {
-                TResponse responseObject = JsonUtility.FromJson<TResponse>(www.downloadHandler.text);
-                Debug.Log("Response: " + JsonUtility.ToJson(responseObject));
+                Debug.Log("Request successful. Status Code: " + www.responseCode);
             }
             else
-            {
-                Debug.LogError($"Error: {www.error}, Status Code: {www.responseCode}, Response: {www.downloadHandler.text}" );
+            {   
+                Debug.LogError($"Error: {www.error}, Status Code: {www.responseCode}");
             }
         }
     }

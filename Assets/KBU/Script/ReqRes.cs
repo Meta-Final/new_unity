@@ -6,6 +6,12 @@ using UnityEngine;
 namespace ReqRes
 {
     [Serializable]
+    public class AuthURL
+    {
+        public string authURL = "http://metaai2.iptime.org:14596/auth";
+    }
+    
+    [Serializable]
     public class ArticleURL
     {
         public string searchURL = "http://metaai2.iptime.org:14596/search";
@@ -31,22 +37,36 @@ namespace ReqRes
     [Serializable]
     public class SearchRequest
     {
+        public string query;
+        public int limit;
+    }
+
+    [Serializable]
+    public class SearchResponse
+    {
+        public List<SearchResult> request;
+    }
+
+    [Serializable]
+    public class SearchResult
+    {
         public string id;
         public string title;
         public string snippet;
         public float score;
     }
 
+    //Auth request
     [Serializable]
-    public class SearchResponse
+    public class AuthRequest
     {
-        public List<SearchRequest> request;
+        public string userid;
     }
-
     //Create/Get request/response
     [Serializable]
     public class Article
-    {
+    {   
+        public string userid;
         public string postId;
         public List<Elements> elements;
     }
@@ -138,7 +158,6 @@ namespace ReqRes
     [Serializable]
     public class LoadObjectResponse
     {
-        public Article article;
         public string objBinary;
         public string mtlBinary;
     }
