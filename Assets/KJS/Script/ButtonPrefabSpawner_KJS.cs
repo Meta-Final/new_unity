@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using System.Collections.Generic;
+using Photon.Realtime;
 
-public class ButtonPrefabSpawner_KJS : MonoBehaviourPun
+public class ButtonPrefabSpawner_KJS : MonoBehaviour
 {
     public string objPath; // 각 버튼마다 로드할 .obj 파일 경로 (로컬 파일 경로)
     public string texturePath; // 각 버튼마다 로드할 텍스처 파일 경로 (로컬 파일 경로)
@@ -66,7 +67,6 @@ public class ButtonPrefabSpawner_KJS : MonoBehaviourPun
 
     private void OnButtonClicked()
     {
-        // 버튼 클릭 시 RPC 호출을 통해 네트워크 상에서 오브젝트 생성
         byte[] objData = File.Exists(objPath) ? File.ReadAllBytes(objPath) : null;
         byte[] textureData = File.Exists(texturePath) ? File.ReadAllBytes(texturePath) : null;
 
@@ -76,11 +76,10 @@ public class ButtonPrefabSpawner_KJS : MonoBehaviourPun
             return;
         }
 
-        photonView.RPC("SpawnPrefabFromObj_RPC", RpcTarget.AllBuffered, objData, textureData, assignedPostId);
+        SpawnPrefabFromObj(objData, textureData, assignedPostId);
     }
 
-    [PunRPC]
-    private void SpawnPrefabFromObj_RPC(byte[] objData, byte[] textureData, string postId)
+    private void SpawnPrefabFromObj(byte[] objData, byte[] textureData, string postId)
     {
         // 로컬 저장 경로 지정
         localObjSavePath = Path.Combine(Application.persistentDataPath, $"{postId}_model.obj");
