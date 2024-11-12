@@ -755,7 +755,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &124278968
 RectTransform:
   m_ObjectHideFlags: 0
@@ -900,8 +900,8 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 0
-  m_InputType: 0
+  m_ContentType: 7
+  m_InputType: 2
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 0
@@ -1038,7 +1038,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1894,7 +1894,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.16862746, g: 0.4392157, b: 1, a: 0.4627451}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.47058824}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2676,6 +2676,7 @@ GameObject:
   m_Component:
   - component: {fileID: 548477914}
   - component: {fileID: 548477913}
+  - component: {fileID: 548477915}
   m_Layer: 0
   m_Name: Video Player
   m_TagString: Untagged
@@ -2691,7 +2692,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 548477912}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: be246fae19500424380bd989debc0637, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: 8b441ea5cbaea52498b728b9c3e15cd5, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
@@ -2732,6 +2733,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &548477915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 548477912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ea27e36d27048941820f354765c01f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  videoPlayer: {fileID: 0}
+  videoSpeed: 0.2
 --- !u!1 &559620467
 GameObject:
   m_ObjectHideFlags: 0
@@ -3006,7 +3021,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 2f4e0e58264dccb47bdbe79edc19dbe5, type: 3}
+  m_Texture: {fileID: 2800000, guid: d9de4de4307f0d84ab0a8cca45a75733, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -3071,7 +3086,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.16862746, g: 0.4392157, b: 1, a: 0.4627451}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.47058824}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3540,7 +3555,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &736618221
 GameObject:
   m_ObjectHideFlags: 0
@@ -3888,7 +3903,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &764487529
 GameObject:
   m_ObjectHideFlags: 0
@@ -4168,6 +4183,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 796847334}
+  - component: {fileID: 796847335}
   m_Layer: 0
   m_Name: Toggle
   m_TagString: Untagged
@@ -4193,6 +4209,21 @@ Transform:
   - {fileID: 726889274}
   m_Father: {fileID: 1297944979}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &796847335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 796847333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60e3946142ac27e42be1d944dea33301, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  t_Fashion: {fileID: 1733022622}
+  t_Sports: {fileID: 761048253}
+  t_Cook: {fileID: 726889275}
 --- !u!1 &806981134
 GameObject:
   m_ObjectHideFlags: 0
@@ -4613,7 +4644,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5328,8 +5359,8 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 0
-  m_InputType: 0
+  m_ContentType: 7
+  m_InputType: 2
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 0
@@ -5588,6 +5619,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadLevelName: 
+  emial: {fileID: 0}
+  password: {fileID: 0}
 --- !u!114 &1035849866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5617,7 +5650,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1045363980
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6575,7 +6608,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1211705737
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7199,7 +7232,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7379,13 +7412,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1369630690}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.49119762, y: 0.50865006, z: 0.49119762, w: 0.50865006}
+  m_LocalRotation: {x: 0.4822456, y: -0.5171452, z: 0.4822456, w: 0.5171452}
   m_LocalPosition: {x: -0.15036273, y: 0.09872818, z: 0.0328}
   m_LocalScale: {x: -0.011734305, y: 0.19975673, z: 0.009092695}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7215774088050795154}
-  m_LocalEulerAnglesHint: {x: -93, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 86, y: -90, z: 0}
 --- !u!1 &1370784418
 GameObject:
   m_ObjectHideFlags: 0
@@ -7920,8 +7953,8 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 0
-  m_InputType: 0
+  m_ContentType: 7
+  m_InputType: 2
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 0
@@ -9104,7 +9137,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &1755568002
 GameObject:
   m_ObjectHideFlags: 0
@@ -10300,7 +10333,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.16862746, g: 0.4392157, b: 1, a: 0.4627451}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.47058824}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
