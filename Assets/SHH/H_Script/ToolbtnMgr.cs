@@ -26,6 +26,7 @@ public class ToolbtnMgr : MonoBehaviour
     public void Exitpanel()
     {
         GameObject Magazinepanel = transform.Find("MagazineView 2").gameObject;
+       
         Magazinepanel.SetActive(false);
 
 

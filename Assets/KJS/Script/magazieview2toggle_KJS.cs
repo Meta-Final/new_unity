@@ -8,12 +8,16 @@ public class magazieview2toggle_KJS : MonoBehaviour
     [SerializeField] private GameObject targetUI; // 토글할 UI 오브젝트
     private bool isUIToggled = false;
 
+    public GameObject roombtn;
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
             isUIToggled = !isUIToggled;
             targetUI.SetActive(isUIToggled);
+            roombtn.SetActive(false);
         }
+        
+        
     }
 }

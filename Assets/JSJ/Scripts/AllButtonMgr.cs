@@ -5,9 +5,13 @@ using UnityEngine.UI;
 
 public class AllButtonMgr : MonoBehaviour
 {
+
+    public Button btn_Exit;
+
+    GameObject Magazinepanel = null;
     void Start()
     {
-
+        btn_Exit.onClick.AddListener(OnClickExitbtn);
     }
 
     void Update()
@@ -61,7 +65,12 @@ public class AllButtonMgr : MonoBehaviour
     //크리에이터툴 닫기
     public void OnClickExitbtn()
     {
-        ToolbtnMgr.instance.Exitpanel();
+
+        if(Magazinepanel == null)
+        {
+            Magazinepanel = GameObject.Find("MagazineView 2");
+        }
+        Magazinepanel.transform.GetChild(0).gameObject.SetActive(false);
     }
    
 }
