@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using System.IO;
 
 public class InventoryText_KJS : MonoBehaviour
 {
@@ -14,10 +15,11 @@ public class InventoryText_KJS : MonoBehaviour
     private Dictionary<string, H_PostInfo> postInfoDict = new Dictionary<string, H_PostInfo>(); // postId별로 아이템 데이터를 저장할 딕셔너리
 
     private int previousItemCount = 0; // 이전 inventoryPostIds 개수를 저장하여 변화 감지
+    private string baseDirectory = @"C:\Users\Admin\Documents\GitHub\new_unity\Assets\KJS\UserInfo"; // 기본 저장 경로
 
     void Start()
     {
-        StartCoroutine(LoadPostInfoFromJson());
+        StartCoroutine(LoadPostInfoFromFolders());
     }
 
     void Update()
@@ -30,22 +32,32 @@ public class InventoryText_KJS : MonoBehaviour
         }
     }
 
-    // JSON 데이터를 로드하여 PostInfoList를 초기화하는 코루틴
-    private IEnumerator LoadPostInfoFromJson()
+    // 각 postId별 폴더에서 JSON 데이터를 로드하여 PostInfoList를 초기화하는 코루틴
+    private IEnumerator LoadPostInfoFromFolders()
     {
-        string jsonFilePath = "file:///C:/Users/Admin/Documents/GitHub/new_unity/Assets/KJS/UserInfo/thumbnail.json";
-
-        UnityWebRequest request = UnityWebRequest.Get(jsonFilePath);
-        yield return request.SendWebRequest();
-
-        if (request.result == UnityWebRequest.Result.Success)
+        if (Directory.Exists(baseDirectory))
         {
-            PostInfoList postInfoList = JsonUtility.FromJson<PostInfoList>(request.downloadHandler.text);
+            string[] postDirectories = Directory.GetDirectories(baseDirectory);
 
-            // postData 리스트를 딕셔너리에 저장하여 빠르게 조회할 수 있도록 준비
-            foreach (H_PostInfo post in postInfoList.postData)
+            foreach (string postDirectory in postDirectories)
             {
-                postInfoDict[post.postid] = post;
+                string jsonFilePath = Path.Combine(postDirectory, "thumbnail.json");
+
+                if (File.Exists(jsonFilePath))
+                {
+                    string jsonContent = File.ReadAllText(jsonFilePath);
+                    PostInfoList postInfoList = JsonUtility.FromJson<PostInfoList>(jsonContent);
+
+                    // postData 리스트를 딕셔너리에 저장하여 빠르게 조회할 수 있도록 준비
+                    foreach (H_PostInfo post in postInfoList.postData)
+                    {
+                        postInfoDict[post.postid] = post;
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning($"폴더 {postDirectory}에 thumbnail.json 파일이 없습니다.");
+                }
             }
 
             // 초기 인벤토리 설정
@@ -53,8 +65,10 @@ public class InventoryText_KJS : MonoBehaviour
         }
         else
         {
-            Debug.LogError("JSON 파일을 불러오는 데 실패했습니다: " + request.error);
+            Debug.LogError($"기본 디렉토리가 존재하지 않습니다: {baseDirectory}");
         }
+
+        yield return null;
     }
 
     // 인벤토리 슬롯 UI를 업데이트하는 메서드
@@ -93,7 +107,7 @@ public class InventoryText_KJS : MonoBehaviour
             inventorySlots.Add(newSlot);
 
             // 해당 postInfo의 thumburl을 사용하여 이미지를 로드하여 슬롯에 설정
-            StartCoroutine(LoadAndSetThumbnail(postInfo.thumburl, newSlot));
+            StartCoroutine(LoadAndSetThumbnail(postInfo, newSlot));
         }
         else
         {
@@ -102,9 +116,9 @@ public class InventoryText_KJS : MonoBehaviour
     }
 
     // 이미지 파일을 로드하여 슬롯에 설정하는 코루틴
-    private IEnumerator LoadAndSetThumbnail(string imagePath, GameObject slot)
+    private IEnumerator LoadAndSetThumbnail(H_PostInfo postInfo, GameObject slot)
     {
-        string filePath = "file:///" + imagePath; // 로컬 파일 경로
+        string filePath = "file:///" + postInfo.thumburl; // 각 postId별 폴더 내 이미지 파일 경로
 
         UnityWebRequest textureRequest = UnityWebRequestTexture.GetTexture(filePath);
         yield return textureRequest.SendWebRequest();

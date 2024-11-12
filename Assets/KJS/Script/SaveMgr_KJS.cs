@@ -167,14 +167,6 @@ public class SaveMgr_KJS : MonoBehaviour
 
     private void SaveObjectsToFile()
     {
-        //// 로그인 확인
-        //if (!MetaFireAuth.instance.IsLoggedIn)
-        //{
-        //    Debug.LogError("Firebase에 로그인되어 있지 않습니다. 자동 로그인을 시도합니다.");
-        //    MetaFireAuth.instance.SignInWithTemporaryAccount();
-        //    return;
-        //}
-
         string targetPostId = inputPostIdField.text;
 
         if (string.IsNullOrWhiteSpace(targetPostId))
@@ -185,6 +177,17 @@ public class SaveMgr_KJS : MonoBehaviour
 
         try
         {
+            // postId에 따라 저장 경로 설정
+            string postDirectory = Path.Combine(saveDirectory, targetPostId);
+            string postSavePath = Path.Combine(postDirectory, saveFileName);
+
+            // 해당 postId의 폴더가 없으면 생성
+            if (!Directory.Exists(postDirectory))
+            {
+                Directory.CreateDirectory(postDirectory);
+                Debug.Log($"Directory created at: {postDirectory}");
+            }
+
             // 동일한 postId가 이미 있는지 확인
             Post existingPost = rootData.posts.Find(post => post.postId == targetPostId);
 
@@ -263,9 +266,9 @@ public class SaveMgr_KJS : MonoBehaviour
 
             // 모든 데이터를 하나의 파일(magazine.json)로 저장
             string json = JsonUtility.ToJson(rootData, true);
-            File.WriteAllText(savePath, json);
+            File.WriteAllText(postSavePath, json);
 
-            Debug.Log($"All data saved locally in magazine.json at {savePath}");
+            Debug.Log($"All data saved locally in {postSavePath}");
         }
         catch (Exception e)
         {
@@ -283,80 +286,105 @@ public class SaveMgr_KJS : MonoBehaviour
             return;
         }
 
-        Post targetPost = rootData.posts.Find(post => post.postId == targetPostId);
+        // postId에 따라 저장된 경로 설정
+        string postDirectory = Path.Combine(saveDirectory, targetPostId);
+        string postLoadPath = Path.Combine(postDirectory, saveFileName);
 
-        if (targetPost == null)
+        // 해당 경로에 magazine.json 파일이 있는지 확인
+        if (!File.Exists(postLoadPath))
         {
-            Debug.LogWarning($"postId '{targetPostId}'에 해당하는 게시물이 없습니다.");
+            Debug.LogWarning($"postId '{targetPostId}'에 해당하는 파일이 없습니다: {postLoadPath}");
             return;
         }
 
-        textBoxes.ForEach(Destroy);
-        imageBoxes.ForEach(Destroy);
-        pages.ForEach(Destroy);
-
-        textBoxes.Clear();
-        imageBoxes.Clear();
-        pages.Clear();
-
-        foreach (var page in targetPost.pages)
+        try
         {
-            GameObject newPage = Instantiate(pagePrefab, pagesParentTransform);
-            InitializePage(newPage);
+            // 파일에서 데이터를 읽어와 JSON 파싱
+            string json = File.ReadAllText(postLoadPath);
+            rootData = JsonUtility.FromJson<RootObject>(json);
 
-            foreach (var element in page.elements)
+            // 지정된 postId의 게시물을 찾기
+            Post targetPost = rootData.posts.Find(post => post.postId == targetPostId);
+
+            if (targetPost == null)
             {
-                if (element.type == Element.ElementType.Text_Box)
+                Debug.LogWarning($"postId '{targetPostId}'에 해당하는 게시물이 없습니다.");
+                return;
+            }
+
+            // 기존 UI 요소 초기화
+            textBoxes.ForEach(Destroy);
+            imageBoxes.ForEach(Destroy);
+            pages.ForEach(Destroy);
+
+            textBoxes.Clear();
+            imageBoxes.Clear();
+            pages.Clear();
+
+            // 로드한 데이터를 바탕으로 페이지와 요소 생성
+            foreach (var page in targetPost.pages)
+            {
+                GameObject newPage = Instantiate(pagePrefab, pagesParentTransform);
+                InitializePage(newPage);
+
+                foreach (var element in page.elements)
                 {
-                    GameObject newTextBox = Instantiate(textBoxPrefab, newPage.transform);
-                    InitializeTextBox(newTextBox);
-
-                    newTextBox.transform.localPosition = element.position;
-                    newTextBox.transform.localScale = element.scale;
-
-                    TMP_Text textComponent = newTextBox.GetComponentInChildren<TMP_Text>();
-                    if (textComponent != null)
+                    if (element.type == Element.ElementType.Text_Box)
                     {
-                        textComponent.text = element.content;
-                        textComponent.fontSize = element.fontSize;
+                        GameObject newTextBox = Instantiate(textBoxPrefab, newPage.transform);
+                        InitializeTextBox(newTextBox);
 
-                        TMP_FontAsset fontAsset = Resources.Load<TMP_FontAsset>($"Fonts/{element.fontFace}");
-                        if (fontAsset != null) textComponent.font = fontAsset;
+                        newTextBox.transform.localPosition = element.position;
+                        newTextBox.transform.localScale = element.scale;
 
-                        textComponent.fontStyle = FontStyles.Normal;
-                        if (element.isUnderlined) textComponent.fontStyle |= FontStyles.Underline;
-                        if (element.isStrikethrough) textComponent.fontStyle |= FontStyles.Strikethrough;
+                        TMP_Text textComponent = newTextBox.GetComponentInChildren<TMP_Text>();
+                        if (textComponent != null)
+                        {
+                            textComponent.text = element.content;
+                            textComponent.fontSize = element.fontSize;
+
+                            TMP_FontAsset fontAsset = Resources.Load<TMP_FontAsset>($"Fonts/{element.fontFace}");
+                            if (fontAsset != null) textComponent.font = fontAsset;
+
+                            textComponent.fontStyle = FontStyles.Normal;
+                            if (element.isUnderlined) textComponent.fontStyle |= FontStyles.Underline;
+                            if (element.isStrikethrough) textComponent.fontStyle |= FontStyles.Strikethrough;
+                        }
                     }
-                }
-                else if (element.type == Element.ElementType.Image_Box)
-                {
-                    GameObject newImageBox = Instantiate(imageBoxPrefab, newPage.transform);
-                    InitializeImageBox(newImageBox);
-
-                    newImageBox.transform.localPosition = element.position;
-                    newImageBox.transform.localScale = element.scale;
-
-                    Image imageComponent = newImageBox.transform.GetChild(0).GetComponent<Image>();
-                    if (imageComponent != null && element.imageData != null && element.imageData.Length > 0)
+                    else if (element.type == Element.ElementType.Image_Box)
                     {
-                        Texture2D texture = Element.DecodeImageFromBytes(element.imageData);
-                        imageComponent.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+                        GameObject newImageBox = Instantiate(imageBoxPrefab, newPage.transform);
+                        InitializeImageBox(newImageBox);
+
+                        newImageBox.transform.localPosition = element.position;
+                        newImageBox.transform.localScale = element.scale;
+
+                        Image imageComponent = newImageBox.transform.GetChild(0).GetComponent<Image>();
+                        if (imageComponent != null && element.imageData != null && element.imageData.Length > 0)
+                        {
+                            Texture2D texture = Element.DecodeImageFromBytes(element.imageData);
+                            imageComponent.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+                        }
                     }
                 }
             }
+
+            // 페이지 정보 업데이트
+            totalPages = pages.Count;
+            createMgr.pageCount = totalPages;
+            createMgr.UpdateContentWidth();
+            createMgr.UpdateScrollbarSteps();
+            UpdateScrollbar();
+
+            // 스크롤바 초기 위치 설정
+            pageScrollbar.value = 0f;
+
+            Debug.Log($"Data loaded successfully for postId '{targetPostId}' from {postLoadPath}.");
         }
-
-        totalPages = pages.Count;
-
-        createMgr.pageCount = totalPages;
-        createMgr.UpdateContentWidth();
-        createMgr.UpdateScrollbarSteps();
-
-        UpdateScrollbar();
-
-        pageScrollbar.value = 0f;
-
-        Debug.Log($"Data loaded successfully for postId '{targetPostId}'.");
+        catch (Exception e)
+        {
+            Debug.LogError($"Load failed: {e.Message}");
+        }
     }
 
     private void InitializePage(GameObject page)

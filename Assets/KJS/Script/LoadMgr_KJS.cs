@@ -45,14 +45,23 @@ public class LoadMgr_KJS : MonoBehaviour
         {
             Debug.Log($"LoadObjectsFromFile() called for postId: {postId}");
 
-            if (!File.Exists(savePath))
+            // postId에 따라 로드 경로 설정
+            string postDirectory = Path.Combine(saveDirectory, postId);
+            string postLoadPath = Path.Combine(postDirectory, saveFileName);
+
+            // 해당 경로에 magazine.json 파일이 있는지 확인
+            if (!File.Exists(postLoadPath))
             {
-                Debug.LogWarning("Save file not found.");
+                Debug.LogWarning($"postId '{postId}'에 해당하는 파일이 없습니다: {postLoadPath}");
                 return;
             }
 
-            LoadDataFromJsonFile();
+            // 파일에서 데이터를 읽어와 JSON 파싱
+            string json = File.ReadAllText(postLoadPath);
+            rootData = JsonUtility.FromJson<RootObject>(json);
+            Debug.Log("Data loaded from JSON file successfully.");
 
+            // 지정된 postId의 게시물을 찾기
             Post post = rootData.posts.Find(p => p.postId == postId);
             if (post == null)
             {
@@ -60,6 +69,7 @@ public class LoadMgr_KJS : MonoBehaviour
                 return;
             }
 
+            // 기존 UI 요소 초기화
             textBoxes.ForEach(Destroy);
             imageBoxes.ForEach(Destroy);
             pages.ForEach(Destroy);
@@ -68,6 +78,7 @@ public class LoadMgr_KJS : MonoBehaviour
             imageBoxes.Clear();
             pages.Clear();
 
+            // 로드한 데이터를 바탕으로 페이지와 요소 생성
             foreach (var page in post.pages)
             {
                 GameObject newPageObj = Instantiate(pagePrefab, pagesParentTransform);
@@ -116,6 +127,7 @@ public class LoadMgr_KJS : MonoBehaviour
                 }
             }
 
+            // 페이지 정보 업데이트
             totalPages = pages.Count;
             UpdateScrollbar();
 

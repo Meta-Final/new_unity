@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using System.IO;
 
 [System.Serializable]
 public class H_PostInfo
@@ -31,6 +32,8 @@ public class PostMgr : MonoBehaviour
     List<Button> btns = new List<Button>();
     public Button btn_Exit;
 
+    private string baseDirectory = @"C:\Users\Admin\Documents\GitHub\new_unity\Assets\KJS\UserInfo"; // 기본 저장 경로
+
     void Start()
     {
         GameObject editorManagerObj = GameObject.Find("EditorManager");
@@ -52,20 +55,46 @@ public class PostMgr : MonoBehaviour
 
     public void ThumStart()
     {
-        HttpInfo info = new HttpInfo();
-        info.url = "C:/Users/Admin/Documents/GitHub/new_unity/Assets/KJS/UserInfo/thumbnail.json";
-        info.onComplete = OncompletePostInfo;
+        // postId별로 저장된 폴더에서 thumbnail.json 파일을 찾습니다.
+        if (Directory.Exists(baseDirectory))
+        {
+            string[] postDirectories = Directory.GetDirectories(baseDirectory);
 
-        StartCoroutine(HttpManager.GetInstance().Get(info));
+            foreach (string postDirectory in postDirectories)
+            {
+                string jsonFilePath = Path.Combine(postDirectory, "thumbnail.json");
 
+                if (File.Exists(jsonFilePath))
+                {
+                    try
+                    {
+                        string json = File.ReadAllText(jsonFilePath);
+                        PostInfoList postInfoList = JsonUtility.FromJson<PostInfoList>(json);
+                        allPost.AddRange(postInfoList.postData);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError($"JSON 파일을 로드하는 동안 오류가 발생했습니다: {e.Message}");
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning($"폴더 {postDirectory}에 thumbnail.json 파일이 없습니다.");
+                }
+            }
+        }
+        else
+        {
+            Debug.LogError($"기본 디렉토리가 존재하지 않습니다: {baseDirectory}");
+        }
+
+        // 모든 포스트 정보를 로드한 후 UI 생성
+        CreatePostThumbnails();
         btn_Exit.onClick.AddListener(OnClickExit);
     }
 
-    public void OncompletePostInfo(DownloadHandler downloadhandler)
+    private void CreatePostThumbnails()
     {
-        PostInfoList postinfoList = JsonUtility.FromJson<PostInfoList>(downloadhandler.text);
-        allPost = postinfoList.postData;
-
         for (int i = 0; i < allPost.Count; i++)
         {
             GameObject go = Instantiate(prefabfactory, content.transform);

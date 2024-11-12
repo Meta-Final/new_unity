@@ -4,19 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using TMPro;
-using System.Text;
 
 public class Thumbnail_KJS : MonoBehaviour
 {
     public Button saveButton;   // 저장 버튼 (Inspector에서 연결)
     public Button loadButton;   // 로드 버튼 (Inspector에서 연결)
-    public Button modifyButton; // 수정 버튼 (Inspector에서 연결)
     public Image targetImage;   // 저장할 이미지가 할당된 Image 컴포넌트 (Inspector에서 할당)
     public TMP_InputField postIdInputField; // 사용자 입력을 통해 postId를 설정할 InputField (Inspector에서 할당)
 
     private PostInfoList postInfoList = new PostInfoList();  // 빈 리스트로 초기화
     private string saveDirectory = @"C:\Users\Admin\Documents\GitHub\new_unity\Assets\KJS\UserInfo";
-    private string jsonFilePath = @"C:\Users\Admin\Documents\GitHub\new_unity\Assets\KJS\UserInfo\thumbnail.json";
 
     void Start()
     {
@@ -40,30 +37,9 @@ public class Thumbnail_KJS : MonoBehaviour
             Debug.LogError("loadButton이 할당되지 않았습니다.");
         }
 
-        // 수정 버튼 설정
-        if (modifyButton != null)
-        {
-            modifyButton.onClick.AddListener(ModifyAndSaveImage); // 수정 버튼 클릭 시 이미지를 수정하고 저장
-        }
-        else
-        {
-            Debug.LogError("modifyButton이 할당되지 않았습니다.");
-        }
-
         if (postIdInputField == null)
         {
             Debug.LogError("postIdInputField가 할당되지 않았습니다. Inspector에서 postIdInputField를 설정하세요.");
-        }
-
-        EnsureDirectoryExists();
-    }
-
-    private void EnsureDirectoryExists()
-    {
-        if (!Directory.Exists(saveDirectory))
-        {
-            Directory.CreateDirectory(saveDirectory);
-            Debug.Log($"Directory created at: {saveDirectory}");
         }
     }
 
@@ -82,19 +58,45 @@ public class Thumbnail_KJS : MonoBehaviour
             return;
         }
 
-        string fileName = "UserImage_" + System.DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".png";
-        string imagePath = Path.Combine(saveDirectory, fileName);
+        // postId별 저장 경로 설정
+        string postId = postIdInputField.text;
+        string postDirectory = Path.Combine(saveDirectory, postId);
+        string jsonFilePath = Path.Combine(postDirectory, "thumbnail.json");
 
+        // postId별 디렉토리가 없으면 생성
+        if (!Directory.Exists(postDirectory))
+        {
+            Directory.CreateDirectory(postDirectory);
+            Debug.Log($"Directory created at: {postDirectory}");
+        }
+
+        // 이미지 파일 저장 경로
+        string fileName = "UserImage_" + System.DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".png";
+        string imagePath = Path.Combine(postDirectory, fileName);
+
+        // 이미지 파일을 로컬에 저장
         SaveImageToLocal(targetImage.sprite.texture, imagePath);
 
+        // 기존 JSON 파일이 있으면 로드하여 postInfoList를 업데이트
+        if (File.Exists(jsonFilePath))
+        {
+            string existingJson = File.ReadAllText(jsonFilePath);
+            postInfoList = JsonUtility.FromJson<PostInfoList>(existingJson);
+        }
+        else
+        {
+            postInfoList = new PostInfoList(); // 새로운 JSON 파일을 위해 리스트 초기화
+        }
+
+        // 새로운 포스트 정보를 생성하여 리스트에 추가
         H_PostInfo newPost = new H_PostInfo
         {
-            postid = postIdInputField.text,
+            postid = postId,
             thumburl = imagePath
         };
 
-        postInfoList.postData.Add(newPost);
-        SaveJsonToLocal();
+        postInfoList.postData.Add(newPost);  // 포스트 리스트에 추가
+        SaveJsonToLocal(jsonFilePath);  // postId별 폴더에 JSON 저장
     }
 
     private void SaveImageToLocal(Texture2D texture, string path)
@@ -117,20 +119,11 @@ public class Thumbnail_KJS : MonoBehaviour
         }
     }
 
-    private void SaveJsonToLocal()
+    private void SaveJsonToLocal(string jsonFilePath)
     {
         try
         {
-            // 경로가 존재하지 않으면 생성
-            string directoryPath = Path.GetDirectoryName(jsonFilePath);
-            if (!Directory.Exists(directoryPath))
-            {
-                Directory.CreateDirectory(directoryPath);
-                Debug.Log($"JSON 파일 저장 경로 생성됨: {directoryPath}");
-            }
-
             string json = JsonUtility.ToJson(postInfoList, true);
-
             File.WriteAllText(jsonFilePath, json);
             Debug.Log($"JSON 데이터가 로컬에 {jsonFilePath} 경로로 저장되었습니다.");
         }
@@ -149,7 +142,11 @@ public class Thumbnail_KJS : MonoBehaviour
             return;
         }
 
-        // JSON 파일 읽기
+        string postId = postIdInputField.text;
+        string postDirectory = Path.Combine(saveDirectory, postId);
+        string jsonFilePath = Path.Combine(postDirectory, "thumbnail.json");
+
+        // JSON 파일 존재 여부 확인
         if (!File.Exists(jsonFilePath))
         {
             Debug.LogError($"JSON 파일이 {jsonFilePath} 경로에 존재하지 않습니다.");
@@ -158,11 +155,12 @@ public class Thumbnail_KJS : MonoBehaviour
 
         try
         {
+            // JSON 파일 읽기
             string json = File.ReadAllText(jsonFilePath);
             postInfoList = JsonUtility.FromJson<PostInfoList>(json);
 
             // 입력된 postId와 일치하는 항목 찾기
-            H_PostInfo postInfo = postInfoList.postData.Find(post => post.postid == postIdInputField.text);
+            H_PostInfo postInfo = postInfoList.postData.Find(post => post.postid == postId);
             if (postInfo == null)
             {
                 Debug.LogError("해당 postId를 가진 항목을 찾을 수 없습니다.");
@@ -194,38 +192,5 @@ public class Thumbnail_KJS : MonoBehaviour
         {
             Debug.LogError($"JSON 파일을 로드하는 동안 오류가 발생했습니다: {e.Message}");
         }
-    }
-
-    // 이미지를 수정하고 로컬에 저장하는 메서드
-    void ModifyAndSaveImage()
-    {
-        if (targetImage == null || targetImage.sprite == null || targetImage.sprite.texture == null)
-        {
-            Debug.LogError("수정할 이미지가 설정되지 않았거나 텍스처가 없습니다.");
-            return;
-        }
-
-        // 텍스처 복사 및 수정 (여기서는 색상 반전을 예시로 함)
-        Texture2D originalTexture = targetImage.sprite.texture;
-        Texture2D modifiedTexture = new Texture2D(originalTexture.width, originalTexture.height);
-
-        for (int y = 0; y < originalTexture.height; y++)
-        {
-            for (int x = 0; x < originalTexture.width; x++)
-            {
-                Color originalColor = originalTexture.GetPixel(x, y);
-                Color modifiedColor = new Color(1 - originalColor.r, 1 - originalColor.g, 1 - originalColor.b); // 색상 반전
-                modifiedTexture.SetPixel(x, y, modifiedColor);
-            }
-        }
-        modifiedTexture.Apply();
-
-        // 수정된 텍스처를 다시 저장
-        string modifiedFileName = "ModifiedImage_" + System.DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".png";
-        string modifiedImagePath = Path.Combine(saveDirectory, modifiedFileName);
-
-        SaveImageToLocal(modifiedTexture, modifiedImagePath);
-
-        Debug.Log($"수정된 이미지가 {modifiedImagePath} 경로에 저장되었습니다.");
     }
 }
