@@ -1364,6 +1364,11 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: -17
       objectReference: {fileID: 0}
+    - target: {fileID: 2945048639361669581, guid: 61680cdcb6d60c2459ab6261dff78e04,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3768410226880252554, guid: 61680cdcb6d60c2459ab6261dff78e04,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -1412,7 +1417,7 @@ PrefabInstance:
     - target: {fileID: 6229091592516016793, guid: 61680cdcb6d60c2459ab6261dff78e04,
         type: 3}
       propertyPath: sceneViewId
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6290302308959592147, guid: 61680cdcb6d60c2459ab6261dff78e04,
         type: 3}
@@ -1926,6 +1931,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -4228479006557700922, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 1427670641148758666, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6588,6 +6598,7 @@ GameObject:
   - component: {fileID: 2445524370739886647}
   - component: {fileID: 3915990586021749780}
   - component: {fileID: 3678064410657637994}
+  - component: {fileID: 5481744956576156944}
   m_Layer: 16
   m_Name: Canvas_Inventory
   m_TagString: Untagged
@@ -6595,6 +6606,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &5481744956576156944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5481744956576156943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 3
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!224 &5506759484657947245
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7343,7 +7376,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents: []
-  sceneViewId: 2
+  sceneViewId: 7
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!4 &6261217873522501475
