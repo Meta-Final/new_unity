@@ -63,9 +63,6 @@ public class FireAuthManager : MonoBehaviour
 
             // 회원 정보 불러오기
             FireStore.instance.LoadUserInfo();
-
-            
-            
         }
         else
         {
