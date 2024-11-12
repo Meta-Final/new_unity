@@ -40,25 +40,13 @@ public class AllButtonMgr : MonoBehaviour
     }
 
 
+    //게임종료
 
+    public void Onclickpoweroff()
+    {
+        Application.Quit();
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //// 게임 종료
-    //public void GameOff()
-    //{
-
-    //}
+   
 }
 
