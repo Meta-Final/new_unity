@@ -26,6 +26,8 @@ public class FireStore : MonoBehaviour
 
     FirebaseFirestore store;
 
+    public UserInfo userInfo;
+
     private void Awake()
     {
         instance = this;
