@@ -63,6 +63,7 @@ public class FireAuthManager : MonoBehaviour
 
             // 회원 정보 불러오기
             FireStore.instance.LoadUserInfo();
+            
 
         }
         else
@@ -90,6 +91,8 @@ public class FireAuthManager : MonoBehaviour
         if (task.Exception == null)
         {
             print("회원가입 성공");
+            string userId = GetCurrentUserId();
+            userInfo.userId = userId;
 
             // 회원 정보 저장
             FireStore.instance.SaveUserInfo(userInfo);
@@ -107,4 +110,6 @@ public class FireAuthManager : MonoBehaviour
     {
         return auth.CurrentUser.UserId;
     }
+
+   
 }

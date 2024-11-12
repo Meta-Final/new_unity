@@ -5,18 +5,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// 내정보 or 회원정보
-[FirestoreData]
-public class UserInfo
-{
-    [FirestoreProperty]
-    public string name { get; set; }
-    [FirestoreProperty]
-    public string nickName { get; set; }
-    [FirestoreProperty]
-    public int userBirth { get; set; }
-}
-
 public class LoginSceneMgr : MonoBehaviour
 {
     [Header("Button")]

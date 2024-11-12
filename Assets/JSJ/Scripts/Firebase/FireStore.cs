@@ -6,6 +6,20 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
+// 내정보 or 회원정보
+[FirestoreData]
+public class UserInfo
+{
+    [FirestoreProperty]
+    public string userId { get; set; }
+    [FirestoreProperty]
+    public string name { get; set; }
+    [FirestoreProperty]
+    public string nickName { get; set; }
+    [FirestoreProperty]
+    public int userBirth { get; set; }
+}
+
 public class FireStore : MonoBehaviour
 {
     public static FireStore instance;
