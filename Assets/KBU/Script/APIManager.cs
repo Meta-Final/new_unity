@@ -23,10 +23,10 @@ public class APIManager : MonoBehaviour
     //회원가입
     public void Auth()
     {
-        string id = firestore.UserInfo().userid;
-        AuthRequest auth = new AuthRequest {userid = id};
-        string authUrl = authURL.authURL;
-        StartCoroutine(GetHttp<AuthRequest>(auth, authUrl));
+        //string id = firestore.UserInfo().userid;
+        //AuthRequest auth = new AuthRequest {userid = id};
+        //string authUrl = authURL.authURL;
+        //StartCoroutine(GetHttp<AuthRequest>(auth, authUrl));
     }
 
     //기사 호출 관련 함수
@@ -39,18 +39,18 @@ public class APIManager : MonoBehaviour
     
     public void CreateArticle()
     {   
-        string id = firestore.UserInfo().userid;
-        Article article = new Article{userid = id};
-        string createUrl = articleURL.createURL;
-        StartCoroutine(PostHttp<Article, Article>(article, createUrl));
+        //string id = firestore.UserInfo().userid;
+        //Article article = new Article{userid = id};
+        //string createUrl = articleURL.createURL;
+        //StartCoroutine(PostHttp<Article, Article>(article, createUrl));
     }
 
     public void GetArticle()
     {   
-        string id = firestore.UserInfo().userid;
-        Article article = new Article{userid = id};
-        string getUrl = articleURL.getURL;
-        StartCoroutine(PostHttp<Article, Article>(article, getUrl));
+    //    string id = firestore.UserInfo().userid;
+    //    Article article = new Article{userid = id};
+    //    string getUrl = articleURL.getURL;
+    //    StartCoroutine(PostHttp<Article, Article>(article, getUrl));
     }
 
     //LLM 호출 메서드
