@@ -50,6 +50,7 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinLobby();
     }
 
+
     // Lobby 에 접속을 성공하면 호출되는 함수
     public override void OnJoinedLobby()
     {
@@ -167,6 +168,20 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         roomNumber = 2;
     }
 
+    // Town -> ScrapBook
+    public void TownToScrapBook()
+    {
+        PhotonNetwork.LeaveRoom();
+        roomNumber = 3;
+    }
+
+    // Town -> Folder
+    public void TownToFolder()
+    {
+        PhotonNetwork.LeaveRoom();
+        roomNumber = 4;
+    }
+
     // Room 에서 나오면 호출되는 함수
     public override void OnLeftRoom()
     {
@@ -178,11 +193,19 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         {
             JoinChannel();
         }
-        // 만약 룸넘버가 2면, Folder 로 이동한다.
-        if (roomNumber == 2)
+        // 만약 룸넘버가 2이거나 4면, Folder 로 이동한다.
+        if (roomNumber == 2 || roomNumber ==4)
         {
             JoinFolder();
         }
+        // 만약 룸넘버가 3이면, ScrapBook 으로 이동한다.
+        if (roomNumber == 3)
+        {
+            JoinOrCreateRoom();
+        }
+
+
+        
         
     }
 
