@@ -43,7 +43,8 @@ public class AI_Movement_KJS : MonoBehaviourPun
 
     void Update()
     {
-        if (playerTransform != null)
+        // AI가 이 클라이언트의 로컬 플레이어만 따라가도록 설정
+        if (playerTransform != null && photonView.IsMine)
         {
             // 플레이어의 회전을 적용한 상대 위치 계산
             Vector3 rotatedOffset = playerTransform.rotation * offset;
@@ -52,7 +53,7 @@ public class AI_Movement_KJS : MonoBehaviourPun
             agent.SetDestination(targetPosition);
         }
 
-        if (Input.GetMouseButtonDown(0))  // 마우스 왼쪽 클릭
+        if (Input.GetMouseButtonDown(0) && photonView.IsMine)  // 마우스 왼쪽 클릭
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -60,7 +61,7 @@ public class AI_Movement_KJS : MonoBehaviourPun
             if (Physics.Raycast(ray, out hit))
             {
                 // 이 스크립트가 부착된 오브젝트를 클릭했는지 확인
-                if (hit.transform == transform && photonView.IsMine)
+                if (hit.transform == transform)
                 {
                     if (toolUI != null)
                     {
