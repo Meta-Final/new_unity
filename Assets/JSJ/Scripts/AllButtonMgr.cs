@@ -53,12 +53,16 @@ public class AllButtonMgr : MonoBehaviour
 
 
     //게임종료
-
     public void Onclickpoweroff()
     {
         Application.Quit();
     }
-
+    
+    //크리에이터툴 닫기
+    public void OnClickExitbtn()
+    {
+        ToolbtnMgr.instance.Exitpanel();
+    }
    
 }
 
