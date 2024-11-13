@@ -68,12 +68,14 @@ public class ButtonPrefabSpawner2_KJS : MonoBehaviourPunCallbacks
 
     private void OnButtonClicked()
     {
-        // 모든 클라이언트에서 프리팹을 생성하는 RPC 호출
-        photonView.RPC("SpawnPrefabFromResource_RPC", RpcTarget.AllBuffered, assignedPostId);
+        // 버튼을 클릭한 로컬 플레이어만 프리팹을 생성
+        if (photonView.IsMine)
+        {
+            SpawnPrefabFromResource(assignedPostId);
+        }
     }
 
-    [PunRPC]
-    private void SpawnPrefabFromResource_RPC(string postId)
+    private void SpawnPrefabFromResource(string postId)
     {
         if (string.IsNullOrEmpty(prefabResourcePath))
         {
@@ -81,21 +83,31 @@ public class ButtonPrefabSpawner2_KJS : MonoBehaviourPunCallbacks
             return;
         }
 
-        // 생성할 위치 계산 (로컬 플레이어 소유일 경우 로컬 플레이어의 앞에 생성)
-        Vector3 spawnPosition;
-        if (photonView.IsMine)
+        // Player 태그를 가진 오브젝트 중 photonView.IsMine이 true인 로컬 플레이어를 찾기
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        Transform playerTransform = null;
+
+        foreach (GameObject player in players)
         {
-            // 로컬 플레이어의 Transform을 기준으로 Z 방향으로 0.5 떨어진 위치
-            spawnPosition = transform.position + transform.forward * 0.5f;
-        }
-        else
-        {
-            // 다른 플레이어일 경우 부모 Transform을 기준으로 생성
-            spawnPosition = transform.parent.position + transform.parent.forward.normalized * 0.5f;
+            PhotonView playerPhotonView = player.GetComponent<PhotonView>();
+            if (playerPhotonView != null && playerPhotonView.IsMine)
+            {
+                playerTransform = player.transform;
+                break;
+            }
         }
 
+        if (playerTransform == null)
+        {
+            Debug.LogError("로컬 플레이어의 위치를 찾을 수 없습니다.");
+            return;
+        }
+
+        // 로컬 플레이어의 앞쪽 Z 방향으로 0.5만큼 떨어진 위치에 프리팹 생성
+        Vector3 spawnPosition = playerTransform.position + playerTransform.forward * 0.5f;
+
         // PhotonNetwork.Instantiate를 사용하여 네트워크 객체 생성
-        GameObject loadedObject = PhotonNetwork.Instantiate(prefabResourcePath, spawnPosition, transform.rotation);
+        GameObject loadedObject = PhotonNetwork.Instantiate(prefabResourcePath, spawnPosition, playerTransform.rotation);
         loadedObject.transform.localScale = Vector3.one;
         loadedObject.tag = "Item"; // 생성된 오브젝트의 태그를 "Item"으로 설정
 
