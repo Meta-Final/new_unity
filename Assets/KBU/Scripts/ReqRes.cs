@@ -60,13 +60,15 @@ namespace ReqRes
     [Serializable]
     public class AuthRequest
     {
-        public string userid;
+        public string userId;
+        public string name;
+        public string nickName;
     }
     //Create/Get request/response
     [Serializable]
     public class Article
     {   
-        public string userid;
+        public AuthRequest authRequest;
         public string postId;
         public List<Elements> elements;
     }
