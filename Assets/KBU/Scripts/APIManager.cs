@@ -5,17 +5,25 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 using ReqRes;
+using UnityEngine.UI;
+using UnityEngine.Rendering;
 
 public class APIManager : MonoBehaviour
 {   
     public Texture2D coverDownloadTexture;
     public Texture2D trendDownloadTexture;
+    public Image trendImage;
 
 
     AlphaURL alphaURL = new AlphaURL();
     //알파 시연 메서드
     //첫 번째 썸네일 이미지 호출 코드
     //두 번째 트렌드 이미지 호출 코드
+
+    private void Start()
+    {
+        Trend();
+    }
     public void Cover()
     {   
         string coverURL = alphaURL.coverURL;
@@ -25,6 +33,7 @@ public class APIManager : MonoBehaviour
     public void Trend()
     {
         string trendURL = alphaURL.trendURL;
+        //string trendURL = "https://cdn.weaversmind.com/landing/202409/25/on_land/Paper-122-01-01/cnt_01.jpg";
         StartCoroutine(TrendDownloadImage(trendURL));
     }
 
@@ -52,6 +61,9 @@ public class APIManager : MonoBehaviour
         if (request.result == UnityWebRequest.Result.Success)
         {
             trendDownloadTexture = ((DownloadHandlerTexture)request.downloadHandler).texture;
+            Sprite sprite = Sprite.Create(trendDownloadTexture, new Rect(0, 0, trendDownloadTexture.width, trendDownloadTexture.height), Vector2.zero);
+
+            trendImage.sprite = sprite;
         }
         else
         {

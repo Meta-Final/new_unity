@@ -4776,8 +4776,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de4bba8757fd0a049b4be474f00c6d19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  closebtn: {fileID: 872956502}
-  Magazinepanel: {fileID: 836935008}
+  btn_exit_1: {fileID: 8808856939806607377}
+  btn_exit_2: {fileID: 872956502}
+  Magazinepanel1: {fileID: 9108021462184091055}
+  Magazinepanel2: {fileID: 836935008}
+  roombtns: {fileID: 2087864686}
 --- !u!4 &1831532022
 Transform:
   m_ObjectHideFlags: 0
@@ -9068,6 +9071,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f1dead521465f340818458969e7f378, type: 3}
+--- !u!114 &8808856939806607377 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 796809041139483552, guid: 4f1dead521465f340818458969e7f378,
+    type: 3}
+  m_PrefabInstance: {fileID: 8808856939806607376}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &8832251628240080917
 RectTransform:
   m_ObjectHideFlags: 0

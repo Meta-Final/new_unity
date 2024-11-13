@@ -5,17 +5,28 @@ using UnityEngine.UI;
 
 public class AllButtonMgr : MonoBehaviour
 {
-    public Button closebtn;
-    public GameObject Magazinepanel;
+    public Button btn_exit_1;
+    public Button btn_exit_2;
+    public GameObject Magazinepanel1;
+    public GameObject Magazinepanel2;
+    public GameObject roombtns;
 
     void Start()
     {
-        closebtn.onClick.AddListener(OnClickExitbtn);
+        btn_exit_1.onClick.AddListener(OnClickExitbtn1);
+        btn_exit_2.onClick.AddListener(OnClickExitbtn2);
     }
 
     void Update()
     {
-
+        if(Magazinepanel1.transform.GetChild(0).gameObject.activeSelf == false)
+        {
+            roombtns.SetActive(true);
+        }
+        else
+        {
+            roombtns.SetActive(false);
+        }
     }
 
     // Channel -> ScrapBook
@@ -60,11 +71,17 @@ public class AllButtonMgr : MonoBehaviour
     {
         Application.Quit();
     }
-    
+
     //크리에이터툴 닫기
-    public void OnClickExitbtn()
+    public void OnClickExitbtn1()
     {
-        Magazinepanel.transform.GetChild(0).gameObject.SetActive(false);
+        Magazinepanel1.transform.GetChild(0).gameObject.SetActive(false);
+    }
+
+    //크리에이터툴 닫기
+    public void OnClickExitbtn2()
+    {
+        Magazinepanel2.transform.GetChild(0).gameObject.SetActive(false);
     }
    
 }
