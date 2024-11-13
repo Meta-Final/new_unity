@@ -1,29 +1,37 @@
-using UnityEngine;
 using Photon.Pun;
+using UnityEngine;
 
-public class PlayerAnimationController : MonoBehaviourPun
+public class PlayerAnimationController_KJS : MonoBehaviourPunCallbacks
 {
     private Animator animator;
+    private PhotonView photonView;
+    private bool isWalking;
 
-    void Start()
+    private void Start()
     {
         animator = GetComponent<Animator>();
+        photonView = GetComponent<PhotonView>();
     }
 
-    void Update()
+    private void Update()
     {
-        if (!photonView.IsMine) return; // 로컬 플레이어만 입력을 처리
+        if (photonView.IsMine)
+        {
+            float horizontal = Input.GetAxis("Horizontal");
+            float vertical = Input.GetAxis("Vertical");
+            bool walking = Mathf.Abs(horizontal) > 0.1f || Mathf.Abs(vertical) > 0.1f;
 
-        // WASD 키 입력을 체크하여 이동 상태를 확인
-        bool isWalking = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D);
-
-        // 모든 클라이언트에서 isWalking 상태를 동기화
-        photonView.RPC("SetWalkingState", RpcTarget.All, isWalking);
+            if (walking != isWalking)
+            {
+                isWalking = walking;
+                photonView.RPC("SetWalkingAnimation", RpcTarget.All, isWalking);
+            }
+        }
     }
 
     [PunRPC]
-    void SetWalkingState(bool isWalking)
+    private void SetWalkingAnimation(bool walking)
     {
-        animator.SetBool("isWalking", isWalking);
+        animator.SetBool("isWalking", walking);
     }
 }

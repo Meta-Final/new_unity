@@ -1753,6 +1753,7 @@ GameObject:
   - component: {fileID: 693072721853637775}
   - component: {fileID: 7337721029490668853}
   - component: {fileID: 2014364859766739557}
+  - component: {fileID: 4753181883516307551}
   m_Layer: 0
   m_Name: PlayerAvatarBlueGirl
   m_TagString: Player
@@ -2053,7 +2054,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowLayerWeightsInspector: 1
   ShowParameterInspector: 1
-  m_SynchronizeParameters: []
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 0
+    Name: isWalking
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
@@ -2069,6 +2073,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1efbe36653602ec45b28369ed766e678, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4753181883516307551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1621623788659447664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 7337721029490668853}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1695406341290987462
 GameObject:
   m_ObjectHideFlags: 0
@@ -5929,7 +5956,6 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 2035540061069590949}
-  - {fileID: 7337721029490668853}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -5962,8 +5988,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryPostIds:
-  - "\uC2A4\uD0C0\uBC85\uC2A4 \uC804\uC6A9 \uC571\uC5D0\uC11C \u2018\uC8FC\uBB38
-    \uCDE8\uC18C \uBC0F \uBCC0\uACBD\u2019\uC774 \uAC00\uB2A5\uD574\uC9C4\uB2E4"
+  - "\uB2E8\uD48D"
+  - "\uC2A4\uD0C0\uBC85\uC2A4"
+  - "\uD2B8\uB7FC\uD504"
   inventorySlotPrefabPath: Btn_SlotItem _K
   inventoryPanel: {fileID: 6290302308959592147}
 --- !u!114 &-2281026626621375017
