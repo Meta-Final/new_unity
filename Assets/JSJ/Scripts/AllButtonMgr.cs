@@ -5,9 +5,12 @@ using UnityEngine.UI;
 
 public class AllButtonMgr : MonoBehaviour
 {
+    public Button closebtn;
+    public GameObject Magazinepanel;
+
     void Start()
     {
-
+        closebtn.onClick.AddListener(OnClickExitbtn);
     }
 
     void Update()
@@ -61,7 +64,7 @@ public class AllButtonMgr : MonoBehaviour
     //크리에이터툴 닫기
     public void OnClickExitbtn()
     {
-        ToolbtnMgr.instance.Exitpanel();
+        Magazinepanel.transform.GetChild(0).gameObject.SetActive(false);
     }
    
 }
