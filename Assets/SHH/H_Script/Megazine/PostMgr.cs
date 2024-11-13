@@ -32,7 +32,7 @@ public class PostMgr : MonoBehaviour
     List<Button> btns = new List<Button>();
     public Button btn_Exit;
 
-    private string baseDirectory = @"C:\Users\Admin\Documents\GitHub\new_unity\Assets\KJS\UserInfo"; // 기본 저장 경로
+    private string baseDirectory = Application.dataPath; // 기본 저장 경로
 
     void Start()
     {
