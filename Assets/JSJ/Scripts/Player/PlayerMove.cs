@@ -71,35 +71,24 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         // 중력 적용
         yPos += Physics.gravity.y * Time.deltaTime;
 
-        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, Mathf.Infinity))
+        // 바닥에 닿았을 때
+        if (cc.collisionFlags == CollisionFlags.CollidedBelow)
         {
-            float terrainHeight = hit.point.y + groundOffset;
-
-            // 바닥에 닿았을 때
-            if (cc.collisionFlags == CollisionFlags.CollidedBelow)
-            {
-                yPos = 0;
-                jumpCurrentCount = 0;
-            }
-
-            // 점프
-            if (Input.GetKeyDown(KeyCode.Space) & jumpCurrentCount < jumpMaxCount)
-            {
-                yPos = jumpPower;
-                jumpCurrentCount++;
-            }
-
-            dir.y = yPos;
-
-            if (transform.position.y < terrainHeight)
-            {
-                transform.position = new Vector3(transform.position.x, terrainHeight, transform.position.z);
-            }
-
-            cc.Move(dir * moveSpeed * Time.deltaTime);
+            yPos = 0;
+            jumpCurrentCount = 0;
         }
 
-        
+        // 점프
+        if (Input.GetKeyDown(KeyCode.Space) & jumpCurrentCount < jumpMaxCount)
+        {
+            yPos = jumpPower;
+            jumpCurrentCount++;
+        }
+
+        dir.y = yPos;
+
+        cc.Move(dir * moveSpeed * Time.deltaTime);
+
     }
 
     // 애니메이션 동기화
