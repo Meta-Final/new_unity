@@ -13,7 +13,7 @@ public class Thumbnail_KJS : MonoBehaviour
     public TMP_InputField postIdInputField; // 사용자 입력을 통해 postId를 설정할 InputField (Inspector에서 할당)
 
     private PostInfoList postInfoList = new PostInfoList();  // 빈 리스트로 초기화
-    private string saveDirectory = @"C:\Users\Admin\Documents\GitHub\new_unity\Assets\KJS\UserInfo";
+    private string saveDirectory = Application.dataPath;
 
     void Start()
     {

@@ -11,7 +11,6 @@ public class ColorButtons : MonoBehaviour
 
     void Start()
     {
-        myColor = GetComponent<Image>().color;
         GetComponent<Button>().onClick.AddListener(TransferMyColor);
     }    
 
@@ -20,7 +19,9 @@ public class ColorButtons : MonoBehaviour
 
     void TransferMyColor()
     {
-       inventoryUI.SetPostItColor(myColor);
+        myColor = GetComponent<Image>().color;
+
+        inventoryUI.SetPostItColor(GetComponent<Image>().color);
     }
 
 

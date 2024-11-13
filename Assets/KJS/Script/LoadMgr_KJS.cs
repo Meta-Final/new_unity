@@ -21,7 +21,7 @@ public class LoadMgr_KJS : MonoBehaviour
     public List<GameObject> imageBoxes = new List<GameObject>();
     public List<GameObject> pages = new List<GameObject>();
 
-    private string saveDirectory = @"C:\Users\Admin\Documents\GitHub\new_unity\Assets\KJS\UserInfo";
+    private string saveDirectory =Application.dataPath;
     private string saveFileName = "Magazine.json"; // 확장자를 .json으로 변경
     private string savePath;
 
