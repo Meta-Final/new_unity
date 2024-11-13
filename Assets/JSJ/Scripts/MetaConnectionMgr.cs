@@ -111,7 +111,7 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
     // Town 积己 饶 涝厘
     public void JoinOrCreateTown()
     {
-        loadLevelName = "Meta_Town_Scene";
+        loadLevelName = "Meta_RealTownScene";
 
         // 规 积己 可记
         RoomOptions roomOptions = new RoomOptions();

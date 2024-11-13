@@ -16,6 +16,9 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     public float jumpPower = 3f;
     public int jumpMaxCount = 1;
 
+    [Header("Terrain 보정")]
+    public float groundOffset = 0.1f;
+
     float yPos;
     int jumpCurrentCount;
 
@@ -42,11 +45,9 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         if (photonView.IsMine)
         {
             Moving();
-
-            canvasNickName.transform.rotation = Quaternion.LookRotation(canvasNickName.transform.position - Camera.main.transform.position);
         }
 
-        
+        canvasNickName.transform.rotation = Quaternion.LookRotation(canvasNickName.transform.position - Camera.main.transform.position);
     }
 
     public void Moving()
@@ -70,23 +71,35 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         // 중력 적용
         yPos += Physics.gravity.y * Time.deltaTime;
 
-        // 바닥에 닿았을 때
-        if(cc.collisionFlags == CollisionFlags.CollidedBelow)
+        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, Mathf.Infinity))
         {
-            yPos = 0;
-            jumpCurrentCount = 0;
+            float terrainHeight = hit.point.y + groundOffset;
+
+            // 바닥에 닿았을 때
+            if (cc.collisionFlags == CollisionFlags.CollidedBelow)
+            {
+                yPos = 0;
+                jumpCurrentCount = 0;
+            }
+
+            // 점프
+            if (Input.GetKeyDown(KeyCode.Space) & jumpCurrentCount < jumpMaxCount)
+            {
+                yPos = jumpPower;
+                jumpCurrentCount++;
+            }
+
+            dir.y = yPos;
+
+            if (transform.position.y < terrainHeight)
+            {
+                transform.position = new Vector3(transform.position.x, terrainHeight, transform.position.z);
+            }
+
+            cc.Move(dir * moveSpeed * Time.deltaTime);
         }
 
-        // 점프
-        if(Input.GetKeyDown(KeyCode.Space) & jumpCurrentCount < jumpMaxCount)
-        {
-            yPos = jumpPower;
-            jumpCurrentCount++;
-        }
-
-        dir.y = yPos;
-
-        cc.Move(dir * moveSpeed * Time.deltaTime);
+        
     }
 
     // 애니메이션 동기화
