@@ -13,6 +13,9 @@ public class AiChatMgr_KJS : MonoBehaviour
     public APIManager apiManager;         // APIManager 인스턴스 참조
     public Button sendButton;             // 전송 버튼
 
+    private GameObject chatUI;            // MagazineView 안에 있는 Chat UI
+    private GameObject toolUI;            // MagazineView 안에 있는 Tool UI
+
     private void Awake()
     {
         // 싱글톤 인스턴스 설정
@@ -28,8 +31,48 @@ public class AiChatMgr_KJS : MonoBehaviour
 
     void Start()
     {
+        // "MagazineView" 오브젝트 안에 있는 "Chat"과 "Tool" UI를 찾기
+        GameObject magazineView = GameObject.Find("MagazineView");
+        if (magazineView != null)
+        {
+            chatUI = magazineView.transform.Find("Chat")?.gameObject;
+            toolUI = magazineView.transform.Find("Tool")?.gameObject;
+
+            if (chatUI != null)
+            {
+                chatUI.SetActive(false); // Chat UI를 비활성화 상태로 초기화
+            }
+            else
+            {
+                Debug.LogError("Chat UI not found within MagazineView.");
+            }
+
+            if (toolUI != null)
+            {
+                toolUI.SetActive(false); // Tool UI를 비활성화 상태로 초기화
+            }
+            else
+            {
+                Debug.LogError("Tool UI not found within MagazineView.");
+            }
+        }
+        else
+        {
+            Debug.LogError("MagazineView object not found in the scene.");
+        }
+
         // 버튼 클릭 시 OnSendButtonClicked 호출
         sendButton.onClick.AddListener(OnSendButtonClicked);
+    }
+
+    // 오브젝트 클릭 시 Chat UI 활성화
+    private void OnMouseDown()
+    {
+        if (chatUI != null)
+        {
+            chatUI.SetActive(true); // Chat UI 활성화
+            Debug.Log("Chat UI가 활성화되었습니다.");
+        }
     }
 
     void OnSendButtonClicked()
@@ -51,6 +94,10 @@ public class AiChatMgr_KJS : MonoBehaviour
             {
                 UpdateChatResponse("작업한 포스트 내용을 오브젝트로 만들어줘"); // 새로운 조건 처리
             }
+            else if (userMessage.Trim() == "글쓰고 싶어")
+            {
+                UpdateChatResponse("글쓰고 싶어");
+            }
             else
             {
                 // apiManager.CallLLM(userMessage); // API 호출 (비동기 응답 대기)
@@ -68,13 +115,28 @@ public class AiChatMgr_KJS : MonoBehaviour
             // 요리 이미지 관련 처리
             if (response == "이미지 만들어줘")
             {
-                chatResponseText.text = "이미지를 만들었습니다.";
+                chatResponseText.text = "이미지를 만들었다. 삐약!";
                 Debug.Log("요리 이미지 생성 요청에 대한 응답입니다.");
             }
             else if (response == "작업한 포스트 내용을 오브젝트로 만들어줘")
             {
-                chatResponseText.text = "오브젝트를 만들었습니다.";
+                chatResponseText.text = "오브젝트를 만들었다. 삐약!";
                 Debug.Log("작업한 포스트 내용을 오브젝트로 만드는 요청에 대한 응답입니다.");
+            }
+            else if (response == "글쓰고 싶어")
+            {
+                chatResponseText.text = "알겠다 삐약!";
+                Debug.Log("글쓰기 요청에 대한 응답입니다.");
+
+                // Tool UI를 활성화
+                if (toolUI != null)
+                {
+                    toolUI.SetActive(true);
+                }
+                else
+                {
+                    Debug.LogError("Tool UI is not assigned.");
+                }
             }
             else
             {

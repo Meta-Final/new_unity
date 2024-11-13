@@ -11,7 +11,7 @@ public class AI_Movement_KJS : MonoBehaviourPun
     private Vector3 offset = new Vector3(1, 3, -1);
 
     // Scene에서 tool UI를 저장하기 위한 변수
-    private GameObject toolUI;
+    private GameObject Chat;
 
     void Start()
     {
@@ -24,11 +24,11 @@ public class AI_Movement_KJS : MonoBehaviourPun
         GameObject magazineView = GameObject.Find("MagazineView");
         if (magazineView != null)
         {
-            toolUI = magazineView.transform.Find("Tool")?.gameObject;
-            if (toolUI != null)
+            Chat = magazineView.transform.Find("Chat")?.gameObject;
+            if (Chat != null)
             {
                 // tool UI를 비활성화된 상태로 초기화
-                toolUI.SetActive(false);
+                Chat.SetActive(false);
             }
             else
             {
@@ -63,18 +63,18 @@ public class AI_Movement_KJS : MonoBehaviourPun
                 // 이 스크립트가 부착된 오브젝트를 클릭했는지 확인
                 if (hit.transform == transform)
                 {
-                    if (toolUI != null)
+                    if (Chat != null)
                     {
-                        toolUI.SetActive(true);
+                        Chat.SetActive(true);
                     }
                 }
             }
         }
 
         // ESC 키가 눌렸을 때 tool UI를 비활성화
-        if (Input.GetKeyDown(KeyCode.Escape) && toolUI != null)
+        if (Input.GetKeyDown(KeyCode.Escape) && Chat != null)
         {
-            toolUI.SetActive(false);
+            Chat.SetActive(false);
         }
     }
 
@@ -103,9 +103,9 @@ public class AI_Movement_KJS : MonoBehaviourPun
     private void OnMouseDown()
     {
         // 이 스크립트가 할당된 오브젝트를 로컬 플레이어가 클릭한 경우 tool UI를 활성화
-        if (photonView.IsMine && toolUI != null)
+        if (photonView.IsMine && Chat != null)
         {
-            toolUI.SetActive(true);
+            Chat.SetActive(true);
         }
     }
 }
