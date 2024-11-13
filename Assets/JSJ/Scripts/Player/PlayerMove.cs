@@ -15,14 +15,19 @@ public class PlayerMove : MonoBehaviourPun
     public float jumpPower = 3f;
     public int jumpMaxCount = 1;
 
+    
+
     float yPos;
     int jumpCurrentCount;
 
+    Animator animator;
     CharacterController cc;
 
     void Start()
     {
         cc = GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
+
     }
 
     void Update()
@@ -41,6 +46,8 @@ public class PlayerMove : MonoBehaviourPun
 
         Vector3 dir = new Vector3(h, 0, v);
         dir.Normalize();
+
+        animator.SetFloat("Move", dir.magnitude);
 
         if (!(h == 0 & v == 0))
         {
