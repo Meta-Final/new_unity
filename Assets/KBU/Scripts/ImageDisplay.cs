@@ -7,9 +7,13 @@ public class ImageDisplay : MonoBehaviour
     public APIManager imageDownloader; 
     public RawImage rawImage;
 
-    void Start()
+    void StartCover()
     {
         StartCoroutine(CoverWaitForDownloadAndDisplayImage());
+    }
+
+    void StartTrend()
+    {
         StartCoroutine(TrendWaitForDownloadAndDisplayImage());
     }
 

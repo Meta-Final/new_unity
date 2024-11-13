@@ -10,7 +10,6 @@ public class ImageDisplay_KJS : MonoBehaviour
     void Start()
     {
         StartCoroutine(CoverWaitForDownloadAndDisplayImage());
-        StartCoroutine(TrendWaitForDownloadAndDisplayImage());
     }
 
     IEnumerator CoverWaitForDownloadAndDisplayImage()

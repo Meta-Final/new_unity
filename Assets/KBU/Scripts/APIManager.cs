@@ -28,6 +28,7 @@ public class APIManager : MonoBehaviour
     {   
         string coverURL = alphaURL.coverURL;
         StartCoroutine(CoverDownloadImage(coverURL));
+        print("!!!");
     }
 
     public void Trend()
