@@ -7,147 +7,66 @@ using UnityEngine.Networking;
 using ReqRes;
 
 public class APIManager : MonoBehaviour
-{
-    FireStore firestore;
+{   
+    public Texture2D coverDownloadTexture;
+    public Texture2D trendDownloadTexture;
 
-    AuthURL authURL = new AuthURL();
-    ArticleURL articleURL = new ArticleURL();
-    AIURL aiUrl = new AIURL();
-    
-    public void Start()
-    {
-        GameObject firebase = GameObject.Find("Firebase");
-        firestore = firebase.GetComponent<FireStore>();
-    }
-    
-    //회원가입
-    public void Auth()
-    {
-        AuthRequest auth = new AuthRequest 
-        {
-            userId = firestore.GetUserInfo().userId,
-            name = firestore.GetUserInfo().name, 
-            nickName = firestore.GetUserInfo().nickName
-        };
 
-        string authUrl = authURL.authURL;
-        StartCoroutine(GetHttp<AuthRequest>(auth, authUrl));
-    }
-
-    //기사 호출 관련 함수
-    public void SearchArticle(string query, int limit)
+    AlphaURL alphaURL = new AlphaURL();
+    //알파 시연 메서드
+    //첫 번째 썸네일 이미지 호출 코드
+    //두 번째 트렌드 이미지 호출 코드
+    public void Cover()
     {   
-        SearchRequest searchRequest = new SearchRequest{query = query, limit = limit};
-        string searchUrl = articleURL.searchURL;
-        StartCoroutine(PostHttp<SearchRequest, SearchResponse>(searchRequest, searchUrl));
+        string coverURL = alphaURL.coverURL;
+        StartCoroutine(CoverDownloadImage(coverURL));
     }
-    
-    public void CreateArticle()
-    {   
-        AuthRequest auth = new AuthRequest 
+
+    public void Trend()
+    {
+        string trendURL = alphaURL.trendURL;
+        StartCoroutine(TrendDownloadImage(trendURL));
+    }
+
+    IEnumerator CoverDownloadImage(string url)
+    {
+        UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
         {
-            userId = firestore.GetUserInfo().userId,
-            name = firestore.GetUserInfo().name, 
-            nickName = firestore.GetUserInfo().nickName
-        };
-        
-        Article article = new Article{authRequest = auth};
-
-        string createUrl = articleURL.createURL;
-        StartCoroutine(PostHttp<Article, Article>(article, createUrl));
-    }
-
-    public void GetArticle()
-    {   
-        AuthRequest auth = new AuthRequest 
+            coverDownloadTexture = ((DownloadHandlerTexture)request.downloadHandler).texture;
+        }
+        else
         {
-            userId = firestore.GetUserInfo().userId,
-            name = firestore.GetUserInfo().name, 
-            nickName = firestore.GetUserInfo().nickName
-        };
-        
-        Article article = new Article{authRequest = auth};
-        string getUrl = articleURL.getURL;
-        StartCoroutine(PostHttp<Article, Article>(article, getUrl));
-    }
-
-    //LLM 호출 메서드
-
-    //Cover 생성/호출 메서드
-    public void GenCover(string prompt)
-    {
-        GenCoverRequest genCoverRequest = new GenCoverRequest {text = prompt};
-        string genCoverUrl = aiUrl.genCoverURL;
-        StartCoroutine(PostHttp<GenCoverRequest, GenCoverResponse>(genCoverRequest, genCoverUrl));
-    }
-    public void LoadCover(string path)
-    {
-        LoadCoverRequest loadCoverRequest = new LoadCoverRequest {imgPath = path};
-        string loadCoverUrl = aiUrl.loadCoverURL;
-        StartCoroutine(PostHttp<LoadCoverRequest, LoadCoverResponse>(loadCoverRequest, loadCoverUrl)); 
-    }
-    
-    //Object 생성/호출 메서드
-    public void GenObject(string prompt)
-    {
-        GenObjectRequest genObjectRequest = new GenObjectRequest {text = prompt};
-        string genObjectUrl = aiUrl.genObjectURL;
-        StartCoroutine(PostHttp<GenObjectRequest, GenObjectResponse>(genObjectRequest, genObjectUrl));
-    }
-    public void loadobject(string objPath, string mtlPath)
-    {
-        LoadObjectRequest loadObjectRequest = new LoadObjectRequest {objFilePath = objPath, mtlFilePath = mtlPath};
-        string loadObjectUrl = aiUrl.loadObjectURL;
-        StartCoroutine(PostHttp<LoadObjectRequest, LoadObjectResponse>(loadObjectRequest, loadObjectUrl));
-    }
-
-    //Http 메서드 post
-    public IEnumerator PostHttp<TRequest, TResponse>(TRequest requestObject, string url)
-    {   
-        string json = JsonUtility.ToJson(requestObject);
-
-        using (UnityWebRequest www = new UnityWebRequest(url, "POST"))
-        {
-            byte[] jsonToSend = Encoding.UTF8.GetBytes(json);
-            www.uploadHandler = new UploadHandlerRaw(jsonToSend);
-            www.downloadHandler = new DownloadHandlerBuffer();
-            www.SetRequestHeader("Content-Type", "application/json");
-            
-            yield return www.SendWebRequest();
-
-            if (www.result == UnityWebRequest.Result.Success)
-            {
-                TResponse responseObject = JsonUtility.FromJson<TResponse>(www.downloadHandler.text);
-                Debug.Log("Response: " + JsonUtility.ToJson(responseObject));
-            }
-            else
-            {
-                Debug.LogError($"Error: {www.error}, Status Code: {www.responseCode}, Response: {www.downloadHandler.text}" );
-            }
-
+            Debug.LogError("Failed to download image: " + request.error);
         }
     }
 
-    //Http 메서드 get
-    public IEnumerator GetHttp<TRequest>(TRequest requestObject, string url)
-    {   
-        string json = JsonUtility.ToJson(requestObject);
     
-        using (UnityWebRequest www = UnityWebRequest.Get(url))
+    IEnumerator TrendDownloadImage(string url)
+    {
+        UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
         {
-            www.downloadHandler = new DownloadHandlerBuffer();
-            www.SetRequestHeader("Content-Type", "application/json");
-
-            yield return www.SendWebRequest();
-
-            if (www.result == UnityWebRequest.Result.Success)
-            {
-                Debug.Log("Request successful. Status Code: " + www.responseCode);
-            }
-            else
-            {   
-                Debug.LogError($"Error: {www.error}, Status Code: {www.responseCode}");
-            }
+            trendDownloadTexture = ((DownloadHandlerTexture)request.downloadHandler).texture;
         }
+        else
+        {
+            Debug.LogError("Failed to download image: " + request.error);
+        }
+    }
+
+
+    public Texture2D CoverGetDownloadedImage()
+    {
+        return coverDownloadTexture;
+    }
+    
+     public Texture2D TrendGetDownloadedImage()
+    {
+        return trendDownloadTexture;
     }
 }
