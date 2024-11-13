@@ -42,10 +42,13 @@ public class LoginSceneMgr : MonoBehaviour
         signInEmail.onValueChanged.AddListener(SignInValueChanged);
         signInPassword.onValueChanged.AddListener(SignInValueChanged);
 
+        // 회원 이메일 / 비밀번호 기입 UI 비활성화
         canvasJoin.SetActive(false);
+        // 회원 정보 기입 UI 비활성화
         canvasAccount.SetActive(false);
     }
 
+    // 내용 바뀌면 호출되는 함수
     void SignInValueChanged(string s)
     {
         btn_SignIn.interactable = s.Length > 0;
@@ -60,7 +63,7 @@ public class LoginSceneMgr : MonoBehaviour
     // 로그인 실패 UI
     public void ShowSignInFail()
     {
-        StartCoroutine(SignInFail(2f));
+        StartCoroutine(SignInFail(1.5f));
     }
 
     IEnumerator SignInFail(float duration)

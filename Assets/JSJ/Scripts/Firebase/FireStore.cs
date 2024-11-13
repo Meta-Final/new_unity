@@ -96,7 +96,7 @@ public class FireStore : MonoBehaviour
         }
         else
         {
-            print("ȸ������ �ҷ����� ���� : " + task.Exception);
+            print("회원 정보 불러오기 실패 : " + task.Exception);
         }
     }
 
