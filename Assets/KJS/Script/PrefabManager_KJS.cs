@@ -1,6 +1,7 @@
 using UnityEngine;
+using Photon.Pun;
 
-public class PrefabManager_KJS : MonoBehaviour
+public class PrefabManager_KJS : MonoBehaviourPunCallbacks
 {
     public GameObject uiTool; // UI 오브젝트 (MagazineView 2의 자식)
     public float detectionRange = 5f; // 감지 범위
@@ -36,6 +37,10 @@ public class PrefabManager_KJS : MonoBehaviour
 
     void Update()
     {
+        // 로컬 플레이어가 아니면 키 입력을 무시
+        if (!photonView.IsMine)
+            return;
+
         if (player != null)
         {
             // 플레이어와의 거리 계산
