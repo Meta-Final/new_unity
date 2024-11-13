@@ -9,8 +9,8 @@ namespace ReqRes
     [Serializable]
     public class AlphaURL
     {
-        public string coverURL = "http://metaai2.iptime.org:9000/thumbnail";
-        public string trendURL = "http://metaai2.iptime.org:9000/trend";
+        public string coverURL = "http://metaai2.iptime.org:14596/thumbnail";
+        public string trendURL = "http://metaai2.iptime.org:14596/trend";
     }
 
 }
