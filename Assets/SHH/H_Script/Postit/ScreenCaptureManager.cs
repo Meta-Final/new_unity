@@ -21,8 +21,10 @@ public class ScreenCaptureManager : MonoBehaviour
 
     // 캡처된 이미지 유니티 화면에 미리보기
     public RawImage displayImage;
-
     bool isCapturing = false;
+
+    //스크린캡쳐 후 성공이미지
+    public RawImage sucessImage;
 
     void Update()
     {
@@ -30,12 +32,14 @@ public class ScreenCaptureManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && isCapturing)
         {
             StartDrag();
+            sucessImage.gameObject.SetActive(false);
         }
 
         //드래그 중
         if (Input.GetMouseButton(0) && isDragging)
         {
             UpdateDrag();
+            sucessImage.gameObject.SetActive(false);
         }
         
         //마우스를 떼면 드래그 끝
@@ -43,13 +47,10 @@ public class ScreenCaptureManager : MonoBehaviour
         {
             EndDrag();  
             StartCoroutine(CaptureScreen());
+         
         }
 
-        // 스페이스바 입력 처리
-       // if (Input.GetKeyDown(KeyCode.Space) && !isDragging)
-        //{
-          
-      //  }
+      
     }
 
     private void StartDrag()
@@ -98,6 +99,8 @@ public class ScreenCaptureManager : MonoBehaviour
             displayImage.texture = capturedTexture;
         }
 
+      
+
         // 결과를 파일로 저장
         byte[] bytes = capturedTexture.EncodeToPNG();
         string now = DateTime.Now.ToString();
@@ -105,12 +108,21 @@ public class ScreenCaptureManager : MonoBehaviour
         System.IO.File.WriteAllBytes(Path.Combine(Application.dataPath, now + ".png"), bytes); //경로설정
         print("저장성공!");
 
+
+        //스크린캡쳐 후 성공이미지를 보여준다.
+        sucessImage.gameObject.SetActive(true);
+        Invoke("HideDragSuccessUI", 2.0f); // 2초 후에 UI를 숨김
       
         // 이미지를 인벤토리에 추가
         //string base64 = System.Convert.ToBase64String(bytes);
         //InventoryManager.instance.addScreen(base64);
     }
 
+    // 드래그 성공 UI를 숨기는 메서드
+    void HideDragSuccessUI()
+    {
+        sucessImage.gameObject.SetActive(false);
+    }
     public void OnClickedButton()
     {
         isCapturing = true;
