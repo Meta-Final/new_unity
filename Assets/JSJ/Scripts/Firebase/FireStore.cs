@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-// ������ or ȸ������
+// 회원 정보
 [FirestoreData]
 public class UserInfo
 {
@@ -38,7 +38,7 @@ public class FireStore : MonoBehaviour
         store = FirebaseFirestore.DefaultInstance;
     }
 
-    // ȸ�� ���� ���� ����
+    // 회원 정보 저장하기
     public void SaveUserInfo(UserInfo info)
     {
         StartCoroutine(CoSaveUserInfo(info));
@@ -46,24 +46,24 @@ public class FireStore : MonoBehaviour
 
     IEnumerator CoSaveUserInfo(UserInfo info)
     {
-        // ���� ���
+        // 저장 경로
         string path = "USER/" + FireAuthManager.instance.auth.CurrentUser.UserId;
-        // ���� ���� ��û
+        // 정보 저장 요청
         Task task = store.Document(path).SetAsync(info);
-        // ����� �Ϸ�� ������ ��ٸ���.
+        // 통신이 완료될 때까지 기다린다.
         yield return new WaitUntil(() => task.IsCompleted);
-        // ���࿡ ���ܰ� ���ٸ�
+        // 만약에 예외가 없다면,
         if (task.Exception == null)
         {
-            print("ȸ������ ���� ����");
+            print("회원 정보 저장 성공");
         }
         else
         {
-            print("ȸ������ ���� ���� : " + task.Exception);
+            print("회원 정보 저장 실패 : " + task.Exception);
         }
     }
 
-    // ȸ�� ���� �ҷ����� ����
+    // 회원 정보 불러오기
     public void LoadUserInfo()
     {
         StartCoroutine(CoLoadUserInfo()); 
@@ -71,18 +71,18 @@ public class FireStore : MonoBehaviour
 
     IEnumerator CoLoadUserInfo()
     {
-        // ���� ���
+        // 저장 경로
         string path = "USER/" + FireAuthManager.instance.auth.CurrentUser.UserId;
-        // ���� ��ȸ ��û
+        // 정보 불러오기 요청
         Task<DocumentSnapshot> task = store.Document(path).GetSnapshotAsync();
-        // ����� �Ϸ�� ������ ��ٸ���.
+        // 통신이 완료될 때까지 기다린다.
         yield return new WaitUntil(() => task.IsCompleted);
-        // ���࿡ ���ܰ� ���ٸ�
+        // 만약에 예외가 없다면,
         if (task.Exception == null)
         {
-            print("ȸ������ �ҷ����� ����");
+            print("회원 정보 불러오기 성공");
 
-            // �ҷ��� ������ UserInfo ������ ����
+            // 불러온 정보를 loadInfo 변수에 저장
             UserInfo loadInfo = task.Result.ConvertTo<UserInfo>();
 
             string userId = loadInfo.userId;
@@ -90,7 +90,7 @@ public class FireStore : MonoBehaviour
 
             SaveUserInfo(userId, userNickName);
 
-            // �ҷ��� ���� ����
+            // 불러온 정보를 전달
             MetaConnectionMgr.instance.JoinLobby(loadInfo);
 
         }
@@ -100,13 +100,13 @@ public class FireStore : MonoBehaviour
         }
     }
 
-    // ���� ���̵� / �г��� �����ϴ� �Լ�
+    // 회원 고유 아이디 / 닉네임 저장 함수
     public void SaveUserInfo(string userId, string userNickName)
     {
         PlayerPrefs.SetString("UserId", userId);
         PlayerPrefs.SetString("Nickname", userNickName);
         PlayerPrefs.Save();
-        print("���� ���̵�� �г����� ����Ǿ����ϴ�.");
+        print("회원 아이디 / 닉네임이 저장되었습니다.");
 
     }
 
@@ -115,7 +115,7 @@ public class FireStore : MonoBehaviour
         return userInfo;
     }
 
-    // ���� ���̵� / �г����� �ҷ����� �Լ�
+    // 회원 고유 아이디 / 닉네임 불러오는 함수
     //public void GetUserId()
     //{
     //    string userId = PlayerPrefs.GetString("UserId", "DefaultUserId");
