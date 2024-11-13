@@ -56,6 +56,10 @@ public class Get_KJS : MonoBehaviour
         // 플레이어가 바라보는 방향으로 약간 앞에 위치하도록 설정
         Vector3 carryPosition = transform.position + transform.forward * 5f + new Vector3(0, 5, 0);
         targetItem.transform.position = carryPosition;
+
+        // 기존 X축 회전을 유지하고 Y, Z축 회전만 캐릭터의 회전을 따르게 설정
+        Vector3 currentRotation = targetItem.transform.rotation.eulerAngles;
+        targetItem.transform.rotation = Quaternion.Euler(currentRotation.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
     }
 
     // 들고 있는 오브젝트를 현재 위치의 Y축 0인 지점에 내려놓는 메서드
