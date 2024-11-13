@@ -103,7 +103,7 @@ public class SaveMgr_KJS : MonoBehaviour
     public Button saveButton;
     public List<Button> loadButtons = new List<Button>();
 
-    private string saveDirectory = @"C:\Users\Admin\Documents\GitHub\new_unity\Assets\KJS\UserInfo";
+    private string saveDirectory = Application.dataPath;
     private string saveFileName = "Magazine.json";
     private string savePath;
 
