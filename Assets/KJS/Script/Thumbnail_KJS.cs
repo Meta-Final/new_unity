@@ -70,9 +70,8 @@ public class Thumbnail_KJS : MonoBehaviour
             Debug.Log($"Directory created at: {postDirectory}");
         }
 
-        // 이미지 파일 저장 경로
         string fileName = "UserImage_" + System.DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".png";
-        string imagePath = Path.Combine(postDirectory, fileName);
+        string imagePath = Path.Combine(Application.dataPath, fileName);
 
         // 이미지 파일을 로컬에 저장
         SaveImageToLocal(targetImage.sprite.texture, imagePath);
