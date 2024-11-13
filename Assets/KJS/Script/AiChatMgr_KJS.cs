@@ -10,7 +10,7 @@ public class AiChatMgr_KJS : MonoBehaviour
 
     public TMP_InputField userInputField; // 사용자가 입력할 TMP 필드
     public TMP_Text chatResponseText;     // AI 응답을 표시할 TMP 텍스트
-    //public APIManager apiManager;         // APIManager 인스턴스 참조
+    public APIManager apiManager;         // APIManager 인스턴스 참조
     public Button sendButton;             // 전송 버튼
     public RawImage targetRawImage;       // Inspector에서 할당된 RawImage 참조
     public Texture2D inspectorTexture;    // Inspector에서 할당된 이미지(Texture2D)

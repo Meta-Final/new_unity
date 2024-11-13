@@ -14,12 +14,17 @@ public class ButtonPrefabSpawner2_KJS : MonoBehaviourPunCallbacks
     private static int currentPostIdIndex = 0; // POSTID 리스트 인덱스 추적
     private string assignedPostId; // 이 버튼에 할당된 postId
 
-    private void Awake()
+    private void Start()
     {
-        button = GetComponent<Button>();
+        if (button == null)
+        {
+            button = GetComponent<Button>();
+        }
 
-        // 부모 오브젝트에서 InventoryText_KJS 컴포넌트 찾기
-        inventoryText = GetComponentInParent<InventoryText_KJS>();
+        if (inventoryText == null)
+        {
+            inventoryText = GetComponentInParent<InventoryText_KJS>();
+        }
 
         if (inventoryText == null)
         {
@@ -76,27 +81,23 @@ public class ButtonPrefabSpawner2_KJS : MonoBehaviourPunCallbacks
             return;
         }
 
-        // Resources 폴더에서 프리팹 로드
-        GameObject prefab = Resources.Load<GameObject>(prefabResourcePath);
-        if (prefab == null)
+        // 생성할 위치 계산 (로컬 플레이어 소유일 경우 로컬 플레이어의 앞에 생성)
+        Vector3 spawnPosition;
+        if (photonView.IsMine)
         {
-            Debug.LogError($"경로 '{prefabResourcePath}'에서 프리팹을 찾을 수 없습니다.");
-            return;
+            // 로컬 플레이어의 Transform을 기준으로 Z 방향으로 0.5 떨어진 위치
+            spawnPosition = transform.position + transform.forward * 0.5f;
+        }
+        else
+        {
+            // 다른 플레이어일 경우 부모 Transform을 기준으로 생성
+            spawnPosition = transform.parent.position + transform.parent.forward.normalized * 0.5f;
         }
 
-        // 프리팹 인스턴스화
-        GameObject loadedObject = Instantiate(prefab);
-
-        // 생성된 오브젝트의 태그를 "Item"으로 설정
-        loadedObject.tag = "Item";
-
-        // 플레이어 위치에서 현재 로컬 Z 방향(forward)으로 0.5만큼 떨어진 위치 계산
-        Vector3 spawnPosition = transform.parent.position + transform.parent.forward.normalized * 0.5f;
-        loadedObject.transform.position = spawnPosition;
+        // PhotonNetwork.Instantiate를 사용하여 네트워크 객체 생성
+        GameObject loadedObject = PhotonNetwork.Instantiate(prefabResourcePath, spawnPosition, transform.rotation);
         loadedObject.transform.localScale = Vector3.one;
-
-        // 오브젝트가 부모 오브젝트와 같은 방향을 바라보도록 회전 설정
-        loadedObject.transform.rotation = transform.parent.rotation;
+        loadedObject.tag = "Item"; // 생성된 오브젝트의 태그를 "Item"으로 설정
 
         // PrefabManager_KJS 컴포넌트를 추가하고 postId 설정
         PrefabManager_KJS prefabManager = loadedObject.GetComponent<PrefabManager_KJS>();
@@ -117,6 +118,7 @@ public class ButtonPrefabSpawner2_KJS : MonoBehaviourPunCallbacks
             Debug.LogWarning("생성된 프리팹에 Text 컴포넌트가 없습니다.");
         }
 
+        // URP 쉐이더 설정
         Shader urpLitShader = Shader.Find("Universal Render Pipeline/Lit");
         if (urpLitShader != null)
         {

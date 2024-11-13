@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using System.IO;
+using Photon.Pun;
 
 public class InventoryText_KJS : MonoBehaviour
 {
@@ -94,16 +95,16 @@ public class InventoryText_KJS : MonoBehaviour
         // 해당 postId가 딕셔너리에 있는지 확인
         if (postInfoDict.TryGetValue(postId, out H_PostInfo postInfo))
         {
-            // Resources 폴더에서 프리팹 로드
-            GameObject inventorySlotPrefab = Resources.Load<GameObject>(inventorySlotPrefabPath);
-            if (inventorySlotPrefab == null)
+            // Resources 폴더에서 프리팹 로드 (PhotonNetwork.Instantiate에서는 경로에 Resources를 포함하지 않습니다)
+            if (Resources.Load<GameObject>(inventorySlotPrefabPath) == null)
             {
                 Debug.LogError("Inventory Slot UI 프리팹을 Resources 폴더에서 찾을 수 없습니다. 경로를 확인하세요: " + inventorySlotPrefabPath);
                 return;
             }
 
-            // 새로운 슬롯 UI 생성
-            GameObject newSlot = Instantiate(inventorySlotPrefab, inventoryPanel);
+            // 새로운 슬롯 UI 생성 (PhotonNetwork.Instantiate 사용)
+            GameObject newSlot = PhotonNetwork.Instantiate(inventorySlotPrefabPath, inventoryPanel.position, Quaternion.identity);
+            newSlot.transform.SetParent(inventoryPanel, false); // inventoryPanel의 자식으로 설정
             inventorySlots.Add(newSlot);
 
             // 해당 postInfo의 thumburl을 사용하여 이미지를 로드하여 슬롯에 설정
