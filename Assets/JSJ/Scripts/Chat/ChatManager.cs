@@ -56,8 +56,11 @@ public class ChatManager : MonoBehaviourPun
         // AddChat RPC 함수 호출
         photonView.RPC(nameof(AddChat), RpcTarget.All, chat);
 
-        // 강제로 inputChat 을 활성화 하자
-        inputChat.ActivateInputField();
+        if (photonView.IsMine)
+        {
+            // 강제로 inputChat 을 활성화 하자
+            inputChat.ActivateInputField();
+        }
     }
 
     // 채팅 추가 함수
