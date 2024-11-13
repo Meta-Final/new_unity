@@ -328,6 +328,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de4bba8757fd0a049b4be474f00c6d19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  closebtn: {fileID: 0}
+  Magazinepanel: {fileID: 0}
 --- !u!4 &110765054
 Transform:
   m_ObjectHideFlags: 0
@@ -2260,6 +2262,7 @@ GameObject:
   - component: {fileID: 639262756}
   - component: {fileID: 639262755}
   - component: {fileID: 639262758}
+  - component: {fileID: 639262759}
   m_Layer: 5
   m_Name: ChatView
   m_TagString: Untagged
@@ -2375,6 +2378,28 @@ MonoBehaviour:
     type: 3}
   trContent: {fileID: 293049809}
   trChatView: {fileID: 639262754}
+--- !u!114 &639262759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 639262753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &654070178
 GameObject:
   m_ObjectHideFlags: 0
@@ -2508,8 +2533,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 5, y: 0}
+  m_SizeDelta: {x: -10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &678181064
 MonoBehaviour:
@@ -2551,10 +2576,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Enter text...
+  m_text: "\uD14D\uC2A4\uD2B8\uB97C \uC785\uB825\uD558\uC138\uC694"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d100cff1f1908c948b90bcea7b01e59a, type: 2}
+  m_sharedMaterial: {fileID: -6335151944157053342, guid: d100cff1f1908c948b90bcea7b01e59a,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5523,8 +5549,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 5, y: 0}
+  m_SizeDelta: {x: -10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1337797997
 MonoBehaviour:
@@ -5548,8 +5574,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u200B"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d100cff1f1908c948b90bcea7b01e59a, type: 2}
+  m_sharedMaterial: {fileID: -6335151944157053342, guid: d100cff1f1908c948b90bcea7b01e59a,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
