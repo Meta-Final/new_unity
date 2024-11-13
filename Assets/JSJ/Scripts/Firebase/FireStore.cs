@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-// ³»Á¤º¸ or È¸¿øÁ¤º¸
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ or È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 [FirestoreData]
 public class UserInfo
 {
@@ -38,7 +38,7 @@ public class FireStore : MonoBehaviour
         store = FirebaseFirestore.DefaultInstance;
     }
 
-    // È¸¿ø Á¤º¸ ÀúÀå ÁøÇà
+    // È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void SaveUserInfo(UserInfo info)
     {
         StartCoroutine(CoSaveUserInfo(info));
@@ -46,24 +46,24 @@ public class FireStore : MonoBehaviour
 
     IEnumerator CoSaveUserInfo(UserInfo info)
     {
-        // ÀúÀå °æ·Î
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         string path = "USER/" + FireAuthManager.instance.auth.CurrentUser.UserId;
-        // Á¤º¸ ÀúÀå ¿äÃ»
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã»
         Task task = store.Document(path).SetAsync(info);
-        // Åë½ÅÀÌ ¿Ï·áµÉ ¶§±îÁö ±â´Ù¸°´Ù.
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ù¸ï¿½ï¿½ï¿½.
         yield return new WaitUntil(() => task.IsCompleted);
-        // ¸¸¾à¿¡ ¿¹¿Ü°¡ ¾ø´Ù¸é
+        // ï¿½ï¿½ï¿½à¿¡ ï¿½ï¿½ï¿½Ü°ï¿½ ï¿½ï¿½ï¿½Ù¸ï¿½
         if (task.Exception == null)
         {
-            print("È¸¿øÁ¤º¸ ÀúÀå ¼º°ø");
+            print("È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
         }
         else
         {
-            print("È¸¿øÁ¤º¸ ÀúÀå ½ÇÆÐ : " + task.Exception);
+            print("È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ : " + task.Exception);
         }
     }
 
-    // È¸¿ø Á¤º¸ ºÒ·¯¿À±â ÁøÇà
+    // È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void LoadUserInfo()
     {
         StartCoroutine(CoLoadUserInfo()); 
@@ -71,18 +71,18 @@ public class FireStore : MonoBehaviour
 
     IEnumerator CoLoadUserInfo()
     {
-        // ÀúÀå °æ·Î
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         string path = "USER/" + FireAuthManager.instance.auth.CurrentUser.UserId;
-        // Á¤º¸ Á¶È¸ ¿äÃ»
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸ ï¿½ï¿½Ã»
         Task<DocumentSnapshot> task = store.Document(path).GetSnapshotAsync();
-        // Åë½ÅÀÌ ¿Ï·áµÉ ¶§±îÁö ±â´Ù¸°´Ù.
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ù¸ï¿½ï¿½ï¿½.
         yield return new WaitUntil(() => task.IsCompleted);
-        // ¸¸¾à¿¡ ¿¹¿Ü°¡ ¾ø´Ù¸é
+        // ï¿½ï¿½ï¿½à¿¡ ï¿½ï¿½ï¿½Ü°ï¿½ ï¿½ï¿½ï¿½Ù¸ï¿½
         if (task.Exception == null)
         {
-            print("È¸¿øÁ¤º¸ ºÒ·¯¿À±â ¼º°ø");
+            print("È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
 
-            // ºÒ·¯¿Â Á¤º¸¸¦ UserInfo º¯¼ö¿¡ ÀúÀå
+            // ï¿½Ò·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ UserInfo ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             UserInfo loadInfo = task.Result.ConvertTo<UserInfo>();
 
             string userId = loadInfo.userId;
@@ -90,27 +90,32 @@ public class FireStore : MonoBehaviour
 
             SaveUserInfo(userId, userNickName);
 
-            // ºÒ·¯¿Â Á¤º¸ Àü´Þ
+            // ï¿½Ò·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             MetaConnectionMgr.instance.JoinLobby(loadInfo);
 
         }
         else
         {
-            print("È¸¿øÁ¤º¸ ºÒ·¯¿À±â ½ÇÆÐ : " + task.Exception);
+            print("È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ : " + task.Exception);
         }
     }
 
-    // À¯Àú ¾ÆÀÌµð / ´Ð³×ÀÓ ÀúÀåÇÏ´Â ÇÔ¼ö
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½ / ï¿½Ð³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
     public void SaveUserInfo(string userId, string userNickName)
     {
         PlayerPrefs.SetString("UserId", userId);
         PlayerPrefs.SetString("Nickname", userNickName);
         PlayerPrefs.Save();
-        print("À¯Àú ¾ÆÀÌµð¿Í ´Ð³×ÀÓÀÌ ÀúÀåµÇ¾ú½À´Ï´Ù.");
+        print("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½ï¿½ ï¿½Ð³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
 
     }
 
-    // À¯Àú ¾ÆÀÌµð / ´Ð³×ÀÓÀ» ºÒ·¯¿À´Â ÇÔ¼ö
+    public UserInfo GetUserInfo()
+    {
+        return userInfo;
+    }
+
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½ / ï¿½Ð³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
     //public void GetUserId()
     //{
     //    string userId = PlayerPrefs.GetString("UserId", "DefaultUserId");
