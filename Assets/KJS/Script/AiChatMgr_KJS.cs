@@ -145,7 +145,7 @@ public class AiChatMgr_KJS : MonoBehaviour
             else if (response == "내가 최근에 스크랩한 기사를 알려줘")
             {
                 // 최근 스크랩한 기사 응답 처리
-                chatResponseText.text = "너가 최근에 스크랩한 기사는 크리스마스, 연말, 일상이다 삐약!";
+                chatResponseText.text = "너가 최근에 스크랩한 기사는 스타벅스, 연말, 일상이다 삐약!";
                 Debug.Log("최근 스크랩한 기사 요청에 대한 응답입니다.");
             }
             else
