@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using TMPro;
 
-public class PlayerMove : MonoBehaviourPun
+public class PlayerMove : MonoBehaviourPun, IPunObservable
 {
     [Header("이동")]
     public float moveSpeed = 5f;
@@ -15,10 +16,13 @@ public class PlayerMove : MonoBehaviourPun
     public float jumpPower = 3f;
     public int jumpMaxCount = 1;
 
-    
-
     float yPos;
     int jumpCurrentCount;
+
+    float moveState;
+
+    public Canvas canvasNickName;
+    public TMP_Text playerNickName;
 
     Animator animator;
     CharacterController cc;
@@ -28,6 +32,8 @@ public class PlayerMove : MonoBehaviourPun
         cc = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
 
+        // 해당 캐릭터의 닉네임 설정
+        playerNickName.text = photonView.Owner.NickName;
     }
 
     void Update()
@@ -36,7 +42,11 @@ public class PlayerMove : MonoBehaviourPun
         if (photonView.IsMine)
         {
             Moving();
+
+            canvasNickName.transform.rotation = Quaternion.LookRotation(canvasNickName.transform.position - Camera.main.transform.position);
         }
+
+        
     }
 
     public void Moving()
@@ -47,7 +57,10 @@ public class PlayerMove : MonoBehaviourPun
         Vector3 dir = new Vector3(h, 0, v);
         dir.Normalize();
 
-        animator.SetFloat("Move", dir.magnitude);
+        moveState = dir.magnitude;
+
+        // Player 애니메이션
+        animator.SetFloat("Move", moveState);
 
         if (!(h == 0 & v == 0))
         {
@@ -74,5 +87,18 @@ public class PlayerMove : MonoBehaviourPun
         dir.y = yPos;
 
         cc.Move(dir * moveSpeed * Time.deltaTime);
+    }
+
+    // 애니메이션 동기화
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(moveState);
+        }
+        else
+        {
+            moveState = (float)stream.ReceiveNext();
+        }
     }
 }
