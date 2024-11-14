@@ -85,22 +85,22 @@ public class AiChatMgr_KJS : MonoBehaviour
             userInputField.text = ""; // 입력 필드 초기화
 
             // 입력된 텍스트에 따라 다른 응답 처리
-            if (userMessage.Trim() == "이미지 만들어줘")
+            if (userMessage.Trim() == "크리스마스이미지만들어줘")
             {
-                UpdateChatResponse("이미지 만들어줘"); // 기존 메서드 호출
+                UpdateChatResponse("크리스마스이미지만들어줘"); // 기존 메서드 호출
                 apiManager.Cover(); // APIManager의 Cover 메서드 호출
             }
-            else if (userMessage.Trim() == "작업한 포스트 내용을 오브젝트로 만들어줘")
+            else if (userMessage.Trim() == "작업한기사를오브젝트로만들어줘")
             {
-                UpdateChatResponse("작업한 포스트 내용을 오브젝트로 만들어줘"); // 새로운 조건 처리
+                UpdateChatResponse("작업한포스트기사를오브젝트로만들어줘"); // 새로운 조건 처리
             }
-            else if (userMessage.Trim() == "글쓰고 싶어")
+            else if (userMessage.Trim() == "글쓰고싶어")
             {
-                UpdateChatResponse("글쓰고 싶어");
+                UpdateChatResponse("글쓰고싶어");
             }
-            else if (userMessage.Trim() == "내가 최근에 스크랩한 기사를 알려줘")
+            else if (userMessage.Trim() == "내가최근에스크랩한기사를알려줘")
             {
-                UpdateChatResponse("내가 최근에 스크랩한 기사를 알려줘");
+                UpdateChatResponse("내가최근에스크랩한기사를알려줘");
             }
             else
             {
@@ -117,17 +117,17 @@ public class AiChatMgr_KJS : MonoBehaviour
             Debug.Log($"UpdateChatResponse 호출됨: {response}"); // 응답 로그
 
             // 요리 이미지 관련 처리
-            if (response == "이미지 만들어줘")
+            if (response == "크리스마스이미지만들어줘")
             {
                 chatResponseText.text = "이미지를 만들었다. 삐약!";
                 Debug.Log("요리 이미지 생성 요청에 대한 응답입니다.");
             }
-            else if (response == "작업한 포스트 내용을 오브젝트로 만들어줘")
+            else if (response == "작업한기사를오브젝트로만들어줘")
             {
                 chatResponseText.text = "오브젝트를 만들었다. 삐약!";
                 Debug.Log("작업한 포스트 내용을 오브젝트로 만드는 요청에 대한 응답입니다.");
             }
-            else if (response == "글쓰고 싶어")
+            else if (response == "글쓰고싶어")
             {
                 chatResponseText.text = "알겠다 삐약!";
                 Debug.Log("글쓰기 요청에 대한 응답입니다.");
@@ -142,10 +142,10 @@ public class AiChatMgr_KJS : MonoBehaviour
                     Debug.LogError("Tool UI is not assigned.");
                 }
             }
-            else if (response == "내가 최근에 스크랩한 기사를 알려줘")
+            else if (response == "내가최근에스크랩한기사를알려줘")
             {
                 // 최근 스크랩한 기사 응답 처리
-                chatResponseText.text = "너가 최근에 스크랩한 기사는 스타벅스, 연말, 일상이다 삐약!";
+                chatResponseText.text = "너가 최근에 스크랩한 기사는 백화점, 연말이다 삐약!";
                 Debug.Log("최근 스크랩한 기사 요청에 대한 응답입니다.");
             }
             else

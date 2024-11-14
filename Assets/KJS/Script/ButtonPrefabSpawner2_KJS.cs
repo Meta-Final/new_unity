@@ -125,6 +125,9 @@ public class ButtonPrefabSpawner2_KJS : MonoBehaviourPunCallbacks
             // 설정된 회전값을 모든 클라이언트에서 적용
             loadedObject.transform.rotation = rotation;
 
+            // 스케일을 20으로 설정
+            loadedObject.transform.localScale = Vector3.one * 100;
+
             // 태그 설정
             loadedObject.tag = "Item";
 
