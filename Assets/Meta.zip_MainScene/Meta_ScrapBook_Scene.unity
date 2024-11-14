@@ -2305,6 +2305,11 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2546298614308023435, guid: 61680cdcb6d60c2459ab6261dff78e04,
+        type: 3}
+      propertyPath: inventoryPostIds.Array.data[1]
+      value: "\uC2A4\uD0C0\uBC85\uC2A4"
+      objectReference: {fileID: 0}
     - target: {fileID: 2945048639361669581, guid: 61680cdcb6d60c2459ab6261dff78e04,
         type: 3}
       propertyPath: sceneViewId
@@ -2995,6 +3000,36 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 89986293668bc864b99cffb29bd8b504, type: 3}
+--- !u!224 &872956501 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3526553094548780494, guid: 89986293668bc864b99cffb29bd8b504,
+    type: 3}
+  m_PrefabInstance: {fileID: 872956500}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &872956502 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2511950082663954191, guid: 89986293668bc864b99cffb29bd8b504,
+    type: 3}
+  m_PrefabInstance: {fileID: 872956500}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &872956503 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5358103943188598902, guid: 89986293668bc864b99cffb29bd8b504,
+    type: 3}
+  m_PrefabInstance: {fileID: 872956500}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a4db7a114972834c8e4117be1d82ba3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!224 &872956504 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3147293639954072863, guid: 89986293668bc864b99cffb29bd8b504,
+    type: 3}
+  m_PrefabInstance: {fileID: 872956500}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &898698859
 GameObject:
   m_ObjectHideFlags: 0
@@ -7041,7 +7076,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!224 &1943307548
 RectTransform:
@@ -8812,22 +8847,22 @@ PrefabInstance:
         type: 3}
       propertyPath: parent
       value: 
-      objectReference: {fileID: 7644665568370512546}
+      objectReference: {fileID: 872956504}
     - target: {fileID: 5318417001481067666, guid: 38922a62777744644915b5ef29018281,
         type: 3}
       propertyPath: pageScrollbar
       value: 
-      objectReference: {fileID: 856228268579030987}
+      objectReference: {fileID: 872956503}
     - target: {fileID: 5318417001481067666, guid: 38922a62777744644915b5ef29018281,
         type: 3}
       propertyPath: pages.Array.data[0]
       value: 
-      objectReference: {fileID: 7162444682950074546}
+      objectReference: {fileID: 872956502}
     - target: {fileID: 5318417001481067666, guid: 38922a62777744644915b5ef29018281,
         type: 3}
       propertyPath: pagesParentTransform
       value: 
-      objectReference: {fileID: 8163607126721110643}
+      objectReference: {fileID: 872956501}
     - target: {fileID: 5407121803447432933, guid: 38922a62777744644915b5ef29018281,
         type: 3}
       propertyPath: m_Name

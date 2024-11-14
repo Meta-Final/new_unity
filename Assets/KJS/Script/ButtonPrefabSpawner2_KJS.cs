@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using System.Collections.Generic;
-using Photon.Realtime;
 
 public class ButtonPrefabSpawner2_KJS : MonoBehaviourPunCallbacks
 {
@@ -83,7 +82,7 @@ public class ButtonPrefabSpawner2_KJS : MonoBehaviourPunCallbacks
             return;
         }
 
-        // Player 태그를 가진 오브젝트 중 photonView.IsMine이 true인 로컬 플레이어를 찾기
+        // 로컬 플레이어의 Transform 찾기
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
         Transform playerTransform = null;
 
@@ -103,49 +102,69 @@ public class ButtonPrefabSpawner2_KJS : MonoBehaviourPunCallbacks
             return;
         }
 
-        // 로컬 플레이어의 앞쪽 Z 방향으로 0.5만큼 떨어진 위치에 프리팹 생성
         Vector3 spawnPosition = playerTransform.position + playerTransform.forward * 0.5f;
 
+        // 기본 회전 설정 (로컬 플레이어 기준으로 x축 -90도 회전 적용)
+        Quaternion spawnRotation = playerTransform.rotation * Quaternion.Euler(-90, 0, 0);
+
         // PhotonNetwork.Instantiate를 사용하여 네트워크 객체 생성
-        GameObject loadedObject = PhotonNetwork.Instantiate(prefabResourcePath, spawnPosition, playerTransform.rotation);
-        loadedObject.transform.localScale = Vector3.one;
-        loadedObject.tag = "Item"; // 생성된 오브젝트의 태그를 "Item"으로 설정
+        GameObject loadedObject = PhotonNetwork.Instantiate(prefabResourcePath, spawnPosition, spawnRotation);
 
-        // PrefabManager_KJS 컴포넌트를 추가하고 postId 설정
-        PrefabManager_KJS prefabManager = loadedObject.GetComponent<PrefabManager_KJS>();
-        if (prefabManager == null)
-        {
-            prefabManager = loadedObject.AddComponent<PrefabManager_KJS>();
-        }
-        prefabManager.postId = postId;
-        Debug.Log($"PrefabManager_KJS에 할당된 postId: {prefabManager.postId}");
+        // RPC 호출로 모든 클라이언트에 태그와 postId, 그리고 회전값을 설정하도록 요청
+        photonView.RPC("SetupSpawnedObject", RpcTarget.AllBuffered, loadedObject.GetComponent<PhotonView>().ViewID, postId, spawnRotation);
+    }
 
-        Text prefabText = loadedObject.GetComponentInChildren<Text>();
-        if (prefabText != null)
+    [PunRPC]
+    private void SetupSpawnedObject(int viewID, string postId, Quaternion rotation)
+    {
+        PhotonView targetView = PhotonView.Find(viewID);
+        if (targetView != null)
         {
-            prefabText.text = postId;
-        }
-        else
-        {
-            Debug.LogWarning("생성된 프리팹에 Text 컴포넌트가 없습니다.");
-        }
+            GameObject loadedObject = targetView.gameObject;
 
-        // URP 쉐이더 설정
-        Shader urpLitShader = Shader.Find("Universal Render Pipeline/Lit");
-        if (urpLitShader != null)
-        {
-            MeshRenderer[] meshRenderers = loadedObject.GetComponentsInChildren<MeshRenderer>();
-            foreach (MeshRenderer renderer in meshRenderers)
+            // 설정된 회전값을 모든 클라이언트에서 적용
+            loadedObject.transform.rotation = rotation;
+
+            // 태그 설정
+            loadedObject.tag = "Item";
+
+            // PrefabManager_KJS 컴포넌트를 추가하고 postId 설정
+            PrefabManager_KJS prefabManager = loadedObject.GetComponent<PrefabManager_KJS>();
+            if (prefabManager == null)
             {
-                foreach (Material mat in renderer.materials)
+                prefabManager = loadedObject.AddComponent<PrefabManager_KJS>();
+            }
+            prefabManager.postId = postId;
+            Debug.Log($"PrefabManager_KJS에 할당된 postId: {prefabManager.postId}");
+
+            // Text 컴포넌트에 postId를 표시
+            Text prefabText = loadedObject.GetComponentInChildren<Text>();
+            if (prefabText != null)
+            {
+                prefabText.text = postId;
+            }
+            else
+            {
+                Debug.LogWarning("생성된 프리팹에 Text 컴포넌트가 없습니다.");
+            }
+
+            // URP 쉐이더 설정
+            Shader urpLitShader = Shader.Find("Universal Render Pipeline/Lit");
+            if (urpLitShader != null)
+            {
+                MeshRenderer[] meshRenderers = loadedObject.GetComponentsInChildren<MeshRenderer>();
+                foreach (MeshRenderer renderer in meshRenderers)
                 {
-                    mat.shader = urpLitShader;
+                    foreach (Material mat in renderer.materials)
+                    {
+                        mat.shader = urpLitShader;
+                    }
                 }
             }
-        }
-        else
-        {
-            Debug.LogError("URP의 Lit 쉐이더를 찾을 수 없습니다. URP가 프로젝트에 적용되었는지 확인하세요.");
+            else
+            {
+                Debug.LogError("URP의 Lit 쉐이더를 찾을 수 없습니다. URP가 프로젝트에 적용되었는지 확인하세요.");
+            }
         }
     }
 
