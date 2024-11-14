@@ -83,6 +83,9 @@ public class AllButtonMgr : MonoBehaviour
     {
         Magazinepanel2.transform.GetChild(0).gameObject.SetActive(false);
     }
+
+
+      
    
 }
 
