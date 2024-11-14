@@ -2471,24 +2471,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 836935013}
   m_SourcePrefab: {fileID: 100100000, guid: 89986293668bc864b99cffb29bd8b504, type: 3}
---- !u!1 &872956501 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 615890974656450922, guid: 89986293668bc864b99cffb29bd8b504,
-    type: 3}
-  m_PrefabInstance: {fileID: 872956500}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &872956502 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 653075057636904247, guid: 89986293668bc864b99cffb29bd8b504,
-    type: 3}
-  m_PrefabInstance: {fileID: 872956500}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &893792680 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7854762617254323990, guid: 9fc00af1a8f688040ba0363119b006ad,
@@ -4361,13 +4343,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1555804030}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.27435377, y: -0.13553257, z: 0.252208, w: 0.9180153}
+  m_LocalRotation: {x: 0.21206631, y: -0.11828445, z: 0.26074272, w: 0.9343715}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 34.896, y: -7.739, z: 28.288}
+  m_LocalEulerAnglesHint: {x: 27.257, y: -7.137, z: 29.452}
 --- !u!114 &1555804033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4699,7 +4681,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b9fac7ba0962db468b3a1dc1448cfb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetUI: {fileID: 872956501}
+  uiPanels: []
 --- !u!4 &1787089053 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2282859939448244530, guid: c89b82b0e2359954d93d73e66f03abf9,
@@ -4908,8 +4890,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de4bba8757fd0a049b4be474f00c6d19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  closebtn: {fileID: 872956502}
-  Magazinepanel: {fileID: 836935008}
+  btn_exit_1: {fileID: 0}
+  btn_exit_2: {fileID: 0}
+  Magazinepanel1: {fileID: 0}
+  Magazinepanel2: {fileID: 0}
+  roombtns: {fileID: 0}
 --- !u!4 &1831532022
 Transform:
   m_ObjectHideFlags: 0

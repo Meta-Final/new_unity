@@ -16,7 +16,7 @@ public class InventoryText_KJS : MonoBehaviour
     private Dictionary<string, H_PostInfo> postInfoDict = new Dictionary<string, H_PostInfo>(); // postId별로 아이템 데이터를 저장할 딕셔너리
 
     private int previousItemCount = 0; // 이전 inventoryPostIds 개수를 저장하여 변화 감지
-    private string baseDirectory = @"C:\Users\Admin\Documents\GitHub\new_unity\Assets\KJS\UserInfo"; // 기본 저장 경로
+    private string baseDirectory = Application.dataPath; // 기본 저장 경로
 
     void Start()
     {
