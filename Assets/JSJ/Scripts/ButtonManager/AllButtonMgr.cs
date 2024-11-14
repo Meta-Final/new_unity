@@ -50,5 +50,7 @@ public class AllButtonMgr : MonoBehaviour
     {
         MetaConnectionMgr.instance.TownToChannel();
     }
+
+    
 }
 

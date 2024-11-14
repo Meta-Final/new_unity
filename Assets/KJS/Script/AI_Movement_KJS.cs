@@ -13,13 +13,12 @@ public class AI_Movement_KJS : MonoBehaviourPun
     // Scene에서 tool UI를 저장하기 위한 변수
     private GameObject Chat;
 
-    //삐약이 사용법
-    public GameObject npctutorial;
+    
+    
     
     void Start()
     {
-        npctutorial = GameObject.Find("aitutorial");
-        StartCoroutine(SetFalse(2));
+      
         agent = GetComponent<NavMeshAgent>();
 
         // 클라이언트의 로컬 플레이어 찾기
@@ -119,10 +118,6 @@ public class AI_Movement_KJS : MonoBehaviourPun
 
     }
 
-    IEnumerator SetFalse(float t)
-    {
-        yield return new WaitForSeconds(t);
-        npctutorial.SetActive(false);
-    }
+    
 
 }

@@ -122,6 +122,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!224 &72022415 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8741922692871482561, guid: c1999f48cfc95b34588e6c08dba7c93a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1753929491}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &136698498 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3264523768726124401, guid: dbcb96bc5e755514f95ba9c7fd388f8f,
@@ -2529,12 +2535,12 @@ GameObject:
   - component: {fileID: 761725681}
   - component: {fileID: 761725680}
   m_Layer: 5
-  m_Name: canvas
+  m_Name: canvas_large
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &761725680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3151,6 +3157,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 898698859}
   m_CullTransparentMesh: 1
+--- !u!1 &914693410
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 914693411}
+  - component: {fileID: 914693412}
+  m_Layer: 0
+  m_Name: NpcTutorial
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &914693411
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914693410}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -23.53003, y: 1.0700073, z: 14.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 72022415}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &914693412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914693410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03cdbb20dbba04a4987448cadeaca0c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  npctutorial: {fileID: 0}
 --- !u!1 &938511689
 GameObject:
   m_ObjectHideFlags: 0
@@ -3168,7 +3220,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &938511690
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6003,7 +6055,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 914693411}
     m_Modifications:
     - target: {fileID: 3321508612977726103, guid: c1999f48cfc95b34588e6c08dba7c93a,
         type: 3}
@@ -6013,7 +6065,7 @@ PrefabInstance:
     - target: {fileID: 3321508612977726103, guid: c1999f48cfc95b34588e6c08dba7c93a,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8741922692871482561, guid: c1999f48cfc95b34588e6c08dba7c93a,
         type: 3}
@@ -6053,6 +6105,21 @@ PrefabInstance:
     - target: {fileID: 8741922692871482561, guid: c1999f48cfc95b34588e6c08dba7c93a,
         type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8741922692871482561, guid: c1999f48cfc95b34588e6c08dba7c93a,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8741922692871482561, guid: c1999f48cfc95b34588e6c08dba7c93a,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8741922692871482561, guid: c1999f48cfc95b34588e6c08dba7c93a,
+        type: 3}
+      propertyPath: m_LocalScale.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8741922692871482561, guid: c1999f48cfc95b34588e6c08dba7c93a,
@@ -6863,7 +6930,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1901808083
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12105,6 +12172,7 @@ SceneRoots:
   - {fileID: 1943307548}
   - {fileID: 2034201140}
   - {fileID: 1484439532}
+  - {fileID: 914693411}
   - {fileID: 761725683}
   - {fileID: 1925998677}
   - {fileID: 708427194}
@@ -12118,4 +12186,3 @@ SceneRoots:
   - {fileID: 156637664}
   - {fileID: 1831532022}
   - {fileID: 804332077}
-  - {fileID: 1753929491}
