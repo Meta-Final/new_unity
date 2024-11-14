@@ -13,8 +13,13 @@ public class AI_Movement_KJS : MonoBehaviourPun
     // Scene에서 tool UI를 저장하기 위한 변수
     private GameObject Chat;
 
+    //삐약이 사용법
+    public GameObject npctutorial;
+    
     void Start()
     {
+        npctutorial = GameObject.Find("aitutorial");
+        StartCoroutine(SetFalse(2));
         agent = GetComponent<NavMeshAgent>();
 
         // 클라이언트의 로컬 플레이어 찾기
@@ -27,8 +32,9 @@ public class AI_Movement_KJS : MonoBehaviourPun
             Chat = magazineView.transform.Find("Chat")?.gameObject;
             if (Chat != null)
             {
-                // tool UI를 비활성화된 상태로 초기화
+                // tool UI, NPC를 비활성화된 상태로 초기화
                 Chat.SetActive(false);
+               
             }
             else
             {
@@ -66,7 +72,8 @@ public class AI_Movement_KJS : MonoBehaviourPun
                     if (Chat != null)
                     {
                         Chat.SetActive(true);
-                    }
+                      
+                        }
                 }
             }
         }
@@ -75,6 +82,7 @@ public class AI_Movement_KJS : MonoBehaviourPun
         if (Input.GetKeyDown(KeyCode.Escape) && Chat != null)
         {
             Chat.SetActive(false);
+           
         }
     }
 
@@ -107,5 +115,14 @@ public class AI_Movement_KJS : MonoBehaviourPun
         {
             Chat.SetActive(true);
         }
+     
+
     }
+
+    IEnumerator SetFalse(float t)
+    {
+        yield return new WaitForSeconds(t);
+        npctutorial.SetActive(false);
+    }
+
 }
