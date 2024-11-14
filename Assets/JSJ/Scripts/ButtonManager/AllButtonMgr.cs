@@ -46,9 +46,9 @@ public class AllButtonMgr : MonoBehaviour
     }
 
     // Town -> Folder
-    public void TownToFolder()
+    public void TownToChannel()
     {
-        MetaConnectionMgr.instance.TownToFolder();
+        MetaConnectionMgr.instance.TownToChannel();
     }
 }
 
