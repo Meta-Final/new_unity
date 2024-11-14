@@ -101,6 +101,8 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         else
         {
             moveState = (float)stream.ReceiveNext();
+
+            animator.SetFloat("Move", moveState);
         }
     }
 }
