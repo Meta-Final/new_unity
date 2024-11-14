@@ -217,12 +217,12 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
     public void RoomTransition()
     {
         // 만약 룸넘버가 1이거나 4면, Channel 로 이동한다.
-        if (roomNumber == 1)
+        if (roomNumber == 1 || roomNumber == 4)
         {
             JoinChannel();
         }
         // 만약 룸넘버가 2이면, Folder 로 이동한다.
-        if (roomNumber == 2 || roomNumber == 4)
+        if (roomNumber == 2 )
         {
             JoinFolder();
         }
