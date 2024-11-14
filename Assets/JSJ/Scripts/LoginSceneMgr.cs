@@ -120,7 +120,7 @@ public class LoginSceneMgr : MonoBehaviour
     // 회원 가입 성공 UI
     public void ShowSignUpSuccess()
     {
-        StartCoroutine(SignUpSuccess(2f));
+        StartCoroutine(SignUpSuccess(1.5f));
     }
 
     IEnumerator SignUpSuccess(float duration)
