@@ -176,7 +176,7 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
     }
 
     // Town -> Folder
-    public void TownToFolder()
+    public void TownToChannel()
     {
         PhotonNetwork.LeaveRoom();
         roomNumber = 4;
@@ -216,12 +216,12 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
     // 룸 이동 함수
     public void RoomTransition()
     {
-        // 만약 룸넘버가 1이면, Channel 로 이동한다.
+        // 만약 룸넘버가 1이거나 4면, Channel 로 이동한다.
         if (roomNumber == 1)
         {
             JoinChannel();
         }
-        // 만약 룸넘버가 2이거나 4면, Folder 로 이동한다.
+        // 만약 룸넘버가 2이면, Folder 로 이동한다.
         if (roomNumber == 2 || roomNumber == 4)
         {
             JoinFolder();
