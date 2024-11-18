@@ -11,9 +11,8 @@ public class CameraManager : MonoBehaviourPun
     public float zoomInSpeed = 2f; // 줌인 속도
     public float zoomInDistance = 10f; // 플레이어와의 줌인 거리
 
-    Vector3 offset;
-
-    private AI_Movement_KJS aiMovementScript;
+    private Vector3 offset;
+    private PlayerMove playerMoveScript; // PlayerMove 스크립트를 참조
 
     private bool stopCameraMoving = false; // CameraMoving 중단 플래그
     private bool isZoomingIn = false; // MoveCameraToPosition에서 줌인 활성화 플래그
@@ -27,6 +26,9 @@ public class CameraManager : MonoBehaviourPun
         {
             offset = mainCamera.transform.position - transform.position;
         }
+
+        // PlayerMove 스크립트 참조
+        playerMoveScript = GetComponent<PlayerMove>();
     }
 
     void Update()
@@ -36,6 +38,12 @@ public class CameraManager : MonoBehaviourPun
         {
             isZoomingIn = false; // MoveCameraToPosition 줌인 중단
             stopCameraMoving = false; // CameraMoving 다시 활성화
+
+            // PlayerMove 활성화
+            if (playerMoveScript != null)
+            {
+                playerMoveScript.EnableMoving(true);
+            }
         }
 
         // 내 것일 때만 카메라 컨트롤
@@ -49,12 +57,6 @@ public class CameraManager : MonoBehaviourPun
             {
                 CameraMoving(); // 플레이어를 따라가는 기본 로직
             }
-        }
-
-        // 동적으로 AI_Movement_KJS 스크립트가 생성되었는지 체크
-        if (aiMovementScript == null)
-        {
-            aiMovementScript = FindObjectOfType<AI_Movement_KJS>();
         }
     }
 
@@ -74,9 +76,17 @@ public class CameraManager : MonoBehaviourPun
             stopCameraMoving = true; // CameraMoving 중단
             isZoomingIn = true; // 줌인 활성화
 
+            // PlayerMove 비활성화
+            if (playerMoveScript != null)
+            {
+                playerMoveScript.EnableMoving(false);
+            }
+
             // 줌인 목표 위치 설정 (플레이어를 향한 방향으로 이동)
             Vector3 directionToPlayer = (transform.position - mainCamera.transform.position).normalized; // 카메라에서 플레이어 방향 계산
-            targetPosition = (transform.position - Vector3.right*3) - directionToPlayer * zoomInDistance; // 플레이어 방향으로 zoomInDistance만큼 이동
+            targetPosition = (transform.position - Vector3.right * 3)
+                        - directionToPlayer * zoomInDistance
+                        + Vector3.up * 2.0f;
         }
     }
 
@@ -90,6 +100,12 @@ public class CameraManager : MonoBehaviourPun
         if (Vector3.Distance(mainCamera.transform.position, targetPosition) < 0.01f)
         {
             isZoomingIn = false; // 줌인 중단
+        }
+
+        if (playerMoveScript != null)
+        {
+            playerMoveScript.EnableMoving(false); // 이동 비활성화
+            playerMoveScript.StartRotateToHelper(); // Helper 방향으로 회전
         }
     }
 }
