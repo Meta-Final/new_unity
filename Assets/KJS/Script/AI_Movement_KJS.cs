@@ -70,8 +70,9 @@ public class AI_Movement_KJS : MonoBehaviourPun
                 {
                     if (Chat != null)
                     {
-                        Chat.SetActive(true);
-                      
+                        OnMouseDown();
+
+
                         }
                 }
             }
@@ -107,17 +108,20 @@ public class AI_Movement_KJS : MonoBehaviourPun
         }
     }
 
-    private void OnMouseDown()
+    public void OnMouseDown()
     {
+        print("!!!");
+
         // 이 스크립트가 할당된 오브젝트를 로컬 플레이어가 클릭한 경우 tool UI를 활성화
         if (photonView.IsMine && Chat != null)
         {
             Chat.SetActive(true);
         }
-     
 
+        CameraManager cameraManager = FindObjectOfType<CameraManager>();
+        if (cameraManager != null)
+        {
+            cameraManager.MoveCameraToPosition();
+        }
     }
-
-    
-
 }

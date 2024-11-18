@@ -39,10 +39,12 @@ public class InventoryText_KJS : MonoBehaviour
         if (Directory.Exists(baseDirectory))
         {
             string[] postDirectories = Directory.GetDirectories(baseDirectory);
+            Debug.Log("postInfoDict count: " + postInfoDict.Count);
 
             foreach (string postDirectory in postDirectories)
             {
                 string jsonFilePath = Path.Combine(postDirectory, "thumbnail.json");
+                Debug.Log($"폴더 {postDirectory}에 thumbnail.json 파일이 없습니다.");
 
                 if (File.Exists(jsonFilePath))
                 {
@@ -120,8 +122,11 @@ public class InventoryText_KJS : MonoBehaviour
     private IEnumerator LoadAndSetThumbnail(H_PostInfo postInfo, GameObject slot)
     {
         string filePath = "file:///" + postInfo.thumburl; // 각 postId별 폴더 내 이미지 파일 경로
+        Debug.Log("baseDirectory: " + baseDirectory);
+        Debug.Log("filePath: " + filePath);
 
         UnityWebRequest textureRequest = UnityWebRequestTexture.GetTexture(filePath);
+        Debug.LogError("이미지 로드 실패: " + textureRequest.error);
         yield return textureRequest.SendWebRequest();
 
         if (textureRequest.result == UnityWebRequest.Result.Success)
