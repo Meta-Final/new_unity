@@ -16,6 +16,7 @@ public class AiChatMgr_KJS : MonoBehaviour
 
     private GameObject chatUI;            // MagazineView 안에 있는 Chat UI
     private GameObject toolUI;            // MagazineView 안에 있는 Tool UI
+    private bool wasToolUIActive = false;
 
     private void Awake()
     {
@@ -143,10 +144,24 @@ public class AiChatMgr_KJS : MonoBehaviour
             Debug.Log("Extra UI 비활성화");
         }
 
-        // 추가 작업 수행 (필요하면 actionKey에 따라 처리 가능)
         if (actionKey == "글쓰고싶어" && toolUI != null)
         {
             toolUI.SetActive(true); // Tool UI 활성화
+
+            // chatUI 비활성화
+            if (chatUI != null)
+            {
+                chatUI.SetActive(false);
+                Debug.Log("Chat UI 비활성화");
+            }
+
+            // 캐릭터 이동 비활성화
+            PlayerMove playerMove = FindObjectOfType<PlayerMove>();
+            if (playerMove != null)
+            {
+                playerMove.EnableMoving(false); // 캐릭터 이동 비활성화
+                Debug.Log("캐릭터 이동 비활성화");
+            }
         }
     }
 
