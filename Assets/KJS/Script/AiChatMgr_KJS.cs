@@ -92,7 +92,7 @@ public class AiChatMgr_KJS : MonoBehaviour
 
         if (!string.IsNullOrEmpty(userMessage))
         {
-            chatResponseText.text = ""; // 사용자가 입력한 텍스트 초기화
+            chatResponseText.text = ""; // 텍스트 초기화
             userInputField.text = "";  // 입력 필드 초기화
 
             // 입력된 텍스트에 따라 다른 응답 처리
@@ -120,14 +120,28 @@ public class AiChatMgr_KJS : MonoBehaviour
         }
     }
 
-    // 코루틴: 메시지 출력 후 extraUI를 1초 동안 활성화
+    // 코루틴: UI 활성화 -> 메시지 출력 -> 1초 대기 후 UI 비활성화
     private IEnumerator ProcessMessage(string responseText, string actionKey)
     {
-        // 한 글자씩 텍스트 출력
+        // 1. extraUI를 먼저 활성화
+        if (extraUI != null)
+        {
+            extraUI.SetActive(true);
+            Debug.Log("Extra UI 활성화");
+        }
+
+        // 2. 한 글자씩 텍스트 출력
         yield return StartCoroutine(TypeText(responseText));
 
-        // 추가 UI 1초간 활성화
-        yield return StartCoroutine(ShowExtraUIForOneSecond());
+        // 3. 텍스트 출력이 완료된 후 1초 대기
+        yield return new WaitForSeconds(1f);
+
+        // 4. extraUI 비활성화
+        if (extraUI != null)
+        {
+            extraUI.SetActive(false);
+            Debug.Log("Extra UI 비활성화");
+        }
 
         // 추가 작업 수행 (필요하면 actionKey에 따라 처리 가능)
         if (actionKey == "글쓰고싶어" && toolUI != null)
@@ -136,20 +150,7 @@ public class AiChatMgr_KJS : MonoBehaviour
         }
     }
 
-    // Coroutine: extraUI를 1초간 활성화
-    private IEnumerator ShowExtraUIForOneSecond()
-    {
-        if (extraUI != null)
-        {
-            extraUI.SetActive(true); // extraUI 활성화
-            Debug.Log("Extra UI 활성화");
-            yield return new WaitForSeconds(1f); // 1초 대기
-            extraUI.SetActive(false); // extraUI 비활성화
-            Debug.Log("Extra UI 비활성화");
-        }
-    }
-
-    // APIManager에서 응답 텍스트를 받아와 한 글자씩 표시하는 메서드
+    // 텍스트를 한 글자씩 출력하는 Coroutine
     private IEnumerator TypeText(string text)
     {
         chatResponseText.text = ""; // 기존 텍스트 초기화
