@@ -5,16 +5,6 @@ using UnityEngine.UI;
 
 public class AllButtonMgr : MonoBehaviour
 {
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
-
     // Channel -> ScrapBook
     public void ChannelToScrapBook()
     {
@@ -39,18 +29,22 @@ public class AllButtonMgr : MonoBehaviour
         MetaConnectionMgr.instance.ScrapBookToFolder();
     }
 
-    // Town -> ScrapBook
-    public void TownToScrapBook()
-    {
-        MetaConnectionMgr.instance.TownToScrapBook();
-    }
-
-    // Town -> Folder
+    // Town -> Channel
     public void TownToChannel()
     {
         MetaConnectionMgr.instance.TownToChannel();
     }
 
-    
+    // Town -> Folder
+    public void TownToFolder()
+    {
+        MetaConnectionMgr.instance.TownToFolder();
+    }
+
+    // Town -> ScrapBook
+    public void TownToScrapBook()
+    {
+        MetaConnectionMgr.instance.TownToScrapBook();
+    }
 }
 
