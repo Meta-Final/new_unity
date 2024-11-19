@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI; // UI 사용
-using TMPro; // TextMeshPro 사용
+using UnityEngine.UI;
+using TMPro;
 
 public class AiChatMgr_KJS : MonoBehaviour
 {
@@ -12,6 +12,7 @@ public class AiChatMgr_KJS : MonoBehaviour
     public TMP_Text chatResponseText;     // AI 응답을 표시할 TMP 텍스트
     public APIManager apiManager;         // APIManager 인스턴스 참조
     public Button sendButton;             // 전송 버튼
+    public GameObject extraUI;            // 추가적인 UI (평소에는 꺼져 있음)
 
     private GameObject chatUI;            // MagazineView 안에 있는 Chat UI
     private GameObject toolUI;            // MagazineView 안에 있는 Tool UI
@@ -61,6 +62,16 @@ public class AiChatMgr_KJS : MonoBehaviour
             Debug.LogError("MagazineView object not found in the scene.");
         }
 
+        // extraUI 초기 비활성화
+        if (extraUI != null)
+        {
+            extraUI.SetActive(false);
+        }
+        else
+        {
+            Debug.LogWarning("Extra UI가 할당되지 않았습니다.");
+        }
+
         // 버튼 클릭 시 OnSendButtonClicked 호출
         sendButton.onClick.AddListener(OnSendButtonClicked);
     }
@@ -81,83 +92,71 @@ public class AiChatMgr_KJS : MonoBehaviour
 
         if (!string.IsNullOrEmpty(userMessage))
         {
-            chatResponseText.text = userMessage; // 사용자가 입력한 텍스트 표시
-            userInputField.text = ""; // 입력 필드 초기화
+            chatResponseText.text = ""; // 사용자가 입력한 텍스트 초기화
+            userInputField.text = "";  // 입력 필드 초기화
 
             // 입력된 텍스트에 따라 다른 응답 처리
             if (userMessage.Trim() == "크리스마스이미지만들어줘")
             {
-                UpdateChatResponse("크리스마스이미지만들어줘"); // 기존 메서드 호출
+                StartCoroutine(ProcessMessage("이미지를 만들었다. 삐약!", "크리스마스이미지만들어줘"));
                 apiManager.Cover(); // APIManager의 Cover 메서드 호출
             }
             else if (userMessage.Trim() == "작업한기사를오브젝트로만들어줘")
             {
-                UpdateChatResponse("작업한포스트기사를오브젝트로만들어줘"); // 새로운 조건 처리
+                StartCoroutine(ProcessMessage("오브젝트를 만들었다. 삐약!", "작업한포스트기사를오브젝트로만들어줘"));
             }
             else if (userMessage.Trim() == "글쓰고싶어")
             {
-                UpdateChatResponse("글쓰고싶어");
+                StartCoroutine(ProcessMessage("알겠다 삐약!", "글쓰고싶어"));
             }
             else if (userMessage.Trim() == "내가최근에스크랩한기사를알려줘")
             {
-                UpdateChatResponse("내가최근에스크랩한기사를알려줘");
+                StartCoroutine(ProcessMessage("너가 최근에 스크랩한 기사는 백화점, 연말이다 삐약!", "내가최근에스크랩한기사를알려줘"));
             }
             else
             {
-                // apiManager.CallLLM(userMessage); // API 호출 (비동기 응답 대기)
+                StartCoroutine(ProcessMessage(userMessage, ""));
             }
         }
     }
 
-    // APIManager에서 응답 텍스트를 받아와 표시하는 메서드
-    public void UpdateChatResponse(string response)
+    // 코루틴: 메시지 출력 후 extraUI를 1초 동안 활성화
+    private IEnumerator ProcessMessage(string responseText, string actionKey)
     {
-        try
+        // 한 글자씩 텍스트 출력
+        yield return StartCoroutine(TypeText(responseText));
+
+        // 추가 UI 1초간 활성화
+        yield return StartCoroutine(ShowExtraUIForOneSecond());
+
+        // 추가 작업 수행 (필요하면 actionKey에 따라 처리 가능)
+        if (actionKey == "글쓰고싶어" && toolUI != null)
         {
-            Debug.Log($"UpdateChatResponse 호출됨: {response}"); // 응답 로그
-
-            // 요리 이미지 관련 처리
-            if (response == "크리스마스이미지만들어줘")
-            {
-                chatResponseText.text = "이미지를 만들었다. 삐약!";
-                Debug.Log("요리 이미지 생성 요청에 대한 응답입니다.");
-            }
-            else if (response == "작업한기사를오브젝트로만들어줘")
-            {
-                chatResponseText.text = "오브젝트를 만들었다. 삐약!";
-                Debug.Log("작업한 포스트 내용을 오브젝트로 만드는 요청에 대한 응답입니다.");
-            }
-            else if (response == "글쓰고싶어")
-            {
-                chatResponseText.text = "알겠다 삐약!";
-                Debug.Log("글쓰기 요청에 대한 응답입니다.");
-
-                // Tool UI를 활성화
-                if (toolUI != null)
-                {
-                    toolUI.SetActive(true);
-                }
-                else
-                {
-                    Debug.LogError("Tool UI is not assigned.");
-                }
-            }
-            else if (response == "내가최근에스크랩한기사를알려줘")
-            {
-                // 최근 스크랩한 기사 응답 처리
-                chatResponseText.text = "너가 최근에 스크랩한 기사는 백화점, 연말이다 삐약!";
-                Debug.Log("최근 스크랩한 기사 요청에 대한 응답입니다.");
-            }
-            else
-            {
-                // 다른 응답의 경우, 전달된 응답을 그대로 표시
-                chatResponseText.text = response;
-                Debug.LogWarning("조건에 맞는 응답이 아닙니다.");
-            }
+            toolUI.SetActive(true); // Tool UI 활성화
         }
-        catch (System.Exception e)
+    }
+
+    // Coroutine: extraUI를 1초간 활성화
+    private IEnumerator ShowExtraUIForOneSecond()
+    {
+        if (extraUI != null)
         {
-            Debug.LogError($"UpdateChatResponse 중 오류 발생: {e.Message}");
+            extraUI.SetActive(true); // extraUI 활성화
+            Debug.Log("Extra UI 활성화");
+            yield return new WaitForSeconds(1f); // 1초 대기
+            extraUI.SetActive(false); // extraUI 비활성화
+            Debug.Log("Extra UI 비활성화");
+        }
+    }
+
+    // APIManager에서 응답 텍스트를 받아와 한 글자씩 표시하는 메서드
+    private IEnumerator TypeText(string text)
+    {
+        chatResponseText.text = ""; // 기존 텍스트 초기화
+        foreach (char c in text)
+        {
+            chatResponseText.text += c; // 한 글자씩 추가
+            yield return new WaitForSeconds(0.05f); // 딜레이 추가 (0.05초)
         }
     }
 }
