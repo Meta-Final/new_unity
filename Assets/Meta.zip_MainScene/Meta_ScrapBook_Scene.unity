@@ -5411,7 +5411,6 @@ GameObject:
   - component: {fileID: 1479273809}
   - component: {fileID: 1479273811}
   - component: {fileID: 1479273812}
-  - component: {fileID: 1479273813}
   m_Layer: 0
   m_Name: AImanager
   m_TagString: Untagged
@@ -5457,23 +5456,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1479273808}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe8e3fe4ede7db3459a3f7a4795226c5, type: 3}
+  m_Script: {fileID: 11500000, guid: 65da01030b6da514b818fc8aa7797077, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1479273813
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1479273808}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 054509d98acf8474fa2f38698ef573fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  renderCamera: {fileID: 0}
-  renderTexture: {fileID: 8400000, guid: fd0dc5b163f54974d95d4517a6b43d52, type: 2}
+  coverDownloadTexture: {fileID: 0}
+  trendDownloadTexture: {fileID: 0}
 --- !u!1 &1484439531
 GameObject:
   m_ObjectHideFlags: 0
@@ -9345,7 +9332,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   userInputField: {fileID: 283875922471031247}
   chatResponseText: {fileID: 648160531}
-  apiManager: {fileID: 1479273812}
+  apiManager: {fileID: 0}
   sendButton: {fileID: 380955424812191385}
   extraUI: {fileID: 0}
 --- !u!222 &830427568300631112
@@ -13567,7 +13554,7 @@ PrefabInstance:
         type: 3}
       propertyPath: apiManager
       value: 
-      objectReference: {fileID: 1479273812}
+      objectReference: {fileID: 0}
     - target: {fileID: 1567409499442980667, guid: 4f1dead521465f340818458969e7f378,
         type: 3}
       propertyPath: balloonPrefab
