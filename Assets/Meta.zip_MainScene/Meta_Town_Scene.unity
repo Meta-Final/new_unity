@@ -1502,6 +1502,8 @@ MonoBehaviour:
   stickerParent: {fileID: 1709480984}
   drawButton: {fileID: 689068412}
   stickerButton: {fileID: 1417851652}
+  penIcon: {fileID: 2800000, guid: 39a6e875fef07e04a9a4bde09111e6a5, type: 3}
+  penSpot: {x: 0, y: 0}
   isDrawing: 0
   isAttaching: 0
   line: {fileID: 0}
@@ -8897,7 +8899,7 @@ GameObject:
   - component: {fileID: 279399059}
   - component: {fileID: 279399058}
   m_Layer: 5
-  m_Name: Img_CharaterFace
+  m_Name: Img_RealChatting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8920,7 +8922,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -100, y: -100}
-  m_SizeDelta: {x: 300, y: 756}
+  m_SizeDelta: {x: 400, y: 760}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &279399058
 MonoBehaviour:
@@ -29954,6 +29956,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MagazineView
+      objectReference: {fileID: 0}
+    - target: {fileID: 2180595041872185069, guid: 9fc00af1a8f688040ba0363119b006ad,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3392432395017828146, guid: 9fc00af1a8f688040ba0363119b006ad,
         type: 3}
@@ -53480,10 +53487,10 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1515515727}
   - {fileID: 1794850322}
-  - {fileID: 199333060}
   - {fileID: 279399057}
+  - {fileID: 199333060}
+  - {fileID: 1515515727}
   m_Father: {fileID: 1109771320}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -54559,7 +54566,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 100, y: -100}
-  m_SizeDelta: {x: 1344, y: 756}
+  m_SizeDelta: {x: 1300, y: 760}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1794850323
 MonoBehaviour:
