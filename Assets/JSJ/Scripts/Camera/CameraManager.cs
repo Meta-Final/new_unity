@@ -108,4 +108,17 @@ public class CameraManager : MonoBehaviourPun
             playerMoveScript.StartRotateToHelper(); // Helper 방향으로 회전
         }
     }
+    public void ResetCameraState()
+    {
+        isZoomingIn = false; // MoveCameraToPosition 줌인 중단
+        stopCameraMoving = false; // CameraMoving 다시 활성화
+
+        // PlayerMove 활성화
+        if (playerMoveScript != null)
+        {
+            playerMoveScript.EnableMoving(true);
+        }
+
+        Debug.Log("CameraManager 상태가 초기화되었습니다. (줌인 중단, 이동 활성화)");
+    }
 }

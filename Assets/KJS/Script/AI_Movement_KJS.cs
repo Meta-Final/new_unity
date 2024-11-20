@@ -122,8 +122,6 @@ public class AI_Movement_KJS : MonoBehaviourPun
 
     public void OnMouseDown()
     {
-        print("!!!");
-
         // 이 스크립트가 할당된 오브젝트를 로컬 플레이어가 클릭한 경우 tool UI를 활성화
         if (photonView.IsMine && Chat != null)
         {
@@ -166,5 +164,25 @@ public class AI_Movement_KJS : MonoBehaviourPun
             isRotatingToPlayer = false; // 회전 중단
             Debug.Log("로컬 플레이어 방향으로 회전 완료!");
         }
+    }
+    public void ResetAgentState()
+    {
+        // NavMeshAgent 활성화
+        if (agent != null && !isAgentEnabled)
+        {
+            agent.enabled = true; // NavMeshAgent 다시 활성화
+            isAgentEnabled = true;
+        }
+
+        // 로컬 플레이어 방향 회전 중단
+        isRotatingToPlayer = false;
+
+        // Chat UI 비활성화 (안전 확인)
+        if (Chat != null && Chat.activeSelf)
+        {
+            Chat.SetActive(false);
+        }
+
+        Debug.Log("AI_Movement_KJS: NavMeshAgent 및 상태가 초기화되었습니다.");
     }
 }
