@@ -62,6 +62,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         canvasNickName.transform.rotation = Quaternion.LookRotation(canvasNickName.transform.position - Camera.main.transform.position);
     }
 
+    // 플레이어 이동 관련 함수
     public void Moving()
     {
         float h = Input.GetAxis("Horizontal");
@@ -73,7 +74,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         moveState = dir.magnitude;
 
         // Player 애니메이션
-        animator.SetFloat("Move", moveState);
+        animator.SetFloat("Moving", moveState);
 
         if (!(h == 0 & v == 0))
         {
@@ -102,6 +103,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         cc.Move(dir * moveSpeed * Time.deltaTime);
     }
 
+
     // `Moving` 기능 활성화/비활성화
     public void EnableMoving(bool enable)
     {
@@ -113,6 +115,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             animator.SetFloat("Move", 0f);
         }
     }
+
 
     // Helper 방향으로 회전 시작
     public void StartRotateToHelper()
@@ -131,6 +134,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             Debug.LogWarning("Helper 오브젝트를 찾을 수 없습니다.");
         }
     }
+
 
     // Helper 방향으로 회전
     private void RotateToHelper()
@@ -153,6 +157,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         }
     }
 
+
     // 애니메이션 동기화
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
@@ -164,7 +169,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         {
             moveState = (float)stream.ReceiveNext();
 
-            animator.SetFloat("Move", moveState);
+            animator.SetFloat("Moving", moveState);
         }
     }
 }
