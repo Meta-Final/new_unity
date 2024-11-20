@@ -72,9 +72,11 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         dir.Normalize();
 
         moveState = dir.magnitude;
+        print("11111");
 
         // Player 애니메이션
         animator.SetFloat("Moving", moveState);
+        print("222222");
 
         if (!(h == 0 & v == 0))
         {
