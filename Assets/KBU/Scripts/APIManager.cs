@@ -5,6 +5,8 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 using ReqRes;
+using Firebase.Firestore;
+using UniHumanoid;
 
 public class APIManager : MonoBehaviour
 {
@@ -13,26 +15,20 @@ public class APIManager : MonoBehaviour
     AuthURL authURL = new AuthURL();
     ArticleURL articleURL = new ArticleURL();
     AIURL aiUrl = new AIURL();
-    
     public void Start()
     {
         GameObject firebase = GameObject.Find("Firebase");
         firestore = firebase.GetComponent<FireStore>();
     }
     
+    
     //회원가입
     public void Auth()
     {
-        AuthRequest auth = new AuthRequest 
-        {
-            userId = firestore.GetUserInfo().userId,
-            name = firestore.GetUserInfo().name, 
-            nickName = firestore.GetUserInfo().nickName
-        };
-
         string authUrl = authURL.authURL;
-        StartCoroutine(PostHttp<AuthRequest>(auth, authUrl));
+        StartCoroutine(AuthHttp(authUrl));
     }
+
 
     //기사 호출 관련 함수
     public void SearchArticle(string query, int limit)
@@ -42,33 +38,62 @@ public class APIManager : MonoBehaviour
         StartCoroutine(PostHttp<SearchRequest, SearchResponse>(searchRequest, searchUrl));
     }
     
-    public void CreateArticle()
+    public void CreateArticle(string postId, int pageId, string content, int type, string imageData, int fontSize, string fontFace, bool isUnderlined, bool isStrikethrough, float x, float y, float z, float scale_x, float scale_y, float scale_z)
     {   
-        AuthRequest auth = new AuthRequest 
+        Scale scale = new Scale
         {
-            userId = firestore.GetUserInfo().userId,
-            name = firestore.GetUserInfo().name, 
-            nickName = firestore.GetUserInfo().nickName
+            x = scale_x,
+            y = scale_y,
+            z = scale_z
         };
-        
-        Article article = new Article{authRequest = auth};
+
+        Position position = new Position
+        {
+            x = x,
+            y = y,
+            z = z
+        };
+
+        Elements element = new Elements{
+            content = content,
+            type = type,
+            imageData = imageData,
+            position = position,
+            scale = scale,
+            fontSize = fontSize,
+            fontFace = fontFace,
+            isUnderlined = isUnderlined,
+            isStrikethrough = isStrikethrough
+        };
+
+        Pages page = new Pages{
+            pageId = pageId,
+            elements = new List<Elements> {element}
+        };
+
+        Posts post = new Posts{
+            postId = postId,
+            pages = new List<Pages> {page}
+        };
+
+        Article article = new Article{
+            userid = firestore.GetUserInfo().userId,
+            posts = new List<Posts> {post}
+        };
 
         string createUrl = articleURL.createURL;
         StartCoroutine(PostHttp<Article, Article>(article, createUrl));
     }
 
-    public void GetArticle()
+    public void GetArticle(string articleid)
     {   
-        AuthRequest auth = new AuthRequest 
-        {
-            userId = firestore.GetUserInfo().userId,
-            name = firestore.GetUserInfo().name, 
-            nickName = firestore.GetUserInfo().nickName
+        GetRequest getRequest = new GetRequest{
+            userid = firestore.GetUserInfo().userId,
+            articleid = articleid
         };
         
-        Article article = new Article{authRequest = auth};
         string getUrl = articleURL.getURL;
-        StartCoroutine(PostHttp<Article, Article>(article, getUrl));
+        StartCoroutine(PostHttp<GetRequest, GetResponse>(getRequest, getUrl));
     }
 
     //LLM 호출 메서드
@@ -130,6 +155,7 @@ public class APIManager : MonoBehaviour
             if (www.result == UnityWebRequest.Result.Success)
             {
                 TResponse responseObject = JsonUtility.FromJson<TResponse>(www.downloadHandler.text);
+                Debug.Log("success");
                 Debug.Log("Response: " + JsonUtility.ToJson(responseObject));
             }
             else
@@ -140,9 +166,16 @@ public class APIManager : MonoBehaviour
         }
     }
 
-    public IEnumerator PostHttp<TRequest>(TRequest requestObject, string url)
+    public IEnumerator AuthHttp(string url)
     {   
-        string json = JsonUtility.ToJson(requestObject);
+        AuthRequest auth = new AuthRequest 
+        {
+            userid = firestore.GetUserInfo().userId,
+            username = firestore.GetUserInfo().nickName,
+            email = firestore.GetUserInfo().email
+        };
+        string json = JsonUtility.ToJson(auth);
+        Debug.Log("JSON Payload: " + json);
 
         using (UnityWebRequest www = new UnityWebRequest(url, "POST"))
         {
@@ -150,8 +183,10 @@ public class APIManager : MonoBehaviour
             www.uploadHandler = new UploadHandlerRaw(jsonToSend);
             www.downloadHandler = new DownloadHandlerBuffer();
             www.SetRequestHeader("Content-Type", "application/json");
-            
+        
             yield return www.SendWebRequest();
+
+            Debug.Log($"Response Code: {www.responseCode}, Response Text: {www.downloadHandler.text}");
 
             if (www.result == UnityWebRequest.Result.Success)
             {
@@ -159,9 +194,8 @@ public class APIManager : MonoBehaviour
             }
             else
             {
-                Debug.LogError($"Error: {www.error}, Status Code: {www.responseCode}, Response: {www.downloadHandler.text}" );
+                Debug.LogError($"Error: {www.error}, Status Code: {www.responseCode}, Response: {www.downloadHandler.text}");
             }
-
         }
     }
 

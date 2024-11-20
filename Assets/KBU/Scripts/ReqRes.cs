@@ -8,25 +8,25 @@ namespace ReqRes
     [Serializable]
     public class AuthURL
     {
-        public string authURL = "http://metaai2.iptime.org:14596/auth/create-user";
+        public string authURL = "http://metaai2.iptime.org:14596/api/v1/auth/create-user";
     }
     
     [Serializable]
     public class ArticleURL
     {
-        public string searchURL = "http://metaai2.iptime.org:14596/articles/search";
-        public string createURL = "http://metaai2.iptime.org:14596/articles/create";
-        public string getURL = "http://metaai2.iptime.org:14596/articles/get";
-        public string deleteURL = "http://metaai2.iptime.org:14596/articles/delete";
+        public string searchURL = "http://metaai2.iptime.org:14596/api/v1/articles/search";
+        public string createURL = "http://metaai2.iptime.org:14596/api/v1/articles/create";
+        public string getURL = "http://metaai2.iptime.org:14596/api/v1/articles/get";
+        public string deleteURL = "http://metaai2.iptime.org:14596/api/v1/articles/delete";
     }
 
     [Serializable]
     public class AIURL
     {
-        public string chatURL = "http://metaai2.iptime.org:14596/chat/message";
-        public string loadCoverURL = "http://metaai2.iptime.org:14596/loadcover";
-        public string loadObjectURL = "http://metaai2.iptime.org:14596/loadobject";
-        public string trendURL = "http://metaai2.iptime.org:14596/";
+        public string chatURL = "http://metaai2.iptime.org:14596/api/v1/chat/message";
+        public string loadCoverURL = "http://metaai2.iptime.org:14596/api/v1/loadcover";
+        public string loadObjectURL = "http://metaai2.iptime.org:14596/api/v1/loadobject";
+        public string trendURL = "http://metaai2.iptime.org:14596/api/v1/";
     }
 
     //Search request/response
@@ -56,16 +56,29 @@ namespace ReqRes
     [Serializable]
     public class AuthRequest
     {
-        public string userId;
-        public string name;
-        public string nickName;
+        public string userid;
+        public string username;
+        public string email;
     }
     //Create/Get request/response
     [Serializable]
     public class Article
     {   
-        public AuthRequest authRequest;
-        public string articleId;
+        public string userid;
+        public List<Posts> posts;
+    }
+
+    [Serializable]
+    public class Posts
+    {
+        public string postId;
+        public List<Pages> pages;
+    }
+
+    [Serializable]
+    public class Pages
+    {
+        public int pageId;
         public List<Elements> elements;
     }
 
@@ -98,6 +111,22 @@ namespace ReqRes
         public float x;
         public float y;
         public float z;
+    }
+    
+    //Get request/response
+    [Serializable]
+    public class GetRequest
+    {
+        public string userid;
+        public string articleid;
+    }
+
+    [Serializable]
+    public class GetResponse
+    {
+        public string userid;
+        public string articleid;
+        public List<Posts> posts;
     }
 
     //Delete request/response
