@@ -10811,7 +10811,6 @@ GameObject:
   m_Component:
   - component: {fileID: 361349375}
   - component: {fileID: 361349374}
-  - component: {fileID: 361349373}
   m_Layer: 0
   m_Name: AImanager
   m_TagString: Untagged
@@ -10819,21 +10818,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &361349373
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 361349372}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe8e3fe4ede7db3459a3f7a4795226c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  coverDownloadTexture: {fileID: 0}
-  trendDownloadTexture: {fileID: 0}
-  trendImage: {fileID: 0}
 --- !u!114 &361349374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10846,7 +10830,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 616d6a0e7e27d7a4d8f667a79d14c5da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageDownloader: {fileID: 361349373}
+  imageDownloader: {fileID: 0}
   image: {fileID: 0}
 --- !u!4 &361349375
 Transform:
@@ -12081,7 +12065,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   userInputField: {fileID: 892460744}
   chatResponseText: {fileID: 1560793546}
-  apiManager: {fileID: 361349373}
+  apiManager: {fileID: 0}
   sendButton: {fileID: 1024454985}
   extraUI: {fileID: 0}
 --- !u!1001 &408090743
@@ -28125,6 +28109,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 615890974656450922, guid: 89986293668bc864b99cffb29bd8b504,
+        type: 3}
+      propertyPath: m_TagString
+      value: Screen
+      objectReference: {fileID: 0}
     - target: {fileID: 625052045512818060, guid: 89986293668bc864b99cffb29bd8b504,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -32614,6 +32603,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2959712968108006805, guid: 9fc00af1a8f688040ba0363119b006ad,
+        type: 3}
+      propertyPath: m_TagString
+      value: Screen
+      objectReference: {fileID: 0}
     - target: {fileID: 3392432395017828146, guid: 9fc00af1a8f688040ba0363119b006ad,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -32728,7 +32722,7 @@ PrefabInstance:
         type: 3}
       propertyPath: apiManager
       value: 
-      objectReference: {fileID: 361349373}
+      objectReference: {fileID: 0}
     - target: {fileID: 7867847728494453716, guid: 9fc00af1a8f688040ba0363119b006ad,
         type: 3}
       propertyPath: chatResponseText
