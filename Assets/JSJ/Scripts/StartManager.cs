@@ -47,7 +47,6 @@ public class StartManager : MonoBehaviour
 
         // 오프닝 활성화
         MaskOffAndMoving();
-
     }
 
     IEnumerator FadeTo(float startAlpha, float endAlpha, float duration)

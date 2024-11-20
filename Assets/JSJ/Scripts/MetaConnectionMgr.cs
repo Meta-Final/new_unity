@@ -90,14 +90,6 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, TypedLobby.Default);
     }
 
-    // ScrapBook 입장
-    public void JoinRoom()
-    {
-        string roomName = PhotonNetwork.NickName + "'s ScrapBook";
-
-        PhotonNetwork.JoinRoom(roomName);
-    }
-
 
     // [Folder]----------------------------------------------------------------------------------------------------------
     // Folder 입장
@@ -111,7 +103,7 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
     // Town 생성 후 입장
     public void JoinOrCreateTown()
     {
-        loadLevelName = "Meta_RealTownScene";
+        loadLevelName = "Meta_Town_Scene";
 
         // 방 생성 옵션
         RoomOptions roomOptions = new RoomOptions();
@@ -124,12 +116,6 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
 
         // Room 참여 or 생성
         PhotonNetwork.JoinOrCreateRoom("Town", roomOptions, TypedLobby.Default);
-    }
-
-    // Town 입장
-    public void JoinTown()
-    {
-        PhotonNetwork.JoinRoom("Town");
     }
 
 
@@ -168,18 +154,25 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         roomNumber = 2;
     }
 
-    // Town -> ScrapBook
-    public void TownToScrapBook()
+    // Town -> Channel
+    public void TownToChannel()
     {
         PhotonNetwork.LeaveRoom();
         roomNumber = 3;
     }
 
     // Town -> Folder
-    public void TownToChannel()
+    public void TownToFolder()
     {
         PhotonNetwork.LeaveRoom();
         roomNumber = 4;
+    }
+
+    // Town -> ScrapBook
+    public void TownToScrapBook()
+    {
+        PhotonNetwork.LeaveRoom();
+        roomNumber = 5;
     }
 
 
@@ -216,18 +209,18 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
     // 룸 이동 함수
     public void RoomTransition()
     {
-        // 만약 룸넘버가 1이거나 4면, Channel 로 이동한다.
-        if (roomNumber == 1 || roomNumber == 4)
+        // 만약 룸넘버가 1이거나 3이면, Channel 로 이동한다.
+        if (roomNumber == 1 || roomNumber == 3)
         {
             JoinChannel();
         }
-        // 만약 룸넘버가 2이면, Folder 로 이동한다.
-        if (roomNumber == 2 )
+        // 만약 룸넘버가 2이거나 4면, Folder 로 이동한다.
+        if (roomNumber == 2 || roomNumber == 4 )
         {
             JoinFolder();
         }
-        // 만약 룸넘버가 3이면, ScrapBook 으로 이동한다.
-        if (roomNumber == 3)
+        // 만약 룸넘버가 5이면, ScrapBook 으로 이동한다.
+        if (roomNumber == 5)
         {
             JoinOrCreateRoom();
         }
@@ -235,34 +228,4 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         // 이동 후 초기화
         roomNumber = 0;
     }
-
-
-
-
-
-
-
-
-
-
-    public TMP_InputField emial;
-    public TMP_InputField password;
-    
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.F1))
-        {
-            emial.text = "emflazlwm@naver.com";
-            password.text = "jkogji4102!";
-        }
-
-        if (Input.GetKeyDown(KeyCode.F2))
-        {
-            emial.text = "1@naver.com";
-            password.text = "111111";
-        }
-    }
-
-
-
 }
