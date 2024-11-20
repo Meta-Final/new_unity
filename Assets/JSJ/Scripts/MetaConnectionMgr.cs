@@ -14,6 +14,8 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
     public string loadLevelName;
 
     int roomNumber = 0;
+
+    AvatarManager avatarManager;
     
     private void Awake()
     {
@@ -38,6 +40,8 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         {
             print("마스터 서버에 접속 되어 있음");
         }
+
+        avatarManager = GetComponent<AvatarManager>();
     }
 
 
@@ -134,8 +138,11 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
 
         print("현재 방 이름 : " + PhotonNetwork.CurrentRoom.Name);
 
+        avatarManager.AssignRandomAvatar();
+
         PhotonNetwork.LoadLevel(loadLevelName);
         // 멀티플레이 컨텐츠 즐길 수 있는 상태
+
     }
 
 
