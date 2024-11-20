@@ -1265,6 +1265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c955f493513e28b46950637452ff01a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotationSpeed: 2
 --- !u!195 &1298765390
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2316,6 +2317,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -4228479006557700922, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1427670641148758666, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2370,6 +2376,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Helper
+      objectReference: {fileID: 0}
+    - target: {fileID: 2817603813161376899, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
+        type: 3}
+      propertyPath: m_BackGroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2817603813161376899, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
+        type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2817603813161376899, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
+        type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2817603813161376899, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
+        type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10458,6 +10484,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 0}
   followSpeed: 5
+  zoomInSpeed: 2
+  zoomInDistance: 10
 --- !u!4 &8731857911160253379
 Transform:
   m_ObjectHideFlags: 0

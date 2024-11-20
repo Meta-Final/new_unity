@@ -21,6 +21,10 @@ public class DrawWithMouse : MonoBehaviourPun
     public Button drawButton;
     public Button stickerButton;
 
+    public Texture2D penIcon;
+
+    public Vector2 penSpot = Vector2.zero;
+
     public bool isDrawing = false;
     public bool isAttaching = false;
 
@@ -43,6 +47,8 @@ public class DrawWithMouse : MonoBehaviourPun
 
         // 붙이기 비활성화
         isAttaching = false;
+
+        SetPenIcon();
     }
 
     // 붙이기
@@ -52,7 +58,9 @@ public class DrawWithMouse : MonoBehaviourPun
         isAttaching = true;
 
         // 그리기 비활성화
-        isDrawing = false;   
+        isDrawing = false;
+
+        SetPenIcon();
     }
 
 
@@ -140,8 +148,19 @@ public class DrawWithMouse : MonoBehaviourPun
         GameObject stickerInstance = Instantiate(stickerprefab, canvasPicket.transform);
         stickerInstance.transform.SetParent(stickerParent.transform);
         stickerInstance.transform.localPosition = localPoint;
-
     }
 
+    public void SetPenIcon()
+    {
+        if (isDrawing == true)
+        {
+            Cursor.SetCursor(penIcon, penSpot, CursorMode.Auto);
+        }
+        else
+        {
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        }
+
+    }
     
 }
