@@ -26,7 +26,7 @@ public class H_MergeMgr : MonoBehaviour
 
     private void OnMouseDrag()
     {
-        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+;        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         transform.position = new Vector3(mousePosition.x - offsetX, mousePosition.y - offsetY, transform.position.z);
     }
     private void OnMouseUp()
