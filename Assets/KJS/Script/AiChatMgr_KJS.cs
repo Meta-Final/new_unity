@@ -5,35 +5,35 @@ using TMPro;
 
 public class AiChatMgr_KJS : MonoBehaviour
 {
-    // ½Ì±ÛÅæ ÀÎ½ºÅÏ½º ¼±¾ð
+    // ï¿½Ì±ï¿½ï¿½ï¿½ ï¿½Î½ï¿½ï¿½Ï½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public static AiChatMgr_KJS Instance { get; private set; }
 
-    public TMP_InputField userInputField; // »ç¿ëÀÚ°¡ ÀÔ·ÂÇÒ TMP ÇÊµå
-    public TMP_Text chatResponseText;     // AI ÀÀ´äÀ» Ç¥½ÃÇÒ TMP ÅØ½ºÆ®
-    public APIManager apiManager;         // APIManager ÀÎ½ºÅÏ½º ÂüÁ¶
-    public Button sendButton;             // Àü¼Û ¹öÆ°
-    public GameObject extraUI;            // Ãß°¡ÀûÀÎ UI (Æò¼Ò¿¡´Â ²¨Á® ÀÖÀ½)
+    public TMP_InputField userInputField; // ï¿½ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½Ô·ï¿½ï¿½ï¿½ TMP ï¿½Êµï¿½
+    public TMP_Text chatResponseText;     // AI ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½ï¿½ï¿½ TMP ï¿½Ø½ï¿½Æ®
+    public APIManager apiManager;         // APIManager ï¿½Î½ï¿½ï¿½Ï½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    public Button sendButton;             // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°
+    public GameObject extraUI;            // ï¿½ß°ï¿½ï¿½ï¿½ï¿½ï¿½ UI (ï¿½ï¿½Ò¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
 
-    private GameObject chatUI;            // MagazineView ¾È¿¡ ÀÖ´Â Chat UI
-    private GameObject toolUI;            // MagazineView ¾È¿¡ ÀÖ´Â Tool UI
+    private GameObject chatUI;            // MagazineView ï¿½È¿ï¿½ ï¿½Ö´ï¿½ Chat UI
+    private GameObject toolUI;            // MagazineView ï¿½È¿ï¿½ ï¿½Ö´ï¿½ Tool UI
     private bool wasToolUIActive = false;
 
     private void Awake()
     {
-        // ½Ì±ÛÅæ ÀÎ½ºÅÏ½º ¼³Á¤
+        // ï¿½Ì±ï¿½ï¿½ï¿½ ï¿½Î½ï¿½ï¿½Ï½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (Instance != null && Instance != this)
         {
-            Destroy(gameObject); // ÀÌ¹Ì ÀÎ½ºÅÏ½º°¡ Á¸ÀçÇÏ¸é Áßº¹µÈ ¿ÀºêÁ§Æ®¸¦ Á¦°Å
+            Destroy(gameObject); // ï¿½Ì¹ï¿½ ï¿½Î½ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ßºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         }
         else
         {
-            Instance = this; // ÀÎ½ºÅÏ½º ÇÒ´ç
+            Instance = this; // ï¿½Î½ï¿½ï¿½Ï½ï¿½ ï¿½Ò´ï¿½
         }
     }
 
     void Start()
     {
-        // "MagazineView" ¿ÀºêÁ§Æ® ¾È¿¡ ÀÖ´Â "Chat"°ú "Tool" UI¸¦ Ã£±â
+        // "MagazineView" ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½È¿ï¿½ ï¿½Ö´ï¿½ "Chat"ï¿½ï¿½ "Tool" UIï¿½ï¿½ Ã£ï¿½ï¿½
         GameObject magazineView = GameObject.Find("MagazineView");
         if (magazineView != null)
         {
@@ -42,7 +42,7 @@ public class AiChatMgr_KJS : MonoBehaviour
 
             if (chatUI != null)
             {
-                chatUI.SetActive(false); // Chat UI¸¦ ºñÈ°¼ºÈ­ »óÅÂ·Î ÃÊ±âÈ­
+                chatUI.SetActive(false); // Chat UIï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­ ï¿½ï¿½ï¿½Â·ï¿½ ï¿½Ê±ï¿½È­
             }
             else
             {
@@ -51,7 +51,7 @@ public class AiChatMgr_KJS : MonoBehaviour
 
             if (toolUI != null)
             {
-                toolUI.SetActive(false); // Tool UI¸¦ ºñÈ°¼ºÈ­ »óÅÂ·Î ÃÊ±âÈ­
+                toolUI.SetActive(false); // Tool UIï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­ ï¿½ï¿½ï¿½Â·ï¿½ ï¿½Ê±ï¿½È­
             }
             else
             {
@@ -63,56 +63,56 @@ public class AiChatMgr_KJS : MonoBehaviour
             Debug.LogError("MagazineView object not found in the scene.");
         }
 
-        // extraUI ÃÊ±â ºñÈ°¼ºÈ­
+        // extraUI ï¿½Ê±ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­
         if (extraUI != null)
         {
             extraUI.SetActive(false);
         }
         else
         {
-            Debug.LogWarning("Extra UI°¡ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            Debug.LogWarning("Extra UIï¿½ï¿½ ï¿½Ò´ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
         }
 
-        // ¹öÆ° Å¬¸¯ ½Ã OnSendButtonClicked È£Ãâ
+        // ï¿½ï¿½Æ° Å¬ï¿½ï¿½ ï¿½ï¿½ OnSendButtonClicked È£ï¿½ï¿½
         sendButton.onClick.AddListener(OnSendButtonClicked);
     }
 
-    // ¿ÀºêÁ§Æ® Å¬¸¯ ½Ã Chat UI È°¼ºÈ­
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® Å¬ï¿½ï¿½ ï¿½ï¿½ Chat UI È°ï¿½ï¿½È­
     private void OnMouseDown()
     {
         if (chatUI != null)
         {
-            chatUI.SetActive(true); // Chat UI È°¼ºÈ­
-            Debug.Log("Chat UI°¡ È°¼ºÈ­µÇ¾ú½À´Ï´Ù.");
+            chatUI.SetActive(true); // Chat UI È°ï¿½ï¿½È­
+            Debug.Log("Chat UIï¿½ï¿½ È°ï¿½ï¿½È­ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
         }
     }
 
     void OnSendButtonClicked()
     {
-        string userMessage = userInputField.text; // ÀÔ·ÂµÈ ÅØ½ºÆ® °¡Á®¿À±â
+        string userMessage = userInputField.text; // ï¿½Ô·Âµï¿½ ï¿½Ø½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
         if (!string.IsNullOrEmpty(userMessage))
         {
-            chatResponseText.text = ""; // ÅØ½ºÆ® ÃÊ±âÈ­
-            userInputField.text = "";  // ÀÔ·Â ÇÊµå ÃÊ±âÈ­
+            chatResponseText.text = ""; // ï¿½Ø½ï¿½Æ® ï¿½Ê±ï¿½È­
+            userInputField.text = "";  // ï¿½Ô·ï¿½ ï¿½Êµï¿½ ï¿½Ê±ï¿½È­
 
-            // ÀÔ·ÂµÈ ÅØ½ºÆ®¿¡ µû¶ó ´Ù¸¥ ÀÀ´ä Ã³¸®
-            if (userMessage.Trim() == "Å©¸®½º¸¶½ºÀÌ¹ÌÁö¸¸µé¾îÁà")
+            // ï¿½Ô·Âµï¿½ ï¿½Ø½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
+            if (userMessage.Trim() == "Å©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
             {
-                StartCoroutine(ProcessMessage("ÀÌ¹ÌÁö¸¦ ¸¸µé¾ú´Ù. »ß¾à!", "Å©¸®½º¸¶½ºÀÌ¹ÌÁö¸¸µé¾îÁà"));
-                apiManager.Cover(); // APIManagerÀÇ Cover ¸Þ¼­µå È£Ãâ
+                StartCoroutine(ProcessMessage("ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. ï¿½ß¾ï¿½!", "Å©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"));
+                apiManager.Cover(); // APIManagerï¿½ï¿½ Cover ï¿½Þ¼ï¿½ï¿½ï¿½ È£ï¿½ï¿½
             }
-            else if (userMessage.Trim() == "ÀÛ¾÷ÇÑ±â»ç¸¦¿ÀºêÁ§Æ®·Î¸¸µé¾îÁà")
+            else if (userMessage.Trim() == "ï¿½Û¾ï¿½ï¿½Ñ±ï¿½ç¸¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½Î¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
             {
-                StartCoroutine(ProcessMessage("¿ÀºêÁ§Æ®¸¦ ¸¸µé¾ú´Ù. »ß¾à!", "ÀÛ¾÷ÇÑÆ÷½ºÆ®±â»ç¸¦¿ÀºêÁ§Æ®·Î¸¸µé¾îÁà"));
+                StartCoroutine(ProcessMessage("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. ï¿½ß¾ï¿½!", "ï¿½Û¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ç¸¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½Î¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"));
             }
-            else if (userMessage.Trim() == "±Û¾²°í½Í¾î")
+            else if (userMessage.Trim() == "ï¿½Û¾ï¿½ï¿½ï¿½ï¿½Í¾ï¿½")
             {
-                StartCoroutine(ProcessMessage("¾Ë°Ú´Ù »ß¾à!", "±Û¾²°í½Í¾î"));
+                StartCoroutine(ProcessMessage("ï¿½Ë°Ú´ï¿½ ï¿½ß¾ï¿½!", "ï¿½Û¾ï¿½ï¿½ï¿½ï¿½Í¾ï¿½"));
             }
-            else if (userMessage.Trim() == "³»°¡ÃÖ±Ù¿¡½ºÅ©·¦ÇÑ±â»ç¸¦¾Ë·ÁÁà")
+            else if (userMessage.Trim() == "ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½Å©ï¿½ï¿½ï¿½Ñ±ï¿½ç¸¦ï¿½Ë·ï¿½ï¿½ï¿½")
             {
-                StartCoroutine(ProcessMessage("³Ê°¡ ÃÖ±Ù¿¡ ½ºÅ©·¦ÇÑ ±â»ç´Â ¹éÈ­Á¡, ¿¬¸»ÀÌ´Ù »ß¾à!", "³»°¡ÃÖ±Ù¿¡½ºÅ©·¦ÇÑ±â»ç¸¦¾Ë·ÁÁà"));
+                StartCoroutine(ProcessMessage("ï¿½Ê°ï¿½ ï¿½Ö±Ù¿ï¿½ ï¿½ï¿½Å©ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½Ì´ï¿½ ï¿½ß¾ï¿½!", "ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½Å©ï¿½ï¿½ï¿½Ñ±ï¿½ç¸¦ï¿½Ë·ï¿½ï¿½ï¿½"));
             }
             else
             {
@@ -121,58 +121,58 @@ public class AiChatMgr_KJS : MonoBehaviour
         }
     }
 
-    // ÄÚ·çÆ¾: UI È°¼ºÈ­ -> ¸Þ½ÃÁö Ãâ·Â -> 1ÃÊ ´ë±â ÈÄ UI ºñÈ°¼ºÈ­
+    // ï¿½Ú·ï¿½Æ¾: UI È°ï¿½ï¿½È­ -> ï¿½Þ½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ -> 1ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ UI ï¿½ï¿½È°ï¿½ï¿½È­
     private IEnumerator ProcessMessage(string responseText, string actionKey)
     {
-        // 1. extraUI¸¦ ¸ÕÀú È°¼ºÈ­
+        // 1. extraUIï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È°ï¿½ï¿½È­
         if (extraUI != null)
         {
             extraUI.SetActive(true);
-            Debug.Log("Extra UI È°¼ºÈ­");
+            Debug.Log("Extra UI È°ï¿½ï¿½È­");
         }
 
-        // 2. ÇÑ ±ÛÀÚ¾¿ ÅØ½ºÆ® Ãâ·Â
+        // 2. ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¾ï¿½ ï¿½Ø½ï¿½Æ® ï¿½ï¿½ï¿½
         yield return StartCoroutine(TypeText(responseText));
 
-        // 3. ÅØ½ºÆ® Ãâ·ÂÀÌ ¿Ï·áµÈ ÈÄ 1ÃÊ ´ë±â
+        // 3. ï¿½Ø½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ï¿½ ï¿½ï¿½ 1ï¿½ï¿½ ï¿½ï¿½ï¿½
         yield return new WaitForSeconds(1f);
 
-        // 4. extraUI ºñÈ°¼ºÈ­
+        // 4. extraUI ï¿½ï¿½È°ï¿½ï¿½È­
         if (extraUI != null)
         {
             extraUI.SetActive(false);
-            Debug.Log("Extra UI ºñÈ°¼ºÈ­");
+            Debug.Log("Extra UI ï¿½ï¿½È°ï¿½ï¿½È­");
         }
 
-        if (actionKey == "±Û¾²°í½Í¾î" && toolUI != null)
+        if (actionKey == "ï¿½Û¾ï¿½ï¿½ï¿½ï¿½Í¾ï¿½" && toolUI != null)
         {
-            toolUI.SetActive(true); // Tool UI È°¼ºÈ­
+            toolUI.SetActive(true); // Tool UI È°ï¿½ï¿½È­
 
-            // chatUI ºñÈ°¼ºÈ­
+            // chatUI ï¿½ï¿½È°ï¿½ï¿½È­
             if (chatUI != null)
             {
                 chatUI.SetActive(false);
-                Debug.Log("Chat UI ºñÈ°¼ºÈ­");
+                Debug.Log("Chat UI ï¿½ï¿½È°ï¿½ï¿½È­");
             }
 
-            // Ä³¸¯ÅÍ ÀÌµ¿ ºñÈ°¼ºÈ­
+            // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½È°ï¿½ï¿½È­
             PlayerMove playerMove = FindObjectOfType<PlayerMove>();
             if (playerMove != null)
             {
-                playerMove.EnableMoving(false); // Ä³¸¯ÅÍ ÀÌµ¿ ºñÈ°¼ºÈ­
-                Debug.Log("Ä³¸¯ÅÍ ÀÌµ¿ ºñÈ°¼ºÈ­");
+                playerMove.EnableMoving(false); // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½È°ï¿½ï¿½È­
+                Debug.Log("Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½È°ï¿½ï¿½È­");
             }
         }
     }
 
-    // ÅØ½ºÆ®¸¦ ÇÑ ±ÛÀÚ¾¿ Ãâ·ÂÇÏ´Â Coroutine
+    // ï¿½Ø½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¾ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ Coroutine
     private IEnumerator TypeText(string text)
     {
-        chatResponseText.text = ""; // ±âÁ¸ ÅØ½ºÆ® ÃÊ±âÈ­
+        chatResponseText.text = ""; // ï¿½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Æ® ï¿½Ê±ï¿½È­
         foreach (char c in text)
         {
-            chatResponseText.text += c; // ÇÑ ±ÛÀÚ¾¿ Ãß°¡
-            yield return new WaitForSeconds(0.05f); // µô·¹ÀÌ Ãß°¡ (0.05ÃÊ)
+            chatResponseText.text += c; // ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¾ï¿½ ï¿½ß°ï¿½
+            yield return new WaitForSeconds(0.05f); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ (0.05ï¿½ï¿½)
         }
     }
 }
