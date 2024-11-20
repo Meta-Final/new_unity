@@ -18,7 +18,7 @@ public class H_Slot : MonoBehaviour
 
         // 아이템을 이 슬롯의 자식으로 설정
         itemGo.transform.SetParent(this.transform);
-        itemGo.transform.localPosition = Vector3.zero;
+        //itemGo.transform.localPosition = Vector3.zero;
         itemGo.transform.localScale = Vector3.one;
 
         currentItem = itemGo.GetComponent<H_Item>();
