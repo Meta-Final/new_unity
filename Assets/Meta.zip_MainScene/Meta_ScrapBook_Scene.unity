@@ -5410,7 +5410,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1479273809}
   - component: {fileID: 1479273811}
-  - component: {fileID: 1479273812}
   m_Layer: 0
   m_Name: AImanager
   m_TagString: Untagged
@@ -5445,22 +5444,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 616d6a0e7e27d7a4d8f667a79d14c5da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageDownloader: {fileID: 1479273812}
+  imageDownloader: {fileID: 0}
   image: {fileID: 1554663255}
---- !u!114 &1479273812
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1479273808}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65da01030b6da514b818fc8aa7797077, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  coverDownloadTexture: {fileID: 0}
-  trendDownloadTexture: {fileID: 0}
 --- !u!1 &1484439531
 GameObject:
   m_ObjectHideFlags: 0
