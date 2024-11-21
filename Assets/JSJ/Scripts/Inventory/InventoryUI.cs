@@ -191,10 +191,6 @@ public class InventoryUI : MonoBehaviourPun
                 postItImage.texture = selectScreenshot;
             }
 
-            // H_MergeMgr 스크립트 추가
-            H_MergeMgr mergeMgr = newPostIt.AddComponent<H_MergeMgr>();
-            mergeMgr.SetMergeResultSprite("pie_Sprite");
-
             // 새 포스트잇에 클릭 리스너 추가하여 이미지를 확대함
             Button postItButton = newPostIt.AddComponent<Button>();
             Texture2D currentScreenshot = selectScreenshot;
