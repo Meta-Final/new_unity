@@ -8,17 +8,14 @@ public class AvatarManager : MonoBehaviour
 {
     public static AvatarManager instance;
 
-    public GameObject currentAvatar;
-
     public int avatarCode;
-
-    
 
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -26,33 +23,13 @@ public class AvatarManager : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
-
-    
-
+    // 아바타 랜덤 코드 생성
     public void RandomAvatartCode()
     {
         int randomIndex = Random.Range(0, 2);
 
-        
         avatarCode = randomIndex;
         print(avatarCode);
-    }
-
-    public void LoadandSetAvatarCode()
-    {
-        
-        print("아바타생성시작");
-        PhotonNetwork.Instantiate("Player_" + avatarCode, Vector3.zero, Quaternion.identity);
-        print("아바타 생성완료!");
     }
 
 }

@@ -16,13 +16,8 @@ public class PicketManager : MonoBehaviourPun
 
     void Start()
     {
-        MetaConnectionMgr metaConnectionMgr = MetaConnectionMgr.instance;
-        AvatarManager avatarManager = metaConnectionMgr.GetComponentInChildren<AvatarManager>();
-        if (avatarManager != null && avatarManager.currentAvatar != null)
-        {
-            player = avatarManager.currentAvatar;
-        }
-
+        player = FindObjectOfType<GameManager>().player;
+       
         btn_Picket.onClick.AddListener(MakePicket);
 
         panelLinkNews.SetActive(false);

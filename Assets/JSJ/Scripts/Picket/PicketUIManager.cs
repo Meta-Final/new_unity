@@ -8,16 +8,17 @@ public class PicketUIManager : MonoBehaviour
     public GameObject player;
     public GameObject currentPicket;    // 방금 생성된 Picket Prefab
 
+    [Header("Picket UI")]
     public GameObject panelInventory;   // 인벤토리 UI
     public GameObject panelLinkNews;    // Picket이랑 기사 링크 여부 Panel
     public GameObject panelPicket;      // Picket UI
-    
 
+    [Header("Button")]
     public Button btn_Yes;   // 링크 'Yes'
     public Button btn_No;    // 링크 'No'
-
     public Button btn_X;
 
+    [Header("Screenshot")]
     public Texture newsTexture;   // 기사 스크린샷
     public RawImage img_News;     // 기사 스크린샷을 보여주는 이미지
 
@@ -27,12 +28,7 @@ public class PicketUIManager : MonoBehaviour
 
     void Start()
     {
-        MetaConnectionMgr metaConnectionMgr = MetaConnectionMgr.instance;
-        AvatarManager avatarManager = metaConnectionMgr.GetComponentInChildren<AvatarManager>();
-        if (avatarManager != null && avatarManager.currentAvatar != null)
-        {
-            player = avatarManager.currentAvatar;
-        }
+        player = FindObjectOfType<GameManager>().player;
 
         if (player != null)
         {

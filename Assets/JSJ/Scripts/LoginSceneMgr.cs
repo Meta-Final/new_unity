@@ -48,25 +48,21 @@ public class LoginSceneMgr : MonoBehaviour
         canvasAccount.SetActive(false);
     }
 
+
     // 내용 바뀌면 호출되는 함수
     void SignInValueChanged(string s)
     {
         btn_SignIn.interactable = s.Length > 0;
     }
 
+
     // [로그인]-----------------------------------------------------------------------------------
     public void OnClickSignIn()
     {
         FireAuthManager.instance.OnSignIn(signInEmail.text, signInPassword.text);
-        AvatarManager.instance.RandomAvatartCode();
-        //RandomAvatartCode();
-        print("랜덤 숫자 뽑기");
-    }
-    public void RandomAvatartCode()
-    {
-        int randomIndex = Random.Range(0, 2);
 
-        PlayerPrefs.SetInt("randomIndex", randomIndex);
+        // 아바타 랜덤 코드 생성
+        AvatarManager.instance.RandomAvatartCode();
     }
 
     // 로그인 실패 UI
