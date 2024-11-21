@@ -6,6 +6,8 @@ using Photon.Pun;
 
 public class ChatManager : MonoBehaviourPun
 {
+    public static ChatManager instance;
+
     // Input Field
     public TMP_InputField inputChat;
 
@@ -21,9 +23,24 @@ public class ChatManager : MonoBehaviourPun
     // 채팅이 추가되기 전의 Content 의 H(높이) 값을 가지고 있는 변수
     float prevContentH;
 
+    // 채팅 중인지
+    bool isChatting = false;
+
     // 닉네임 색상
     Color nickNameColor;
-    
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void Start()
     {
         // 닉네임 색상을 랜덤하게 설정
@@ -102,10 +119,18 @@ public class ChatManager : MonoBehaviourPun
     void OnValueChanged(string s)
     {
         //print("변경 중 : " + s);
+        isChatting = true;
     }
 
     void OnEndEdit(string s)
     {
         //print("작성 끝 : " + s);
+        isChatting = false;
+    }
+
+    // isChatting 상태를 반환하는 함수
+    public bool IsChatting()
+    {
+        return isChatting;
     }
 }

@@ -122,13 +122,16 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             jumpCurrentCount = 0;
         }
 
-        // 점프
-        if (Input.GetKeyDown(KeyCode.Space) & jumpCurrentCount < jumpMaxCount)
+        if (!ChatManager.instance.IsChatting())
         {
-            yPos = jumpPower;
-            jumpCurrentCount++;
+            // 점프
+            if (Input.GetKeyDown(KeyCode.Space) & jumpCurrentCount < jumpMaxCount)
+            {
+                yPos = jumpPower;
+                jumpCurrentCount++;
+            }
         }
-
+        
         dir.y = yPos;
 
         cc.Move(dir * currentSpeed * Time.deltaTime);
