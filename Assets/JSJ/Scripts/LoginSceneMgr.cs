@@ -58,6 +58,15 @@ public class LoginSceneMgr : MonoBehaviour
     public void OnClickSignIn()
     {
         FireAuthManager.instance.OnSignIn(signInEmail.text, signInPassword.text);
+        AvatarManager.instance.RandomAvatartCode();
+        //RandomAvatartCode();
+        print("랜덤 숫자 뽑기");
+    }
+    public void RandomAvatartCode()
+    {
+        int randomIndex = Random.Range(0, 2);
+
+        PlayerPrefs.SetInt("randomIndex", randomIndex);
     }
 
     // 로그인 실패 UI

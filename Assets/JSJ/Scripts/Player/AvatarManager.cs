@@ -12,12 +12,13 @@ public class AvatarManager : MonoBehaviour
 
     public int avatarCode;
 
+    
+
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -40,22 +41,18 @@ public class AvatarManager : MonoBehaviour
     public void RandomAvatartCode()
     {
         int randomIndex = Random.Range(0, 2);
-        SaveAvatarCode(randomIndex);
+
+        
+        avatarCode = randomIndex;
+        print(avatarCode);
     }
 
-    public void SaveAvatarCode(int code)
+    public void LoadandSetAvatarCode()
     {
-        avatarCode = code;
+        
+        print("아바타생성시작");
+        PhotonNetwork.Instantiate("Player_" + avatarCode, Vector3.zero, Quaternion.identity);
+        print("아바타 생성완료!");
     }
 
-    public void AssignRandomAvatar(int avatarInt)
-    {
-        if (currentAvatar == null)
-        {
-            currentAvatar = PhotonNetwork.Instantiate("Player_" + avatarInt, Vector3.zero, Quaternion.identity);
-
-            print("아바타 생성완료!");
-        }
-
-    }
 }

@@ -15,8 +15,6 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
 
     int roomNumber = 0;
 
-    
-    
     private void Awake()
     {
         if (instance == null)
@@ -141,8 +139,9 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         PhotonNetwork.LoadLevel(loadLevelName);
         // 멀티플레이 컨텐츠 즐길 수 있는 상태
 
-    }
+        AvatarManager.instance.LoadandSetAvatarCode();
 
+    }
 
     // [Room 에서 나가기]--------------------------------------------------------------------------------------------------
     // ScrapBook -> Channel
