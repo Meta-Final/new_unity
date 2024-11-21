@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Photon.Pun;
+using UnityEditor.Rendering.Universal.ShaderGUI;
 
 public class AI_Movement_KJS : MonoBehaviourPun
 {
@@ -12,6 +13,8 @@ public class AI_Movement_KJS : MonoBehaviourPun
 
     // Scene에서 tool UI를 저장하기 위한 변수
     private GameObject Chat;
+
+    public List<GameObject> list_ui = new List<GameObject>();
 
     private bool isAgentEnabled = true; // NavMeshAgent 활성화 상태 플래그
     private bool isRotatingToPlayer = false; // 로컬 플레이어 방향으로 회전 플래그
@@ -45,6 +48,12 @@ public class AI_Movement_KJS : MonoBehaviourPun
         {
             Debug.LogError("MagazineView object not found in the scene.");
         }
+
+        list_ui.Add(GameObject.Find("MagazineView").transform.GetChild(0).gameObject);
+        list_ui.Add(GameObject.Find("MagazineView").transform.GetChild(1).gameObject);
+        list_ui.Add(GameObject.Find("MagazineView 2").transform.GetChild(0).gameObject);
+        list_ui.Add(GameObject.Find("Canvas_Inventory").transform.GetChild(0).gameObject);    
+
     }
 
     void Update()
@@ -122,6 +131,14 @@ public class AI_Movement_KJS : MonoBehaviourPun
 
     public void OnMouseDown()
     {
+        foreach(GameObject ui in list_ui)
+        {
+            if( ui.activeSelf == true)
+            {
+                return;
+            }
+        }
+
         // 이 스크립트가 할당된 오브젝트를 로컬 플레이어가 클릭한 경우 tool UI를 활성화
         if (photonView.IsMine && Chat != null)
         {
