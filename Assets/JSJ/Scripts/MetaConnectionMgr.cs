@@ -136,31 +136,12 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
 
         print("현재 방 이름 : " + PhotonNetwork.CurrentRoom.Name);
 
-        
-        //LoadandSetAvatarCode();
-
         PhotonNetwork.LoadLevel(loadLevelName);
         // 멀티플레이 컨텐츠 즐길 수 있는 상태
 
         AvatarManager.instance.LoadandSetAvatarCode();
 
     }
-
-    public GameObject[] avatars;
-
-    public GameObject currentAvatar;
-
-    public void LoadandSetAvatarCode()
-    {
-        int randomIndex = PlayerPrefs.GetInt("randomIndex", 0);
-
-        if (randomIndex >= 0 && randomIndex < avatars.Length)
-        {
-            currentAvatar = PhotonNetwork.Instantiate(avatars[randomIndex].name, Vector3.zero, Quaternion.identity);
-            print("아바타 생성완료!");
-        }
-    }
-
 
     // [Room 에서 나가기]--------------------------------------------------------------------------------------------------
     // ScrapBook -> Channel

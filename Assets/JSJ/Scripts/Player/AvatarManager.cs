@@ -8,8 +8,6 @@ public class AvatarManager : MonoBehaviour
 {
     public static AvatarManager instance;
 
-    public GameObject[] avatars;
-
     public GameObject currentAvatar;
 
     public int avatarCode;
@@ -21,7 +19,6 @@ public class AvatarManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -45,14 +42,14 @@ public class AvatarManager : MonoBehaviour
     {
         int randomIndex = Random.Range(0, 2);
 
-        //PlayerPrefs.SetInt("randomIndex", randomIndex);
+        
         avatarCode = randomIndex;
         print(avatarCode);
     }
 
     public void LoadandSetAvatarCode()
     {
-        //int randomIndex = PlayerPrefs.GetInt("randomIndex", 0);
+        
         print("아바타생성시작");
         PhotonNetwork.Instantiate("Player_" + avatarCode, Vector3.zero, Quaternion.identity);
         print("아바타 생성완료!");
