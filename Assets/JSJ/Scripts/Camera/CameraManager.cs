@@ -5,7 +5,7 @@ using Photon.Pun;
 
 public class CameraManager : MonoBehaviourPun
 {
-    public Camera mainCamera;
+    public GameObject mainCamera;
 
     public float followSpeed = 5f;
     public float zoomInSpeed = 2f; // 줌인 속도
@@ -18,37 +18,46 @@ public class CameraManager : MonoBehaviourPun
     private bool isZoomingIn = false; // MoveCameraToPosition에서 줌인 활성화 플래그
     private Vector3 targetPosition; // 줌인 목표 위치
 
+
     void Start()
     {
-        mainCamera = Camera.main;
-
-        if (mainCamera != null)
+        if (photonView.IsMine)
         {
-            offset = mainCamera.transform.position - transform.position;
-        }
+            if (mainCamera == null)
+            {
+                mainCamera = FindObjectOfType<Camera>().gameObject;
+                print(mainCamera == null ? "Null" : "Has");
+            }
+            
 
+            if (mainCamera != null)
+            {
+                offset = mainCamera.transform.position - transform.position;
+            }
+        }
+       
         // PlayerMove 스크립트 참조
         playerMoveScript = GetComponent<PlayerMove>();
     }
 
     void Update()
     {
-        // ESC 키로 MoveCameraToPosition(줌인) 동작 중단
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            isZoomingIn = false; // MoveCameraToPosition 줌인 중단
-            stopCameraMoving = false; // CameraMoving 다시 활성화
-
-            // PlayerMove 활성화
-            if (playerMoveScript != null)
-            {
-                playerMoveScript.EnableMoving(true);
-            }
-        }
-
         // 내 것일 때만 카메라 컨트롤
         if (photonView.IsMine)
         {
+            // ESC 키로 MoveCameraToPosition(줌인) 동작 중단
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                isZoomingIn = false; // MoveCameraToPosition 줌인 중단
+                stopCameraMoving = false; // CameraMoving 다시 활성화
+
+                // PlayerMove 활성화
+                if (playerMoveScript != null)
+                {
+                    playerMoveScript.EnableMoving(true);
+                }
+            }
+
             if (isZoomingIn)
             {
                 ZoomInToPlayer(); // 줌인 진행

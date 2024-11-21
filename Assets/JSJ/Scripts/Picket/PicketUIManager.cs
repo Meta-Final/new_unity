@@ -27,7 +27,12 @@ public class PicketUIManager : MonoBehaviour
 
     void Start()
     {
-        player = FindObjectOfType<GameManager>().player;
+        MetaConnectionMgr metaConnectionMgr = MetaConnectionMgr.instance;
+        AvatarManager avatarManager = metaConnectionMgr.GetComponentInChildren<AvatarManager>();
+        if (avatarManager != null && avatarManager.currentAvatar != null)
+        {
+            player = avatarManager.currentAvatar;
+        }
 
         if (player != null)
         {

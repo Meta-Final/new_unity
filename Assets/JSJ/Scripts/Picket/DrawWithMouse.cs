@@ -23,7 +23,7 @@ public class DrawWithMouse : MonoBehaviourPun
 
     public Texture2D penIcon;
 
-    public Vector2 penSpot = Vector2.zero;
+    
 
     public bool isDrawing = false;
     public bool isAttaching = false;
@@ -42,25 +42,26 @@ public class DrawWithMouse : MonoBehaviourPun
     // 그리기
     void StartDrawing()
     {
+        SetPenIcon();
+
         // 그리기 활성화
         isDrawing = true;
 
         // 붙이기 비활성화
         isAttaching = false;
 
-        SetPenIcon();
     }
 
     // 붙이기
     void StartAttaching()
     {
+        ResetCursor();
+
         // 붙이기 활성화
         isAttaching = true;
 
         // 그리기 비활성화
         isDrawing = false;
-
-        SetPenIcon();
     }
 
 
@@ -152,15 +153,13 @@ public class DrawWithMouse : MonoBehaviourPun
 
     public void SetPenIcon()
     {
-        if (isDrawing == true)
-        {
-            Cursor.SetCursor(penIcon, penSpot, CursorMode.Auto);
-        }
-        else
-        {
-            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-        }
+        Cursor.SetCursor(penIcon, Vector2.zero, CursorMode.Auto);
+        
+    }
 
+    public void ResetCursor()
+    {
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
     }
     
 }
