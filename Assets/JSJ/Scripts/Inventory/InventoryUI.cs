@@ -26,6 +26,7 @@ public class InventoryUI : MonoBehaviourPun
     int selectIndex = -1;
     Texture2D selectScreenshot;
 
+    
     [Header("큰 이미지로 보기")]
     public GameObject largeImagePreviewPanel; // 큰 이미지 패널
     public RawImage largeImagePreview;        // 확대 이미지를 표시할 RawImage
@@ -169,9 +170,9 @@ public class InventoryUI : MonoBehaviourPun
 
     [PunRPC]
     // 정렬을 위한 위치 값 설정
-    private int postItColumnCount = 3;      // 한 행에 들어갈 포스트잇 개수 (3으로 설정)
-    private int postItRowCount = 3;         // 총 행 개수 (3으로 설정)
-    private float postItSpacing = 8f;      // 포스트잇 간 간격 (픽셀 단위)
+    private int postItColumnCount;      // 한 행에 들어갈 포스트잇 개수 (3으로 설정)
+    private int postItRowCount;         // 총 행 개수 (3으로 설정)
+    //private float postItSpacing = 8f;      // 포스트잇 간 간격 (픽셀 단위)
     private int postItIndex = 0;            // 생성된 포스트잇의 인덱스
 
     public Material matPostIt;
@@ -228,14 +229,13 @@ public class InventoryUI : MonoBehaviourPun
     }
     private Vector3 GetNewPosition()
     {
-        
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hitInfo))
-        {
-            return hitInfo.point;
-        }
 
-        return noticePos.position;
+        // 랜덤 위치 범위 설정
+        float xOffset = UnityEngine.Random.Range(-5f, 5f); // X축 이동 범위
+        float yOffset = UnityEngine.Random.Range(-5f, 5f); // Y축 이동 범위
+        float zOffset = -0.5f;                              // 고정된 Z축
+
+        return noticePos.position + new Vector3(xOffset, yOffset, zOffset);
     }
     private void ShowLargeImage(Texture2D screenshot)
     {
@@ -248,5 +248,71 @@ public class InventoryUI : MonoBehaviourPun
     public void HideLargeImage()
     {
         largeImagePreviewPanel.SetActive(false);
+    }
+}
+public class PostItDragHandler : MonoBehaviour
+{
+    private bool isDragging = false;
+    private Vector3 offset;
+    private Transform noticePos;
+
+    private void Start()
+    {
+        // 포스트잇의 부모인 noticePos를 자동으로 가져옵니다.
+        noticePos = transform.parent;
+    }
+
+    private void OnMouseDown()
+    {
+        isDragging = true;
+        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        offset = transform.position - mouseWorldPos;
+    }
+
+    private void OnMouseDrag()
+    {
+        if (isDragging)
+        {
+            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mouseWorldPos.z = transform.position.z; // Z축 고정
+            Vector3 targetPosition = mouseWorldPos + offset;
+
+            targetPosition = ClampToBounds(targetPosition);
+            transform.position = targetPosition;
+        }
+
+    }
+
+    private void OnMouseUp()
+    {
+        isDragging = false;
+    }
+    private Vector3 ClampToBounds(Vector3 targetPosition)
+    {
+        if (noticePos == null)
+            return targetPosition;
+
+        // noticePos의 경계값 계산
+        Bounds bounds = GetNoticePosBounds();
+
+        // X, Y 축 제한
+        targetPosition.x = Mathf.Clamp(targetPosition.x, bounds.min.x, bounds.max.x);
+        targetPosition.y = Mathf.Clamp(targetPosition.y, bounds.min.y, bounds.max.y);
+
+        return targetPosition;
+    }
+
+    private Bounds GetNoticePosBounds()
+    {
+        // noticePos의 중심과 크기를 기반으로 경계 생성
+        Renderer renderer = noticePos.GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            return renderer.bounds;
+        }
+
+        // Renderer가 없을 경우, 대체 경계 설정
+        Vector3 size = new Vector3(10f, 10f, 0); // X, Y 크기 가정
+        return new Bounds(noticePos.position, size);
     }
 }
