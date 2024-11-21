@@ -23,7 +23,7 @@ public class AIBotSpawner_KJS : MonoBehaviourPunCallbacks
             if (playerPhotonView != null && playerPhotonView.IsMine)
             {
                 // 로컬 플레이어 위치 기준으로 x값 -1만큼 떨어진 위치 계산
-                spawnPosition = player.transform.position + new Vector3(-1f, 0f, 0f);
+                spawnPosition = player.transform.position + new Vector3(2f, 0f, 0f);
                 foundLocalPlayer = true;
                 break;
             }
