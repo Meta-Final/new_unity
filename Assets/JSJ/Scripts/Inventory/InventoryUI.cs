@@ -185,17 +185,17 @@ public class InventoryUI : MonoBehaviourPun
     {
         if (selectScreenshot != null)
         {
-            // 3x3 배치의 행과 열 계산
-            int row = postItIndex / postItColumnCount;
-            int column = postItIndex % postItColumnCount;
+            // // 3x3 배치의 행과 열 계산
+            // int row = postItIndex / postItColumnCount;
+            // int column = postItIndex % postItColumnCount;
+            //
+            // Vector3 offset = new Vector3(
+            //     column * postItSpacing - 10f,
+            //     -(row * postItSpacing) + 8f,
+            //     -0.5f
+            // );
 
-            Vector3 offset = new Vector3(
-                column * postItSpacing - 10f,
-                -(row * postItSpacing) + 8f,
-                -0.5f
-            );
-
-            Vector3 spawnPosition = noticePos.position + offset;
+            Vector3 spawnPosition = GetNewPosition();
             GameObject newPostIt = Instantiate(postItPrefab, spawnPosition, Quaternion.identity, noticePos);
 
             // 색상 및 텍스처 설정
@@ -226,7 +226,17 @@ public class InventoryUI : MonoBehaviourPun
             btn_PostIt.interactable = false;
         }
     }
+    private Vector3 GetNewPosition()
+    {
+        
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hitInfo))
+        {
+            return hitInfo.point;
+        }
 
+        return noticePos.position;
+    }
     private void ShowLargeImage(Texture2D screenshot)
     {
         // 큰 이미지 텍스처 설정
