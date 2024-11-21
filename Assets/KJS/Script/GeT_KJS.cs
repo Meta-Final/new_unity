@@ -7,6 +7,7 @@ public class Get_KJS : MonoBehaviour
     public float detectionRange = 5.0f; // 감지 범위
     private GameObject targetItem = null; // 현재 들고 있는 food 오브젝트
     private bool isCarrying = false; // 오브젝트를 들고 있는지 여부
+    private float originalYPosition = 0.0f; // 오브젝트의 초기 Y값 저장
 
     void Update()
     {
@@ -46,6 +47,7 @@ public class Get_KJS : MonoBehaviour
         if (targetItem != null)
         {
             isCarrying = true;
+            originalYPosition = targetItem.transform.position.y; // 초기 Y값 저장
             Debug.Log($"{targetItem.name}을(를) 집었습니다.");
         }
     }
@@ -54,7 +56,7 @@ public class Get_KJS : MonoBehaviour
     void CarryFoodWithPlayer()
     {
         // 플레이어가 바라보는 방향으로 약간 앞에 위치하도록 설정
-        Vector3 carryPosition = transform.position + transform.forward * 5f + new Vector3(0, 5, 0);
+        Vector3 carryPosition = transform.position + transform.forward * 1f + new Vector3(0, 1, 0);
         targetItem.transform.position = carryPosition;
 
         // 기존 X축 회전을 유지하고 Y, Z축 회전만 캐릭터의 회전을 따르게 설정
@@ -62,14 +64,14 @@ public class Get_KJS : MonoBehaviour
         targetItem.transform.rotation = Quaternion.Euler(currentRotation.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
     }
 
-    // 들고 있는 오브젝트를 현재 위치의 Y축 0인 지점에 내려놓는 메서드
+    // 들고 있는 오브젝트를 초기 Y값으로 놓는 메서드
     void DropItem()
     {
         if (targetItem != null)
         {
-            // 현재 위치의 y축을 0으로 설정하여 오브젝트를 놓음
+            // 초기 Y값을 설정하여 오브젝트를 놓음
             Vector3 dropPosition = targetItem.transform.position;
-            dropPosition.y = 0;
+            dropPosition.y = originalYPosition; // 초기 Y값으로 설정
             targetItem.transform.position = dropPosition;
 
             Debug.Log($"{targetItem.name}을(를) 내려놓았습니다.");
