@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 [System.Serializable]
 public class ScreenshotData
@@ -111,12 +112,33 @@ public class InventoryManager : MonoBehaviour
 
             if (!string.IsNullOrEmpty(screenshotPath))
             {
+                // 스크린샷 파일의 날짜 가져오기
+                DateTime fileDate = File.GetCreationTime(screenshotPath);
+                string formattedDate = fileDate.ToString("MM월/dd일");
+
+                // 스크린샷 표시
                 inventoryUI.DisplayScreenshot(screenshotPath);
+
+                // 버튼 위에 날짜 표기 (UI 처리)
+                Transform slotButton = inventoryUI.slot.GetChild(index);
+                TextMeshProUGUI tmpText = slotButton.GetComponentInChildren<TextMeshProUGUI>();
+                if (tmpText != null)
+                {
+                    tmpText.text = formattedDate;
+                }
             }
             else
             {
                 Debug.LogWarning("유효하지 않은 인덱스: " + index);
             }
         }
+    }
+    public string GetScreenshotPath(int index)
+    {
+        if (index >= 0 && index < screenshotData.screenshotList.Count)
+        {
+            return screenshotData.screenshotList[index];
+        }
+        return null; // 유효하지 않은 인덱스인 경우 null 반환
     }
 }

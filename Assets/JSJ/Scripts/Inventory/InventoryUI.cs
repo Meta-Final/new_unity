@@ -7,6 +7,8 @@ using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Photon.Pun;
+using System;
+using TMPro;
 
 [RequireComponent(typeof(PhotonView))]
 public class InventoryUI : MonoBehaviourPun
@@ -58,19 +60,35 @@ public class InventoryUI : MonoBehaviourPun
     // 인벤토리 UI 업데이트
     public void UpdateInventoryUI()
     {
+        // 기존 슬롯의 모든 자식 오브젝트 제거
         foreach (Transform child in slot)
         {
-            // Slot 의 모든 자식 오브젝트를 제거
             Destroy(child.gameObject);
         }
 
+        // 스크린샷 개수만큼 버튼 생성
         for (int i = 0; i < InventoryManager.instance.ScreenshotCount(); i++)
         {
-            Button newButton = Instantiate(btn_SlotItemPrefab, slot);
+            Button newButton = Instantiate(btn_SlotItemPrefab, slot); // 버튼 생성
             int index = i;
 
+            // 버튼에 클릭 이벤트 추가
             newButton.onClick.AddListener(() => OnSlotClick(index));
 
+            // 스크린샷 날짜 가져오기
+            string screenshotPath = InventoryManager.instance.GetScreenshotPath(index);
+            if (!string.IsNullOrEmpty(screenshotPath))
+            {
+                DateTime fileDate = File.GetCreationTime(screenshotPath); // 파일 생성 날짜
+                string formattedDate = fileDate.ToString("MM월/dd일");    // 날짜 포맷
+
+                // 버튼 위 텍스트 설정
+                 TextMeshProUGUI tmpText = newButton.GetComponentInChildren<TextMeshProUGUI>();
+                if (tmpText != null)
+                {
+                    tmpText.text = formattedDate; // TMP 텍스트에 날짜 설정
+                }
+            }
         }
     }
     public void OnClickColoroff()
