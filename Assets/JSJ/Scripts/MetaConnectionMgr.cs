@@ -15,6 +15,7 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
 
     int roomNumber = 0;
 
+
     private void Awake()
     {
         if (instance == null)
@@ -24,22 +25,18 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         }
     }
 
+
     void Start()
     {
         if (!PhotonNetwork.IsConnected)
         {
             // 마스터 서버에 접속 시도
             PhotonNetwork.ConnectUsingSettings();
-            print("마스터 서버에 접속 성공!");
-
-            //PhotonNetwork.AutomaticallySyncScene = true;
         }
         else
         {
             print("마스터 서버에 접속 되어 있음");
         }
-
-        
     }
 
 
@@ -51,7 +48,6 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
 
         PhotonNetwork.JoinLobby();
     }
-
 
     // Lobby 에 접속을 성공하면 호출되는 함수
     public override void OnJoinedLobby()
@@ -138,10 +134,8 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
 
         PhotonNetwork.LoadLevel(loadLevelName);
         // 멀티플레이 컨텐츠 즐길 수 있는 상태
-
-        AvatarManager.instance.LoadandSetAvatarCode();
-
     }
+
 
     // [Room 에서 나가기]--------------------------------------------------------------------------------------------------
     // ScrapBook -> Channel
@@ -179,7 +173,6 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         roomNumber = 5;
     }
 
-
     // Room 에서 나오면 호출되는 함수
     public override void OnLeftRoom()
     {
@@ -195,7 +188,7 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         // 이미 마스터 서버에 접속해있다면,
         else
         {
-            // 룸 이동
+            // Room 이동
             RoomTransition();
         }
     }
@@ -204,13 +197,13 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         base.OnConnectedToMaster();
-        Debug.Log("마스터 서버에 재접속했습니다.");
+        Debug.Log("마스터 서버에 접속했습니다.");
 
         // 룸 이동
         RoomTransition();
     }
 
-    // 룸 이동 함수
+    // Room 이동 함수
     public void RoomTransition()
     {
         // 만약 룸넘버가 1이거나 3이면, Channel 로 이동한다.

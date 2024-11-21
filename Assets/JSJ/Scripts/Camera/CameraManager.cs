@@ -5,7 +5,9 @@ using Photon.Pun;
 
 public class CameraManager : MonoBehaviourPun
 {
-    public GameObject mainCamera;
+    public Camera mainCamera;
+    
+
 
     public float followSpeed = 5f;
     public float zoomInSpeed = 2f; // 줌인 속도
@@ -21,21 +23,13 @@ public class CameraManager : MonoBehaviourPun
 
     void Start()
     {
-        if (photonView.IsMine)
+        if (mainCamera == null)
         {
-            if (mainCamera == null)
-            {
-                mainCamera = FindObjectOfType<Camera>().gameObject;
-                print(mainCamera == null ? "Null" : "Has");
-            }
-            
-
-            if (mainCamera != null)
-            {
-                offset = mainCamera.transform.position - transform.position;
-            }
+            mainCamera = Camera.main;
         }
-       
+        
+        offset = mainCamera.transform.position - transform.position;
+
         // PlayerMove 스크립트 참조
         playerMoveScript = GetComponent<PlayerMove>();
     }
