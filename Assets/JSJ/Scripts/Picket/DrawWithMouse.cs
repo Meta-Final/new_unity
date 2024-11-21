@@ -14,6 +14,7 @@ public class DrawWithMouse : MonoBehaviourPun
 
     public GameObject stickerprefab;
 
+    [Header("SetParent")]
     public GameObject lineParent;      // Line들이 모인 오브젝트
     public GameObject stickerParent;   // Sticker들이 모인 오브젝트
 
@@ -21,12 +22,14 @@ public class DrawWithMouse : MonoBehaviourPun
     public Button drawButton;
     public Button stickerButton;
 
+    [Header("커서 이미지")]
     public Texture2D penIcon;
+    public Texture2D stickerIcon;
 
-    
 
     public bool isDrawing = false;
     public bool isAttaching = false;
+    public bool isCursorActive = false;
 
     float timestep;
 
@@ -35,35 +38,52 @@ public class DrawWithMouse : MonoBehaviourPun
     
     private void Start()
     {
-        drawButton.onClick.AddListener(StartDrawing);
-        stickerButton.onClick.AddListener(StartAttaching);
+        drawButton.onClick.AddListener(DrawMode);
+        stickerButton.onClick.AddListener(StickerMode);
     }
 
-    // 그리기
-    void StartDrawing()
+    // 그리기 모드
+    public void DrawMode()
     {
-        SetPenIcon();
+        isDrawing = !isDrawing;
 
-        // 그리기 활성화
-        isDrawing = true;
+        // 만일, 그리기 상태라면
+        if (isDrawing)
+        {
+            // 커서를 펜 아이콘으로 설정
+            SetPenIcon();
 
-        // 붙이기 비활성화
-        isAttaching = false;
-
+            // 붙이기 비활성화
+            isAttaching = false;
+        }
+        else
+        {
+            // 커서 초기화
+            ResetCursor();
+        }
     }
 
-    // 붙이기
-    void StartAttaching()
+    // 스티커 모드
+    public void StickerMode()
     {
-        ResetCursor();
+        isAttaching = !isAttaching;
 
-        // 붙이기 활성화
-        isAttaching = true;
+        // 만일, 붙이기 상태라면
+        if (isAttaching)
+        {
+            // 커서를 스티커 아이콘으로 설정
+            SetStickerIcon();
 
-        // 그리기 비활성화
-        isDrawing = false;
+            // 그리기 비활성화
+            isDrawing = false;
+        }
+        else
+        {
+            // 커서 초기화
+            ResetCursor();
+        }
     }
-
+   
 
     private void Update()
     {
@@ -88,7 +108,6 @@ public class DrawWithMouse : MonoBehaviourPun
                     line.AddPoint(point);
 
                     timestep = Time.time;
-
                 }
             }
         }
@@ -140,7 +159,6 @@ public class DrawWithMouse : MonoBehaviourPun
 
         photonView.RPC("Sticker", RpcTarget.AllBuffered, localPoint);
     }
-
     
     // 스티커 생성 동기화
     [PunRPC]
@@ -151,12 +169,20 @@ public class DrawWithMouse : MonoBehaviourPun
         stickerInstance.transform.localPosition = localPoint;
     }
 
+
+    // 커서를 펜 아이콘으로 설정
     public void SetPenIcon()
     {
         Cursor.SetCursor(penIcon, Vector2.zero, CursorMode.Auto);
-        
     }
 
+    // 커서를 스티커 아이콘으로 설정
+    public void SetStickerIcon()
+    {
+        Cursor.SetCursor(stickerIcon, Vector2.zero, CursorMode.Auto);
+    }
+
+    // 커서 초기화
     public void ResetCursor()
     {
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
