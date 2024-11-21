@@ -8,6 +8,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 {
     [Header("이동")]
     public float moveSpeed = 5f;
+    public float runSpeed = 10f;
 
     [Header("회전")]
     public float rotSpeed = 200f;
@@ -16,13 +17,12 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     public float jumpPower = 3f;
     public int jumpMaxCount = 1;
 
-    [Header("Terrain 보정")]
-    public float groundOffset = 0.1f;
-
     float yPos;
     int jumpCurrentCount;
 
     float moveState;
+    float currentSpeed;
+    bool isRunning = false;
 
     public Canvas canvasNickName;
     public TMP_Text playerNickName;
@@ -72,16 +72,45 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         dir.Normalize();
 
         moveState = dir.magnitude;
-        print("11111");
 
-        // Player 애니메이션
-        animator.SetFloat("Moving", moveState);
-        print("222222");
 
-        if (!(h == 0 & v == 0))
+        // 플레이어가 움직이는 상태이고 Left Shift를 눌렀다면,
+        if (Input.GetKeyDown(KeyCode.LeftShift) && moveState > 0)
+        {
+            // 달리기 모드 Toggle
+            isRunning = !isRunning;
+        }
+        
+        // 플레이어가 움직이는 상태가 아니라면,
+        if (h == 0 && v == 0)
+        {
+            // 달리기 모드는 해제된다.
+            isRunning = false;
+        }
+        else
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), rotSpeed * Time.deltaTime);
         }
+
+        // 플레이어가 달리기 모드라면,
+        if (isRunning)
+        {
+            currentSpeed = runSpeed;
+
+            // Player Run Animation
+            animator.SetBool("isRunning", true);
+        }
+        // 플레이어가 달리기 모드가 아니라면,
+        else
+        {
+            currentSpeed = moveSpeed;
+
+            // Player Walk Animation
+            animator.SetFloat("Moving", moveState);
+            // Player Run Animation
+            animator.SetBool("isRunning", false);
+        }
+
 
         // 중력 적용
         yPos += Physics.gravity.y * Time.deltaTime;
@@ -102,7 +131,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 
         dir.y = yPos;
 
-        cc.Move(dir * moveSpeed * Time.deltaTime);
+        cc.Move(dir * currentSpeed * Time.deltaTime);
     }
 
 
@@ -165,13 +194,16 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     {
         if (stream.IsWriting)
         {
-            stream.SendNext(moveState);
+            stream.SendNext(moveState);   
+            stream.SendNext(isRunning);
         }
         else
         {
             moveState = (float)stream.ReceiveNext();
+            isRunning = (bool)stream.ReceiveNext();
 
             animator.SetFloat("Moving", moveState);
+            animator.SetBool("Running", isRunning);
         }
     }
 }

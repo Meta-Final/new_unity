@@ -5,35 +5,32 @@ using TMPro;
 
 public class AiChatMgr_KJS : MonoBehaviour
 {
-    // �̱��� �ν��Ͻ� ����
     public static AiChatMgr_KJS Instance { get; private set; }
 
-    public TMP_InputField userInputField; // ����ڰ� �Է��� TMP �ʵ�
-    public TMP_Text chatResponseText;     // AI ������ ǥ���� TMP �ؽ�Ʈ
-    public APIManager apiManager;         // APIManager �ν��Ͻ� ����
-    public Button sendButton;             // ���� ��ư
-    public GameObject extraUI;            // �߰����� UI (��ҿ��� ���� ����)
+    public TMP_InputField userInputField; // 사용자 입력 TMP 필드
+    public TMP_Text chatResponseText;     // AI 응답 텍스트 TMP
+    public APIManager apiManager;         // APIManager 인스턴스
+    public Button sendButton;             // 전송 버튼
+    public GameObject extraUI;            // 추가적인 UI (일시적 표시)
 
-    private GameObject chatUI;            // MagazineView �ȿ� �ִ� Chat UI
-    private GameObject toolUI;            // MagazineView �ȿ� �ִ� Tool UI
+    private GameObject chatUI;            // MagazineView 안의 Chat UI
+    private GameObject toolUI;            // MagazineView 안의 Tool UI
     private bool wasToolUIActive = false;
 
     private void Awake()
     {
-        // �̱��� �ν��Ͻ� ����
         if (Instance != null && Instance != this)
         {
-            Destroy(gameObject); // �̹� �ν��Ͻ��� �����ϸ� �ߺ��� ������Ʈ�� ����
+            Destroy(gameObject);
         }
         else
         {
-            Instance = this; // �ν��Ͻ� �Ҵ�
+            Instance = this;
         }
     }
 
     void Start()
     {
-        // "MagazineView" ������Ʈ �ȿ� �ִ� "Chat"�� "Tool" UI�� ã��
         GameObject magazineView = GameObject.Find("MagazineView");
         if (magazineView != null)
         {
@@ -42,7 +39,7 @@ public class AiChatMgr_KJS : MonoBehaviour
 
             if (chatUI != null)
             {
-                chatUI.SetActive(false); // Chat UI�� ��Ȱ��ȭ ���·� �ʱ�ȭ
+                chatUI.SetActive(false);
             }
             else
             {
@@ -51,7 +48,7 @@ public class AiChatMgr_KJS : MonoBehaviour
 
             if (toolUI != null)
             {
-                toolUI.SetActive(false); // Tool UI�� ��Ȱ��ȭ ���·� �ʱ�ȭ
+                toolUI.SetActive(false);
             }
             else
             {
@@ -63,56 +60,49 @@ public class AiChatMgr_KJS : MonoBehaviour
             Debug.LogError("MagazineView object not found in the scene.");
         }
 
-        // extraUI �ʱ� ��Ȱ��ȭ
         if (extraUI != null)
         {
             extraUI.SetActive(false);
         }
         else
         {
-            Debug.LogWarning("Extra UI�� �Ҵ���� �ʾҽ��ϴ�.");
+            Debug.LogWarning("Extra UI가 설정되지 않았습니다.");
         }
 
-        // ��ư Ŭ�� �� OnSendButtonClicked ȣ��
         sendButton.onClick.AddListener(OnSendButtonClicked);
     }
 
-    // ������Ʈ Ŭ�� �� Chat UI Ȱ��ȭ
     private void OnMouseDown()
     {
         if (chatUI != null)
         {
-            chatUI.SetActive(true); // Chat UI Ȱ��ȭ
-            Debug.Log("Chat UI�� Ȱ��ȭ�Ǿ����ϴ�.");
+            chatUI.SetActive(true);
+            Debug.Log("Chat UI 활성화되었습니다.");
         }
     }
 
     void OnSendButtonClicked()
     {
-        string userMessage = userInputField.text; // �Էµ� �ؽ�Ʈ ��������
+        string userMessage = userInputField.text;
 
         if (!string.IsNullOrEmpty(userMessage))
         {
-            chatResponseText.text = ""; // �ؽ�Ʈ �ʱ�ȭ
-            userInputField.text = "";  // �Է� �ʵ� �ʱ�ȭ
+            chatResponseText.text = "";
+            userInputField.text = "";
 
-            // �Էµ� �ؽ�Ʈ�� ���� �ٸ� ���� ó��
-            if (userMessage.Trim() == "ũ���������̹����������")
+            // 입력된 텍스트에 따라 다른 작업 처리
+            if (userMessage.Trim() == "글쓰고싶어")
             {
-                StartCoroutine(ProcessMessage("�̹����� �������. �߾�!", "ũ���������̹����������"));
-                apiManager.Cover(); // APIManager�� Cover �޼��� ȣ��
+                StartCoroutine(ProcessMessage("알겠다 삐약", "글쓰고싶어"));
             }
-            else if (userMessage.Trim() == "�۾��ѱ�縦������Ʈ�θ������")
+            else if (userMessage.Trim() == "크리스마스타임!")
             {
-                StartCoroutine(ProcessMessage("������Ʈ�� �������. �߾�!", "�۾�������Ʈ��縦������Ʈ�θ������"));
+                StartCoroutine(ProcessMessage("크리스마스 분위기 전환 완료! 삐약!", "크리스마스타임!"));
+                apiManager.Cover();
             }
-            else if (userMessage.Trim() == "�۾����;�")
+            else if (userMessage.Trim() == "작업상태확인")
             {
-                StartCoroutine(ProcessMessage("�˰ڴ� �߾�!", "�۾����;�"));
-            }
-            else if (userMessage.Trim() == "�����ֱٿ���ũ���ѱ�縦�˷���")
-            {
-                StartCoroutine(ProcessMessage("�ʰ� �ֱٿ� ��ũ���� ���� ��ȭ��, �����̴� �߾�!", "�����ֱٿ���ũ���ѱ�縦�˷���"));
+                StartCoroutine(ProcessMessage("작업상태는 양호합니다. 삐약!", "작업상태확인"));
             }
             else
             {
@@ -121,58 +111,50 @@ public class AiChatMgr_KJS : MonoBehaviour
         }
     }
 
-    // �ڷ�ƾ: UI Ȱ��ȭ -> �޽��� ��� -> 1�� ��� �� UI ��Ȱ��ȭ
     private IEnumerator ProcessMessage(string responseText, string actionKey)
     {
-        // 1. extraUI�� ���� Ȱ��ȭ
         if (extraUI != null)
         {
             extraUI.SetActive(true);
-            Debug.Log("Extra UI Ȱ��ȭ");
+            Debug.Log("Extra UI 활성화");
         }
 
-        // 2. �� ���ھ� �ؽ�Ʈ ���
         yield return StartCoroutine(TypeText(responseText));
 
-        // 3. �ؽ�Ʈ ����� �Ϸ�� �� 1�� ���
         yield return new WaitForSeconds(1f);
 
-        // 4. extraUI ��Ȱ��ȭ
         if (extraUI != null)
         {
             extraUI.SetActive(false);
-            Debug.Log("Extra UI ��Ȱ��ȭ");
+            Debug.Log("Extra UI 비활성화");
         }
 
-        if (actionKey == "�۾����;�" && toolUI != null)
+        if (actionKey == "글쓰고싶어" && toolUI != null)
         {
-            toolUI.SetActive(true); // Tool UI Ȱ��ȭ
+            toolUI.SetActive(true);
 
-            // chatUI ��Ȱ��ȭ
             if (chatUI != null)
             {
                 chatUI.SetActive(false);
-                Debug.Log("Chat UI ��Ȱ��ȭ");
+                Debug.Log("Chat UI 비활성화");
             }
 
-            // ĳ���� �̵� ��Ȱ��ȭ
             PlayerMove playerMove = FindObjectOfType<PlayerMove>();
             if (playerMove != null)
             {
-                playerMove.EnableMoving(false); // ĳ���� �̵� ��Ȱ��ȭ
-                Debug.Log("ĳ���� �̵� ��Ȱ��ȭ");
+                playerMove.EnableMoving(false);
+                Debug.Log("플레이어 이동 비활성화");
             }
         }
     }
 
-    // �ؽ�Ʈ�� �� ���ھ� ����ϴ� Coroutine
     private IEnumerator TypeText(string text)
     {
-        chatResponseText.text = ""; // ���� �ؽ�Ʈ �ʱ�ȭ
+        chatResponseText.text = "";
         foreach (char c in text)
         {
-            chatResponseText.text += c; // �� ���ھ� �߰�
-            yield return new WaitForSeconds(0.05f); // ������ �߰� (0.05��)
+            chatResponseText.text += c;
+            yield return new WaitForSeconds(0.05f);
         }
     }
 }

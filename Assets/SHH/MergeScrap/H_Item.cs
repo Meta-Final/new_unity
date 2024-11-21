@@ -9,10 +9,10 @@ public class H_Item : MonoBehaviour
     public H_Slot parentSlot;
 
     public SpriteRenderer visualRenderer;
-    public void Init(int id, H_Slot slot)
+    public void Init(int id, H_Slot Slot)
     {
         this.id = id;
-        this.parentSlot = slot;
+        this.parentSlot = Slot;
         visualRenderer.sprite = H_Utils.GetItemVisualById(id);
     }
 }
