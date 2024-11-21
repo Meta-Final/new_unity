@@ -1491,12 +1491,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 571835294}
   m_CullTransparentMesh: 1
---- !u!1 &575118507 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8202969751626316150, guid: 4f1dead521465f340818458969e7f378,
-    type: 3}
-  m_PrefabInstance: {fileID: 8808856939806607376}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &577619749
 GameObject:
   m_ObjectHideFlags: 0
@@ -2410,6 +2404,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -0.000061035156
       objectReference: {fileID: 0}
+    - target: {fileID: 6392870238404904412, guid: 61680cdcb6d60c2459ab6261dff78e04,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6401209123795789181, guid: 61680cdcb6d60c2459ab6261dff78e04,
         type: 3}
       propertyPath: m_Color.b
@@ -2439,6 +2438,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Color.r
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7700195302039414420, guid: 61680cdcb6d60c2459ab6261dff78e04,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7741945506818105849, guid: 61680cdcb6d60c2459ab6261dff78e04,
         type: 3}
@@ -8802,7 +8806,7 @@ PrefabInstance:
         type: 3}
       propertyPath: targetUI
       value: 
-      objectReference: {fileID: 575118507}
+      objectReference: {fileID: 0}
     - target: {fileID: 4782826722791024812, guid: 38922a62777744644915b5ef29018281,
         type: 3}
       propertyPath: parent
