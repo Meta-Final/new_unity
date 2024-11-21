@@ -142,7 +142,7 @@ public class APIManager : MonoBehaviour
     public void Ocr(string screenShot)
     {
         string ocrUrl = aiUrl.ocrURL;
-        StartCoroutine(PostHttpFile2(ocrUrl));
+        StartCoroutine(PostHttpFile2(ocrUrl, screenShot));
     }
 
     //Http Json Post
@@ -178,8 +178,7 @@ public class APIManager : MonoBehaviour
         AuthRequest auth = new AuthRequest 
         {
             userid = firestore.GetUserInfo().userId,
-            username = firestore.GetUserInfo().nickName,
-            email = firestore.GetUserInfo().email
+            username = firestore.GetUserInfo().nickName
         };
         string json = JsonUtility.ToJson(auth);
         Debug.Log("JSON Payload: " + json);
@@ -252,7 +251,7 @@ public class APIManager : MonoBehaviour
     }
 
     
-    public IEnumerator PostHttpFile2(string url)
+    public IEnumerator PostHttpFile2(string url, string screenShot)
     {   
         OcrRequest ocrRequest = new OcrRequest{screenShot = screenShot};
         string json = JsonUtility.ToJson(ocrRequest);
@@ -269,7 +268,7 @@ public class APIManager : MonoBehaviour
 
             if (www.result == UnityWebRequest.Result.Success)
             {
-                Debug.Log($"File downloaded successfully and saved at: {fileSavePath}");
+                Debug.Log("Success");
             }
             else
             {

@@ -59,7 +59,6 @@ namespace ReqRes
     {
         public string userid;
         public string username;
-        public string email;
     }
     //Create/Get request/response
     [Serializable]
