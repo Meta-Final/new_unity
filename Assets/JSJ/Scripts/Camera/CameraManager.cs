@@ -5,7 +5,7 @@ using Photon.Pun;
 
 public class CameraManager : MonoBehaviourPun
 {
-    public Camera mainCamera;
+    public GameObject mainCamera;
 
     public float followSpeed = 5f;
     public float zoomInSpeed = 2f; // 줌인 속도
@@ -25,7 +25,8 @@ public class CameraManager : MonoBehaviourPun
         {
             if (mainCamera == null)
             {
-                mainCamera = Camera.main;
+                mainCamera = FindObjectOfType<Camera>().gameObject;
+                print(mainCamera == null ? "Null" : "Has");
             }
             
 
