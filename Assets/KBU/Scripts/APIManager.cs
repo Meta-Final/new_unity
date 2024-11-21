@@ -135,7 +135,14 @@ public class APIManager : MonoBehaviour
     public void Trend(string fileSavePath)
     {
         string trendUrl = aiUrl.trendURL;
-        StartCoroutine(PostHttpFile(trendUrl, fileSavePath));
+        StartCoroutine(PostHttpFile1(trendUrl, fileSavePath));
+    }
+
+    //Ocr 생성/호출 메서드
+    public void Ocr(string screenShot)
+    {
+        string ocrUrl = aiUrl.ocrURL;
+        StartCoroutine(PostHttpFile2(ocrUrl));
     }
 
     //Http Json Post
@@ -224,11 +231,38 @@ public class APIManager : MonoBehaviour
         }
     }
 
-    public IEnumerator PostHttpFile(string url, string fileSavePath)
+    public IEnumerator PostHttpFile1(string url, string fileSavePath)
     {
         using (UnityWebRequest www = new UnityWebRequest(url, "POST"))
         {
             www.downloadHandler = new DownloadHandlerFile(fileSavePath);
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.Success)
+            {
+                Debug.Log($"File downloaded successfully and saved at: {fileSavePath}");
+            }
+            else
+            {
+                Debug.LogError($"Error: {www.error}, Status Code: {www.responseCode}");
+            }
+        }
+    }
+
+    
+    public IEnumerator PostHttpFile2(string url)
+    {   
+        OcrRequest ocrRequest = new OcrRequest{screenShot = screenShot};
+        string json = JsonUtility.ToJson(ocrRequest);
+
+        using (UnityWebRequest www = new UnityWebRequest(url, "POST"))
+        {
+            
+            byte[] jsonToSend = Encoding.UTF8.GetBytes(json);
+            www.uploadHandler = new UploadHandlerRaw(jsonToSend);
+            www.downloadHandler = new DownloadHandlerBuffer();
             www.SetRequestHeader("Content-Type", "application/json");
 
             yield return www.SendWebRequest();

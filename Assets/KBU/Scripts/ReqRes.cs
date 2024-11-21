@@ -27,6 +27,7 @@ namespace ReqRes
         public string loadCoverURL = "http://metaai2.iptime.org:14596/api/v1/loadcover";
         public string loadObjectURL = "http://metaai2.iptime.org:14596/api/v1/loadobject";
         public string trendURL = "http://metaai2.iptime.org:14596/api/v1/";
+        public string ocrURL = "http://metaai2.iptime.org:14596/api/v1/ocr";
     }
 
     //Search request/response
@@ -174,7 +175,13 @@ namespace ReqRes
         public List<Files> filePath;
     }
 
-
+    //OCR request
+    [Serializable]
+    public class OcrRequest
+    {
+        public string screenShot;
+    }
+    
     //알파때 URL
     [Serializable]
     public class AlphaURL
