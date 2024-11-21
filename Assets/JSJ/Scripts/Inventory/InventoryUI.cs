@@ -34,10 +34,7 @@ public class InventoryUI : MonoBehaviourPun
 
     public GameObject Colorbtn;
 
-    private void Awake()
-    {
-    }
-    [PunRPC]
+    
     private void Start()
     {
         // 지금 'Meta_ScrapBook_Scene'이라면, 액자를 찾아라.
@@ -210,6 +207,10 @@ public class InventoryUI : MonoBehaviourPun
                 postItImage.texture = selectScreenshot;
             }
 
+            // 드래그 스크립트 동적 추가
+            H_DargMg dragScript = newPostIt.AddComponent<H_DargMg>();
+            dragScript.noticePos = noticePos; // 부모 경계 전달
+
             // 새 포스트잇에 클릭 리스너 추가하여 이미지를 확대함
             Button postItButton = newPostIt.AddComponent<Button>();
             Texture2D currentScreenshot = selectScreenshot;
@@ -248,71 +249,5 @@ public class InventoryUI : MonoBehaviourPun
     public void HideLargeImage()
     {
         largeImagePreviewPanel.SetActive(false);
-    }
-}
-public class PostItDragHandler : MonoBehaviour
-{
-    private bool isDragging = false;
-    private Vector3 offset;
-    private Transform noticePos;
-
-    private void Start()
-    {
-        // 포스트잇의 부모인 noticePos를 자동으로 가져옵니다.
-        noticePos = transform.parent;
-    }
-
-    private void OnMouseDown()
-    {
-        isDragging = true;
-        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        offset = transform.position - mouseWorldPos;
-    }
-
-    private void OnMouseDrag()
-    {
-        if (isDragging)
-        {
-            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mouseWorldPos.z = transform.position.z; // Z축 고정
-            Vector3 targetPosition = mouseWorldPos + offset;
-
-            targetPosition = ClampToBounds(targetPosition);
-            transform.position = targetPosition;
-        }
-
-    }
-
-    private void OnMouseUp()
-    {
-        isDragging = false;
-    }
-    private Vector3 ClampToBounds(Vector3 targetPosition)
-    {
-        if (noticePos == null)
-            return targetPosition;
-
-        // noticePos의 경계값 계산
-        Bounds bounds = GetNoticePosBounds();
-
-        // X, Y 축 제한
-        targetPosition.x = Mathf.Clamp(targetPosition.x, bounds.min.x, bounds.max.x);
-        targetPosition.y = Mathf.Clamp(targetPosition.y, bounds.min.y, bounds.max.y);
-
-        return targetPosition;
-    }
-
-    private Bounds GetNoticePosBounds()
-    {
-        // noticePos의 중심과 크기를 기반으로 경계 생성
-        Renderer renderer = noticePos.GetComponent<Renderer>();
-        if (renderer != null)
-        {
-            return renderer.bounds;
-        }
-
-        // Renderer가 없을 경우, 대체 경계 설정
-        Vector3 size = new Vector3(10f, 10f, 0); // X, Y 크기 가정
-        return new Bounds(noticePos.position, size);
     }
 }
