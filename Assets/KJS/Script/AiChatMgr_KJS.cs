@@ -17,6 +17,11 @@ public class AiChatMgr_KJS : MonoBehaviour
     private GameObject toolUI;            // MagazineView 안의 Tool UI
     private bool wasToolUIActive = false;
 
+    private AudioSource audioSource;      // 오디오 소스
+    public AudioClip typingSound;         // 타이핑 효과음
+    private float lastSoundPlayTime = 0f; // 마지막으로 재생된 시간
+    private float typingSoundDelay = 0.5f; // 타이핑 사운드 재생 간격 (초)
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -27,6 +32,8 @@ public class AiChatMgr_KJS : MonoBehaviour
         {
             Instance = this;
         }
+
+        audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     void Start()
@@ -154,6 +161,17 @@ public class AiChatMgr_KJS : MonoBehaviour
         foreach (char c in text)
         {
             chatResponseText.text += c;
+
+            // 사운드 재생 간격을 확인
+            if (typingSound != null && audioSource != null)
+            {
+                if (Time.time - lastSoundPlayTime >= typingSoundDelay)
+                {
+                    audioSource.PlayOneShot(typingSound);
+                    lastSoundPlayTime = Time.time; // 마지막 재생 시간 업데이트
+                }
+            }
+
             yield return new WaitForSeconds(0.05f);
         }
     }
