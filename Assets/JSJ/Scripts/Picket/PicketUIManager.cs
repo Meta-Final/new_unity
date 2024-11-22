@@ -8,6 +8,7 @@ public class PicketUIManager : MonoBehaviour
 {
     public GameObject player;
     public GameObject currentPicket; // 방금 생성된 Picket Prefab
+    public GameObject selectPicket; // 현재 선택된 Picket Prefab
 
     [Header("Picket UI")]
     public GameObject panelInventory; // 인벤토리 UI
@@ -80,6 +81,7 @@ public class PicketUIManager : MonoBehaviour
                 // 만일, 기사가 링크된 피켓을 클릭했다면
                 if (hitInfo.collider.gameObject.layer == 18 && currentPicket != null)
                 {
+                    selectPicket = hitInfo.collider.gameObject;
                     ShowPicketUI();
                 }
             }
@@ -107,7 +109,7 @@ public class PicketUIManager : MonoBehaviour
         if (currentPicket != null)
         {
             // PicketId_KJS 컴포넌트에서 스크린샷 경로 가져오기
-            PicketId_KJS picketIdKJS = currentPicket.GetComponent<PicketId_KJS>();
+            PicketId_KJS picketIdKJS = selectPicket.GetComponent<PicketId_KJS>();
             if (picketIdKJS != null)
             {
                 string screenshotPath = picketIdKJS.GetScreenshotPath();
