@@ -141,4 +141,13 @@ public class InventoryManager : MonoBehaviour
         }
         return null; // 유효하지 않은 인덱스인 경우 null 반환
     }
+    public List<string> GetScreenshotList()
+    {
+        if (screenshotData == null)
+        {
+            screenshotData = new ScreenshotData();
+        }
+
+        return screenshotData.screenshotList;
+    }
 }

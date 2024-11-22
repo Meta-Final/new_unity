@@ -109,6 +109,8 @@ public class InventoryUI : MonoBehaviourPun
     {
         selectIndex = index;
 
+        FindObjectOfType<PicketUIManager>().SetURL(index);
+
         InventoryManager.instance.ShowScreenshot(selectIndex);
 
         btn_Delete.interactable = true;
