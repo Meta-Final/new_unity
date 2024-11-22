@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Photon.Pun;
-using UnityEditor.Rendering.Universal.ShaderGUI;
 
 public class AI_Movement_KJS : MonoBehaviourPun
 {
@@ -22,9 +21,16 @@ public class AI_Movement_KJS : MonoBehaviourPun
 
     public float rotationSpeed = 2f; // 회전 속도
 
+    // 오디오 관련 변수
+    private AudioSource audioSource; // 오디오 소스
+    public AudioClip clickSound; // 클릭 시 재생할 소리
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+
+        // AudioSource 컴포넌트 추가 및 설정
+        audioSource = gameObject.AddComponent<AudioSource>();
 
         // 클라이언트의 로컬 플레이어 찾기
         FindLocalPlayer();
@@ -52,8 +58,7 @@ public class AI_Movement_KJS : MonoBehaviourPun
         list_ui.Add(GameObject.Find("MagazineView").transform.GetChild(0).gameObject);
         list_ui.Add(GameObject.Find("MagazineView").transform.GetChild(1).gameObject);
         list_ui.Add(GameObject.Find("MagazineView 2").transform.GetChild(0).gameObject);
-        list_ui.Add(GameObject.Find("Canvas_Inventory").transform.GetChild(0).gameObject);    
-
+        list_ui.Add(GameObject.Find("Canvas_Inventory").transform.GetChild(0).gameObject);
     }
 
     void Update()
@@ -131,9 +136,9 @@ public class AI_Movement_KJS : MonoBehaviourPun
 
     public void OnMouseDown()
     {
-        foreach(GameObject ui in list_ui)
+        foreach (GameObject ui in list_ui)
         {
-            if( ui.activeSelf == true)
+            if (ui.activeSelf == true)
             {
                 return;
             }
@@ -161,6 +166,12 @@ public class AI_Movement_KJS : MonoBehaviourPun
         {
             cameraManager.MoveCameraToPosition();
         }
+
+        // 클릭 사운드 재생
+        if (audioSource != null && clickSound != null)
+        {
+            audioSource.PlayOneShot(clickSound);
+        }
     }
 
     private void RotateToPlayer()
@@ -182,6 +193,7 @@ public class AI_Movement_KJS : MonoBehaviourPun
             Debug.Log("로컬 플레이어 방향으로 회전 완료!");
         }
     }
+
     public void ResetAgentState()
     {
         // NavMeshAgent 활성화
