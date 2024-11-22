@@ -10,50 +10,44 @@ public class H_MergeDrag : MonoBehaviour
 
     private void OnMouseDown()
     {
-        dragging = false;
-        offsetX = Camera.main.ScreenToViewportPoint(Input.mousePosition).x - transform.position.x;
-        offsetY = Camera.main.ScreenToViewportPoint(Input.mousePosition).y - transform.position.y;
+        dragging = true;
+        offsetX = Camera.main.ScreenToWorldPoint(Input.mousePosition).x - transform.position.x;
+        offsetY = Camera.main.ScreenToWorldPoint(Input.mousePosition).y - transform.position.y;
     }
 
     private void OnMouseDrag()
     {
-        mousePosition = Camera.main.ScreenToViewportPoint(Input.mousePosition);
-        transform.position = new Vector2(mousePosition.x - offsetX,mousePosition.y-offsetY);
+        if (dragging)
+        {
+            mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            transform.position = new Vector2(mousePosition.x - offsetX, mousePosition.y - offsetY);
+        }
     }
+
     private void OnMouseUp()
     {
-          dragging = true;
+        dragging = false;
     }
-
+    
     private void OnTriggerStay2D(Collider2D collision)
     {
-        //현재 오브젝트 이름
-        string thisObjName;
-        //충돌 후 오브젝트 이름
-        string collObjName;
+        if (!dragging) return;
 
-        //현재 오브젝트 이름의 _ 앞의 부분만 추출
-        thisObjName = gameObject.name.Substring(0, name.IndexOf("_"));
-        collObjName = collision.gameObject.name.Substring(0, name.IndexOf("_"));
+        // 현재 오브젝트와 충돌한 오브젝트의 ID를 비교
+        H_MergeItem thisItem = GetComponent<H_MergeItem>();
+        H_MergeItem collisionItem = collision.GetComponent<H_MergeItem>();
 
-        //현재 오브젝트 이름이 "1"이며,
-        //현재 오브젝트와 충돌한 _ 이전 부분이 동일한 경우 실행.
-        if (dragging && thisObjName == "1" && thisObjName == collObjName) 
+        if (thisItem != null && collisionItem != null && thisItem.id == collisionItem.id)
         {
-            NewMethod(collision, "2_merge");
+            MergeItems(collision, thisItem.id + 1);
         }
-        if (dragging && thisObjName == "2" && thisObjName == collObjName)
-        {
-            NewMethod(collision, "3_merge");
-        }
+    }
 
-            void NewMethod(Collider2D collision, string name)
-        {
-            GameObject loadPrefab = Resources.Load<GameObject>(name);
-            Instantiate(loadPrefab, transform.position, Quaternion.identity);
-            dragging = false;
-            Destroy(collision.gameObject);
-            Destroy(gameObject);
-        }
+    private void MergeItems(Collider2D collision, int newId)
+    {
+        //InventoryMgr.inst.CreateUpgradeItem(newId, transform.position); // 병합된 새로운 아이템 생성
+        dragging = false;
+        Destroy(collision.gameObject); // 충돌된 아이템 삭제
+        Destroy(gameObject); // 현재 아이템 삭제
     }
 }
