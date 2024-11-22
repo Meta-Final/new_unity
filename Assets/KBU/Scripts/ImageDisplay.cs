@@ -10,7 +10,6 @@ public class ImageDisplay : MonoBehaviour
     void Start()
     {
         StartCoroutine(CoverWaitForDownloadAndDisplayImage());
-        StartCoroutine(TrendWaitForDownloadAndDisplayImage());
     }
 
     IEnumerator CoverWaitForDownloadAndDisplayImage()
@@ -22,18 +21,6 @@ public class ImageDisplay : MonoBehaviour
         }
 
         rawImage.texture = imageDownloader.CoverGetDownloadedImage();
-        Debug.Log("Image displayed on UI.");
-    }
-
-    IEnumerator TrendWaitForDownloadAndDisplayImage()
-    {
-       
-        while (imageDownloader.TrendGetDownloadedImage() == null)
-        {
-            yield return null; 
-        }
-
-        rawImage.texture = imageDownloader.TrendGetDownloadedImage();
         Debug.Log("Image displayed on UI.");
     }
 }

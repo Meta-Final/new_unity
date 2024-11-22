@@ -25,6 +25,7 @@ namespace ReqRes
     {
         public string chatURL = "http://metaai2.iptime.org:14596/api/v1/chat/message";
         public string loadCoverURL = "http://metaai2.iptime.org:14596/api/v1/loadcover";
+        public string giveObjectURL = "http://metaai2.iptime.org:14596/api/v1/giveobject";
         public string loadObjectURL = "http://metaai2.iptime.org:14596/api/v1/loadobject";
         public string trendURL = "http://metaai2.iptime.org:14596/api/v1/";
         public string ocrURL = "http://metaai2.iptime.org:14596/api/v1/ocr";
@@ -173,7 +174,7 @@ namespace ReqRes
     {
         public List<Files> filePath;
     }
-
+    
     //OCR request
     [Serializable]
     public class OcrRequest

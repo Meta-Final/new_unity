@@ -106,6 +106,13 @@ public class APIManager : MonoBehaviour
         StartCoroutine(PostHttp<ChatRequest, ChatResponse>(chatRequest, chatUrl));
     }
 
+    //Object 생성/호출 메서드
+    public void GiveObject()
+    {
+        string giveUrl = aiUrl.giveObjectURL;
+        StartCoroutine(GiveObjectHTTP(giveUrl));
+    }
+
     //Cover 생성/호출 메서드
     public void LoadCover(string imgPath, string fileSavePath)
     {
@@ -277,6 +284,39 @@ public class APIManager : MonoBehaviour
         }
     }
 
+    public IEnumerator GiveObjectHTTP(string url)
+    {
+        LoadObjectRequest loadObjectRequest = new LoadObjectRequest();
+
+        using (UnityWebRequest www = new UnityWebRequest(url, "POST"))
+        {
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+            string jsonData = JsonUtility.ToJson(loadObjectRequest);
+            www.uploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(jsonData));
+            www.uploadHandler.contentType = "application/json";
+
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.Success)
+            {
+                try
+                {
+                    LoadObjectRequest responseObject = JsonUtility.FromJson<LoadObjectRequest>(www.downloadHandler.text);
+                    Debug.Log("Success");
+                    Debug.Log("Response: " + JsonUtility.ToJson(responseObject));
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError("Failed to parse JSON: " + e.Message);
+                }
+            }
+            else
+            {
+                Debug.LogError($"Error: {www.error}, Status Code: {www.responseCode}");
+            }
+        }
+    }
 
     //진짜 망했을때 용
     public Texture2D coverDownloadTexture;
@@ -292,13 +332,6 @@ public class APIManager : MonoBehaviour
         string coverURL = alphaURL.coverURL;
         StartCoroutine(CoverDownloadImage(coverURL));
     }
-
-    public void Trend()
-    {
-        string trendURL = alphaURL.trendURL;
-        StartCoroutine(TrendDownloadImage(trendURL));
-    }
-
     IEnumerator CoverDownloadImage(string url)
     {
         UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
@@ -313,33 +346,9 @@ public class APIManager : MonoBehaviour
             Debug.LogError("Failed to download image: " + request.error);
         }
     }
-
-    
-    IEnumerator TrendDownloadImage(string url)
-    {
-        UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
-        yield return request.SendWebRequest();
-
-        if (request.result == UnityWebRequest.Result.Success)
-        {
-            trendDownloadTexture = ((DownloadHandlerTexture)request.downloadHandler).texture;
-        }
-        else
-        {
-            Debug.LogError("Failed to download image: " + request.error);
-        }
-    }
-
-
     public Texture2D CoverGetDownloadedImage()
     {
         return coverDownloadTexture;
     }
     
-     public Texture2D TrendGetDownloadedImage()
-    {
-        return trendDownloadTexture;
-    }
-
-
 }

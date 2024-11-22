@@ -5,7 +5,7 @@ using System.Collections;
 public class ImageDisplay_KJS : MonoBehaviour
 {
     public APIManager imageDownloader;
-    public Image image;  // RawImage ´ë½Å Image ÄÄÆ÷³ÍÆ® »ç¿ë
+    public Image image;  // RawImage ï¿½ï¿½ï¿½ Image ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½
 
     void Start()
     {
@@ -14,33 +14,19 @@ public class ImageDisplay_KJS : MonoBehaviour
 
     IEnumerator CoverWaitForDownloadAndDisplayImage()
     {
-        // ÀÌ¹ÌÁö°¡ ´Ù¿î·ÎµåµÉ ¶§±îÁö ´ë±â
+        // ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¿ï¿½Îµï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         while (imageDownloader.CoverGetDownloadedImage() == null)
         {
             yield return null;
         }
 
-        // ´Ù¿î·ÎµåµÈ Texture2D¸¦ Sprite·Î º¯È¯ÇÏ¿© Image ÄÄÆ÷³ÍÆ®¿¡ Ç¥½Ã
+        // ï¿½Ù¿ï¿½Îµï¿½ï¿½ Texture2Dï¿½ï¿½ Spriteï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ï¿ï¿½ Image ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ Ç¥ï¿½ï¿½
         Texture2D downloadedTexture = imageDownloader.CoverGetDownloadedImage();
         image.sprite = TextureToSprite(downloadedTexture);
         Debug.Log("Cover image displayed on UI.");
     }
 
-    IEnumerator TrendWaitForDownloadAndDisplayImage()
-    {
-        // ÀÌ¹ÌÁö°¡ ´Ù¿î·ÎµåµÉ ¶§±îÁö ´ë±â
-        while (imageDownloader.TrendGetDownloadedImage() == null)
-        {
-            yield return null;
-        }
-
-        // ´Ù¿î·ÎµåµÈ Texture2D¸¦ Sprite·Î º¯È¯ÇÏ¿© Image ÄÄÆ÷³ÍÆ®¿¡ Ç¥½Ã
-        Texture2D downloadedTexture = imageDownloader.TrendGetDownloadedImage();
-        image.sprite = TextureToSprite(downloadedTexture);
-        Debug.Log("Trend image displayed on UI.");
-    }
-
-    // Texture2D¸¦ Sprite·Î º¯È¯ÇÏ´Â ¸Þ¼­µå
+    // Texture2Dï¿½ï¿½ Spriteï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
     private Sprite TextureToSprite(Texture2D texture)
     {
         return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
