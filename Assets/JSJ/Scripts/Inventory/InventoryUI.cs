@@ -109,14 +109,15 @@ public class InventoryUI : MonoBehaviourPun
     {
         selectIndex = index;
 
-        FindObjectOfType<PicketUIManager>().SetURL(index);
-
         InventoryManager.instance.ShowScreenshot(selectIndex);
 
         btn_Delete.interactable = true;
         btn_PostIt.interactable = true;
 
         btn_Delete.onClick.AddListener(() => OnSlotDeleteClick(selectIndex));
+
+        FindObjectOfType<PicketUIManager>().SetURL(index);
+
     }
     public void RPC_deletepostit()
     {
