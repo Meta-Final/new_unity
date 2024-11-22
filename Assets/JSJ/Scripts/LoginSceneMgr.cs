@@ -9,15 +9,15 @@ public class LoginSceneMgr : MonoBehaviour
 {
     [Header("Button")]
     public Button btn_SignIn;   // 로그인 버튼
-    public Button btn_Quit;     // 게임 종료 버튼
+    //public Button btn_Quit;     // 게임 종료 버튼
     public Button btn_Join;     // 회원가입 UI 버튼
-    public Button btn_SignUp;   // 회원가입 진행 버튼
     public Button btn_Next;     // 넘기기 버튼
+    public Button btn_SignUp;   // 회원가입 진행 버튼
 
     [Header("Canvas")]
     public GameObject canvas_Signin;        // 로그인 UI
-    public GameObject canvasJoin;          // 회원가입 UI
-    public GameObject canvasAccount;       // User 정보기입 창
+    public GameObject canvas_Join;          // 회원가입 UI
+    public GameObject canvas_Account;       // User 정보기입 창
 
     [Header("GameObject")]
     public GameObject img_SignInFail;      // 로그인 실패 UI
@@ -43,9 +43,9 @@ public class LoginSceneMgr : MonoBehaviour
         signInPassword.onValueChanged.AddListener(SignInValueChanged);
 
         // 회원 이메일 / 비밀번호 기입 UI 비활성화
-        canvasJoin.SetActive(false);
+        canvas_Join.SetActive(false);
         // 회원 정보 기입 UI 비활성화
-        canvasAccount.SetActive(false);
+        canvas_Account.SetActive(false);
     }
 
 
@@ -95,20 +95,19 @@ public class LoginSceneMgr : MonoBehaviour
     {
         // 로그인 UI 비활성화
         canvas_Signin.SetActive(false);
-        print("가입창 끔");
-
+        
         // 회원가입 UI 활성화
-        canvasJoin.SetActive(true);
+        canvas_Join.SetActive(true);
     }
 
     // 다음
     public void OnClickNext()
     {
         // 회원가입 UI 비활성화
-        canvasJoin.SetActive(false);
+        canvas_Join.SetActive(false);
 
         // User 정보기입 창 활성화
-        canvasAccount.SetActive(true);
+        canvas_Account.SetActive(true);
     }
 
     // 회원 가입
@@ -140,8 +139,8 @@ public class LoginSceneMgr : MonoBehaviour
     public void OnClickX()
     {
         // 회원가입 / 정보 기입 UI 비활성화
-        canvasJoin.SetActive(false);
-        canvasAccount.SetActive(false);
+        canvas_Join.SetActive(false);
+        canvas_Account.SetActive(false);
 
         // 로그인 UI 활성화
         canvas_Signin.SetActive(true);
