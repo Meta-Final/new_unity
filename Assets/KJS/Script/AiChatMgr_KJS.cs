@@ -98,11 +98,7 @@ public class AiChatMgr_KJS : MonoBehaviour
             userInputField.text = "";
 
             // 입력된 텍스트에 따라 다른 작업 처리
-            if (userMessage.Trim() == "글쓰고싶어")
-            {
-                StartCoroutine(ProcessMessage("알겠다 삐약", "글쓰고싶어"));
-            }
-            else if (userMessage.Trim() == "크리스마스타임!")
+            if (userMessage.Trim() == "크리스마스타임!")
             {
                 StartCoroutine(ProcessMessage("크리스마스 분위기 전환 완료! 삐약!", "크리스마스타임!"));
                 apiManager.Cover();
@@ -136,7 +132,7 @@ public class AiChatMgr_KJS : MonoBehaviour
             Debug.Log("Extra UI 비활성화");
         }
 
-        if (actionKey == "글쓰고싶어" && toolUI != null)
+        if (actionKey == "크리스마스타임!" && toolUI != null)
         {
             toolUI.SetActive(true);
 
