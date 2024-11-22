@@ -37,15 +37,15 @@ public class InventoryUI : MonoBehaviourPun
     
     private void Start()
     {
-        // 지금 'Meta_ScrapBook_Scene'이라면, 액자를 찾아라.
-        if (SceneManager.GetActiveScene().name == "Meta_ScrapBook_Scene")
-        {
-            noticePos = GameObject.Find("CorkBoard 1").transform;
-        }
-        else
-        {
-            noticePos = null;
-        }
+        //// 지금 'Meta_ScrapBook_Scene'이라면, 액자를 찾아라.
+        //if (SceneManager.GetActiveScene().name == "Meta_ScrapBook_Scene")
+        //{
+        //    noticePos = GameObject.Find("CorkBoard 1").transform;
+        //}
+        //else
+        //{
+        //    noticePos = null;
+        //}
 
         btn_Delete.interactable = false;
         btn_PostIt.interactable = false;
@@ -109,7 +109,7 @@ public class InventoryUI : MonoBehaviourPun
     {
         selectIndex = index;
 
-        FindObjectOfType<PicketUIManager>().SetURL(index);
+        //FindObjectOfType<PicketUIManager>().SetURL(index);
 
         InventoryManager.instance.ShowScreenshot(selectIndex);
 
@@ -210,8 +210,8 @@ public class InventoryUI : MonoBehaviourPun
             }
 
             // 드래그 스크립트 동적 추가
-            H_DargMg dragScript = newPostIt.AddComponent<H_DargMg>();
-            dragScript.noticePos = noticePos; // 부모 경계 전달
+            //H_DargMg dragScript = newPostIt.AddComponent<H_DargMg>();
+            //dragScript.noticePos = noticePos; // 부모 경계 전달
 
             // 새 포스트잇에 클릭 리스너 추가하여 이미지를 확대함
             Button postItButton = newPostIt.AddComponent<Button>();
