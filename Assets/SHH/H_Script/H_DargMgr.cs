@@ -5,7 +5,7 @@ using UnityEngine;
 public class H_DargMg : MonoBehaviour
 {
     private Vector3 H_offset;
-    private bool isDragging = false;
+   // private bool isDragging = false;
     public Transform noticePos;
     RaycastHit hitInfo;
     Vector3 targetPos;
