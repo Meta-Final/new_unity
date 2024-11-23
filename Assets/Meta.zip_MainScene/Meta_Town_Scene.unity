@@ -3381,7 +3381,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00033086888, y: 49.999947}
+  m_AnchoredPosition: {x: 0.00033086888, y: 50.00003}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &71780600
@@ -30039,7 +30039,7 @@ GameObject:
   - component: {fileID: 826354836}
   m_Layer: 5
   m_Name: Loading
-  m_TagString: Untagged
+  m_TagString: Loading
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -49020,6 +49020,7 @@ MonoBehaviour:
   typingSpeed: 0.1
   delayAfterButton3: 0.5
   bgmClip: {fileID: 8300000, guid: 0d10bb83678ae5b4ba7f76c46a46b41f, type: 3}
+  loadingUI: {fileID: 826354831}
 --- !u!1 &1304667238
 GameObject:
   m_ObjectHideFlags: 0
@@ -61667,8 +61668,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 376701537}
   m_HandleRect: {fileID: 376701536}
   m_Direction: 2
-  m_Value: 0.0000015258798
-  m_Size: 0.83330864
+  m_Value: -0.0000006103523
+  m_Size: 0.8329004
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

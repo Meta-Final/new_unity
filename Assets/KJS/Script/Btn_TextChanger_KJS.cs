@@ -25,6 +25,9 @@ public class Btn_TextChanger_KJS : MonoBehaviour
 
     private Coroutine typingCoroutine; // 현재 실행 중인 코루틴을 추적
 
+    public GameObject loadingUI; // "Loading" 태그를 가진 UI
+    private bool allowCheckMessage = true; // CheckAndSetCompleteMessage 실행 여부 플래그
+
     // 랜덤 출력 텍스트 목록
     private readonly string[] randomTexts = {
         "무슨일이야 삐약!",
@@ -33,9 +36,24 @@ public class Btn_TextChanger_KJS : MonoBehaviour
         "많은 기사를 서로 교환하자 삐약!"
     };
 
+    private void Update()
+    {
+        // Loading UI가 활성화되었는지 확인
+        if (allowCheckMessage && loadingUI != null && loadingUI.activeSelf)
+        {
+            CheckAndSetCompleteMessage(loadingUI); // "Loading" UI 활성화 상태 확인 및 메시지 출력
+        }
+    }
+
     private void OnEnable()
     {
         StartTyping(GetRandomText(), false); // 활성화될 때 랜덤 텍스트를 한 글자씩 출력
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines(); // 모든 코루틴 중지
+        StopBGM(); // 스크립트가 비활성화될 때 BGM 정지
     }
 
     // 랜덤으로 텍스트 반환
@@ -48,37 +66,45 @@ public class Btn_TextChanger_KJS : MonoBehaviour
     // 버튼 1에서 호출될 메서드
     public void ChangeTextToButton1Text()
     {
+        allowCheckMessage = false; // CheckAndSetCompleteMessage 실행 금지
         StartTyping(textForButton1, false); // 버튼 1은 UI를 비활성화하지 않음
         if (uiToEnableForButton1 != null)
         {
             uiToEnableForButton1.SetActive(true); // 버튼 1의 UI 활성화
         }
+        Invoke(nameof(EnableCheckMessage), 0.1f); // 일정 시간 후 CheckAndSetCompleteMessage 허용
     }
 
     // 버튼 2에서 호출될 메서드
     public void ChangeTextToButton2Text()
     {
+        allowCheckMessage = false; // CheckAndSetCompleteMessage 실행 금지
         StartTyping(textForButton2, false); // 버튼 2는 UI를 비활성화하지 않음
         if (uiToEnableForButton2 != null)
         {
             uiToEnableForButton2.SetActive(true); // 버튼 2의 UI 활성화
         }
+        Invoke(nameof(EnableCheckMessage), 0.1f); // 일정 시간 후 CheckAndSetCompleteMessage 허용
     }
 
     // 버튼 3에서 호출될 메서드
     public void ChangeTextToButton3Text()
     {
+        allowCheckMessage = false; // CheckAndSetCompleteMessage 실행 금지
         StartTyping(textForButton3, true); // 버튼 3은 UI를 비활성화함
+        Invoke(nameof(EnableCheckMessage), 0.1f); // 일정 시간 후 CheckAndSetCompleteMessage 허용
     }
 
     // 버튼 4에서 호출될 메서드
     public void ChangeTextToButton4Text()
     {
+        allowCheckMessage = false; // CheckAndSetCompleteMessage 실행 금지
         StartTyping(textForButton4, false); // 버튼 4는 UI를 비활성화하지 않음
         if (uiToEnableForButton4 != null)
         {
             uiToEnableForButton4.SetActive(true); // 버튼 4의 UI 활성화
         }
+        Invoke(nameof(EnableCheckMessage), 0.1f); // 일정 시간 후 CheckAndSetCompleteMessage 허용
     }
 
     // 텍스트 출력 시작 (기존 코루틴 중단 후 새로운 코루틴 실행)
@@ -87,6 +113,14 @@ public class Btn_TextChanger_KJS : MonoBehaviour
         if (typingCoroutine != null)
         {
             StopCoroutine(typingCoroutine); // 기존 코루틴이 있으면 중지
+            StopBGM(); // 기존 코루틴 중단 시 BGM도 정지
+        }
+
+        // 텍스트가 비어있는 경우 BGM 실행 및 코루틴 실행 방지
+        if (string.IsNullOrEmpty(textToDisplay))
+        {
+            targetText.text = "";
+            return;
         }
 
         typingCoroutine = StartCoroutine(TypeTextCoroutine(textToDisplay, deactivateUIAfterTyping));
@@ -147,6 +181,22 @@ public class Btn_TextChanger_KJS : MonoBehaviour
         if (bgmObject != null)
         {
             Destroy(bgmObject); // 임시 오디오 객체 제거
+            bgmObject = null;
         }
+    }
+
+    // 특정 UI 활성화 여부를 확인하고 텍스트 변경
+    private void CheckAndSetCompleteMessage(GameObject uiObject)
+    {
+        if (uiObject.activeSelf)
+        {
+            targetText.text = "완성되었다 삐약!"; // 특정 UI가 활성화된 경우 텍스트 변경
+        }
+    }
+
+    // 일정 시간 후 CheckAndSetCompleteMessage 실행 허용
+    private void EnableCheckMessage()
+    {
+        allowCheckMessage = true; // CheckAndSetCompleteMessage 실행 허용
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -7,7 +6,6 @@ using UnityEngine.Networking;
 using ReqRes;
 using Firebase.Firestore;
 using UniHumanoid;
-using Photon.Pun.Demo.Cockpit;
 
 public class APIManager : MonoBehaviour
 {
@@ -21,8 +19,8 @@ public class APIManager : MonoBehaviour
         GameObject firebase = GameObject.Find("Firebase");
         firestore = firebase.GetComponent<FireStore>();
     }
-    
-    
+
+
     //회원가입
     public void Auth()
     {
@@ -33,14 +31,14 @@ public class APIManager : MonoBehaviour
 
     //기사 호출 관련 함수
     public void SearchArticle(string query, int limit)
-    {   
-        SearchRequest searchRequest = new SearchRequest{query = query, limit = limit};
+    {
+        SearchRequest searchRequest = new SearchRequest { query = query, limit = limit };
         string searchUrl = articleURL.searchURL;
         StartCoroutine(PostHttp<SearchRequest, SearchResponse>(searchRequest, searchUrl));
     }
-    
+
     public void CreateArticle(string postId, int pageId, string content, int type, string imageData, int fontSize, string fontFace, bool isUnderlined, bool isStrikethrough, float x, float y, float z, float scale_x, float scale_y, float scale_z)
-    {   
+    {
         Scale scale = new Scale
         {
             x = scale_x,
@@ -55,7 +53,8 @@ public class APIManager : MonoBehaviour
             z = z
         };
 
-        Elements element = new Elements{
+        Elements element = new Elements
+        {
             content = content,
             type = type,
             imageData = imageData,
@@ -67,19 +66,22 @@ public class APIManager : MonoBehaviour
             isStrikethrough = isStrikethrough
         };
 
-        Pages page = new Pages{
+        Pages page = new Pages
+        {
             pageId = pageId,
-            elements = new List<Elements> {element}
+            elements = new List<Elements> { element }
         };
 
-        Posts post = new Posts{
+        Posts post = new Posts
+        {
             postId = postId,
-            pages = new List<Pages> {page}
+            pages = new List<Pages> { page }
         };
 
-        Article article = new Article{
+        Article article = new Article
+        {
             userid = firestore.GetUserInfo().userId,
-            posts = new List<Posts> {post}
+            posts = new List<Posts> { post }
         };
 
         string createUrl = articleURL.createURL;
@@ -87,12 +89,13 @@ public class APIManager : MonoBehaviour
     }
 
     public void GetArticle(string articleid)
-    {   
-        GetRequest getRequest = new GetRequest{
+    {
+        GetRequest getRequest = new GetRequest
+        {
             userid = firestore.GetUserInfo().userId,
             articleid = articleid
         };
-        
+
         string getUrl = articleURL.getURL;
         StartCoroutine(PostHttp<GetRequest, GetResponse>(getRequest, getUrl));
     }
@@ -100,37 +103,10 @@ public class APIManager : MonoBehaviour
     //LLM 호출 메서드
     public void LLM(string text)
     {
-        string userId;
-
-        // Firestore가 null인지 확인
-        if (firestore == null)
-        {
-            Debug.LogWarning("FireStore is not initialized. Using default userId for testing.");
-            userId = "default_user_id"; // 임의의 기본값
-        }
-        else
-        {
-            // Firestore에서 유저 정보를 가져옴
-            var userInfo = firestore.GetUserInfo();
-
-            if (userInfo == null || string.IsNullOrEmpty(userInfo.userId))
-            {
-                Debug.LogWarning("GetUserInfo() returned null or userId is empty. Using default userId for testing.");
-                userId = "default_user_id"; // 임의의 기본값
-            }
-            else
-            {
-                userId = userInfo.userId; // 정상적으로 가져온 userId
-            }
-        }
-
-        Debug.Log("Using userId: " + userId); // userId 확인 로그
+        string userId = firestore.GetUserInfo().userId;
         string chatUrl = aiUrl.chatURL;
 
-        // ChatRequest 생성
         ChatRequest chatRequest = new ChatRequest { userId = userId, text = text };
-
-        // 서버 요청
         StartCoroutine(PostHttp<ChatRequest, ChatResponse>(chatRequest, chatUrl));
     }
 
@@ -148,20 +124,20 @@ public class APIManager : MonoBehaviour
         {
             imgPath = imgPath
         };
-        LoadCoverRequest loadCoverRequest = new LoadCoverRequest {filePath = new List<Files> { files }};
+        LoadCoverRequest loadCoverRequest = new LoadCoverRequest { filePath = new List<Files> { files } };
         string loadCoverUrl = aiUrl.loadCoverURL;
         StartCoroutine(PostHttpFile<LoadCoverRequest>(loadCoverRequest, loadCoverUrl, fileSavePath));
     }
-    
+
     //Object 생성/호출 메서드
     public void Loadobject(string objPath, string pngPath, string fileSavePath)
-    {   
+    {
         Files files = new Files
         {
             imgPath = pngPath,
-            objPath = objPath 
+            objPath = objPath
         };
-        LoadObjectRequest loadObjectRequest = new LoadObjectRequest {filePath = new List<Files> { files }};
+        LoadObjectRequest loadObjectRequest = new LoadObjectRequest { filePath = new List<Files> { files } };
         string loadObjectUrl = aiUrl.loadObjectURL;
         StartCoroutine(PostHttpFile<LoadObjectRequest>(loadObjectRequest, loadObjectUrl, fileSavePath));
     }
@@ -191,7 +167,7 @@ public class APIManager : MonoBehaviour
             www.uploadHandler = new UploadHandlerRaw(jsonToSend);
             www.downloadHandler = new DownloadHandlerBuffer();
             www.SetRequestHeader("Content-Type", "application/json");
-            
+
             yield return www.SendWebRequest();
 
             if (www.result == UnityWebRequest.Result.Success)
@@ -202,15 +178,15 @@ public class APIManager : MonoBehaviour
             }
             else
             {
-                Debug.LogError($"Error: {www.error}, Status Code: {www.responseCode}, Response: {www.downloadHandler.text}" );
+                Debug.LogError($"Error: {www.error}, Status Code: {www.responseCode}, Response: {www.downloadHandler.text}");
             }
 
         }
     }
 
     public IEnumerator AuthHttp(string url)
-    {   
-        AuthRequest auth = new AuthRequest 
+    {
+        AuthRequest auth = new AuthRequest
         {
             userid = firestore.GetUserInfo().userId,
             username = firestore.GetUserInfo().nickName
@@ -224,7 +200,7 @@ public class APIManager : MonoBehaviour
             www.uploadHandler = new UploadHandlerRaw(jsonToSend);
             www.downloadHandler = new DownloadHandlerBuffer();
             www.SetRequestHeader("Content-Type", "application/json");
-        
+
             yield return www.SendWebRequest();
 
             Debug.Log($"Response Code: {www.responseCode}, Response Text: {www.downloadHandler.text}");
@@ -285,15 +261,15 @@ public class APIManager : MonoBehaviour
         }
     }
 
-    
+
     public IEnumerator PostHttpFile2(string url, string screenShot)
-    {   
-        OcrRequest ocrRequest = new OcrRequest{screenShot = screenShot};
+    {
+        OcrRequest ocrRequest = new OcrRequest { screenShot = screenShot };
         string json = JsonUtility.ToJson(ocrRequest);
 
         using (UnityWebRequest www = new UnityWebRequest(url, "POST"))
         {
-            
+
             byte[] jsonToSend = Encoding.UTF8.GetBytes(json);
             www.uploadHandler = new UploadHandlerRaw(jsonToSend);
             www.downloadHandler = new DownloadHandlerBuffer();
@@ -356,7 +332,7 @@ public class APIManager : MonoBehaviour
     //첫 번째 썸네일 이미지 호출 코드
     //두 번째 트렌드 이미지 호출 코드
     public void Cover()
-    {   
+    {
         string coverURL = alphaURL.coverURL;
         StartCoroutine(CoverDownloadImage(coverURL));
     }
@@ -378,5 +354,5 @@ public class APIManager : MonoBehaviour
     {
         return coverDownloadTexture;
     }
-    
+
 }

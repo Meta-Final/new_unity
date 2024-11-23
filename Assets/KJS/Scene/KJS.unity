@@ -1265,7 +1265,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c955f493513e28b46950637452ff01a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  list_ui: []
   rotationSpeed: 2
+  clickSound: {fileID: 0}
 --- !u!195 &1298765390
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1631,6 +1633,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: -680
+      objectReference: {fileID: 0}
+    - target: {fileID: 6392870238404904412, guid: 61680cdcb6d60c2459ab6261dff78e04,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7700195302039414420, guid: 61680cdcb6d60c2459ab6261dff78e04,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7741945506818105849, guid: 61680cdcb6d60c2459ab6261dff78e04,
         type: 3}
@@ -7765,10 +7777,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
+  runSpeed: 10
   rotSpeed: 200
   jumpPower: 3
   jumpMaxCount: 1
-  groundOffset: 0.1
   canvasNickName: {fileID: 0}
   playerNickName: {fileID: 0}
 --- !u!114 &6229091592594205715
