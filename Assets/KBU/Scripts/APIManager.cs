@@ -7,6 +7,7 @@ using UnityEngine.Networking;
 using ReqRes;
 using Firebase.Firestore;
 using UniHumanoid;
+using Photon.Pun.Demo.Cockpit;
 
 public class APIManager : MonoBehaviour
 {
@@ -99,10 +100,37 @@ public class APIManager : MonoBehaviour
     //LLM 호출 메서드
     public void LLM(string text)
     {
-        string userId = firestore.GetUserInfo().userId;
+        string userId;
+
+        // Firestore가 null인지 확인
+        if (firestore == null)
+        {
+            Debug.LogWarning("FireStore is not initialized. Using default userId for testing.");
+            userId = "default_user_id"; // 임의의 기본값
+        }
+        else
+        {
+            // Firestore에서 유저 정보를 가져옴
+            var userInfo = firestore.GetUserInfo();
+
+            if (userInfo == null || string.IsNullOrEmpty(userInfo.userId))
+            {
+                Debug.LogWarning("GetUserInfo() returned null or userId is empty. Using default userId for testing.");
+                userId = "default_user_id"; // 임의의 기본값
+            }
+            else
+            {
+                userId = userInfo.userId; // 정상적으로 가져온 userId
+            }
+        }
+
+        Debug.Log("Using userId: " + userId); // userId 확인 로그
         string chatUrl = aiUrl.chatURL;
 
-        ChatRequest chatRequest = new ChatRequest{userId = userId, text = text};
+        // ChatRequest 생성
+        ChatRequest chatRequest = new ChatRequest { userId = userId, text = text };
+
+        // 서버 요청
         StartCoroutine(PostHttp<ChatRequest, ChatResponse>(chatRequest, chatUrl));
     }
 
@@ -154,7 +182,7 @@ public class APIManager : MonoBehaviour
 
     //Http Json Post
     public IEnumerator PostHttp<TRequest, TResponse>(TRequest requestObject, string url)
-    {   
+    {
         string json = JsonUtility.ToJson(requestObject);
 
         using (UnityWebRequest www = new UnityWebRequest(url, "POST"))

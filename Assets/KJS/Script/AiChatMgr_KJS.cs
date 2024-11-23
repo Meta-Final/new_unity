@@ -2,6 +2,8 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using ReqRes;
+using UnityEngine.Networking;
 
 public class AiChatMgr_KJS : MonoBehaviour
 {
@@ -21,6 +23,11 @@ public class AiChatMgr_KJS : MonoBehaviour
     public AudioClip typingSound;         // 타이핑 효과음
     private float lastSoundPlayTime = 0f; // 마지막으로 재생된 시간
     private float typingSoundDelay = 0.5f; // 타이핑 사운드 재생 간격 (초)
+    private Coroutine typeTextCoroutine;
+
+
+    // 하드코딩된 사용자 ID
+    private const string userId = "user12345";
 
     private void Awake()
     {
@@ -97,57 +104,8 @@ public class AiChatMgr_KJS : MonoBehaviour
             chatResponseText.text = "";
             userInputField.text = "";
 
-            // 입력된 텍스트에 따라 다른 작업 처리
-            if (userMessage.Trim() == "크리스마스타임!")
-            {
-                StartCoroutine(ProcessMessage("크리스마스 분위기 전환 완료! 삐약!", "크리스마스타임!"));
-                apiManager.Cover();
-            }
-            else if (userMessage.Trim() == "작업상태확인")
-            {
-                StartCoroutine(ProcessMessage("작업상태는 양호합니다. 삐약!", "작업상태확인"));
-            }
-            else
-            {
-                StartCoroutine(ProcessMessage(userMessage, ""));
-            }
-        }
-    }
-
-    private IEnumerator ProcessMessage(string responseText, string actionKey)
-    {
-        if (extraUI != null)
-        {
-            extraUI.SetActive(true);
-            Debug.Log("Extra UI 활성화");
-        }
-
-        yield return StartCoroutine(TypeText(responseText));
-
-        yield return new WaitForSeconds(1f);
-
-        if (extraUI != null)
-        {
-            extraUI.SetActive(false);
-            Debug.Log("Extra UI 비활성화");
-        }
-
-        if (actionKey == "크리스마스타임!" && toolUI != null)
-        {
-            toolUI.SetActive(true);
-
-            if (chatUI != null)
-            {
-                chatUI.SetActive(false);
-                Debug.Log("Chat UI 비활성화");
-            }
-
-            PlayerMove playerMove = FindObjectOfType<PlayerMove>();
-            if (playerMove != null)
-            {
-                playerMove.EnableMoving(false);
-                Debug.Log("플레이어 이동 비활성화");
-            }
+            // AI API 호출
+            apiManager.LLM(userMessage); // 수정: userId 전달 불필요
         }
     }
 
