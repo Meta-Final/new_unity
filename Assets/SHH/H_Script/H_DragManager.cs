@@ -5,13 +5,14 @@ using UnityEngine;
 public class H_DragManager : MonoBehaviour
 {
     public static H_DragManager inst;
-    private bool isDragging = false;
+    public bool isDragging = false;
+    public LayerMask layermask;
     RaycastHit hitInfo;
     Vector3 targetPos;
 
     private void Awake()
     {
-        if (inst != null) inst = this;
+        if (inst == null) inst = this;
         else Destroy(gameObject);
     }
     void Start()
@@ -25,11 +26,12 @@ public class H_DragManager : MonoBehaviour
 
         OnMouseButtonDown();
         
-        if (Input.GetMouseButton(0) && isDragging)
+        if (Input.GetMouseButton(0))
         {
             OnMouseDragging();
         }
-        else
+        
+        if(Input.GetMouseButtonUp(0))
         {
             OnMouseButtonUp();
         }
@@ -39,26 +41,22 @@ public class H_DragManager : MonoBehaviour
         if(Input.GetMouseButtonDown(0))
         {
             isDragging = true;  
+            print("제발!");
         }
-        print("제발!");
-        //targetPos.z = transform.position.z;
     }
     private void OnMouseDragging()
     {
         if (isDragging)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hitInfo, 1 << 11))
+            if (Physics.Raycast(ray, out hitInfo, float.MaxValue, layermask))
             {
                 print(hitInfo.transform.name);
                 targetPos = hitInfo.point;
                 targetPos.z = hitInfo.transform.position.z;
                 hitInfo.transform.position = targetPos;
             }
-            //Vector3 targetPosition = targetPos;
-            ////targetPosition.z = targetPos.z;
-            //targetPosition = ClampToBounds(targetPosition);
-            //transform.position = targetPosition;
+          
         }
 
     }
