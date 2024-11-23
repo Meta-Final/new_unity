@@ -1,12 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
-using UnityEngine.UI;  // UI 사용
-using System.IO;  // 파일 입출력 사용
-using TMPro;  // TextMeshPro 사용
-#if UNITY_EDITOR
-using UnityEditor;  // 파일 탐색기 사용을 위한 네임스페이스
-#endif
+using UnityEngine.UI;
+using TMPro; // TextMeshPro 사용
+using SFB;   // StandaloneFileBrowser 사용
 
 public class ImageBox_Thumbnail : MonoBehaviour
 {
@@ -43,31 +40,23 @@ public class ImageBox_Thumbnail : MonoBehaviour
     // 파일 탐색기를 여는 메서드
     void OpenFileExplorer()
     {
-#if UNITY_EDITOR
-        try
-        {
-            // 파일 탐색기 열기: 이미지 파일 선택
-            string path = EditorUtility.OpenFilePanel("Select Image", "", "png,jpg,jpeg");
+        // StandaloneFileBrowser를 사용하여 파일 탐색기 열기
+        string[] paths = StandaloneFileBrowser.OpenFilePanel(
+            "Select an Image",                 // 창 제목
+            "",                               // 초기 경로 (빈 문자열로 설정 시 기본 경로 사용)
+            new[] { new ExtensionFilter("Image Files", "png", "jpg", "jpeg") }, // 허용 확장자 필터
+            false                             // 다중 선택 여부 (false: 단일 파일 선택)
+        );
 
-            if (!string.IsNullOrEmpty(path))
-            {
-                Debug.Log($"선택된 파일 경로: {path}");
-
-                // 선택된 파일 경로의 이미지를 로드하여 Image 컴포넌트에 표시
-                StartCoroutine(LoadImage(path));
-            }
-            else
-            {
-                Debug.LogWarning("파일이 선택되지 않았습니다.");
-            }
-        }
-        catch (System.Exception e)
+        if (paths.Length > 0 && !string.IsNullOrEmpty(paths[0]))
         {
-            Debug.LogError($"파일 탐색기 열기 중 오류 발생: {e.Message}");
+            Debug.Log($"선택된 파일 경로: {paths[0]}");
+            StartCoroutine(LoadImage(paths[0]));  // 선택된 경로로 이미지 로드
         }
-#else
-        Debug.LogWarning("파일 탐색기는 Unity Editor에서만 사용할 수 있습니다.");
-#endif
+        else
+        {
+            Debug.LogWarning("파일이 선택되지 않았습니다.");
+        }
     }
 
     // 선택된 이미지 파일을 로드하여 Image 컴포넌트에 적용하는 코루틴
