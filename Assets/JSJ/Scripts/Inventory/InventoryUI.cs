@@ -116,7 +116,7 @@ public class InventoryUI : MonoBehaviourPun
 
         btn_Delete.onClick.AddListener(() => OnSlotDeleteClick(selectIndex));
 
-        FindObjectOfType<PicketUIManager>().SetURL(index);
+        //FindObjectOfType<PicketUIManager>().SetURL(index);
 
     }
     public void RPC_deletepostit()
@@ -211,8 +211,8 @@ public class InventoryUI : MonoBehaviourPun
             }
 
             // 드래그 스크립트 동적 추가
-            H_DargMg dragScript = newPostIt.AddComponent<H_DargMg>();
-            dragScript.noticePos = noticePos; // 부모 경계 전달
+            //H_DargMg dragScript = newPostIt.AddComponent<H_DargMg>();
+            //dragScript.noticePos = noticePos; // 부모 경계 전달
 
             // 새 포스트잇에 클릭 리스너 추가하여 이미지를 확대함
             Button postItButton = newPostIt.AddComponent<Button>();
