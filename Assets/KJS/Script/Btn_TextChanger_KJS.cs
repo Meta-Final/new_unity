@@ -25,6 +25,26 @@ public class Btn_TextChanger_KJS : MonoBehaviour
 
     private Coroutine typingCoroutine; // 현재 실행 중인 코루틴을 추적
 
+    // 랜덤 출력 텍스트 목록
+    private readonly string[] randomTexts = {
+        "무슨일이야 삐약!",
+        "심심해 삐약!",
+        "무슨 기사를 적어볼까? 삐약!",
+        "많은 기사를 서로 교환하자 삐약!"
+    };
+
+    private void OnEnable()
+    {
+        StartTyping(GetRandomText(), false); // 활성화될 때 랜덤 텍스트를 한 글자씩 출력
+    }
+
+    // 랜덤으로 텍스트 반환
+    private string GetRandomText()
+    {
+        int randomIndex = Random.Range(0, randomTexts.Length); // 랜덤 인덱스 생성
+        return randomTexts[randomIndex]; // 랜덤 텍스트 반환
+    }
+
     // 버튼 1에서 호출될 메서드
     public void ChangeTextToButton1Text()
     {

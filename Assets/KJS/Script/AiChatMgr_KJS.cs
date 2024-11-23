@@ -25,7 +25,6 @@ public class AiChatMgr_KJS : MonoBehaviour
     private float typingSoundDelay = 0.5f; // 타이핑 사운드 재생 간격 (초)
     private Coroutine typeTextCoroutine;
 
-
     // 하드코딩된 사용자 ID
     private const string userId = "user12345";
 
@@ -104,12 +103,49 @@ public class AiChatMgr_KJS : MonoBehaviour
             chatResponseText.text = "";
             userInputField.text = "";
 
-            // AI API 호출
-            apiManager.LLM(userMessage); // 수정: userId 전달 불필요
+            if (userMessage == "오브젝트 만들어줘")
+            {
+                if (typeTextCoroutine != null)
+                {
+                    StopCoroutine(typeTextCoroutine);
+                }
+
+                string responseMessage = "알겠다 삐약! 지금부터 만들겠다 삐약!";
+                typeTextCoroutine = StartCoroutine(TypeText(responseMessage, () =>
+                {
+                    StartCoroutine(ShowExtraUIWithDelay(1f, 9f));
+                    CreateNewGameObject();
+                }));
+            }
+            else
+            {
+                // AI API 호출
+                apiManager.LLM(userMessage);
+            }
         }
     }
 
-    private IEnumerator TypeText(string text)
+    private IEnumerator ShowExtraUIWithDelay(float delayBeforeShow, float duration)
+    {
+        yield return new WaitForSeconds(delayBeforeShow); // 출력 후 1초 대기
+
+        if (extraUI != null)
+        {
+            extraUI.SetActive(true);
+            yield return new WaitForSeconds(duration);
+            extraUI.SetActive(false);
+        }
+    }
+
+    private void CreateNewGameObject()
+    {
+        // 새로운 게임 오브젝트 생성
+        GameObject newObject = new GameObject("NewGameObject");
+        newObject.transform.position = Vector3.zero;
+        Debug.Log("새로운 오브젝트가 생성되었습니다: " + newObject.name);
+    }
+
+    private IEnumerator TypeText(string text, System.Action onComplete)
     {
         chatResponseText.text = "";
         foreach (char c in text)
@@ -128,5 +164,8 @@ public class AiChatMgr_KJS : MonoBehaviour
 
             yield return new WaitForSeconds(0.05f);
         }
+
+        // 모든 텍스트 출력이 완료된 후 콜백 실행
+        onComplete?.Invoke();
     }
 }
