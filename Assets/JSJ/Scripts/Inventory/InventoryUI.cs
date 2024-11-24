@@ -186,18 +186,10 @@ public class InventoryUI : MonoBehaviourPun
     {
         if (selectScreenshot != null)
         {
-            // // 3x3 배치의 행과 열 계산
-            // int row = postItIndex / postItColumnCount;
-            // int column = postItIndex % postItColumnCount;
-            //
-            // Vector3 offset = new Vector3(
-            //     column * postItSpacing - 10f,
-            //     -(row * postItSpacing) + 8f,
-            //     -0.5f
-            // );
 
             Vector3 spawnPosition = GetNewPosition();
             GameObject newPostIt = Instantiate(postItPrefab, spawnPosition, Quaternion.identity, noticePos);
+            newPostIt.GetComponent<H_MergePostIt>().noticepos = noticePos;
 
             // 색상 및 텍스처 설정
             Material mat = new Material(matPostIt);
