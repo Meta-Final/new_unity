@@ -1,14 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class H_DragManager : MonoBehaviour
 {
     public static H_DragManager inst;
     public bool isDragging = false;
+    public GameObject postit;
+    public Transform noticepos;
+
     public LayerMask layermask;
     RaycastHit hitInfo;
     Vector3 targetPos;
+
+    public bool isColliding = false;
+
+    public List<GameObject> folders = new List<GameObject>();
+    public List<Texture> texs = new List<Texture>();
 
     private void Awake()
     {
@@ -35,13 +44,14 @@ public class H_DragManager : MonoBehaviour
         {
             OnMouseButtonUp();
         }
+
     }
     private void OnMouseButtonDown()
     {
         if(Input.GetMouseButtonDown(0))
         {
             isDragging = true;  
-            print("제발!");
+            //print("제발!");
         }
     }
     private void OnMouseDragging()
@@ -66,4 +76,28 @@ public class H_DragManager : MonoBehaviour
         isDragging = false;
     }
 
+
+    //public void SetFolder()
+    //{
+    //    if(postIts.Count >= 2)
+    //    {
+    //        GameObject go = Instantiate(postit, transform.position, Quaternion.identity, noticepos);
+    //        go.transform.localEulerAngles = new Vector3(-180, -180, 0);
+    //        for (int i = 0; i < postIts.Count; i++)
+    //        {
+    //            texs.Add(postIts[i].GetComponent<H_MergePostIt>().image);
+    //            texs[i] = go.GetComponent<H_NewFolder>().texs[i];
+
+    //            Destroy(postIts[i]);
+    //            postIts.RemoveAt(i);
+    //            texs.RemoveAt(i);
+    //        }
+    //    }
+    //}
+
+
+    //public void GetGameObjs(GameObject obj)
+    //{
+    //    postIts.Add(obj);
+    //}
 }
