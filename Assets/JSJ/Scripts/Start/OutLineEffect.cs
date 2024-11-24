@@ -10,22 +10,21 @@ public class OutLineEffect : MonoBehaviour
     {
         outline = GetComponent<Outline>();
 
+        // 아웃라인 비활성화
         outline.enabled = false;
     }
 
-    void Update()
-    {
-        
-    }
-
+    // 커서를 오브젝트에 올렸을 때
     public void OnMouseEnter()
     {
+        // 아웃라인 활성화
         outline.enabled = true;
     }
 
+    // 커서를 오브젝트에서 내렸을 때
     public void OnMouseExit()
     {
+        // 아웃라인 비활성화
         outline.enabled = false;
-        
     }
 }

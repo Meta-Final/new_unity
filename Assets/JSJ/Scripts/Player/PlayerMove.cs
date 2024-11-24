@@ -192,7 +192,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     }
 
 
-    // 애니메이션 동기화
+    // 플레이어 이동 / 애니메이션 동기화
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)

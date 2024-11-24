@@ -7,8 +7,6 @@ public class CameraManager : MonoBehaviourPun
 {
     public Camera mainCamera;
     
-
-
     public float followSpeed = 5f;
     public float zoomInSpeed = 2f; // 줌인 속도
     public float zoomInDistance = 10f; // 플레이어와의 줌인 거리
@@ -36,7 +34,8 @@ public class CameraManager : MonoBehaviourPun
 
     void Update()
     {
-        if (BillBoardView.inst.isZooming || BillBoardView.inst.isZoomedIn) return;
+        //if (BillBoardView.inst.isZooming || BillBoardView.inst.isZoomedIn) return;
+
         // 내 것일 때만 카메라 컨트롤
         if (photonView.IsMine)
         {

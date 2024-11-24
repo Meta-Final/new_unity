@@ -35,16 +35,16 @@ public class AllButtonMgr : MonoBehaviour
         MetaConnectionMgr.instance.TownToChannel();
     }
 
-    // Town -> Folder
-    public void TownToFolder()
-    {
-        MetaConnectionMgr.instance.TownToFolder();
-    }
-
     // Town -> ScrapBook
     public void TownToScrapBook()
     {
         MetaConnectionMgr.instance.TownToScrapBook();
+    }
+
+    // Town -> Folder
+    public void TownToFolder()
+    {
+        MetaConnectionMgr.instance.TownToFolder();
     }
 }
 
