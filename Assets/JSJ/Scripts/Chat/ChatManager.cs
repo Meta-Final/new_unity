@@ -8,8 +8,8 @@ public class ChatManager : MonoBehaviourPun
 {
     public static ChatManager instance;
 
-    // Input Field
-    public TMP_InputField inputChat;
+    // Chat View
+    public GameObject chatView;
 
     // ChatItem Prdfab
     public GameObject chatItemFactory;
@@ -19,6 +19,9 @@ public class ChatManager : MonoBehaviourPun
 
     // ChatView 의 Transform
     public RectTransform trChatView;
+
+    // Input Field
+    public TMP_InputField inputChat;
 
     // 채팅이 추가되기 전의 Content 의 H(높이) 값을 가지고 있는 변수
     float prevContentH;
@@ -46,12 +49,17 @@ public class ChatManager : MonoBehaviourPun
         // 닉네임 색상을 랜덤하게 설정
         nickNameColor = Random.ColorHSV();
 
+        // inputChat 이 선택될 때 호출되는 함수 등록
+        inputChat.onSelect.AddListener(OnSelect);
         // inputChat 의 내용이 변경될 때 호출되는 함수 등록
         inputChat.onValueChanged.AddListener(OnValueChanged);
         // inputChat 엔터를 쳤을 때 호출되는 함수 등록
         inputChat.onSubmit.AddListener(OnSubmit);
-        // inputChat 포커싱을 잃을 때 호출되는 함수 등록
-        inputChat.onEndEdit.AddListener(OnEndEdit);
+        // inputChat 이 포커스를 잃었을 때 호출되는 함수 등록
+        inputChat.onDeselect.AddListener(OnDeselect);
+
+        // chatView 비활성화
+        chatView.SetActive(false);
     }
 
     void Update()
@@ -59,6 +67,25 @@ public class ChatManager : MonoBehaviourPun
         
     }
 
+
+    // -------------------------------------------------------------------------------------------------------------- [ OnSelect ]
+    // inputChat 이 선택되었을 때 호출되는 함수
+    void OnSelect(string s)
+    {
+        // chatView 활성화
+        chatView.SetActive(true);
+    }
+
+
+    // -------------------------------------------------------------------------------------------------------------- [ OnValueChanged ]
+    // 채팅 내용을 입력 중일 때
+    void OnValueChanged(string s)
+    {
+        isChatting = true;
+    }
+
+
+    // -------------------------------------------------------------------------------------------------------------- [ OnSubmit ]
     // Enter를 쳤을 때    
     void OnSubmit(string s)
     {
@@ -116,17 +143,17 @@ public class ChatManager : MonoBehaviourPun
         }
     }
 
-    void OnValueChanged(string s)
-    {
-        //print("변경 중 : " + s);
-        isChatting = true;
-    }
 
-    void OnEndEdit(string s)
+    // -------------------------------------------------------------------------------------------------------------- [ OnDeselect ]
+    // inputChat 이 선택을 잃었을 때 호출되는 함수
+    void OnDeselect(string s)
     {
-        //print("작성 끝 : " + s);
+        // chatView 비활성화
+        chatView.SetActive(false);
+
         isChatting = false;
     }
+
 
     // isChatting 상태를 반환하는 함수
     public bool IsChatting()
