@@ -57,18 +57,25 @@ public class ChatManager : MonoBehaviourPun
         // 닉네임 색상을 랜덤하게 설정
         nickNameColor = Random.ColorHSV();
 
-        // inputChat 이 선택될 때 호출되는 함수 등록
-        inputChat.onSelect.AddListener(OnSelect);
-        // inputChat 의 내용이 변경될 때 호출되는 함수 등록
-        inputChat.onValueChanged.AddListener(OnValueChanged);
-        // inputChat 엔터를 쳤을 때 호출되는 함수 등록
-        inputChat.onSubmit.AddListener(OnSubmit);
-        // inputChat 이 포커스를 잃었을 때 호출되는 함수 등록
-        inputChat.onDeselect.AddListener(OnDeselect);
+        // ChatView 가 할당되었다면,
+        if (chatView != null)
+        {
+            // chatView 비활성화
+            chatView.SetActive(false);
+        }
 
-        
-        // chatView 비활성화
-        chatView.SetActive(false);
+        // inputChat 이 할당되었다면,
+        if (inputChat != null)
+        {
+            // inputChat 이 선택될 때 호출되는 함수 등록
+            inputChat.onSelect.AddListener(OnSelect);
+            // inputChat 의 내용이 변경될 때 호출되는 함수 등록
+            inputChat.onValueChanged.AddListener(OnValueChanged);
+            // inputChat 엔터를 쳤을 때 호출되는 함수 등록
+            inputChat.onSubmit.AddListener(OnSubmit);
+            // inputChat 이 포커스를 잃었을 때 호출되는 함수 등록
+            inputChat.onDeselect.AddListener(OnDeselect);
+        }
     }
 
     void Update()
