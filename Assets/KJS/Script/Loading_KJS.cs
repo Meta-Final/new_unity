@@ -27,10 +27,10 @@ public class Loading_KJS : MonoBehaviour
     public float prefabRotationX = -90f; // 프리팹의 x축 회전값
     public float forwardOffset = 0.5f; // 플레이어 앞쪽의 스폰 거리
 
-
     private void OnEnable()
     {
-        // Photon 프리팹 생성
+        // Photon 프리팹 생성 (주석 처리)
+        /*
         if (PhotonNetwork.IsConnected && PhotonNetwork.InRoom)
         {
             // 로컬 플레이어가 소유한 "Player" 태그의 오브젝트 검색
@@ -61,26 +61,27 @@ public class Loading_KJS : MonoBehaviour
         {
             Debug.LogError("Photon에 연결되어 있지 않거나 룸에 입장하지 않았습니다.");
         }
+        */
     }
 
-    private GameObject FindLocalPlayerObject()
-    {
-        // "Player" 태그를 가진 모든 오브젝트 검색
-        GameObject[] playerObjects = GameObject.FindGameObjectsWithTag("Player");
+    //private GameObject FindLocalPlayerObject()
+    //{
+    //    // "Player" 태그를 가진 모든 오브젝트 검색
+    //    GameObject[] playerObjects = GameObject.FindGameObjectsWithTag("Player");
 
-        foreach (GameObject obj in playerObjects)
-        {
-            PhotonView photonView = obj.GetComponent<PhotonView>();
+    //    foreach (GameObject obj in playerObjects)
+    //    {
+    //        PhotonView photonView = obj.GetComponent<PhotonView>();
 
-            // isMine이 true인 오브젝트를 반환
-            if (photonView != null && photonView.IsMine)
-            {
-                return obj;
-            }
-        }
+    //        // isMine이 true인 오브젝트를 반환
+    //        if (photonView != null && photonView.IsMine)
+    //        {
+    //            return obj;
+    //        }
+    //    }
 
-        return null; // 로컬 플레이어 오브젝트를 찾지 못한 경우
-    }
+    //    return null; // 로컬 플레이어 오브젝트를 찾지 못한 경우
+    //}
 
     void Start()
     {

@@ -22,6 +22,11 @@ public class PicketId_KJS : MonoBehaviour
     public void SetScreenshotPath(string path)
     {
         screenshotPath = path;
+        Billboard billboard = FindObjectOfType<Billboard>(); // Billboard 찾기
+        if (billboard != null)
+        {
+            billboard.UpdateScreenshotPath(screenshotPath);
+        }
     }
 
     // ID를 가져오는 함수
