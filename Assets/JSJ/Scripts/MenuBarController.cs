@@ -22,8 +22,16 @@ public class MenuBarController : MonoBehaviour
     public void MoveButton()
     {
         Vector3 targetPos = channelOriginPos + offset;
-        btn_Channel.position = Vector3.Lerp(channelOriginPos, targetPos, moveSpeed);
-        btn_Channel.transform.position = targetPos;
+        float currentTime = 0;
+
+        while (currentTime < 1f)
+        {
+            currentTime += Time.deltaTime * moveSpeed;
+            btn_Channel.position = Vector3.Lerp(channelOriginPos, targetPos, currentTime);
+
+        }
+        
+        btn_Channel.position = targetPos;
 
 
     }
