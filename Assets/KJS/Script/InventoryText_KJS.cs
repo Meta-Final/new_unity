@@ -1,60 +1,67 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Networking;
-using UnityEngine.UI;
 using System.IO;
-using Photon.Pun;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Networking;
 
 public class InventoryText_KJS : MonoBehaviour
 {
-    public List<string> inventoryPostIds = new List<string>(); // 인스펙터에서 할당할 postId 리스트
-    public string inventorySlotPrefabPath = "Prefabs/InventorySlotUI"; // Resources 폴더 내 프리팹 경로
-    public Transform inventoryPanel;
+    public List<H_PostInfo> allPost = new List<H_PostInfo>(); // 모든 post 정보를 저장
+    public GameObject prefabfactory;                         // 버튼 프리팹
+    public Transform inventoryPanel;                         // 버튼을 배치할 부모
+    public GameObject MagCanvas;                             // 상세 정보를 표시할 캔버스
+    public Button btn_Exit;                                  // 닫기 버튼
 
-    private List<GameObject> inventorySlots = new List<GameObject>(); // 인벤토리 슬롯 UI 목록
-    private Dictionary<string, H_PostInfo> postInfoDict = new Dictionary<string, H_PostInfo>(); // postId별로 아이템 데이터를 저장할 딕셔너리
+    private LoadMgr_KJS loadManager;                         // 외부에서 데이터를 로드할 매니저
 
-    private int previousItemCount = 0; // 이전 inventoryPostIds 개수를 저장하여 변화 감지
-    private string baseDirectory = Application.dataPath; // 기본 저장 경로
+    private string baseDirectory = Application.dataPath;     // 기본 저장 경로
+    private List<Button> btns = new List<Button>();          // 생성된 버튼 리스트
 
     void Start()
     {
-        StartCoroutine(LoadPostInfoFromFolders());
-    }
-
-    void Update()
-    {
-        // inventoryPostIds의 개수 변화 감지
-        if (inventoryPostIds.Count != previousItemCount)
+        // EditorManager에서 LoadMgr_KJS 컴포넌트를 찾습니다.
+        GameObject editorManagerObj = GameObject.Find("EditorManager");
+        if (editorManagerObj != null)
         {
-            UpdateInventorySlots();
-            previousItemCount = inventoryPostIds.Count;
+            loadManager = editorManagerObj.GetComponent<LoadMgr_KJS>();
+            if (loadManager == null)
+            {
+                Debug.LogError("EditorManager 오브젝트에 LoadMgr_KJS 컴포넌트가 없습니다.");
+            }
         }
+        else
+        {
+            Debug.LogError("EditorManager 오브젝트를 찾을 수 없습니다.");
+        }
+
+        // 초기화 작업
+        ThumStart();
     }
 
-    // 각 postId별 폴더에서 JSON 데이터를 로드하여 PostInfoList를 초기화하는 코루틴
-    private IEnumerator LoadPostInfoFromFolders()
+    public void ThumStart()
     {
+        // postId별로 저장된 폴더에서 JSON 파일을 읽습니다.
         if (Directory.Exists(baseDirectory))
         {
             string[] postDirectories = Directory.GetDirectories(baseDirectory);
-            Debug.Log("postInfoDict count: " + postInfoDict.Count);
 
             foreach (string postDirectory in postDirectories)
             {
                 string jsonFilePath = Path.Combine(postDirectory, "thumbnail.json");
-                Debug.Log($"폴더 {postDirectory}에 thumbnail.json 파일이 없습니다.");
 
                 if (File.Exists(jsonFilePath))
                 {
-                    string jsonContent = File.ReadAllText(jsonFilePath);
-                    PostInfoList postInfoList = JsonUtility.FromJson<PostInfoList>(jsonContent);
-
-                    // postData 리스트를 딕셔너리에 저장하여 빠르게 조회할 수 있도록 준비
-                    foreach (H_PostInfo post in postInfoList.postData)
+                    try
                     {
-                        postInfoDict[post.postid] = post;
+                        string json = File.ReadAllText(jsonFilePath);
+                        PostInfoList postInfoList = JsonUtility.FromJson<PostInfoList>(json);
+                        allPost.AddRange(postInfoList.postData);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError($"JSON 파일을 로드하는 동안 오류가 발생했습니다: {e.Message}");
                     }
                 }
                 else
@@ -62,87 +69,86 @@ public class InventoryText_KJS : MonoBehaviour
                     Debug.LogWarning($"폴더 {postDirectory}에 thumbnail.json 파일이 없습니다.");
                 }
             }
-
-            // 초기 인벤토리 설정
-            UpdateInventorySlots();
         }
         else
         {
             Debug.LogError($"기본 디렉토리가 존재하지 않습니다: {baseDirectory}");
         }
 
-        yield return null;
+        // 로드한 데이터를 바탕으로 UI 생성
+        CreatePostThumbnails();
     }
 
-    // 인벤토리 슬롯 UI를 업데이트하는 메서드
-    private void UpdateInventorySlots()
+    private void CreatePostThumbnails()
     {
-        // 기존 슬롯 UI 삭제
-        foreach (GameObject slot in inventorySlots)
+        // 읽어온 모든 post 정보를 기반으로 버튼을 생성
+        for (int i = 0; i < allPost.Count; i++)
         {
-            Destroy(slot);
+            // 버튼 프리팹 생성
+            GameObject go = Instantiate(prefabfactory, inventoryPanel);
+
+            // 버튼 컴포넌트를 가져옴
+            Button button = go.GetComponent<Button>();
+            btns.Add(button);
+
+            string postId = allPost[i].postid;
+
+            // 버튼 클릭 이벤트 추가
+            btns[i].onClick.AddListener(() => OnClickMagContent(postId));
+
+            // 버튼에 썸네일 이미지를 설정
+            StartCoroutine(SetButtonImage(go, allPost[i].thumburl));
         }
-        inventorySlots.Clear();
 
-        // inventoryPostIds 리스트를 바탕으로 새로운 슬롯 UI 생성
-        foreach (string postId in inventoryPostIds)
+        // MagCanvas가 있으면 비활성화
+        if (MagCanvas)
         {
-            AddItemToInventory(postId);
-        }
-    }
-
-    // 특정 postId 아이템을 인벤토리에 추가하는 메서드
-    public void AddItemToInventory(string postId)
-    {
-        // 해당 postId가 딕셔너리에 있는지 확인
-        if (postInfoDict.TryGetValue(postId, out H_PostInfo postInfo))
-        {
-            // Resources 폴더에서 프리팹 로드 (PhotonNetwork.Instantiate에서는 경로에 Resources를 포함하지 않습니다)
-            if (Resources.Load<GameObject>(inventorySlotPrefabPath) == null)
-            {
-                Debug.LogError("Inventory Slot UI 프리팹을 Resources 폴더에서 찾을 수 없습니다. 경로를 확인하세요: " + inventorySlotPrefabPath);
-                return;
-            }
-
-            // 새로운 슬롯 UI 생성 (PhotonNetwork.Instantiate 사용)
-            GameObject newSlot = PhotonNetwork.Instantiate(inventorySlotPrefabPath, inventoryPanel.position, Quaternion.identity);
-            newSlot.transform.SetParent(inventoryPanel, false); // inventoryPanel의 자식으로 설정
-            inventorySlots.Add(newSlot);
-
-            // 해당 postInfo의 thumburl을 사용하여 이미지를 로드하여 슬롯에 설정
-            StartCoroutine(LoadAndSetThumbnail(postInfo, newSlot));
-        }
-        else
-        {
-            Debug.LogWarning("postId에 해당하는 데이터를 찾을 수 없습니다: " + postId);
+            MagCanvas.SetActive(false);
         }
     }
 
-    // 이미지 파일을 로드하여 슬롯에 설정하는 코루틴
-    private IEnumerator LoadAndSetThumbnail(H_PostInfo postInfo, GameObject slot)
+    private IEnumerator SetButtonImage(GameObject buttonObject, string imageUrl)
     {
-        string filePath = "file:///" + postInfo.thumburl; // 각 postId별 폴더 내 이미지 파일 경로
-        Debug.Log("baseDirectory: " + baseDirectory);
-        Debug.Log("filePath: " + filePath);
+        // URL에서 이미지를 다운로드
+        UnityWebRequest request = UnityWebRequestTexture.GetTexture("file:///" + imageUrl);
+        yield return request.SendWebRequest();
 
-        UnityWebRequest textureRequest = UnityWebRequestTexture.GetTexture(filePath);
-        Debug.LogError("이미지 로드 실패: " + textureRequest.error);
-        yield return textureRequest.SendWebRequest();
-
-        if (textureRequest.result == UnityWebRequest.Result.Success)
+        if (request.result == UnityWebRequest.Result.Success)
         {
-            Texture2D texture = DownloadHandlerTexture.GetContent(textureRequest);
+            // 텍스처를 Sprite로 변환
+            Texture2D texture = DownloadHandlerTexture.GetContent(request);
             Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
 
-            Image slotImage = slot.GetComponentInChildren<Image>();
-            if (slotImage != null)
+            // 버튼의 Image 컴포넌트를 가져와 설정
+            Image buttonImage = buttonObject.GetComponent<Image>();
+            if (buttonImage != null)
             {
-                slotImage.sprite = sprite; // 이미지 컴포넌트에 스프라이트 설정
+                buttonImage.sprite = sprite;
+            }
+            else
+            {
+                Debug.LogError("버튼에 Image 컴포넌트가 없습니다.");
             }
         }
         else
         {
-            Debug.LogError("이미지 로드 실패: " + textureRequest.error);
+            Debug.LogError($"이미지 다운로드 실패: {imageUrl}, {request.error}");
+        }
+    }
+
+    public void OnClickMagContent(string postId)
+    {
+        // 상세 보기 UI 활성화
+        MagCanvas.SetActive(true);
+
+        // LoadMgr_KJS 매니저를 통해 해당 postId의 데이터를 로드
+        if (loadManager != null)
+        {
+            loadManager.LoadObjectsFromFile(postId);
+        }
+        else
+        {
+            Debug.LogError("loadManager가 null입니다. LoadMgr_KJS를 찾을 수 없습니다.");
         }
     }
 }
