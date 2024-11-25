@@ -21,7 +21,7 @@ public class ChatManager : MonoBehaviourPun
 
     [Header("말풍선")]
     public GameObject chatBubble;   // 말풍선 Prefab
-    public Transform bubblePos;   // 말풍선 위치
+    public Transform bubbleParent;   // 말풍선 부모
 
     // 현재 활성화된 말풍선
     GameObject currentBubble;
@@ -50,7 +50,7 @@ public class ChatManager : MonoBehaviourPun
     void Start()
     {
         player = FindObjectOfType<GameManager>().player;
-        bubblePos = player.transform.Find("bubblePos");
+        bubbleParent = player.transform.Find("bubbleParent");
 
         mainCamera = Camera.main;
 
@@ -73,12 +73,9 @@ public class ChatManager : MonoBehaviourPun
 
     void Update()
     {
-        if (currentBubble != null && mainCamera != null)
-        {
-            Vector3 targetDir = mainCamera.transform.position - currentBubble.transform.position;
-            targetDir.y = 0;
-            currentBubble.transform.rotation = Quaternion.LookRotation(targetDir);
-        }
+       
+
+        
     }
 
 
@@ -171,54 +168,45 @@ public class ChatManager : MonoBehaviourPun
         }
 
         // 새로운 말풍선 생성
-        currentBubble = Instantiate(chatBubble, bubblePos);
+        currentBubble = Instantiate(chatBubble);
+        // 말풍선 부모 설정
+        currentBubble.transform.SetParent(bubbleParent, false);
 
-        // 플레이어의 방향에 따라 말풍선 위치 조정
-        Vector3 playerForward = player.transform.forward;
-        Vector3 bubbleOffset = Vector3.zero;
 
-        // 말풍선의 회전과 위치 결정
-        Quaternion bubbleRotation = Quaternion.identity; // 말풍선 회전 초기화
+        // 플레이어 위치
+        Vector3 playerPos = player.transform.position;
+        // 플레이어 방향
+        Vector3 forwardDirection = transform.forward;
 
-        // 플레이어의 방향에 따라 말풍선이 배치될 위치를 계산합니다.
-        if (Vector3.Dot(playerForward, player.transform.forward) > 0) // 플레이어가 앞을 볼 때
+
+        // 만약, 플레이어가 앞을 바라보고 있다면
+        if (Vector3.Dot(forwardDirection, Vector3.forward) > 0.9f)
         {
-            bubbleOffset = new Vector3(0, 0, 1); // 앞에 배치
-            bubbleRotation = Quaternion.Euler(0, 0, 0); // 앞을 향하도록 회전
+            Debug.Log("플레이어가 앞을 보고 있습니다.");
+
+            Vector3 leftPos = playerPos - transform.right * 1f + new Vector3(0, 3f, 0); 
+
+            // 말풍선은 플레이어의 왼쪽에 위치한다.
+            currentBubble.transform.position = leftPos;
+            
+            // 카메라를 향해 말풍선 회전
+            if (mainCamera != null)
+            {
+                Vector3 directionToCamera = mainCamera.transform.position - currentBubble.transform.position;
+                currentBubble.transform.rotation = Quaternion.LookRotation(directionToCamera);
+            }
+
+            TMP_Text chatText = currentBubble.GetComponentInChildren<TMP_Text>();
+
+            // 채팅 내용 말풍선 text 에 넣기
+            chatText.text = chat;
+
+            // 말풍선 text 회전
+            chatText.rectTransform.localRotation = Quaternion.Euler(0, 180, 0);
         }
-        else if (Vector3.Dot(playerForward, -player.transform.forward) > 0) // 뒤를 볼 때
-        {
-            bubbleOffset = new Vector3(0, 0, -1); // 뒤에 배치
-            bubbleRotation = Quaternion.Euler(0, 180, 0); // 뒤를 향하도록 회전
-        }
-        else if (Vector3.Dot(playerForward, player.transform.right) > 0) // 오른쪽을 볼 때
-        {
-            bubbleOffset = new Vector3(1, 0, 0); // 오른쪽에 배치
-            bubbleRotation = Quaternion.Euler(0, 90, 0); // 오른쪽을 향하도록 회전
-        }
-        else if (Vector3.Dot(playerForward, -player.transform.right) > 0) // 왼쪽을 볼 때
-        {
-            bubbleOffset = new Vector3(-1, 0, 0); // 왼쪽에 배치
-            bubbleRotation = Quaternion.Euler(0, -90, 0); // 왼쪽을 향하도록 회전
-        }
-
-        // 말풍선 위치 조정
-        currentBubble.transform.position = player.transform.position + bubbleOffset;
-
-        // 말풍선의 회전 적용
-        currentBubble.transform.rotation = bubbleRotation;
-
-        // 텍스트의 회전도 플레이어와 일치하도록 회전합니다.
-        TMP_Text chatText = currentBubble.GetComponentInChildren<TMP_Text>();
-        chatText.text = chat;
-
-        // 텍스트도 회전시켜야 한다면
-        chatText.transform.rotation = bubbleRotation;
-
-        // 3초 후에 말풍선 삭제
-        StartCoroutine(DestroyBubble(3f));
-
         
+        // 3초 후에 말풍선 삭제
+        StartCoroutine(DestroyBubble(5f));
     }
 
     // 말풍선 삭제 함수
