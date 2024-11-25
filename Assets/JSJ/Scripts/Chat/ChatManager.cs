@@ -8,20 +8,23 @@ public class ChatManager : MonoBehaviourPun
 {
     public static ChatManager instance;
 
-    // Chat View
+    public GameObject player;
+
+    public Camera mainCamera;
+
+    [Header("채팅")]
     public GameObject chatView;
-
-    // ChatItem Prdfab
-    public GameObject chatItemFactory;
-
-    // Content 의 Transform
-    public RectTransform trContent;
-
-    // ChatView 의 Transform
+    public GameObject chatItemFactory;   // 채팅 Prefab
     public RectTransform trChatView;
-
-    // Input Field
+    public RectTransform trContent;
     public TMP_InputField inputChat;
+
+    [Header("말풍선")]
+    public GameObject chatBubble;   // 말풍선 Prefab
+    public Transform bubblePos;   // 말풍선 위치
+
+    // 현재 활성화된 말풍선
+    GameObject currentBubble;
 
     // 채팅이 추가되기 전의 Content 의 H(높이) 값을 가지고 있는 변수
     float prevContentH;
@@ -46,6 +49,11 @@ public class ChatManager : MonoBehaviourPun
 
     void Start()
     {
+        player = FindObjectOfType<GameManager>().player;
+        bubblePos = player.transform.Find("bubblePos");
+
+        mainCamera = Camera.main;
+
         // 닉네임 색상을 랜덤하게 설정
         nickNameColor = Random.ColorHSV();
 
@@ -64,6 +72,12 @@ public class ChatManager : MonoBehaviourPun
 
     void Update()
     {
+        if (currentBubble != null && mainCamera != null)
+        {
+            Vector3 targetDir = mainCamera.transform.position - currentBubble.transform.position;
+            targetDir.y = 0;
+            currentBubble.transform.rotation = Quaternion.LookRotation(targetDir);
+        }
         
     }
 
@@ -99,6 +113,8 @@ public class ChatManager : MonoBehaviourPun
 
         // AddChat RPC 함수 호출
         photonView.RPC(nameof(AddChat), RpcTarget.All, chat);
+        // AddBubble RPC 함수 호출
+        photonView.RPC(nameof(AddBubble), RpcTarget.All, chat);
 
         if (photonView.IsMine)
         {
@@ -140,6 +156,37 @@ public class ChatManager : MonoBehaviourPun
                 // content 의 y값을 재설정한다.
                 trContent.anchoredPosition = new Vector2(0, trContent.sizeDelta.y - trChatView.sizeDelta.y);
             }
+        }
+    }
+
+    // 말풍선 함수
+    [PunRPC]
+    void AddBubble(string chat)
+    {
+        // 현재 활성화된 말풍선이 있다면,
+        if (currentBubble != null)
+        {
+            // 삭제하라.
+            Destroy(currentBubble);
+        }
+
+        // 새로운 말풍선 생성
+        currentBubble = Instantiate(chatBubble, bubblePos);
+        TMP_Text chatText = currentBubble.GetComponentInChildren<TMP_Text>();
+        chatText.text = chat;
+
+        // 3초 후에 말풍선 삭제
+        StartCoroutine(DestroyBubble(3f));
+    }
+
+    // 말풍선 삭제 함수
+    IEnumerator DestroyBubble(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (currentBubble != null)
+        {
+            Destroy(currentBubble);
         }
     }
 

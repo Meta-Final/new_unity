@@ -22313,7 +22313,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: c294151649b2149da94b24153bebe790, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -73985,7 +73985,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: c294151649b2149da94b24153bebe790, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -79148,12 +79148,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f8ac9ae4d53b1b49b675fb34cf1c3fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputChat: {fileID: 1973246904}
+  player: {fileID: 0}
   chatView: {fileID: 639262753}
   chatItemFactory: {fileID: 7794309181848656643, guid: d09a917d815f3ad4883b116fe7340270,
     type: 3}
+  chatBubble: {fileID: 4177466516624905218, guid: 622cd9c63565dd9478246eec28b801a6,
+    type: 3}
   trContent: {fileID: 293049809}
   trChatView: {fileID: 639262754}
+  bubblePos: {fileID: 0}
+  inputChat: {fileID: 1973246904}
 --- !u!1001 &2140632876
 PrefabInstance:
   m_ObjectHideFlags: 0
