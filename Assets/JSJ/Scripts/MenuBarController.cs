@@ -4,45 +4,69 @@ using UnityEngine;
 
 public class MenuBarController : MonoBehaviour
 {
-    public RectTransform btn_Channel;
+    public RectTransform[] btnRectTransform;
 
-    public float moveSpeed = 5f;
+    public float distance = 100f;
+    public float spacing = 5f;
+    public float duration = 0.5f;
+    public float delayBetween = 0.5f;
 
-    public Vector3 channelOriginPos;
-    public Vector3 offset = new Vector3(50, 0, 0);
+    bool isMenuOpen = false;
     
     
     void Start()
     {
-        channelOriginPos = btn_Channel.position;
-        print(channelOriginPos);
         
     }
 
-    public void MoveButton()
+    public void MenuToggle()
     {
-        Vector3 targetPos = channelOriginPos + offset;
-        float currentTime = 0;
-
-        while (currentTime < 1f)
+        if (isMenuOpen)
         {
-            currentTime += Time.deltaTime * moveSpeed;
-            btn_Channel.position = Vector3.Lerp(channelOriginPos, targetPos, currentTime);
+            //StartCoroutine(MenuClose());
 
         }
-        
-        btn_Channel.position = targetPos;
+        else
+        {
+            StartCoroutine(MenuOpen());
 
+        }
+    }
+
+    IEnumerator MenuOpen()
+    {
+        for (int i = 0; i < btnRectTransform.Length; i++)
+        {
+            Vector2 orginPos = btnRectTransform[i].anchoredPosition;
+            Vector2 targetPos = new Vector2(distance + (i * spacing), orginPos.y);
+            float currentTime = 0;
+
+            while (currentTime < duration)
+            {
+                btnRectTransform[i].anchoredPosition = Vector2.Lerp(orginPos, targetPos, (currentTime / duration));
+                currentTime += Time.deltaTime;
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(delayBetween);
+        }
 
     }
 
-    
-    
+    //IEnumerator MenuClose()
+    //{
+
+    //}
 
     
 
-   
-    
+
+
+
+
+
+
+
 
 
 
