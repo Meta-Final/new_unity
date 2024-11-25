@@ -78,7 +78,6 @@ public class ChatManager : MonoBehaviourPun
             targetDir.y = 0;
             currentBubble.transform.rotation = Quaternion.LookRotation(targetDir);
         }
-        
     }
 
 
@@ -111,13 +110,12 @@ public class ChatManager : MonoBehaviourPun
         string nick = "<color=#" + ColorUtility.ToHtmlStringRGB(nickNameColor) + ">" + PhotonNetwork.NickName + "</color>";
         string chat = nick + " : " + s;
 
-        // AddChat RPC 함수 호출
-        photonView.RPC(nameof(AddChat), RpcTarget.All, chat);
-        // AddBubble RPC 함수 호출
-        photonView.RPC(nameof(AddBubble), RpcTarget.All, chat);
-
         if (photonView.IsMine)
         {
+            // AddChat RPC 함수 호출
+            photonView.RPC(nameof(AddChat), RpcTarget.All, chat);
+            // AddBubble RPC 함수 호출
+            photonView.RPC(nameof(AddBubble), RpcTarget.All, chat);
             // 강제로 inputChat 을 활성화 하자
             inputChat.ActivateInputField();
         }
