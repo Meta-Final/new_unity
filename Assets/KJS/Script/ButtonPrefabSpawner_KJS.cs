@@ -45,24 +45,24 @@ public class ButtonPrefabSpawner_KJS : MonoBehaviour
 
     private void AssignPostId()
     {
-        List<string> postIdList = inventoryText.inventoryPostIds;
+        //List<string> postIdList = inventoryText.inventoryPostIds;
 
-        if (postIdList == null || postIdList.Count == 0)
-        {
-            Debug.LogWarning("POSTID 리스트가 비어있습니다.");
-            return;
-        }
+    //    if (postIdList == null || postIdList.Count == 0)
+    //    {
+    //        Debug.LogWarning("POSTID 리스트가 비어있습니다.");
+    //        return;
+    //    }
 
-        if (currentPostIdIndex < postIdList.Count)
-        {
-            assignedPostId = postIdList[currentPostIdIndex];
-            Debug.Log($"버튼 생성 순서에 따라 할당된 POSTID: {assignedPostId}");
-            currentPostIdIndex++;
-        }
-        else
-        {
-            Debug.LogWarning("POSTID 리스트의 모든 항목을 이미 사용했습니다.");
-        }
+    //    if (currentPostIdIndex < postIdList.Count)
+    //    {
+    //        assignedPostId = postIdList[currentPostIdIndex];
+    //        Debug.Log($"버튼 생성 순서에 따라 할당된 POSTID: {assignedPostId}");
+    //        currentPostIdIndex++;
+    //    }
+    //    else
+    //    {
+    //        Debug.LogWarning("POSTID 리스트의 모든 항목을 이미 사용했습니다.");
+    //    }
     }
 
     private void OnButtonClicked()

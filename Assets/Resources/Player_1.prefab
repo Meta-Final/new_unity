@@ -6628,9 +6628,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c16efd7ed52c9d448adbaa5d9ca419e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryPostIds: []
-  inventorySlotPrefabPath: Btn_SlotItem _K
+  allPost: []
+  prefabfactory: {fileID: 1597832865248041017, guid: e79203eec845fab4585137427b2c77c7,
+    type: 3}
   inventoryPanel: {fileID: 1861315839787683155}
+  MagCanvas: {fileID: 0}
+  btn_Exit: {fileID: 0}
 --- !u!114 &5195583565769417739
 MonoBehaviour:
   m_ObjectHideFlags: 0
