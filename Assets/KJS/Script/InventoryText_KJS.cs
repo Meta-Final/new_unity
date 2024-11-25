@@ -39,12 +39,10 @@ public class InventoryText_KJS : MonoBehaviour
         if (Directory.Exists(baseDirectory))
         {
             string[] postDirectories = Directory.GetDirectories(baseDirectory);
-            Debug.Log("postInfoDict count: " + postInfoDict.Count);
 
             foreach (string postDirectory in postDirectories)
             {
                 string jsonFilePath = Path.Combine(postDirectory, "thumbnail.json");
-                Debug.Log($"폴더 {postDirectory}에 thumbnail.json 파일이 없습니다.");
 
                 if (File.Exists(jsonFilePath))
                 {
@@ -57,20 +55,11 @@ public class InventoryText_KJS : MonoBehaviour
                         postInfoDict[post.postid] = post;
                     }
                 }
-                else
-                {
-                    Debug.LogWarning($"폴더 {postDirectory}에 thumbnail.json 파일이 없습니다.");
-                }
             }
 
             // 초기 인벤토리 설정
             UpdateInventorySlots();
         }
-        else
-        {
-            Debug.LogError($"기본 디렉토리가 존재하지 않습니다: {baseDirectory}");
-        }
-
         yield return null;
     }
 
