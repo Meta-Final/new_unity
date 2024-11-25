@@ -110,12 +110,13 @@ public class ChatManager : MonoBehaviourPun
         string nick = "<color=#" + ColorUtility.ToHtmlStringRGB(nickNameColor) + ">" + PhotonNetwork.NickName + "</color>";
         string chat = nick + " : " + s;
 
+        // AddChat RPC 함수 호출
+        photonView.RPC(nameof(AddChat), RpcTarget.All, chat);
+        // AddBubble RPC 함수 호출
+        photonView.RPC(nameof(AddBubble), RpcTarget.All, chat);
+
         if (photonView.IsMine)
         {
-            // AddChat RPC 함수 호출
-            photonView.RPC(nameof(AddChat), RpcTarget.All, chat);
-            // AddBubble RPC 함수 호출
-            photonView.RPC(nameof(AddBubble), RpcTarget.All, chat);
             // 강제로 inputChat 을 활성화 하자
             inputChat.ActivateInputField();
         }
@@ -136,8 +137,13 @@ public class ChatManager : MonoBehaviourPun
         chatItem.SetText(chat);
         // 가져온 컴포넌트의 onAutoScroll 변수에 AutoScrollBottom 을 설정
         chatItem.onAutoScroll = AutoScrollBottom;
-        // inputChat 에 있는 내용을 초기화
-        inputChat.text = "";
+
+        if (photonView.IsMine)
+        {
+            // inputChat 에 있는 내용을 초기화
+            inputChat.text = "";
+        }
+        
     }
 
     // 채팅 추가 되었을 때 맨밑으로 Content 위치를 옮기는 함수
@@ -161,6 +167,8 @@ public class ChatManager : MonoBehaviourPun
     [PunRPC]
     void AddBubble(string chat)
     {
+        if (!photonView.IsMine) return;
+
         // 현재 활성화된 말풍선이 있다면,
         if (currentBubble != null)
         {
