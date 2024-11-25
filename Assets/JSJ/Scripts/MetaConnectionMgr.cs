@@ -82,7 +82,7 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         // 방 생성 옵션
         RoomOptions roomOptions = new RoomOptions();
         // 방에 들어 올 수 있는 최대 인원 설정
-        roomOptions.MaxPlayers = 20;
+        roomOptions.MaxPlayers = 10;
         // 로비에 방을 보이게 할 것이니?
         roomOptions.IsVisible = true;
         // 방에 참여를 할 수 있니?
@@ -125,7 +125,19 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
     // EyesMagazine 입장
     public void JoinEyesMagazine()
     {
-        PhotonNetwork.LoadLevel("Meta_Magazine_Scene");
+        loadLevelName = "Meta_Magazine_Scene";
+
+        // 방 생성 옵션
+        RoomOptions roomOptions = new RoomOptions();
+        // 방에 들어 올 수 있는 최대 인원 설정
+        roomOptions.MaxPlayers = 20;
+        // 로비에 방을 보이게 할 것이니?
+        roomOptions.IsVisible = true;
+        // 방에 참여를 할 수 있니?
+        roomOptions.IsOpen = true;
+
+        // Room 참여 or 생성
+        PhotonNetwork.JoinOrCreateRoom("EyesMagazine", roomOptions, TypedLobby.Default);
     }
 
 
