@@ -6,6 +6,7 @@ using Photon.Realtime;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Xml.Serialization;
 
 public class MetaConnectionMgr : MonoBehaviourPunCallbacks
 {
@@ -23,8 +24,11 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
-
 
     void Start()
     {
@@ -39,7 +43,7 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         }
     }
 
-
+    //----------------------------------------------------------------------- [ Lobby ]
     // Lobby 입장
     public void JoinLobby(UserInfo userInfo)
     {
@@ -59,15 +63,15 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
     }
 
 
+    //----------------------------------------------------------------------- [ Channel ]
     // Channel 입장
     public void JoinChannel()
     {
-        // 채널씬으로 이동
         PhotonNetwork.LoadLevel("Meta_Channel_Scene");
     }
 
 
-    // [Room]-------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------- [ Scrap Book ]
     // ScrapBook 생성 후 입장
     public void JoinOrCreateRoom()
     {
@@ -78,7 +82,7 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         // 방 생성 옵션
         RoomOptions roomOptions = new RoomOptions();
         // 방에 들어 올 수 있는 최대 인원 설정
-        roomOptions.MaxPlayers = 20;
+        roomOptions.MaxPlayers = 10;
         // 로비에 방을 보이게 할 것이니?
         roomOptions.IsVisible = true;
         // 방에 참여를 할 수 있니?
@@ -89,7 +93,7 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
     }
 
 
-    // [Folder]----------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------- [ Folder ]
     // Folder 입장
     public void JoinFolder()
     {
@@ -97,7 +101,7 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
     }
 
 
-    // [Town]----------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------- [ Town ]
     // Town 생성 후 입장
     public void JoinOrCreateTown()
     {
@@ -117,6 +121,27 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
     }
 
 
+    //----------------------------------------------------------------------- [ EyesMagazine ]
+    // EyesMagazine 입장
+    public void JoinEyesMagazine()
+    {
+        loadLevelName = "Meta_Magazine_Scene";
+
+        // 방 생성 옵션
+        RoomOptions roomOptions = new RoomOptions();
+        // 방에 들어 올 수 있는 최대 인원 설정
+        roomOptions.MaxPlayers = 20;
+        // 로비에 방을 보이게 할 것이니?
+        roomOptions.IsVisible = true;
+        // 방에 참여를 할 수 있니?
+        roomOptions.IsOpen = true;
+
+        // Room 참여 or 생성
+        PhotonNetwork.JoinOrCreateRoom("EyesMagazine", roomOptions, TypedLobby.Default);
+    }
+
+
+    //----------------------------------------------------------------------- [ Create Room ]
     // 방 생성 성공했을 때 호출되는 함수
     public override void OnCreatedRoom()
     {
@@ -137,7 +162,7 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
     }
 
 
-    // [Room 에서 나가기]--------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------- [ Room Exit ]
     // ScrapBook -> Channel
     public void ScrapBookToChannel()
     {
@@ -159,20 +184,28 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         roomNumber = 3;
     }
 
-    // Town -> Folder
-    public void TownToFolder()
+    // Town -> ScrapBook
+    public void TownToScrapBook()
     {
         PhotonNetwork.LeaveRoom();
         roomNumber = 4;
     }
 
-    // Town -> ScrapBook
-    public void TownToScrapBook()
+    // Town -> Folder
+    public void TownToFolder()
     {
         PhotonNetwork.LeaveRoom();
         roomNumber = 5;
     }
 
+    // Town -> EyesMagazine
+    public void TownToEyesMagazine()
+    {
+        PhotonNetwork.LeaveRoom();
+        roomNumber = 6;
+    }
+
+    
     // Room 에서 나오면 호출되는 함수
     public override void OnLeftRoom()
     {
@@ -199,10 +232,12 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         base.OnConnectedToMaster();
         Debug.Log("마스터 서버에 접속했습니다.");
 
-        // 룸 이동
+        // Room 이동
         RoomTransition();
     }
 
+
+    //----------------------------------------------------------------------- [ Room Transition ]
     // Room 이동 함수
     public void RoomTransition()
     {
@@ -211,15 +246,20 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         {
             JoinChannel();
         }
-        // 만약 룸넘버가 2이거나 4면, Folder 로 이동한다.
-        if (roomNumber == 2 || roomNumber == 4 )
+        // 만약 룸넘버가 2이거나 5면, Folder 로 이동한다.
+        if (roomNumber == 2 || roomNumber == 5 )
         {
             JoinFolder();
         }
-        // 만약 룸넘버가 5이면, ScrapBook 으로 이동한다.
-        if (roomNumber == 5)
+        // 만약 룸넘버가 4이면, ScrapBook 으로 이동한다.
+        if (roomNumber == 4)
         {
             JoinOrCreateRoom();
+        }
+        // 만약 룸넘버가 6이면, EyesMagazine 으로 이동한다.
+        if (roomNumber == 6)
+        {
+            JoinEyesMagazine();
         }
 
         // 이동 후 초기화

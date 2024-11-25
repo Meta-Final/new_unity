@@ -5081,7 +5081,7 @@ GameObject:
   - component: {fileID: 865500893}
   - component: {fileID: 865500892}
   m_Layer: 5
-  m_Name: Icon_User
+  m_Name: Icon_UserName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10362,6 +10362,8 @@ GameObject:
   m_Component:
   - component: {fileID: 298515325260613412}
   - component: {fileID: 301880262052132733}
+  - component: {fileID: 301880262052132735}
+  - component: {fileID: 301880262052132734}
   m_Layer: 20
   m_Name: CRTMonitor
   m_TagString: Untagged
@@ -10390,6 +10392,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.4, y: 0.4, z: 0.5}
   m_Center: {x: 0, y: 0, z: -0.1}
+--- !u!114 &301880262052132734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 301880262052132732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be838d7038670ec4bb446c4272301c0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outline: {fileID: 0}
+--- !u!114 &301880262052132735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 301880262052132732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 0.045369957, g: 0.47058824, b: 0.16431895, a: 1}
+  outlineWidth: 10
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &302662929299706776
 GameObject:
   m_ObjectHideFlags: 0
