@@ -16,8 +16,8 @@ public class H_DragManager : MonoBehaviour
 
     public bool isColliding = false;
 
-    public List<GameObject> folders = new List<GameObject>();
-    public List<Texture> texs = new List<Texture>();
+    public GameObject currentPostIt;
+    
 
     private void Awake()
     {
@@ -62,6 +62,7 @@ public class H_DragManager : MonoBehaviour
             if (Physics.Raycast(ray, out hitInfo, float.MaxValue, layermask))
             {
                 print(hitInfo.transform.name);
+                currentPostIt = hitInfo.transform.gameObject;
                 targetPos = hitInfo.point;
                 targetPos.z = hitInfo.transform.position.z;
                 hitInfo.transform.position = targetPos;

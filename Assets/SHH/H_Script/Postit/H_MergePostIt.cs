@@ -23,34 +23,25 @@ public class H_MergePostIt : MonoBehaviour
     {
         if (H_DragManager.inst.isDragging && other.gameObject.name.Contains("PostItPink"))
         {
-
-            if (isCol)
-                return;
-
-            GameObject go = Instantiate(postit, transform.position, Quaternion.identity, noticepos);
-            go.transform.localEulerAngles = new Vector3(-180, -180, 0);
-
-            //H_DragManager.inst.folders.Add(go);
-            H_NewFolder hn = go.GetComponent<H_NewFolder>();
-            hn.texs.Add(image);
-
-
-            Destroy(gameObject);
-            isCol = true;
+            if(H_DragManager.inst.currentPostIt == gameObject)
+            {
+                GameObject go = Instantiate(postit, transform.position, Quaternion.identity, noticepos);
+                
+                go.transform.localEulerAngles = new Vector3(180, 0, 90);
+                go.transform.localScale = new Vector3(10, 10, 10);
+                H_NewFolder hn = go.GetComponent<H_NewFolder>();
+                hn.texs.Add(image);
+                hn.texs.Add(other.transform.GetComponent<H_MergePostIt>().image);
+                Destroy(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
 
         }
     }
-    private void OnTriggerExit(Collider other)
-    {
-        if (H_DragManager.inst.isDragging && other.gameObject.name.Contains("PostItPink"))
-        {
-            isCol = false;
-            
-            //H_DragManager.inst.GetGameObjs(gameObject);
-            //H_DragManager.inst.SetFolder();
-        }
-        Destroy(gameObject);
-    }
+
 
     public Texture GetTexture(Texture tex)
     {
