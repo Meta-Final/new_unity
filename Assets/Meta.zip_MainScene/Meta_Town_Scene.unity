@@ -12853,6 +12853,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65da01030b6da514b818fc8aa7797077, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  firestore: {fileID: 0}
   coverDownloadTexture: {fileID: 0}
   trendDownloadTexture: {fileID: 0}
 --- !u!114 &361349374
@@ -44600,7 +44601,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  spawnPos: {fileID: 1984588668}
 --- !u!4 &1169477302
 Transform:
   m_ObjectHideFlags: 0
@@ -74243,104 +74243,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1976363119}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &1976832802
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: -4228479006557700922, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
-        type: 3}
-      propertyPath: sceneViewId
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 1427670641148758666, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 9.71
-      objectReference: {fileID: 0}
-    - target: {fileID: 1427670641148758666, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1427670641148758666, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -1.12
-      objectReference: {fileID: 0}
-    - target: {fileID: 1427670641148758666, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1427670641148758666, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1427670641148758666, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1427670641148758666, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1427670641148758666, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1427670641148758666, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1427670641148758666, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1770062499808008907, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
-        type: 3}
-      propertyPath: m_Name
-      value: Helper
-      objectReference: {fileID: 0}
-    - target: {fileID: 1770062499808008907, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2817603813161376899, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
-        type: 3}
-      propertyPath: m_BackGroundColor.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2817603813161376899, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
-        type: 3}
-      propertyPath: m_BackGroundColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2817603813161376899, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
-        type: 3}
-      propertyPath: m_BackGroundColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2817603813161376899, guid: 35b4dd33877f9ad4bb0107c3197eef1e,
-        type: 3}
-      propertyPath: m_BackGroundColor.r
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 35b4dd33877f9ad4bb0107c3197eef1e, type: 3}
 --- !u!1001 &1978032656
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -83437,5 +83339,4 @@ SceneRoots:
   - {fileID: 872956500}
   - {fileID: 2070151894}
   - {fileID: 881330208}
-  - {fileID: 1976832802}
   - {fileID: 1244093160}
