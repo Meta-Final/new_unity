@@ -66,6 +66,7 @@ public class ChatManager : MonoBehaviourPun
         // inputChat 이 포커스를 잃었을 때 호출되는 함수 등록
         inputChat.onDeselect.AddListener(OnDeselect);
 
+        
         // chatView 비활성화
         chatView.SetActive(false);
     }
@@ -119,6 +120,8 @@ public class ChatManager : MonoBehaviourPun
         {
             // 강제로 inputChat 을 활성화 하자
             inputChat.ActivateInputField();
+            // inputChat 에 있는 내용을 초기화
+            inputChat.text = "";
         }
     }
 
@@ -137,13 +140,6 @@ public class ChatManager : MonoBehaviourPun
         chatItem.SetText(chat);
         // 가져온 컴포넌트의 onAutoScroll 변수에 AutoScrollBottom 을 설정
         chatItem.onAutoScroll = AutoScrollBottom;
-
-        if (photonView.IsMine)
-        {
-            // inputChat 에 있는 내용을 초기화
-            inputChat.text = "";
-        }
-        
     }
 
     // 채팅 추가 되었을 때 맨밑으로 Content 위치를 옮기는 함수
@@ -167,8 +163,6 @@ public class ChatManager : MonoBehaviourPun
     [PunRPC]
     void AddBubble(string chat)
     {
-        if (!photonView.IsMine) return;
-
         // 현재 활성화된 말풍선이 있다면,
         if (currentBubble != null)
         {
@@ -178,11 +172,53 @@ public class ChatManager : MonoBehaviourPun
 
         // 새로운 말풍선 생성
         currentBubble = Instantiate(chatBubble, bubblePos);
+
+        // 플레이어의 방향에 따라 말풍선 위치 조정
+        Vector3 playerForward = player.transform.forward;
+        Vector3 bubbleOffset = Vector3.zero;
+
+        // 말풍선의 회전과 위치 결정
+        Quaternion bubbleRotation = Quaternion.identity; // 말풍선 회전 초기화
+
+        // 플레이어의 방향에 따라 말풍선이 배치될 위치를 계산합니다.
+        if (Vector3.Dot(playerForward, player.transform.forward) > 0) // 플레이어가 앞을 볼 때
+        {
+            bubbleOffset = new Vector3(0, 0, 1); // 앞에 배치
+            bubbleRotation = Quaternion.Euler(0, 0, 0); // 앞을 향하도록 회전
+        }
+        else if (Vector3.Dot(playerForward, -player.transform.forward) > 0) // 뒤를 볼 때
+        {
+            bubbleOffset = new Vector3(0, 0, -1); // 뒤에 배치
+            bubbleRotation = Quaternion.Euler(0, 180, 0); // 뒤를 향하도록 회전
+        }
+        else if (Vector3.Dot(playerForward, player.transform.right) > 0) // 오른쪽을 볼 때
+        {
+            bubbleOffset = new Vector3(1, 0, 0); // 오른쪽에 배치
+            bubbleRotation = Quaternion.Euler(0, 90, 0); // 오른쪽을 향하도록 회전
+        }
+        else if (Vector3.Dot(playerForward, -player.transform.right) > 0) // 왼쪽을 볼 때
+        {
+            bubbleOffset = new Vector3(-1, 0, 0); // 왼쪽에 배치
+            bubbleRotation = Quaternion.Euler(0, -90, 0); // 왼쪽을 향하도록 회전
+        }
+
+        // 말풍선 위치 조정
+        currentBubble.transform.position = player.transform.position + bubbleOffset;
+
+        // 말풍선의 회전 적용
+        currentBubble.transform.rotation = bubbleRotation;
+
+        // 텍스트의 회전도 플레이어와 일치하도록 회전합니다.
         TMP_Text chatText = currentBubble.GetComponentInChildren<TMP_Text>();
         chatText.text = chat;
 
+        // 텍스트도 회전시켜야 한다면
+        chatText.transform.rotation = bubbleRotation;
+
         // 3초 후에 말풍선 삭제
         StartCoroutine(DestroyBubble(3f));
+
+        
     }
 
     // 말풍선 삭제 함수
