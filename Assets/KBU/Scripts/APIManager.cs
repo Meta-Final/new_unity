@@ -9,15 +9,16 @@ using UniHumanoid;
 
 public class APIManager : MonoBehaviour
 {
-    FireStore firestore;
+    public FireStore firestore;
 
     AuthURL authURL = new AuthURL();
     ArticleURL articleURL = new ArticleURL();
     AIURL aiUrl = new AIURL();
     public void Start()
     {
-        GameObject firebase = GameObject.Find("Firebase");
-        firestore = firebase.GetComponent<FireStore>();
+        //GameObject firebase = GameObject.Find("Firebase");
+        firestore = FireStore.instance;
+        print(firestore.userInfo.userId);
     }
 
 
@@ -104,10 +105,20 @@ public class APIManager : MonoBehaviour
     public void LLM(string text)
     {
         string userId = firestore.GetUserInfo().userId;
+        Debug.Log($"{userId}");
         string chatUrl = aiUrl.chatURL;
 
         ChatRequest chatRequest = new ChatRequest { userId = userId, text = text };
+
         StartCoroutine(PostHttp<ChatRequest, ChatResponse>(chatRequest, chatUrl));
+    }
+
+    public void TestTest(string testText)
+    {
+        ChatResponse response = JsonUtility.FromJson<ChatResponse>(testText);
+
+        // AIChatMgr_KJS의 인스턴스를 찾아서 응답 텍스트를 업데이트
+        AiChatMgr_KJS.Instance.UpdateChatResponse(response.text);
     }
 
     //Object 생성/호출 메서드
@@ -175,6 +186,13 @@ public class APIManager : MonoBehaviour
                 TResponse responseObject = JsonUtility.FromJson<TResponse>(www.downloadHandler.text);
                 Debug.Log("success");
                 Debug.Log("Response: " + JsonUtility.ToJson(responseObject));
+
+                if( requestObject is ChatRequest)
+                {
+                    //typeof(ChatResponse)
+
+                    TestTest(JsonUtility.ToJson(responseObject));
+                }
             }
             else
             {

@@ -25,9 +25,6 @@ public class AiChatMgr_KJS : MonoBehaviour
     private float typingSoundDelay = 0.5f; // 타이핑 사운드 재생 간격 (초)
     private Coroutine typeTextCoroutine;
 
-    // 하드코딩된 사용자 ID
-    private const string userId = "user12345";
-
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -100,9 +97,6 @@ public class AiChatMgr_KJS : MonoBehaviour
 
         if (!string.IsNullOrEmpty(userMessage))
         {
-            chatResponseText.text = "";
-            userInputField.text = "";
-
             if (userMessage == "오브젝트 만들어줘")
             {
                 if (typeTextCoroutine != null)
@@ -122,7 +116,20 @@ public class AiChatMgr_KJS : MonoBehaviour
                 // AI API 호출
                 apiManager.LLM(userMessage);
             }
+
+            // 입력 필드 초기화
+            userInputField.text = "";
         }
+    }
+    public void UpdateChatResponse(string responseText)
+    {
+        if (typeTextCoroutine != null)
+        {
+            StopCoroutine(typeTextCoroutine);
+        }
+
+        // 응답 텍스트를 출력
+        typeTextCoroutine = StartCoroutine(TypeText(responseText, null));
     }
 
     private IEnumerator ShowExtraUIWithDelay(float delayBeforeShow, float duration)
