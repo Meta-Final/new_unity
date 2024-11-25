@@ -154,10 +154,10 @@ public class APIManager : MonoBehaviour
     }
 
     //Trend 생성/호출 메서드 
-    public void Trend(string fileSavePath)
+    public void Trend()
     {
         string trendUrl = aiUrl.trendURL;
-        StartCoroutine(PostHttpFile1(trendUrl, fileSavePath));
+        StartCoroutine(PostHttpTrend(trendUrl));
     }
 
     //Ocr 생성/호출 메서드
@@ -259,27 +259,6 @@ public class APIManager : MonoBehaviour
         }
     }
 
-    public IEnumerator PostHttpFile1(string url, string fileSavePath)
-    {
-        using (UnityWebRequest www = new UnityWebRequest(url, "POST"))
-        {
-            www.downloadHandler = new DownloadHandlerFile(fileSavePath);
-            www.SetRequestHeader("Content-Type", "application/json");
-
-            yield return www.SendWebRequest();
-
-            if (www.result == UnityWebRequest.Result.Success)
-            {
-                Debug.Log($"File downloaded successfully and saved at: {fileSavePath}");
-            }
-            else
-            {
-                Debug.LogError($"Error: {www.error}, Status Code: {www.responseCode}");
-            }
-        }
-    }
-
-
     public IEnumerator PostHttpFile2(string url, string screenShot)
     {
         OcrRequest ocrRequest = new OcrRequest { screenShot = screenShot };
@@ -340,7 +319,21 @@ public class APIManager : MonoBehaviour
         }
     }
 
-    //진짜 망했을때 용
+    public IEnumerator PostHttpTrend(string url)
+    {
+        UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            coverDownloadTexture = ((DownloadHandlerTexture)request.downloadHandler).texture;
+        }
+        else
+        {
+            Debug.LogError("Failed to download image: " + request.error);
+        }
+    }
+
     public Texture2D coverDownloadTexture;
     public Texture2D trendDownloadTexture;
 
@@ -371,6 +364,11 @@ public class APIManager : MonoBehaviour
     public Texture2D CoverGetDownloadedImage()
     {
         return coverDownloadTexture;
+    }
+
+    public Texture2D TrendGetDownloadedImage()
+    {
+        return trendDownloadTexture;
     }
 
 }
