@@ -40,7 +40,7 @@ public class InventoryUI : MonoBehaviourPun
         // 지금 'Meta_ScrapBook_Scene'이라면, 액자를 찾아라.
         if (SceneManager.GetActiveScene().name == "Meta_ScrapBook_Scene")
         {
-            noticePos = GameObject.Find("CorkBoard 1").transform;
+            noticePos = GameObject.Find("noticepos").transform;
         }
         else
         {

@@ -36,7 +36,8 @@ public class CameraManager : MonoBehaviourPun
 
     void Update()
     {
-        if (BillBoardView.inst.isZooming || BillBoardView.inst.isZoomedIn) return;
+        
+        if (BillBoardView.inst != null && (BillBoardView.inst.isZooming || BillBoardView.inst.isZoomedIn)) return;
         // 내 것일 때만 카메라 컨트롤
         if (photonView.IsMine)
         {
