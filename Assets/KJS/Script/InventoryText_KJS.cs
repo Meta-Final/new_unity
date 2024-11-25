@@ -12,7 +12,6 @@ public class InventoryText_KJS : MonoBehaviour
     public GameObject prefabfactory;                         // 버튼 프리팹
     public Transform inventoryPanel;                         // 버튼을 배치할 부모
     public GameObject MagCanvas;                             // 상세 정보를 표시할 캔버스
-    public Button btn_Exit;                                  // 닫기 버튼
 
     private LoadMgr_KJS loadManager;                         // 외부에서 데이터를 로드할 매니저
 
@@ -34,6 +33,24 @@ public class InventoryText_KJS : MonoBehaviour
         else
         {
             Debug.LogError("EditorManager 오브젝트를 찾을 수 없습니다.");
+        }
+        // MagCanvas를 MagazineView 2의 자식 중에서 Tool 2로 할당
+        Transform magazineView = GameObject.Find("MagazineView 2")?.transform;
+        if (magazineView != null)
+        {
+            Transform tool2 = magazineView.Find("Tool 2");
+            if (tool2 != null)
+            {
+                MagCanvas = tool2.gameObject;
+            }
+            else
+            {
+                Debug.LogError("MagazineView 2의 자식 오브젝트 중 Tool 2를 찾을 수 없습니다.");
+            }
+        }
+        else
+        {
+            Debug.LogError("MagazineView 2 오브젝트를 찾을 수 없습니다.");
         }
 
         // 초기화 작업
@@ -138,8 +155,18 @@ public class InventoryText_KJS : MonoBehaviour
 
     public void OnClickMagContent(string postId)
     {
+        // Canvas_Inventory의 첫 번째 자식을 비활성화
+        GameObject inventoryUI = GameObject.Find("Canvas_Inventory").transform.GetChild(0).gameObject;
+        if (inventoryUI != null)
+        {
+            inventoryUI.SetActive(false);
+        }
+
         // 상세 보기 UI 활성화
-        MagCanvas.SetActive(true);
+        if (MagCanvas != null)
+        {
+            MagCanvas.SetActive(true);
+        }
 
         // LoadMgr_KJS 매니저를 통해 해당 postId의 데이터를 로드
         if (loadManager != null)

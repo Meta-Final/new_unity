@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using ReqRes;
-using UnityEngine.Networking;
 
 public class AiChatMgr_KJS : MonoBehaviour
 {
@@ -24,6 +23,9 @@ public class AiChatMgr_KJS : MonoBehaviour
     private float lastSoundPlayTime = 0f; // 마지막으로 재생된 시간
     private float typingSoundDelay = 0.5f; // 타이핑 사운드 재생 간격 (초)
     private Coroutine typeTextCoroutine;
+
+    public Button specialActionButton;    // 특정 텍스트에 따라 활성화할 버튼
+    private bool activateButtonAfterTyping = false; // 메시지 출력 후 버튼 활성화 여부
 
     private void Awake()
     {
@@ -79,6 +81,11 @@ public class AiChatMgr_KJS : MonoBehaviour
             Debug.LogWarning("Extra UI가 설정되지 않았습니다.");
         }
 
+        if (specialActionButton != null)
+        {
+            specialActionButton.gameObject.SetActive(false); // 처음엔 버튼 비활성화
+        }
+
         sendButton.onClick.AddListener(OnSendButtonClicked);
     }
 
@@ -97,30 +104,20 @@ public class AiChatMgr_KJS : MonoBehaviour
 
         if (!string.IsNullOrEmpty(userMessage))
         {
-            if (userMessage == "오브젝트 만들어줘")
-            {
-                if (typeTextCoroutine != null)
-                {
-                    StopCoroutine(typeTextCoroutine);
-                }
+            // AI API 호출
+            apiManager.LLM(userMessage);
 
-                string responseMessage = "알겠다 삐약! 지금부터 만들겠다 삐약!";
-                typeTextCoroutine = StartCoroutine(TypeText(responseMessage, () =>
-                {
-                    StartCoroutine(ShowExtraUIWithDelay(1f, 9f));
-                    CreateNewGameObject();
-                }));
-            }
-            else
+            // 특정 메시지에 따라 버튼 활성화 예약
+            if (userMessage.Contains("오브젝트 만들고 싶어"))
             {
-                // AI API 호출
-                apiManager.LLM(userMessage);
+                activateButtonAfterTyping = true;
             }
 
             // 입력 필드 초기화
             userInputField.text = "";
         }
     }
+
     public void UpdateChatResponse(string responseText)
     {
         if (typeTextCoroutine != null)
@@ -128,8 +125,24 @@ public class AiChatMgr_KJS : MonoBehaviour
             StopCoroutine(typeTextCoroutine);
         }
 
-        // 응답 텍스트를 출력
-        typeTextCoroutine = StartCoroutine(TypeText(responseText, null));
+        // 응답 텍스트를 출력한 후 버튼 활성화 여부를 확인
+        typeTextCoroutine = StartCoroutine(TypeText(responseText, () =>
+        {
+            if (activateButtonAfterTyping)
+            {
+                ActivateSpecialButton();
+                activateButtonAfterTyping = false; // 상태 초기화
+            }
+        }));
+    }
+
+    private void ActivateSpecialButton()
+    {
+        if (specialActionButton != null)
+        {
+            specialActionButton.gameObject.SetActive(true);
+            Debug.Log("특별한 버튼이 활성화되었습니다.");
+        }
     }
 
     private IEnumerator ShowExtraUIWithDelay(float delayBeforeShow, float duration)
@@ -142,14 +155,6 @@ public class AiChatMgr_KJS : MonoBehaviour
             yield return new WaitForSeconds(duration);
             extraUI.SetActive(false);
         }
-    }
-
-    private void CreateNewGameObject()
-    {
-        // 새로운 게임 오브젝트 생성
-        GameObject newObject = new GameObject("NewGameObject");
-        newObject.transform.position = Vector3.zero;
-        Debug.Log("새로운 오브젝트가 생성되었습니다: " + newObject.name);
     }
 
     private IEnumerator TypeText(string text, System.Action onComplete)

@@ -1,202 +1,67 @@
 using UnityEngine;
 using TMPro;
-using System.Collections;
+using UnityEngine.UI;
 
 public class Btn_TextChanger_KJS : MonoBehaviour
 {
-    public TMP_Text targetText; // TMP_Text 컴포넌트 참조
+    // 4개의 버튼 (비활성화 상태로 시작)
+    public Button[] targetButtons;
 
-    // 버튼 1, 2, 3, 4에 출력할 텍스트를 각각 설정
-    public string textForButton1;
-    public string textForButton2;
-    public string textForButton3;
-    public string textForButton4; // 버튼 4용 텍스트
+    // 각 버튼이 활성화되는 기준 텍스트 (텍스트 입력값과 매칭)
+    public string[] activationTexts;
 
-    public GameObject uiToEnableForButton1; // 버튼 1에서 활성화할 UI
-    public GameObject uiToEnableForButton2; // 버튼 2에서 활성화할 UI
-    public GameObject uiToEnableAfterButton3; // 버튼 3의 코루틴이 끝난 후 활성화할 UI
-    public GameObject uiToEnableForButton4; // 버튼 4에서 활성화할 UI
+    // ChatInputField와 입력 버튼
+    public TMP_InputField chatInputField;
+    public Button inputButton;
 
-    public float typingSpeed = 0.1f; // 텍스트가 출력되는 속도 (초)
-    public float delayAfterButton3 = 0.5f; // 버튼 3 이후 UI 활성화 딜레이 (초)
-
-    public AudioClip bgmClip; // 코루틴 동안 재생할 오디오 클립
-    private GameObject bgmObject; // PlayClipAtPoint로 생성된 임시 오디오 객체
-
-    private Coroutine typingCoroutine; // 현재 실행 중인 코루틴을 추적
-
-    public GameObject loadingUI; // "Loading" 태그를 가진 UI
-    private bool allowCheckMessage = true; // CheckAndSetCompleteMessage 실행 여부 플래그
-
-    // 랜덤 출력 텍스트 목록
-    private readonly string[] randomTexts = {
-        "무슨일이야 삐약!",
-        "심심해 삐약!",
-        "무슨 기사를 적어볼까? 삐약!",
-        "많은 기사를 서로 교환하자 삐약!"
-    };
-
-    private void Update()
+    private void Start()
     {
-        // Loading UI가 활성화되었는지 확인
-        if (allowCheckMessage && loadingUI != null && loadingUI.activeSelf)
+        // 입력 버튼에 클릭 메서드 연결
+        if (inputButton != null)
         {
-            CheckAndSetCompleteMessage(loadingUI); // "Loading" UI 활성화 상태 확인 및 메시지 출력
-        }
-    }
-
-    private void OnEnable()
-    {
-        StartTyping(GetRandomText(), false); // 활성화될 때 랜덤 텍스트를 한 글자씩 출력
-    }
-
-    private void OnDisable()
-    {
-        StopAllCoroutines(); // 모든 코루틴 중지
-        StopBGM(); // 스크립트가 비활성화될 때 BGM 정지
-    }
-
-    // 랜덤으로 텍스트 반환
-    private string GetRandomText()
-    {
-        int randomIndex = Random.Range(0, randomTexts.Length); // 랜덤 인덱스 생성
-        return randomTexts[randomIndex]; // 랜덤 텍스트 반환
-    }
-
-    // 버튼 1에서 호출될 메서드
-    public void ChangeTextToButton1Text()
-    {
-        allowCheckMessage = false; // CheckAndSetCompleteMessage 실행 금지
-        StartTyping(textForButton1, false); // 버튼 1은 UI를 비활성화하지 않음
-        if (uiToEnableForButton1 != null)
-        {
-            uiToEnableForButton1.SetActive(true); // 버튼 1의 UI 활성화
-        }
-        Invoke(nameof(EnableCheckMessage), 0.1f); // 일정 시간 후 CheckAndSetCompleteMessage 허용
-    }
-
-    // 버튼 2에서 호출될 메서드
-    public void ChangeTextToButton2Text()
-    {
-        allowCheckMessage = false; // CheckAndSetCompleteMessage 실행 금지
-        StartTyping(textForButton2, false); // 버튼 2는 UI를 비활성화하지 않음
-        if (uiToEnableForButton2 != null)
-        {
-            uiToEnableForButton2.SetActive(true); // 버튼 2의 UI 활성화
-        }
-        Invoke(nameof(EnableCheckMessage), 0.1f); // 일정 시간 후 CheckAndSetCompleteMessage 허용
-    }
-
-    // 버튼 3에서 호출될 메서드
-    public void ChangeTextToButton3Text()
-    {
-        allowCheckMessage = false; // CheckAndSetCompleteMessage 실행 금지
-        StartTyping(textForButton3, true); // 버튼 3은 UI를 비활성화함
-        Invoke(nameof(EnableCheckMessage), 0.1f); // 일정 시간 후 CheckAndSetCompleteMessage 허용
-    }
-
-    // 버튼 4에서 호출될 메서드
-    public void ChangeTextToButton4Text()
-    {
-        allowCheckMessage = false; // CheckAndSetCompleteMessage 실행 금지
-        StartTyping(textForButton4, false); // 버튼 4는 UI를 비활성화하지 않음
-        if (uiToEnableForButton4 != null)
-        {
-            uiToEnableForButton4.SetActive(true); // 버튼 4의 UI 활성화
-        }
-        Invoke(nameof(EnableCheckMessage), 0.1f); // 일정 시간 후 CheckAndSetCompleteMessage 허용
-    }
-
-    // 텍스트 출력 시작 (기존 코루틴 중단 후 새로운 코루틴 실행)
-    private void StartTyping(string textToDisplay, bool deactivateUIAfterTyping)
-    {
-        if (typingCoroutine != null)
-        {
-            StopCoroutine(typingCoroutine); // 기존 코루틴이 있으면 중지
-            StopBGM(); // 기존 코루틴 중단 시 BGM도 정지
+            inputButton.onClick.AddListener(OnInputButtonClick);
         }
 
-        // 텍스트가 비어있는 경우 BGM 실행 및 코루틴 실행 방지
-        if (string.IsNullOrEmpty(textToDisplay))
+        // 모든 버튼을 초기 상태에서 비활성화
+        foreach (var button in targetButtons)
         {
-            targetText.text = "";
-            return;
-        }
-
-        typingCoroutine = StartCoroutine(TypeTextCoroutine(textToDisplay, deactivateUIAfterTyping));
-    }
-
-    // 코루틴으로 텍스트를 한 글자씩 출력
-    private IEnumerator TypeTextCoroutine(string textToDisplay, bool deactivateUIAfterTyping)
-    {
-        // BGM 재생 시작 (bgmClip이 설정되어 있으면)
-        if (bgmClip != null)
-        {
-            bgmObject = PlayBGM(bgmClip);
-        }
-
-        targetText.text = ""; // 기존 텍스트 초기화
-
-        foreach (char letter in textToDisplay)
-        {
-            targetText.text += letter; // 한 글자씩 추가
-            yield return new WaitForSeconds(typingSpeed); // 설정된 속도로 대기
-        }
-
-        typingCoroutine = null; // 코루틴 완료 후 초기화
-
-        // BGM 정지
-        StopBGM();
-
-        // 버튼 3에 의한 호출이고, 특정 UI가 설정되어 있다면 활성화 (0.5초 딜레이 추가)
-        if (deactivateUIAfterTyping)
-        {
-            if (uiToEnableAfterButton3 != null)
+            if (button != null)
             {
-                yield return new WaitForSeconds(delayAfterButton3); // 0.5초 대기
-                uiToEnableAfterButton3.SetActive(true); // 특정 UI 활성화
+                button.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    // 입력 버튼 클릭 시 실행되는 메서드
+    private void OnInputButtonClick()
+    {
+        if (chatInputField != null && !string.IsNullOrEmpty(chatInputField.text))
+        {
+            string inputText = chatInputField.text.Trim(); // 공백 제거
+
+            // 모든 버튼 비활성화
+            foreach (var button in targetButtons)
+            {
+                if (button != null)
+                {
+                    button.gameObject.SetActive(false);
+                }
             }
 
-            // 이 스크립트가 포함된 UI 비활성화
-            gameObject.SetActive(false);
+            // 입력된 텍스트와 매칭되는 버튼만 활성화
+            for (int i = 0; i < activationTexts.Length; i++)
+            {
+                if (inputText.Equals(activationTexts[i], System.StringComparison.OrdinalIgnoreCase) && i < targetButtons.Length)
+                {
+                    targetButtons[i].gameObject.SetActive(true); // 버튼 활성화
+                    Debug.Log($"버튼 {i + 1} 활성화됨: {activationTexts[i]}"); // 디버그 로그 출력
+                    break; // 하나의 버튼만 활성화
+                }
+            }
         }
-    }
-
-    // Play BGM using PlayClipAtPoint
-    private GameObject PlayBGM(AudioClip clip)
-    {
-        GameObject audioObject = new GameObject("BGM_Audio"); // 임시 오디오 객체 생성
-        AudioSource audioSource = audioObject.AddComponent<AudioSource>();
-        audioSource.clip = clip;
-        audioSource.loop = true; // BGM이 반복되도록 설정
-        audioSource.playOnAwake = false;
-        audioSource.Play();
-
-        return audioObject; // 오디오 객체 반환
-    }
-
-    // Stop BGM and destroy the audio object
-    private void StopBGM()
-    {
-        if (bgmObject != null)
+        else
         {
-            Destroy(bgmObject); // 임시 오디오 객체 제거
-            bgmObject = null;
+            Debug.LogWarning("ChatInputField가 비어있거나 유효하지 않습니다.");
         }
-    }
-
-    // 특정 UI 활성화 여부를 확인하고 텍스트 변경
-    private void CheckAndSetCompleteMessage(GameObject uiObject)
-    {
-        if (uiObject.activeSelf)
-        {
-            targetText.text = "완성되었다 삐약!"; // 특정 UI가 활성화된 경우 텍스트 변경
-        }
-    }
-
-    // 일정 시간 후 CheckAndSetCompleteMessage 실행 허용
-    private void EnableCheckMessage()
-    {
-        allowCheckMessage = true; // CheckAndSetCompleteMessage 실행 허용
     }
 }
