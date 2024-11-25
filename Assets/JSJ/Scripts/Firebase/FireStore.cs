@@ -26,11 +26,12 @@ public class FireStore : MonoBehaviour
 
     FirebaseFirestore store;
 
-    public UserInfo userInfo;
+    public UserInfo userInfo = new UserInfo();
 
     private void Awake()
     {
         instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     void Start()
@@ -85,10 +86,10 @@ public class FireStore : MonoBehaviour
             // 불러온 정보를 loadInfo 변수에 저장
             UserInfo loadInfo = task.Result.ConvertTo<UserInfo>();
 
-            string userId = loadInfo.userId;
-            string userNickName = loadInfo.nickName;
+            userInfo = loadInfo;
 
-            SaveUserInfo(userId, userNickName);
+
+            SaveUserInfo(userInfo.userId, userInfo.nickName);
 
             // 불러온 정보를 전달
             MetaConnectionMgr.instance.JoinLobby(loadInfo);
