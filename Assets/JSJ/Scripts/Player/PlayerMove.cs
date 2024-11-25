@@ -20,6 +20,9 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     float yPos;
     int jumpCurrentCount;
 
+    Vector3 lastPosition;   // 추락 전 플레이어 마지막 위치
+    float fallHeight = -10f;
+
     float moveState;
     float currentSpeed;
     bool isRunning = false;
@@ -34,6 +37,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     private bool isRotatingToHelper = false; // Helper 방향 회전 활성화 플래그
     private Transform helperTarget; // Helper 오브젝트의 Transform
 
+
     void Start()
     {
         cc = GetComponent<CharacterController>();
@@ -41,7 +45,11 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 
         // 해당 캐릭터의 닉네임 설정
         playerNickName.text = photonView.Owner.NickName;
+
+        // 초기 위치 설정
+        lastPosition = transform.position;
     }
+
 
     void Update()
     {
@@ -57,11 +65,20 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             {
                 Moving(); // 일반 이동 처리
             }
+
+            // 추락 감지 및 리스폰 처리
+            if (transform.position.y < fallHeight)
+            {
+                // 리스폰
+                PlayerRespawn();
+            }
         }
 
         canvasNickName.transform.rotation = Quaternion.LookRotation(canvasNickName.transform.position - Camera.main.transform.position);
     }
 
+
+    // -------------------------------------------------------------------------------------------------------------------------------------- [ Player Move ]
     // 플레이어 이동 관련 함수
     public void Moving()
     {
@@ -115,13 +132,18 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         // 중력 적용
         yPos += Physics.gravity.y * Time.deltaTime;
 
+
         // 바닥에 닿았을 때
         if (cc.collisionFlags == CollisionFlags.CollidedBelow)
         {
             yPos = 0;
             jumpCurrentCount = 0;
+
+            // 바닥에 닿으면 마지막 위치를 갱신
+            lastPosition = transform.position;
         }
 
+        // 채팅 중이 아니라면,
         if (!ChatManager.instance.IsChatting())
         {
             // 점프
@@ -136,6 +158,16 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 
         cc.Move(dir * currentSpeed * Time.deltaTime);
     }
+
+    // -------------------------------------------------------------------------------------------------------------------------------------- [ Player Respawn ]
+    // Player 리스폰 함수
+    public void PlayerRespawn()
+    {
+        transform.position = lastPosition;
+        yPos = 0;
+        jumpCurrentCount = 0;
+    }
+
 
 
     // `Moving` 기능 활성화/비활성화
@@ -192,6 +224,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     }
 
 
+    // -------------------------------------------------------------------------------------------------------------------------------------- [ Player 동기화 ]
     // 플레이어 이동 / 애니메이션 동기화
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {

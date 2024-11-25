@@ -234,6 +234,7 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
         }
     }
 
+    // 닉네임 위치 동기화
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
