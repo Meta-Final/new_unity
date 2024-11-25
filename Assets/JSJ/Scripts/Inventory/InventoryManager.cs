@@ -117,7 +117,7 @@ public class InventoryManager : MonoBehaviour
                 string formattedDate = fileDate.ToString("MM월/dd일");
 
                 // 스크린샷 표시
-                inventoryUI.DisplayScreenshot(screenshotPath);
+                inventoryUI.RPC_DisplayScreenshot(screenshotPath);
 
                 // 버튼 위에 날짜 표기 (UI 처리)
                 Transform slotButton = inventoryUI.slot.GetChild(index);

@@ -109,10 +109,17 @@ public class InventoryUI : MonoBehaviourPun
     {
         selectIndex = index;
 
-        InventoryManager.instance.ShowScreenshot(selectIndex);
+        string screenshotPath = InventoryManager.instance.GetScreenshotPath(selectIndex);
 
-        btn_Delete.interactable = true;
-        btn_PostIt.interactable = true;
+        if (!string.IsNullOrEmpty(screenshotPath))
+        {
+            // RPC로 모든 클라이언트에 이미지 로드를 요청
+            photonView.RPC("RPC_DisplayScreenshot", RpcTarget.All, screenshotPath);
+
+            // UI 버튼 상태 업데이트
+            btn_Delete.interactable = true;
+            btn_PostIt.interactable = true;
+        }
 
         btn_Delete.onClick.AddListener(() => OnSlotDeleteClick(selectIndex));
 
@@ -152,9 +159,9 @@ public class InventoryUI : MonoBehaviourPun
         photonView.RPC("DisplayScreenshot", RpcTarget.All);
     }
     [PunRPC]
-    // 이미지 로드
-    public void DisplayScreenshot(string path)
+    public void RPC_DisplayScreenshot(string path)
     {
+        // Coroutine으로 이미지 로드
         StartCoroutine(LoadImage(path));
     }
 
@@ -169,6 +176,8 @@ public class InventoryUI : MonoBehaviourPun
             Texture2D texture = DownloadHandlerTexture.GetContent(request);
             img_Preview.texture = texture;
             selectScreenshot = texture;
+
+            ShowLargeImage(texture);
         }
         else
         {
@@ -241,16 +250,19 @@ public class InventoryUI : MonoBehaviourPun
 
         return noticePos.position + new Vector3(xOffset, yOffset, zOffset);
     }
-    private void ShowLargeImage(Texture2D screenshot)
+    [PunRPC]
+    public void ShowLargeImage(Texture2D screenshot)
     {
-        // 큰 이미지 텍스처 설정
+        // 큰 이미지 UI 패널에 텍스처 설정
         largeImagePreview.texture = screenshot;
         largeImagePreviewPanel.SetActive(true);
     }
 
     // 큰 이미지 닫기
+    [PunRPC]
     public void HideLargeImage()
     {
+        // 큰 이미지 UI 패널 비활성화
         largeImagePreviewPanel.SetActive(false);
     }
 }
