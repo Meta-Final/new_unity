@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using TMPro;
+using System.Net.Sockets;
 
 public class PlayerMove : MonoBehaviourPun, IPunObservable
 {
@@ -44,37 +45,21 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         cc = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
 
-        if (photonView.IsMine)
-        {
-            if (canvasPlayerNickName != null) return;
+       
+        canvasPlayerNickName = transform.GetChild(0).gameObject;
+        playerNickName = canvasPlayerNickName.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
+        // 플레이어 닉네임 부여
+        playerNickName.text = photonView.Owner.NickName;
 
-            // 닉네임 오브젝트 생성
-            canvasPlayerNickName = PhotonNetwork.Instantiate("Canvas_PlayerNickName", transform.position, Quaternion.identity);
-            playerNickName = canvasPlayerNickName.GetComponentInChildren<TMP_Text>();
-
-            // 플레이어 닉네임 부여
-            string nick = photonView.Owner.NickName;
-            playerNickName.text = nick;
-
-            photonView.RPC("ShowNickName", RpcTarget.All, nick);
-        }
-        
         // 초기 위치 설정
         lastPosition = transform.position;
     }
 
-    [PunRPC]
-    void ShowNickName(string nick)
-    {
-        playerNickName.text = nick;
-    }
+   
 
     void Update()
     {
         if (!photonView.IsMine) return;
-
-        // 플레이어 머리 위에 닉네임을 고정
-        canvasPlayerNickName.transform.position = nickNamePos.position;
 
         // 닉네임을 카메라를 향해 회전
         canvasPlayerNickName.transform.rotation = Quaternion.LookRotation(canvasPlayerNickName.transform.position - Camera.main.transform.position);
