@@ -34,25 +34,46 @@ public class InventoryUI : MonoBehaviourPun
 
     public GameObject Colorbtn;
 
+    public GameObject canvasLarge;
     
     private void Start()
     {
-        // 지금 'Meta_ScrapBook_Scene'이라면, 액자를 찾아라.
+        // 지금 'Meta_ScrapBook_Scene'이라면, 
         if (SceneManager.GetActiveScene().name == "Meta_ScrapBook_Scene")
         {
+            // 액자를 찾아라.
             noticePos = GameObject.Find("noticepos").transform;
+
+            // 오브젝트 할당
+            canvasLarge = GameObject.Find("Canvas_large");
+            largeImagePreviewPanel = canvasLarge.transform.GetChild(0).gameObject;
+            largeImagePreview = largeImagePreviewPanel.transform.GetChild(0).GetComponent<RawImage>();
+            closeButton = largeImagePreviewPanel.transform.GetChild(1).GetComponent<Button>();
         }
         else
         {
+            // 모든 오브젝트 null
             noticePos = null;
+            canvasLarge = null;
+            largeImagePreviewPanel = null;
+            largeImagePreview = null;
+            closeButton = null;
         }
 
         btn_Delete.interactable = false;
         btn_PostIt.interactable = false;
 
-        largeImagePreviewPanel.SetActive(false);
+        if (largeImagePreviewPanel != null)
+        {
+            largeImagePreviewPanel.SetActive(false);
+        }
+        
         btn_PostIt.onClick.AddListener(() => OnPostitButtionClick());
-        closeButton.onClick.AddListener(HideLargeImage);
+
+        if (closeButton != null)
+        {
+            closeButton.onClick.AddListener(HideLargeImage);
+        }
     }
 
     // 인벤토리 UI 업데이트
