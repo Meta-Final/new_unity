@@ -59,7 +59,6 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         // 닉네임을 카메라를 향해 회전
         canvasPlayerNickName.transform.rotation = Quaternion.LookRotation(canvasPlayerNickName.transform.position - Camera.main.transform.position);
 
-
         // Helper 방향으로 회전 중이라면
         if (isRotatingToHelper && helperTarget != null)
         {
@@ -74,7 +73,6 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
                 Moving(); 
             }
         }
-
 
         // 플레이어가 달리기 모드라면,
         if (isRunning)
@@ -94,7 +92,6 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             // Player Run Animation
             animator.SetBool("isRunning", false);
         }
-
 
         // 추락 감지 및 리스폰 처리
         if (transform.position.y < fallHeight)
