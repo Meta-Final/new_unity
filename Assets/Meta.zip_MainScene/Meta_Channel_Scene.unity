@@ -794,51 +794,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding: {x: -8, y: -5, z: -8, w: -5}
   m_Softness: {x: 0, y: 0}
---- !u!1 &585005550
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 585005552}
-  - component: {fileID: 585005551}
-  m_Layer: 0
-  m_Name: ChannelBtnMgr
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &585005551
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 585005550}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cccc4b4141076e541baccaf8ea75d230, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tool2: {fileID: 615890976400057616}
---- !u!4 &585005552
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 585005550}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &595958194
 GameObject:
   m_ObjectHideFlags: 0
@@ -1084,7 +1039,7 @@ MonoBehaviour:
   content: {fileID: 775600751}
   MagCanvas: {fileID: 4601572110056652392}
   btn_Pos: {fileID: 6261511625773543040}
-  btn_Exit: {fileID: 0}
+  btn_Exit: {fileID: 653075059655080269}
 --- !u!4 &880828603
 Transform:
   m_ObjectHideFlags: 0
@@ -3941,9 +3896,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 585005551}
-        m_TargetAssemblyTypeName: ChannelBtnMgr, Assembly-CSharp
-        m_MethodName: OnClickXTool2
+      - m_Target: {fileID: 880828602}
+        m_TargetAssemblyTypeName: PostMgr, Assembly-CSharp
+        m_MethodName: OnClickExit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8938,7 +8893,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1150097200765339419}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.5000002
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -13311,4 +13266,3 @@ SceneRoots:
   - {fileID: 5584938891666463244}
   - {fileID: 241649377}
   - {fileID: 66668416}
-  - {fileID: 585005552}
