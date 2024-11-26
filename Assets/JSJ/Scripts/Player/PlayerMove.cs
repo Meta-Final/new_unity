@@ -28,7 +28,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     Vector3 lastPosition;   // 추락 전 플레이어 마지막 위치
     float fallHeight = -10f;
 
-    float moveState;
+    float moveState = 0;
     float currentSpeed;
     bool isRunning = false;
 
@@ -242,8 +242,9 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             moveState = (float)stream.ReceiveNext();
             isRunning = (bool)stream.ReceiveNext();
 
-            animator.SetFloat("Moving", moveState);
-            animator.SetBool("Running", isRunning);
         }
+
+        animator.SetFloat("Moving", moveState);
+        animator.SetBool("Running", isRunning);
     }
 }
