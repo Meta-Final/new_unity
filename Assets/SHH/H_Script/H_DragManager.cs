@@ -17,7 +17,6 @@ public class H_DragManager : MonoBehaviour
     public bool isColliding = false;
 
     public GameObject currentPostIt;
-    
 
     private void Awake()
     {
@@ -26,21 +25,20 @@ public class H_DragManager : MonoBehaviour
     }
     void Start()
     {
-        
+
     }
 
-    // Update is called once per frame
     void Update()
     {
 
         OnMouseButtonDown();
-        
+
         if (Input.GetMouseButton(0))
         {
             OnMouseDragging();
         }
-        
-        if(Input.GetMouseButtonUp(0))
+
+        if (Input.GetMouseButtonUp(0))
         {
             OnMouseButtonUp();
         }
@@ -48,10 +46,9 @@ public class H_DragManager : MonoBehaviour
     }
     private void OnMouseButtonDown()
     {
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
-            isDragging = true;  
-            //print("제발!");
+            isDragging = true;
         }
     }
     private void OnMouseDragging()
@@ -67,7 +64,7 @@ public class H_DragManager : MonoBehaviour
                 targetPos.z = hitInfo.transform.position.z;
                 hitInfo.transform.position = targetPos;
             }
-          
+
         }
 
     }
@@ -75,30 +72,27 @@ public class H_DragManager : MonoBehaviour
     private void OnMouseButtonUp()
     {
         isDragging = false;
+
+        // 클릭된 포스트잇 확인
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hitInfo, float.MaxValue, layermask))
+        {
+            GameObject clickedPostIt = hitInfo.transform.gameObject;
+
+            // 포스트잇에 담긴 이미지를 UI로 전달
+            if (clickedPostIt.GetComponent<H_MergePostIt>() != null)
+            {
+                Texture postItTexture = clickedPostIt.GetComponent<H_MergePostIt>().image;
+
+                // H_NewFolder의 UI에 이미지 표시
+                if (H_NewFolder.inst != null)
+                {
+                    H_NewFolder.inst.texs.Add(postItTexture);
+                    H_NewFolder.inst.MergeContentView();
+                }
+            }
+
+
+        }
     }
-
-
-    //public void SetFolder()
-    //{
-    //    if(postIts.Count >= 2)
-    //    {
-    //        GameObject go = Instantiate(postit, transform.position, Quaternion.identity, noticepos);
-    //        go.transform.localEulerAngles = new Vector3(-180, -180, 0);
-    //        for (int i = 0; i < postIts.Count; i++)
-    //        {
-    //            texs.Add(postIts[i].GetComponent<H_MergePostIt>().image);
-    //            texs[i] = go.GetComponent<H_NewFolder>().texs[i];
-
-    //            Destroy(postIts[i]);
-    //            postIts.RemoveAt(i);
-    //            texs.RemoveAt(i);
-    //        }
-    //    }
-    //}
-
-
-    //public void GetGameObjs(GameObject obj)
-    //{
-    //    postIts.Add(obj);
-    //}
 }
