@@ -8271,11 +8271,11 @@ RectTransform:
   - {fileID: 1417851651}
   m_Father: {fileID: 1761407091}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 100, y: 50}
-  m_SizeDelta: {x: 1344, y: 150}
-  m_Pivot: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 119.265}
+  m_SizeDelta: {x: 1500, y: 159.7}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &199333061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8289,14 +8289,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 0}
+  m_Texture: {fileID: 2800000, guid: df845f1b1122f644ab4fbfbd3b3c763f, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -14841,10 +14841,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  nowMakePicket: {fileID: 0}
   panelLinkNews: {fileID: 479940986516446324}
   btn_Picket: {fileID: 1503351265}
   picketUIManager: {fileID: 1109771324}
-  nowMakePicket: {fileID: 0}
 --- !u!1001 &439738556
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31700,7 +31700,7 @@ GameObject:
   - component: {fileID: 855326668}
   - component: {fileID: 855326667}
   m_Layer: 5
-  m_Name: Picket_News
+  m_Name: Panel_Info
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42791,6 +42791,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  playerPrefabPos: {fileID: 0}
   currentPicket: {fileID: 0}
   selectPicket: {fileID: 0}
   panelInventory: {fileID: 0}
@@ -42799,10 +42800,10 @@ MonoBehaviour:
   btn_Yes: {fileID: 6003797384274903848}
   btn_No: {fileID: 4161288318596247638}
   btn_X: {fileID: 1515515724}
-  img_News: {fileID: 1794850323}
+  img_News: {fileID: 0}
+  screenshotList: []
   isShowPicketUI: 0
   drawWithMouse: {fileID: 39936043}
-  screenshotList: []
 --- !u!1001 &1110346814
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -79936,8 +79937,8 @@ RectTransform:
   - {fileID: 479940985940139427}
   - {fileID: 479940985606030656}
   - {fileID: 479940985876993574}
-  - {fileID: 4161288318596247639}
   - {fileID: 6003797384274903847}
+  - {fileID: 4161288318596247639}
   m_Father: {fileID: 479940986516446325}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}

@@ -885,7 +885,6 @@ Transform:
   - {fileID: 6973955556725842232}
   - {fileID: 606089985403399540}
   - {fileID: 9014636676746631835}
-  - {fileID: 2685413306713613706}
   - {fileID: 4530129446793591311}
   - {fileID: 4956225449318295736}
   - {fileID: 6637125669380837111}
@@ -970,7 +969,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvasPlayerNickName: {fileID: 0}
   playerNickName: {fileID: 0}
-  nickNamePos: {fileID: 2685413306713613706}
   moveSpeed: 5
   runSpeed: 10
   rotSpeed: 200
@@ -2112,7 +2110,7 @@ GameObject:
   m_Layer: 0
   m_Name: bubbleParent
   m_TagString: Untagged
-  m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -4954,37 +4952,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -0.000008900749}
   m_SizeDelta: {x: 0, y: 450}
   m_Pivot: {x: 0, y: 1}
---- !u!1 &7128660330383787142
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2685413306713613706}
-  m_Layer: 16
-  m_Name: nickNamePos
-  m_TagString: Untagged
-  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2685413306713613706
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7128660330383787142}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.2, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2271046937710648571}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7154487325660896484
 GameObject:
   m_ObjectHideFlags: 0
