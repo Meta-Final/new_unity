@@ -44,12 +44,15 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         cc = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
 
-        // 닉네임 오브젝트 생성
-        canvasPlayerNickName = PhotonNetwork.Instantiate("Canvas_PlayerNickName", transform.position, Quaternion.identity);
-        playerNickName = canvasPlayerNickName.GetComponentInChildren<TMP_Text>();
+        if (photonView.IsMine)
+        {
+            // 닉네임 오브젝트 생성
+            canvasPlayerNickName = PhotonNetwork.Instantiate("Canvas_PlayerNickName", transform.position, Quaternion.identity);
+            playerNickName = canvasPlayerNickName.GetComponentInChildren<TMP_Text>();
 
-        // 플레이어 닉네임 부여
-        playerNickName.text = photonView.Owner.NickName;
+            // 플레이어 닉네임 부여
+            playerNickName.text = photonView.Owner.NickName;
+        }
         
         // 초기 위치 설정
         lastPosition = transform.position;
