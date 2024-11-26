@@ -69,7 +69,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             }
             else
             {
-                if (animator.GetFloat("Moving") > 0 && animator.GetBool("Running"))
+                if (animator != null)
                 {
                     animator.SetFloat("Moving", moveState);
                     animator.SetBool("Running", isRunning);
