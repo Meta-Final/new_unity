@@ -46,5 +46,16 @@ public class AllButtonMgr : MonoBehaviour
     {
         MetaConnectionMgr.instance.TownToFolder();
     }
+    public void QuitGame()
+    {
+        Debug.Log("Game is exiting...");
+        Application.Quit();
+
+        // Note: Application.Quit() will not work in the Unity Editor.
+        // To test it in the Editor, you can stop play mode:
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
+    }
 }
 
