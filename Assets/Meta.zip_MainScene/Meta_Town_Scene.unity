@@ -35536,6 +35536,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Picket
       objectReference: {fileID: 0}
+    - target: {fileID: 4675653648790712286, guid: 8b7234341e02f064c8a22e3d57c439c1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6293355992462656177, guid: 8b7234341e02f064c8a22e3d57c439c1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -73528,7 +73533,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 59.99994, y: 40.000336}
+  m_AnchoredPosition: {x: 60, y: 40.000366}
   m_SizeDelta: {x: 600, y: 50}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1973246904
@@ -78687,7 +78692,6 @@ MonoBehaviour:
   inputChat: {fileID: 1973246904}
   chatBubble: {fileID: 4177466516624905218, guid: 622cd9c63565dd9478246eec28b801a6,
     type: 3}
-  bubblePos: {fileID: 0}
 --- !u!1001 &2140632876
 PrefabInstance:
   m_ObjectHideFlags: 0

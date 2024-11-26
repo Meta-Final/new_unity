@@ -18,22 +18,10 @@ public class ChatItem : MonoBehaviour
         chatText = GetComponent<TMP_Text>();
     }
 
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
-
     public void SetText(string s)
     {
         // 텍스트 갱신
         chatText.text = s;
-
-        chatText.ForceMeshUpdate();
 
         // 사이즈 조절 코루틴 실행
         StartCoroutine(UpdateSize());
