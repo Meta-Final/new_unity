@@ -116,7 +116,7 @@ public class ChatManager : MonoBehaviourPun
         int photonviewID = player.GetComponent<PhotonView>().ViewID;
 
         // AddChat RPC 함수 호출
-        photonView.RPC(nameof(AddChat), RpcTarget.AllBuffered, chat);
+        photonView.RPC(nameof(AddChat), RpcTarget.All, chat);
         // AddBubble RPC 함수 호출
         photonView.RPC(nameof(AddBubble), RpcTarget.AllBuffered, chat, photonviewID);
 
