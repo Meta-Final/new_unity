@@ -147,6 +147,8 @@ public class ChatManager : MonoBehaviourPun
         chatItem.SetText(chat);
         // 가져온 컴포넌트의 onAutoScroll 변수에 AutoScrollBottom 을 설정
         chatItem.onAutoScroll = AutoScrollBottom;
+
+        AutoScrollBottom();
     }
 
     // 채팅 추가 되었을 때 맨밑으로 Content 위치를 옮기는 함수
