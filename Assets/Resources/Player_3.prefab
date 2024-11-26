@@ -982,7 +982,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rayPos: {fileID: 9014636676746631835}
-  distance: 10
+  canvasNotice: {fileID: 0}
 --- !u!114 &4965084513544403975
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2240,7 +2240,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3182653899139991411}
   m_Layer: 0
-  m_Name: bubblePos
+  m_Name: bubbleParent
   m_TagString: Untagged
   m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -2255,7 +2255,7 @@ Transform:
   m_GameObject: {fileID: 2767534042212064801}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 2, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5462,6 +5462,7 @@ MonoBehaviour:
   largeImagePreview: {fileID: 0}
   closeButton: {fileID: 0}
   Colorbtn: {fileID: 1272101471096745059}
+  canvasLarge: {fileID: 0}
   matPostIt: {fileID: 2100000, guid: c62fbf7f53d914a4fba7d2b7bc8958e0, type: 2}
   postItColor: {r: 0, g: 0.072042465, b: 1, a: 1}
 --- !u!114 &9145246832684872906

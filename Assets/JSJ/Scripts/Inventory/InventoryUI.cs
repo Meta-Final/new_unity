@@ -34,25 +34,46 @@ public class InventoryUI : MonoBehaviourPun
 
     public GameObject Colorbtn;
 
+    public GameObject canvasLarge;
     
     private void Start()
     {
-        // 지금 'Meta_ScrapBook_Scene'이라면, 액자를 찾아라.
+        // 지금 'Meta_ScrapBook_Scene'이라면, 
         if (SceneManager.GetActiveScene().name == "Meta_ScrapBook_Scene")
         {
+            // 액자를 찾아라.
             noticePos = GameObject.Find("noticepos").transform;
+
+            // 오브젝트 할당
+            canvasLarge = GameObject.Find("Canvas_large");
+            largeImagePreviewPanel = canvasLarge.transform.GetChild(0).gameObject;
+            largeImagePreview = largeImagePreviewPanel.transform.GetChild(0).GetComponent<RawImage>();
+            closeButton = largeImagePreviewPanel.transform.GetChild(1).GetComponent<Button>();
         }
         else
         {
+            // 모든 오브젝트 null
             noticePos = null;
+            canvasLarge = null;
+            largeImagePreviewPanel = null;
+            largeImagePreview = null;
+            closeButton = null;
         }
 
         btn_Delete.interactable = false;
         btn_PostIt.interactable = false;
 
-        largeImagePreviewPanel.SetActive(false);
+        if (largeImagePreviewPanel != null)
+        {
+            largeImagePreviewPanel.SetActive(false);
+        }
+        
         btn_PostIt.onClick.AddListener(() => OnPostitButtionClick());
-        closeButton.onClick.AddListener(HideLargeImage);
+
+        if (closeButton != null)
+        {
+            closeButton.onClick.AddListener(HideLargeImage);
+        }
     }
 
     // 인벤토리 UI 업데이트
@@ -123,16 +144,16 @@ public class InventoryUI : MonoBehaviourPun
 
         btn_Delete.onClick.AddListener(() => OnSlotDeleteClick(selectIndex));
 
-        // PicketUIManager 객체를 안전하게 체크하고 호출
-        PicketUIManager picketUIManager = FindObjectOfType<PicketUIManager>();
-        if (picketUIManager != null)
-        {
-            picketUIManager.SetURL(index);
-        }
-        else
-        {
-            Debug.LogWarning("PicketUIManager가 씬에 존재하지 않습니다. SetURL을 호출하지 않았습니다.");
-        }
+      // PicketUIManager 객체를 안전하게 체크하고 호출
+      PicketUIManager picketUIManager = FindObjectOfType<PicketUIManager>();
+      if (picketUIManager != null)
+      {
+          picketUIManager.SetURL(index);
+      }
+      else
+      {
+          Debug.LogWarning("PicketUIManager가 씬에 존재하지 않습니다. SetURL을 호출하지 않았습니다.");
+      }
     }
     public void RPC_deletepostit()
     {
