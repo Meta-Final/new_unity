@@ -123,16 +123,16 @@ public class InventoryUI : MonoBehaviourPun
 
         btn_Delete.onClick.AddListener(() => OnSlotDeleteClick(selectIndex));
 
-        // PicketUIManager 객체를 안전하게 체크하고 호출
-        PicketUIManager picketUIManager = FindObjectOfType<PicketUIManager>();
-        if (picketUIManager != null)
-        {
-            picketUIManager.SetURL(index);
-        }
-        else
-        {
-            Debug.LogWarning("PicketUIManager가 씬에 존재하지 않습니다. SetURL을 호출하지 않았습니다.");
-        }
+      // PicketUIManager 객체를 안전하게 체크하고 호출
+      PicketUIManager picketUIManager = FindObjectOfType<PicketUIManager>();
+      if (picketUIManager != null)
+      {
+          picketUIManager.SetURL(index);
+      }
+      else
+      {
+          Debug.LogWarning("PicketUIManager가 씬에 존재하지 않습니다. SetURL을 호출하지 않았습니다.");
+      }
     }
     public void RPC_deletepostit()
     {
