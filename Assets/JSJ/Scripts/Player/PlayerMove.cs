@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using TMPro;
+using System.Net.Sockets;
 
 public class PlayerMove : MonoBehaviourPun, IPunObservable
 {
     [Header("닉네임")]
-    public GameObject canvasNickName;
+    public GameObject canvasPlayerNickName;
     public TMP_Text playerNickName;
 
     [Header("이동")]
@@ -27,7 +28,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     Vector3 lastPosition;   // 추락 전 플레이어 마지막 위치
     float fallHeight = -10f;
 
-    float moveState;
+    float moveState = 0;
     float currentSpeed;
     bool isRunning = false;
 
@@ -43,46 +44,45 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         cc = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
 
-        canvasNickName = transform.Find("Canvas_NickName").gameObject;
-        playerNickName = canvasNickName.transform.Find("Text_NickName").GetComponent<TMP_Text>();
+        canvasPlayerNickName = transform.GetChild(0).gameObject;
+        playerNickName = canvasPlayerNickName.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
 
-        photonView.RPC("SetNickName", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.NickName);
+        // 플레이어 닉네임 부여
+        playerNickName.text = photonView.Owner.NickName;
 
         // 초기 위치 설정
         lastPosition = transform.position;
     }
 
-    // 닉네임 동기화 함수
-    [PunRPC]
-    void SetNickName(string nickName)
-    {
-        playerNickName.text = nickName;
-    }
-
     void Update()
     {
-        // 내 것일 때만 컨트롤하자
-        if (photonView.IsMine)
+        // Helper 방향으로 회전 중이라면
+        if (isRotatingToHelper && helperTarget != null)
         {
-            // Helper 방향으로 회전 중이라면
-            if (isRotatingToHelper && helperTarget != null)
-            {
-                RotateToHelper(); // Helper 방향으로 회전
-            }
-            else if (canMove)
+            RotateToHelper(); // Helper 방향으로 회전
+        }
+        else if (canMove)
+        {
+            if (photonView.IsMine)
             {
                 Moving(); // 일반 이동 처리
             }
-
-            // 추락 감지 및 리스폰 처리
-            if (transform.position.y < fallHeight)
+            else
             {
-                // 리스폰
-                PlayerRespawn();
+                animator.SetFloat("Moving", moveState);
+                animator.SetBool("Running", isRunning);
             }
         }
 
-        canvasNickName.transform.rotation = Quaternion.LookRotation(canvasNickName.transform.position - Camera.main.transform.position);
+        // 추락 감지 및 리스폰 처리
+        if (transform.position.y < fallHeight)
+        {
+            // 리스폰
+            PlayerRespawn();
+        }
+
+        // 닉네임을 카메라를 향해 회전
+        canvasPlayerNickName.transform.rotation = Quaternion.LookRotation(canvasPlayerNickName.transform.position - Camera.main.transform.position);
     }
 
 
@@ -167,6 +167,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         cc.Move(dir * currentSpeed * Time.deltaTime);
     }
 
+
     // -------------------------------------------------------------------------------------------------------------------------------------- [ Player Respawn ]
     // Player 리스폰 함수
     public void PlayerRespawn()
@@ -246,8 +247,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             moveState = (float)stream.ReceiveNext();
             isRunning = (bool)stream.ReceiveNext();
 
-            animator.SetFloat("Moving", moveState);
-            animator.SetBool("Running", isRunning);
         }
+
     }
 }

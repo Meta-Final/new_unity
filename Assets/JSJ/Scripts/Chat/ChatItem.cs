@@ -18,16 +18,6 @@ public class ChatItem : MonoBehaviour
         chatText = GetComponent<TMP_Text>();
     }
 
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-        
-    }
-
     public void SetText(string s)
     {
         // 텍스트 갱신
