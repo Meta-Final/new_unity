@@ -9,6 +9,8 @@ public class RayController : MonoBehaviour
     public GameObject canvasNotice; // 알림 UI 오브젝트
     public float noticeDistance = 3f; // 알림 활성화 거리
 
+    public Transform rayPos;
+
     void Start()
     {
         // 현재 씬이 Meta_ScrapBook_Scene일 경우 Canvas를 찾음
@@ -66,6 +68,20 @@ public class RayController : MonoBehaviour
             else
             {
                 canvasNotice.SetActive(false);
+            }
+        }
+    }
+
+    public void EnterMagazine()
+    {
+        Ray ray = new Ray(rayPos.position, rayPos.forward);
+        RaycastHit hitInfo;
+
+        if (Physics.Raycast(ray, out hitInfo))
+        {
+            if (hitInfo.collider.gameObject.layer == 21)
+            {
+
             }
         }
     }

@@ -1,29 +1,35 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using UnityEngine.UI;
 
 public class MenubarMgr : MonoBehaviour
 {
-    public GameObject MenuPanel;
-    public GameObject roomMenu;
+    public GameObject roombar;
+    public Button menuButton;
+
+    // 메뉴바가 열려있는지
+    bool isMenuOpen = false;
+
     void Start()
     {
-        Transform roomMenu = MenuPanel.transform.Find("RoomBar");
-
-        if(roomMenu != null)
-        {
-            roomMenu.gameObject.SetActive(false);
-        }
+        menuButton.onClick.AddListener(OnClickMenuBar);
     }
      
-
-    void Update()
+    public void OnClickMenuBar()
     {
-        if (roomMenu != null && Input.GetKeyDown(KeyCode.Tab))
+        if (isMenuOpen)
         {
-            roomMenu.SetActive(!roomMenu.activeSelf);
+            // MenuBar 닫음
+            roombar.transform.DOLocalMove(new Vector3(-1040, 240, 0), 0.5f);
         }
+        else
+        {
+            // MenuBar 엶
+            roombar.transform.DOLocalMove(new Vector3(-860, 240, 0), 0.5f);
+        }
+
+        isMenuOpen = !isMenuOpen;
     }
-   
 }
