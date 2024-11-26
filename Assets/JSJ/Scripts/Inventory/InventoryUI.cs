@@ -198,7 +198,7 @@ public class InventoryUI : MonoBehaviourPun
             img_Preview.texture = texture;
             selectScreenshot = texture;
 
-            ShowLargeImage(texture);
+            //ShowLargeImage(texture);
         }
         else
         {
@@ -239,13 +239,9 @@ public class InventoryUI : MonoBehaviourPun
             {
                 postItImage.texture = selectScreenshot;
             }
-
-            // 드래그 스크립트 동적 추가
-            //H_DargMg dragScript = newPostIt.AddComponent<H_DargMg>();
-            //dragScript.noticePos = noticePos; // 부모 경계 전달
-
+         
             // 새 포스트잇에 클릭 리스너 추가하여 이미지를 확대함
-            Button postItButton = newPostIt.AddComponent<Button>();
+            Button postItButton = newPostIt.GetComponentInChildren<Button>();
             Texture2D currentScreenshot = selectScreenshot;
             postItButton.onClick.AddListener(() => ShowLargeImage(currentScreenshot));
 
