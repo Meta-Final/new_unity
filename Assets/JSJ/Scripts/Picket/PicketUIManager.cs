@@ -6,33 +6,37 @@ using System.IO;
 
 public class PicketUIManager : MonoBehaviour
 {
+    [Header("GameObject")]
     public GameObject player;
-    public GameObject currentPicket; // 방금 생성된 Picket Prefab
-    public GameObject selectPicket; // 현재 선택된 Picket Prefab
+    public GameObject playerPrefabPos;   // Player Charater
+    public GameObject currentPicket;   // 방금 생성된 Picket Prefab
+    public GameObject selectPicket;   // 현재 선택된 Picket Prefab
 
     [Header("Picket UI")]
-    public GameObject panelInventory; // 인벤토리 UI
-    public GameObject panelLinkNews; // Picket이랑 기사 링크 여부 Panel
-    public GameObject panelPicket; // Picket UI
+    public GameObject panelInventory;   // 인벤토리 UI
+    public GameObject panelLinkNews;   // Picket이랑 기사 링크 여부 Panel
+    public GameObject panelPicket;   // Picket UI
 
     [Header("Button")]
-    public Button btn_Yes; // 링크 'Yes'
-    public Button btn_No; // 링크 'No'
+    public Button btn_Yes;   // 링크 'Yes'
+    public Button btn_No;   // 링크 'No'
     public Button btn_X;
 
     [Header("Screenshot")]
-    public RawImage img_News; // 기사 스크린샷을 보여주는 이미지
+    public RawImage img_News;   // 기사 스크린샷을 보여주는 이미지
+
+    [Header("Inventory Data")]
+    public List<string> screenshotList; // InventoryManager에서 가져온 스크린샷 경로 리스트
 
     public bool isShowPicketUI = false;
 
     public DrawWithMouse drawWithMouse;
 
-    [Header("Inventory Data")]
-    public List<string> screenshotList; // InventoryManager에서 가져온 스크린샷 경로 리스트
 
     void Start()
     {
         player = FindObjectOfType<GameManager>().player;
+        playerPrefabPos = player.transform.GetChild(1).gameObject;
 
         if (player != null)
         {
@@ -64,10 +68,12 @@ public class PicketUIManager : MonoBehaviour
         btn_No.onClick.AddListener(OnClickNoBtn);
         btn_X.onClick.AddListener(OnClickXBtn);
 
+        // UI 비활성화
         panelInventory.SetActive(false);
         panelLinkNews.SetActive(false);
         panelPicket.SetActive(false);
     }
+
 
     void Update()
     {
@@ -75,19 +81,23 @@ public class PicketUIManager : MonoBehaviour
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;
-
-            if (Physics.Raycast(ray, out hitInfo))
+            
+            if (Physics.Raycast(ray, out hitInfo, 50, 1 << 18))
             {
-                // 만일, 기사가 링크된 피켓을 클릭했다면
-                if (hitInfo.collider.gameObject.layer == 18 && currentPicket != null)
+                print(hitInfo.collider.name);
+                // 만일, 피켓을 클릭했다면
+                if (hitInfo.collider.gameObject.layer == 18)
                 {
+                    // 클릭한 Picket 변수에 담기
                     selectPicket = hitInfo.collider.gameObject;
+
                     ShowPicketUI();
                 }
             }
         }
     }
 
+    
     public void ShowPicketUI()
     {
         isShowPicketUI = true;
@@ -140,6 +150,12 @@ public class PicketUIManager : MonoBehaviour
         }
     }
 
+    public void SetURL(int index)
+    {
+        currentPicket.GetComponent<PicketId_KJS>().SetScreenshotPath(screenshotList[index]);
+    }
+
+
     // 질문에 'Yes'버튼을 눌렀을 때
     public void OnClickYesBtn()
     {
@@ -169,6 +185,9 @@ public class PicketUIManager : MonoBehaviour
     // X 버튼을 눌렀을 때
     public void OnClickXBtn()
     {
+        // 질문 UI 비활성화
+        panelLinkNews.SetActive(false);
+
         // Picket UI 비활성화
         panelPicket.SetActive(false);
 
@@ -179,10 +198,10 @@ public class PicketUIManager : MonoBehaviour
 
         drawWithMouse.isDrawing = false;
         drawWithMouse.isAttaching = false;
+
+        // 커서 아이콘 초기화
+        drawWithMouse.ResetCursor();
     }
 
-    public void SetURL(int index)
-    {
-        currentPicket.GetComponent<PicketId_KJS>().SetScreenshotPath(screenshotList[index]);
-    }
+    
 }

@@ -14,8 +14,8 @@ public class ChatManager : MonoBehaviourPun
 
 
     [Header("채팅")]
-    public GameObject chatView;
     public GameObject chatItemFactory;   // 채팅 Prefab
+    public GameObject chatView;
     public RectTransform trChatView;
     public RectTransform trContent;
     public TMP_InputField inputChat;
