@@ -18,7 +18,6 @@ public class APIManager : MonoBehaviour
     {
         //GameObject firebase = GameObject.Find("Firebase");
         firestore = FireStore.instance;
-        print(firestore.userInfo.userId);
     }
 
 
@@ -321,12 +320,15 @@ public class APIManager : MonoBehaviour
 
     public IEnumerator PostHttpTrend(string url)
     {
-        UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
+        UnityWebRequest request = new UnityWebRequest(url, "POST");
+        request.downloadHandler = new DownloadHandlerTexture();
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-            coverDownloadTexture = ((DownloadHandlerTexture)request.downloadHandler).texture;
+            Debug.Log("Success");
+            trendDownloadTexture = ((DownloadHandlerTexture)request.downloadHandler).texture;
+
         }
         else
         {

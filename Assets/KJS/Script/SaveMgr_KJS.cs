@@ -112,6 +112,8 @@ public class SaveMgr_KJS : MonoBehaviour
 
     public TMP_InputField inputPostIdField;
     public TMP_InputField loadPostIdField;
+    private bool isUpdatingScrollbar = false;
+
 
     private void Start()
     {
@@ -276,10 +278,8 @@ public class SaveMgr_KJS : MonoBehaviour
         }
     }
 
-    public void LoadSpecificPostById()
+    public void LoadSpecificPostById(string targetPostId) // targetPostId를 직접 전달받는 방식
     {
-        string targetPostId = loadPostIdField.text;
-
         if (string.IsNullOrWhiteSpace(targetPostId))
         {
             Debug.LogError("유효한 postId를 입력하세요.");
@@ -312,7 +312,7 @@ public class SaveMgr_KJS : MonoBehaviour
                 return;
             }
 
-            // 기존 UI 요소 초기화
+            // 기존 UI 요소 초기화 (이전 데이터를 제거)
             textBoxes.ForEach(Destroy);
             imageBoxes.ForEach(Destroy);
             pages.ForEach(Destroy);
@@ -321,22 +321,29 @@ public class SaveMgr_KJS : MonoBehaviour
             imageBoxes.Clear();
             pages.Clear();
 
+            Debug.Log($"기존 UI 요소 초기화 완료. 페이지 수: {pages.Count}");
+
             // 로드한 데이터를 바탕으로 페이지와 요소 생성
             foreach (var page in targetPost.pages)
             {
+                // 페이지 생성
                 GameObject newPage = Instantiate(pagePrefab, pagesParentTransform);
-                InitializePage(newPage);
+                InitializePage(newPage); // 페이지 초기화
 
+                // 페이지에 해당하는 텍스트 박스와 이미지 박스 생성
                 foreach (var element in page.elements)
                 {
                     if (element.type == Element.ElementType.Text_Box)
                     {
+                        // 텍스트 박스 생성
                         GameObject newTextBox = Instantiate(textBoxPrefab, newPage.transform);
                         InitializeTextBox(newTextBox);
 
+                        // 텍스트 박스 위치, 크기 설정
                         newTextBox.transform.localPosition = element.position;
                         newTextBox.transform.localScale = element.scale;
 
+                        // 텍스트 박스 내용 설정
                         TMP_Text textComponent = newTextBox.GetComponentInChildren<TMP_Text>();
                         if (textComponent != null)
                         {
@@ -349,23 +356,38 @@ public class SaveMgr_KJS : MonoBehaviour
                             textComponent.fontStyle = FontStyles.Normal;
                             if (element.isUnderlined) textComponent.fontStyle |= FontStyles.Underline;
                             if (element.isStrikethrough) textComponent.fontStyle |= FontStyles.Strikethrough;
+
+                            Debug.Log($"텍스트 박스 로드 완료: {textComponent.text}");
                         }
                     }
                     else if (element.type == Element.ElementType.Image_Box)
                     {
+                        // 이미지 박스 생성
                         GameObject newImageBox = Instantiate(imageBoxPrefab, newPage.transform);
                         InitializeImageBox(newImageBox);
 
+                        // 이미지 박스 위치, 크기 설정
                         newImageBox.transform.localPosition = element.position;
                         newImageBox.transform.localScale = element.scale;
 
+                        // 이미지 데이터 설정
                         Image imageComponent = newImageBox.transform.GetChild(0).GetComponent<Image>();
                         if (imageComponent != null && element.imageData != null && element.imageData.Length > 0)
                         {
                             Texture2D texture = Element.DecodeImageFromBytes(element.imageData);
-                            imageComponent.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+                            if (texture != null)
+                            {
+                                imageComponent.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+                                Debug.Log($"이미지 박스 로드 완료: {texture.width}x{texture.height}");
+                            }
                         }
                     }
+                }
+
+                // 중복 생성 방지: 페이지를 이미 `pages` 리스트에 추가했는지 확인
+                if (!pages.Contains(newPage))
+                {
+                    pages.Add(newPage);
                 }
             }
 
@@ -481,14 +503,17 @@ public class SaveMgr_KJS : MonoBehaviour
             pageScrollbar.onValueChanged.AddListener(OnScrollbarValueChanged);
         }
     }
-
     private void OnScrollbarValueChanged(float value)
     {
-        float step = 1f / (totalPages - 1);
+        if (isUpdatingScrollbar) return; // 이벤트 루프 방지
+
+        float step = 1f / Mathf.Max(totalPages - 1, 1); // 나누기 0 방지
         int currentPage = Mathf.RoundToInt(value / step);
         float targetValue = currentPage * step;
 
-        pageScrollbar.value = targetValue;
+        isUpdatingScrollbar = true;
+        pageScrollbar.value = targetValue; // 값 업데이트
+        isUpdatingScrollbar = false;
 
         Debug.Log($"Current Page: {currentPage + 1}/{totalPages}");
     }
