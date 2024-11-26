@@ -12,12 +12,14 @@ public class ChatManager : MonoBehaviourPun
 
     public Camera mainCamera;
 
+
     [Header("채팅")]
     public GameObject chatView;
     public GameObject chatItemFactory;   // 채팅 Prefab
     public RectTransform trChatView;
     public RectTransform trContent;
     public TMP_InputField inputChat;
+
 
     [Header("말풍선")]
     public GameObject chatBubble;   // 말풍선 Prefab
@@ -77,11 +79,6 @@ public class ChatManager : MonoBehaviourPun
         }
     }
 
-    void Update()
-    {
-
-    }
-
 
     // -------------------------------------------------------------------------------------------------------------- [ OnSelect ]
     // inputChat 이 선택되었을 때 호출되는 함수
@@ -111,23 +108,21 @@ public class ChatManager : MonoBehaviourPun
         // "<collor=#ffffff> 원하는 내용 </color>"
         string nick = "<color=#" + ColorUtility.ToHtmlStringRGB(nickNameColor) + ">" + PhotonNetwork.NickName + "</color>";
         string chat = nick + " : " + s;
-
+        
         // 현재 플레이어의 PhotonView ID 를 가져옴
         int photonviewID = player.GetComponent<PhotonView>().ViewID;
-
+        
         // AddChat RPC 함수 호출
         photonView.RPC(nameof(AddChat), RpcTarget.AllBuffered, chat);
+        
         // AddBubble RPC 함수 호출
         photonView.RPC(nameof(AddBubble), RpcTarget.All, chat, photonviewID);
-
+        
         // inputChat 에 있는 내용을 초기화
         inputChat.text = "";
 
-        if (photonView.IsMine)
-        {
-            // 강제로 inputChat 을 활성화 하자
-            inputChat.ActivateInputField();
-        }
+        // 강제로 inputChat 을 활성화 하자
+        inputChat.ActivateInputField();
     }
 
 
@@ -141,12 +136,18 @@ public class ChatManager : MonoBehaviourPun
 
         // ChatItem 하나 만들자 (부모를 ChatView 의 Content 로 하자)
         GameObject go = Instantiate(chatItemFactory, trContent);
+        
         // ChatItem 컴포넌트 가져오자.
         ChatItem chatItem = go.GetComponent<ChatItem>();
+       
         // 가져온 컴포넌트의 SetText 함수 실행
         chatItem.SetText(chat);
+        
         // 가져온 컴포넌트의 onAutoScroll 변수에 AutoScrollBottom 을 설정
         chatItem.onAutoScroll = AutoScrollBottom;
+
+        // chatView 활성화
+        chatView.SetActive(true);
     }
 
     // 채팅 추가 되었을 때 맨밑으로 Content 위치를 옮기는 함수
@@ -244,7 +245,6 @@ public class ChatManager : MonoBehaviourPun
         // 3초 후에 말풍선 삭제
         StartCoroutine(DestroyBubble(5f));
     }
-
 
     // 말풍선 삭제 함수
     IEnumerator DestroyBubble(float delay)
