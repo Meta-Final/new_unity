@@ -21,7 +21,7 @@ public class ChatManager : MonoBehaviourPun
 
     [Header("말풍선")]
     public GameObject chatBubble;   // 말풍선 Prefab
-    public Transform bubbleParent;   // 말풍선 부모
+    
 
     // 현재 활성화된 말풍선
     GameObject currentBubble;
@@ -50,7 +50,6 @@ public class ChatManager : MonoBehaviourPun
     void Start()
     {
         player = FindObjectOfType<GameManager>().player;
-        bubbleParent = player.transform.Find("bubbleParent");
 
         mainCamera = Camera.main;
 
@@ -80,9 +79,7 @@ public class ChatManager : MonoBehaviourPun
 
     void Update()
     {
-       
 
-        
     }
 
 
@@ -115,10 +112,13 @@ public class ChatManager : MonoBehaviourPun
         string nick = "<color=#" + ColorUtility.ToHtmlStringRGB(nickNameColor) + ">" + PhotonNetwork.NickName + "</color>";
         string chat = nick + " : " + s;
 
+        // 현재 플레이어의 PhotonView ID 를 가져옴
+        int photonviewID = player.GetComponent<PhotonView>().ViewID;
+
         // AddChat RPC 함수 호출
         photonView.RPC(nameof(AddChat), RpcTarget.All, chat);
         // AddBubble RPC 함수 호출
-        photonView.RPC(nameof(AddBubble), RpcTarget.All, chat);
+        photonView.RPC(nameof(AddBubble), RpcTarget.All, chat, photonviewID);
 
         // inputChat 에 있는 내용을 초기화
         inputChat.text = "";
@@ -127,12 +127,11 @@ public class ChatManager : MonoBehaviourPun
         {
             // 강제로 inputChat 을 활성화 하자
             inputChat.ActivateInputField();
-            
         }
-
-
     }
 
+
+    // -------------------------------------------------------------------------------------------------------------- [ Add Chat ]
     // 채팅 추가 함수
     [PunRPC]
     void AddChat(string chat)
@@ -167,10 +166,20 @@ public class ChatManager : MonoBehaviourPun
         }
     }
 
+
+    // -------------------------------------------------------------------------------------------------------------- [ Add Bubble ]
     // 말풍선 함수
     [PunRPC]
-    void AddBubble(string chat)
+    void AddBubble(string chat, int photonviewID)
     {
+        // PhotonView ID 로 캐릭터 식별
+        PhotonView targetView = PhotonView.Find(photonviewID);
+
+        Transform targetPlayer = targetView.transform;
+
+        // 말풍선 부모 확인
+        Transform targetBubbleParent = targetPlayer.Find("bubbleParent");
+
         // 현재 활성화된 말풍선이 있다면,
         if (currentBubble != null)
         {
@@ -179,16 +188,17 @@ public class ChatManager : MonoBehaviourPun
         }
 
         // 새로운 말풍선 생성
-        currentBubble = Instantiate(chatBubble);
-        // 말풍선 부모 설정
-        currentBubble.transform.SetParent(bubbleParent, false);
+        currentBubble = Instantiate(chatBubble, targetBubbleParent, false);
+
+        // 채팅 내용 설정
+        TMP_Text chatText = currentBubble.GetComponentInChildren<TMP_Text>();
+        chatText.text = chat;
 
 
         // 플레이어 위치
-        Vector3 playerPos = player.transform.position;
+        Vector3 playerPos = targetPlayer.position;
         // 플레이어 방향
-        Vector3 forwardDirection = transform.forward;
-
+        Vector3 forwardDirection = targetPlayer.forward;
 
         // 만약, 플레이어가 앞을 바라보고 있다면
         if (Vector3.Dot(forwardDirection, Vector3.forward) > 0.9f)
@@ -207,11 +217,6 @@ public class ChatManager : MonoBehaviourPun
                 currentBubble.transform.rotation = Quaternion.LookRotation(directionToCamera);
             }
 
-            TMP_Text chatText = currentBubble.GetComponentInChildren<TMP_Text>();
-
-            // 채팅 내용 말풍선 text 에 넣기
-            chatText.text = chat;
-
             // 말풍선 text 회전
             chatText.rectTransform.localRotation = Quaternion.Euler(0, 180, 0);
         }
@@ -219,6 +224,7 @@ public class ChatManager : MonoBehaviourPun
         // 3초 후에 말풍선 삭제
         StartCoroutine(DestroyBubble(5f));
     }
+
 
     // 말풍선 삭제 함수
     IEnumerator DestroyBubble(float delay)
