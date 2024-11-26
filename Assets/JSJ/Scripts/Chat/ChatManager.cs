@@ -220,6 +220,26 @@ public class ChatManager : MonoBehaviourPun
             // 말풍선 text 회전
             chatText.rectTransform.localRotation = Quaternion.Euler(0, 180, 0);
         }
+        // 아니면 만약, 플레이어가 뒤를 바라보고 있다면
+        else if (Vector3.Dot(forwardDirection, Vector3.forward) < -0.9f)
+        {
+            Debug.Log("플레이어가 뒤를 보고 있습니다.");
+
+            Vector3 rightPos = playerPos + transform.right * 1f + new Vector3(0, 3f, 0);
+
+            // 말풍선은 플레이어의 오른쪽에 위치한다.
+            currentBubble.transform.position = rightPos;
+
+            // 카메라를 향해 말풍선 회전
+            if (mainCamera != null)
+            {
+                Vector3 directionToCamera = currentBubble.transform.position - mainCamera.transform.position;
+                currentBubble.transform.rotation = Quaternion.LookRotation(directionToCamera);
+            }
+
+            // 말풍선 text 회전
+            chatText.rectTransform.localRotation = Quaternion.Euler(0, 0, 0);
+        }
         
         // 3초 후에 말풍선 삭제
         StartCoroutine(DestroyBubble(5f));
