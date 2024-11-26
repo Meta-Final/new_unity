@@ -144,7 +144,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1c6a869b4830d1c42bedbd839da2a9ea, type: 2}
+  - {fileID: 2100000, guid: fbfdc7c53b9dcc24e8474b60fdb80119, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -262,6 +262,7 @@ GameObject:
   - component: {fileID: 1403166856176801401}
   - component: {fileID: 8766994112209109501}
   - component: {fileID: 834379311855493090}
+  - component: {fileID: 2163094981837932751}
   m_Layer: 18
   m_Name: Picket
   m_TagString: Untagged
@@ -282,6 +283,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 8005561597295848903}
   - {fileID: 8285088214027213381}
   - {fileID: 309767504400256264}
   m_Father: {fileID: 0}
@@ -327,6 +329,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 8766994112209109501}
+  - {fileID: 5750694797166587963}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -360,6 +363,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   picketId: 
   screenshotPath: 
+--- !u!114 &2163094981837932751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4675653648790712286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef5a9df7a536fc9479d244e9df13be96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  picketIdComponent: {fileID: 834379311855493090}
+  screenshotPathDebug: 
+  autoAssignTexture: {fileID: 0}
 --- !u!1 &8514185999548671843
 GameObject:
   m_ObjectHideFlags: 0
@@ -443,6 +461,112 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &8746333330028235235
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8005561597295848903}
+  - component: {fileID: 8249615919067343685}
+  - component: {fileID: 8172249490284699555}
+  - component: {fileID: 8830525978942695424}
+  m_Layer: 18
+  m_Name: PicketPicture
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8005561597295848903
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8746333330028235235}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.105405934, y: -0, z: -0, w: 0.99442935}
+  m_LocalPosition: {x: -0.053999998, y: 1.8449999, z: -0.41400003}
+  m_LocalScale: {x: 1.675767, y: 2.530228, z: 1.53108}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6293355992462656177}
+  m_LocalEulerAnglesHint: {x: 12.101, y: 0, z: 0}
+--- !u!33 &8249615919067343685
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8746333330028235235}
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &8172249490284699555
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8746333330028235235}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: fbfdc7c53b9dcc24e8474b60fdb80119, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &8830525978942695424
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8746333330028235235}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &8768890524773794047
 GameObject:
   m_ObjectHideFlags: 0
@@ -658,3 +782,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textMeshPro: {fileID: 5504575334604191575}
   picketIdComponent: {fileID: 834379311855493090}
+  screenshotPathDebug: 
