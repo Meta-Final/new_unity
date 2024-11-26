@@ -120,13 +120,17 @@ public class ChatManager : MonoBehaviourPun
         // AddBubble RPC 함수 호출
         photonView.RPC(nameof(AddBubble), RpcTarget.All, chat);
 
+        // inputChat 에 있는 내용을 초기화
+        inputChat.text = "";
+
         if (photonView.IsMine)
         {
             // 강제로 inputChat 을 활성화 하자
             inputChat.ActivateInputField();
-            // inputChat 에 있는 내용을 초기화
-            inputChat.text = "";
+            
         }
+
+
     }
 
     // 채팅 추가 함수
