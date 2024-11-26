@@ -131,6 +131,9 @@ public class ChatManager : MonoBehaviourPun
     [PunRPC]
     void AddChat(string chat)
     {
+        // chatView 활성화
+        chatView.SetActive(true);
+
         // 새로운 채팅이 추가되기 전의 Content 의 H 값을 저장
         prevContentH = trContent.sizeDelta.y;
 
@@ -145,9 +148,6 @@ public class ChatManager : MonoBehaviourPun
         
         // 가져온 컴포넌트의 onAutoScroll 변수에 AutoScrollBottom 을 설정
         chatItem.onAutoScroll = AutoScrollBottom;
-
-        // chatView 활성화
-        chatView.SetActive(true);
     }
 
     // 채팅 추가 되었을 때 맨밑으로 Content 위치를 옮기는 함수
