@@ -51,10 +51,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         cc = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
 
-        if (photonView.IsMine)
-        {
-            photonView.RPC("SetNickName", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.NickName);
-        }
+        photonView.RPC("SetNickName", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.NickName);
 
         // 초기 위치 설정
         lastPosition = transform.position;
