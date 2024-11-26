@@ -50,19 +50,25 @@ public class RayController : MonoBehaviour
             }
         }
 
+        
         if (Physics.Raycast(ray, out rayHitInfo, 3f))
         {
             if (rayHitInfo.collider.gameObject.layer == 22)
             {
                 print(rayHitInfo.collider.name);
-                canvasNotice.SetActive(true);
 
+                if (canvasNotice != null)
+                {
+                    canvasNotice.SetActive(true);
+                }
             }
             else
             {
-                canvasNotice.SetActive(false);
+                if (canvasNotice != null)
+                {
+                    canvasNotice.SetActive(false);
+                }
             }
-
         }
     }
 
