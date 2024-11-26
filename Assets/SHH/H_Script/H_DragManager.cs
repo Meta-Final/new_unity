@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class H_DragManager : MonoBehaviour
 {
@@ -18,6 +19,14 @@ public class H_DragManager : MonoBehaviour
 
     public GameObject currentPostIt;
 
+    public GameObject Popup_merge; //캔버스
+    public Transform viewcontents; //스크롤뷰
+    public RawImage view1;
+    public RawImage view2;
+
+    //UI닫기 버튼
+    public Button Btn_close_mergeview;
+
     private void Awake()
     {
         if (inst == null) inst = this;
@@ -25,7 +34,7 @@ public class H_DragManager : MonoBehaviour
     }
     void Start()
     {
-
+        Popup_merge.SetActive(false);
     }
 
     void Update()
@@ -58,7 +67,6 @@ public class H_DragManager : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hitInfo, float.MaxValue, layermask))
             {
-                print(hitInfo.transform.name);
                 currentPostIt = hitInfo.transform.gameObject;
                 targetPos = hitInfo.point;
                 targetPos.z = hitInfo.transform.position.z;
@@ -77,22 +85,25 @@ public class H_DragManager : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hitInfo, float.MaxValue, layermask))
         {
-            GameObject clickedPostIt = hitInfo.transform.gameObject;
-
-            // 포스트잇에 담긴 이미지를 UI로 전달
-            if (clickedPostIt.GetComponent<H_MergePostIt>() != null)
+            if(hitInfo.transform.name.Contains("MergeNewItem"))
             {
-                Texture postItTexture = clickedPostIt.GetComponent<H_MergePostIt>().image;
+                GameObject clickedPostIt = hitInfo.transform.gameObject;
+                H_NewFolder nf = clickedPostIt.GetComponent<H_NewFolder>();
 
-                // H_NewFolder의 UI에 이미지 표시
-                if (H_NewFolder.inst != null)
-                {
-                    H_NewFolder.inst.texs.Add(postItTexture);
-                    H_NewFolder.inst.MergeContentView();
-                }
+                Popup_merge.SetActive(true);
+
+
+                view1.texture = nf.texs[0];
+                view2.texture = nf.texs[1];
+
             }
-
+      
 
         }
+    }
+
+    public void OnClickCloseContentview()
+    {
+        Popup_merge.gameObject.SetActive(false);
     }
 }
