@@ -35,9 +35,9 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     Animator animator;
     CharacterController cc;
 
-    private bool canMove = true; // `Moving` 활성화 여부를 제어하는 플래그
-    private bool isRotatingToHelper = false; // Helper 방향 회전 활성화 플래그
-    private Transform helperTarget; // Helper 오브젝트의 Transform
+    private bool canMove = true;   // `Moving` 활성화 여부를 제어하는 플래그
+    private bool isRotatingToHelper = false;   // Helper 방향 회전 활성화 플래그
+    private Transform helperTarget;   // Helper 오브젝트의 Transform
 
     void Start()
     {
@@ -56,26 +56,45 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 
     void Update()
     {
+        // 닉네임을 카메라를 향해 회전
+        canvasPlayerNickName.transform.rotation = Quaternion.LookRotation(canvasPlayerNickName.transform.position - Camera.main.transform.position);
+
+
         // Helper 방향으로 회전 중이라면
         if (isRotatingToHelper && helperTarget != null)
         {
-            RotateToHelper(); // Helper 방향으로 회전
+            // Helper 방향으로 회전
+            RotateToHelper(); 
         }
         else if (canMove)
         {
             if (photonView.IsMine)
             {
-                Moving(); // 일반 이동 처리
-            }
-            else
-            {
-                if (animator != null)
-                {
-                    animator.SetFloat("Moving", moveState);
-                    animator.SetBool("Running", isRunning);
-                }
+                // 일반 이동 처리
+                Moving(); 
             }
         }
+
+
+        // 플레이어가 달리기 모드라면,
+        if (isRunning)
+        {
+            currentSpeed = runSpeed;
+
+            // Player Run Animation
+            animator.SetBool("isRunning", true);
+        }
+        // 플레이어가 달리기 모드가 아니라면,
+        else
+        {
+            currentSpeed = moveSpeed;
+
+            // Player Walk Animation
+            animator.SetFloat("Moving", moveState);
+            // Player Run Animation
+            animator.SetBool("isRunning", false);
+        }
+
 
         // 추락 감지 및 리스폰 처리
         if (transform.position.y < fallHeight)
@@ -83,9 +102,6 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             // 리스폰
             PlayerRespawn();
         }
-
-        // 닉네임을 카메라를 향해 회전
-        canvasPlayerNickName.transform.rotation = Quaternion.LookRotation(canvasPlayerNickName.transform.position - Camera.main.transform.position);
     }
 
 
@@ -120,29 +136,8 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), rotSpeed * Time.deltaTime);
         }
 
-        // 플레이어가 달리기 모드라면,
-        if (isRunning)
-        {
-            currentSpeed = runSpeed;
-
-            // Player Run Animation
-            animator.SetBool("isRunning", true);
-        }
-        // 플레이어가 달리기 모드가 아니라면,
-        else
-        {
-            currentSpeed = moveSpeed;
-
-            // Player Walk Animation
-            animator.SetFloat("Moving", moveState);
-            // Player Run Animation
-            animator.SetBool("isRunning", false);
-        }
-
-
         // 중력 적용
         yPos += Physics.gravity.y * Time.deltaTime;
-
 
         // 바닥에 닿았을 때
         if (cc.collisionFlags == CollisionFlags.CollidedBelow)
