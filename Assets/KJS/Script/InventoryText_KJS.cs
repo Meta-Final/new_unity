@@ -30,10 +30,6 @@ public class InventoryText_KJS : MonoBehaviour
                 Debug.LogError("EditorManager 오브젝트에 LoadMgr_KJS 컴포넌트가 없습니다.");
             }
         }
-        else
-        {
-            Debug.LogError("EditorManager 오브젝트를 찾을 수 없습니다.");
-        }
         // MagCanvas를 MagazineView 2의 자식 중에서 Tool 2로 할당
         Transform magazineView = GameObject.Find("MagazineView 2")?.transform;
         if (magazineView != null)
@@ -43,14 +39,6 @@ public class InventoryText_KJS : MonoBehaviour
             {
                 MagCanvas = tool2.gameObject;
             }
-            else
-            {
-                Debug.LogError("MagazineView 2의 자식 오브젝트 중 Tool 2를 찾을 수 없습니다.");
-            }
-        }
-        else
-        {
-            Debug.LogError("MagazineView 2 오브젝트를 찾을 수 없습니다.");
         }
 
         // 초기화 작업
@@ -78,18 +66,9 @@ public class InventoryText_KJS : MonoBehaviour
                     }
                     catch (Exception e)
                     {
-                        Debug.LogError($"JSON 파일을 로드하는 동안 오류가 발생했습니다: {e.Message}");
                     }
                 }
-                else
-                {
-                    Debug.LogWarning($"폴더 {postDirectory}에 thumbnail.json 파일이 없습니다.");
-                }
             }
-        }
-        else
-        {
-            Debug.LogError($"기본 디렉토리가 존재하지 않습니다: {baseDirectory}");
         }
 
         // 로드한 데이터를 바탕으로 UI 생성
@@ -142,14 +121,6 @@ public class InventoryText_KJS : MonoBehaviour
             {
                 buttonImage.sprite = sprite;
             }
-            else
-            {
-                Debug.LogError("버튼에 Image 컴포넌트가 없습니다.");
-            }
-        }
-        else
-        {
-            Debug.LogError($"이미지 다운로드 실패: {imageUrl}, {request.error}");
         }
     }
 
@@ -172,10 +143,6 @@ public class InventoryText_KJS : MonoBehaviour
         if (loadManager != null)
         {
             loadManager.LoadObjectsFromFile(postId);
-        }
-        else
-        {
-            Debug.LogError("loadManager가 null입니다. LoadMgr_KJS를 찾을 수 없습니다.");
         }
     }
 }
