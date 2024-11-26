@@ -27,7 +27,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     float currentSpeed;
     bool isRunning = false;
 
-    public Canvas canvasNickName;
+    public GameObject canvasNickName;
     public TMP_Text playerNickName;
 
     Animator animator;
