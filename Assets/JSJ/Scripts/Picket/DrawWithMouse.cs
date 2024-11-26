@@ -230,7 +230,7 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
             
 
             // RectTransform을 사용하여 화면 위치를 갱신
-            text_NickName.GetComponent<RectTransform>().anchoredPosition = Input.mousePosition;
+            text_NickName.transform.position = Input.mousePosition + offset;
         }
     }
 
@@ -239,11 +239,11 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
     {
         if (stream.IsWriting)
         {
-            stream.SendNext(text_NickName.GetComponent<RectTransform>().anchoredPosition);
+            stream.SendNext(text_NickName.transform.position);
         }
         else
         {
-            text_NickName.GetComponent<RectTransform>().anchoredPosition = (Vector2)stream.ReceiveNext();
+            text_NickName.transform.position = (Vector2)stream.ReceiveNext();
         }
     }
 }
