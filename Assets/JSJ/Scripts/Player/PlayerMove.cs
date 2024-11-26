@@ -152,10 +152,10 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         }
 
         // 채팅 중이 아니라면,
-        if (!ChatManager.instance.IsChatting())
+        if (!ChatManager.instance.IsChatting() && !PicketChatManager.instance.IsPicketChatting())
         {
             // 점프
-            if (Input.GetKeyDown(KeyCode.Space) & jumpCurrentCount < jumpMaxCount)
+            if (Input.GetKeyDown(KeyCode.Space) && jumpCurrentCount < jumpMaxCount)
             {
                 yPos = jumpPower;
                 jumpCurrentCount++;
