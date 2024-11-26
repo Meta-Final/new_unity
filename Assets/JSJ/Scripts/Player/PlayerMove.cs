@@ -67,6 +67,11 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             {
                 Moving(); // 일반 이동 처리
             }
+            else
+            {
+                animator.SetFloat("Moving", moveState);
+                animator.SetBool("Running", isRunning);
+            }
         }
 
         // 추락 감지 및 리스폰 처리
@@ -244,7 +249,5 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 
         }
 
-        animator.SetFloat("Moving", moveState);
-        animator.SetBool("Running", isRunning);
     }
 }
