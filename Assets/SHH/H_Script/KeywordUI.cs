@@ -9,43 +9,35 @@ using UnityEngine.UI;
 
 public class KeywordUI : MonoBehaviour
 {
-    public RawImage trendmap;
+    public RawImage trendmap;          // 트렌드 이미지를 표시할 UI 컴포넌트
+    public APIManager apiManager;     // APIManager 인스턴스
+
     void Start()
     {
-        
-    }
-
-    void Update()
-    {
-       
-    }
-
-    void ViewTrend()
-    {
-        StartCoroutine(TrendGet());
-    }
-
-    public IEnumerator TrendGet()
-    {
-        string jsonpngPath = "file:///C:/";
-
-        UnityWebRequest request = UnityWebRequest.Get(jsonpngPath);
-        //서버 요청 보내기
-        yield return request.SendWebRequest();
-
-        //서버 결과 정상이라면
-        if(request.result == UnityWebRequest.Result.Success)
+        if (apiManager != null)
         {
-            //데이터처리
-            File.WriteAllBytes(Application.dataPath + "", request.downloadHandler.data);
+            // APIManager의 Trend 메서드 호출
+            apiManager.Trend();
 
-            Texture2D trendtexture = DownloadHandlerTexture.GetContent(request);
-            trendmap.texture = trendtexture;
+            // Trend 이미지가 로드될 때까지 기다린 후 업데이트
+            StartCoroutine(UpdateTrendImage());
         }
-        //그렇지않으면 오류출력
         else
         {
-            Debug.LogError("미안 안왔대!" + request.error);
+            Debug.LogError("APIManager가 설정되지 않았습니다.");
         }
+    }
+
+    private IEnumerator UpdateTrendImage()
+    {
+        // APIManager에서 트렌드 이미지가 로드될 때까지 대기
+        while (apiManager.trendDownloadTexture == null)
+        {
+            yield return null; // 한 프레임 대기
+        }
+
+        // 트렌드 이미지를 RawImage에 할당
+        trendmap.texture = apiManager.trendDownloadTexture;
+        Debug.Log("트렌드 이미지가 성공적으로 적용되었습니다.");
     }
 }

@@ -9,6 +9,7 @@ public class ImageDisplay_KJS : MonoBehaviour
 
     void Start()
     {
+        StartCoroutine(TrendWaitForDownloadAndDisplayImage());
         StartCoroutine(CoverWaitForDownloadAndDisplayImage());
     }
 
@@ -22,6 +23,21 @@ public class ImageDisplay_KJS : MonoBehaviour
 
         // �ٿ�ε�� Texture2D�� Sprite�� ��ȯ�Ͽ� Image ������Ʈ�� ǥ��
         Texture2D downloadedTexture = imageDownloader.CoverGetDownloadedImage();
+        image.sprite = TextureToSprite(downloadedTexture);
+        Debug.Log("Cover image displayed on UI.");
+    }
+
+    IEnumerator TrendWaitForDownloadAndDisplayImage()
+    {
+        print("!!!");
+        // �̹����� �ٿ�ε�� ������ ���
+        while (imageDownloader.TrendGetDownloadedImage() == null)
+        {
+            yield return null;
+        }
+
+        // �ٿ�ε�� Texture2D�� Sprite�� ��ȯ�Ͽ� Image ������Ʈ�� ǥ��
+        Texture2D downloadedTexture = imageDownloader.TrendGetDownloadedImage();
         image.sprite = TextureToSprite(downloadedTexture);
         Debug.Log("Cover image displayed on UI.");
     }
