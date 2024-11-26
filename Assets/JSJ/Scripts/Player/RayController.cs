@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RayController : MonoBehaviour
 {
@@ -10,9 +11,19 @@ public class RayController : MonoBehaviour
     
     void Start()
     {
-        canvasNotice = GameObject.Find("Canvas_Interactive");
-
-        canvasNotice.SetActive(false);
+        if (SceneManager.GetActiveScene().name == "Meta_ScrapBook_Scene")
+        {
+            canvasNotice = GameObject.Find("Canvas_Interactive");
+        }
+        else
+        {
+            canvasNotice = null;
+        }
+        
+        if (canvasNotice != null)
+        {
+            canvasNotice.SetActive(false);
+        }
     }
 
     
