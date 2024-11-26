@@ -40,8 +40,6 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
 
     private void Start()
     {
-        PhotonView photonview = GetComponent<PhotonView>();
-
         drawButton.onClick.AddListener(DrawMode);
         stickerButton.onClick.AddListener(StickerMode);
 

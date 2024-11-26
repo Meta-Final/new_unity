@@ -41,8 +41,6 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 
     void Start()
     {
-        PhotonView photonview = GetComponent<PhotonView>();
-
         cc = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
 
@@ -65,7 +63,10 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         }
         else if (canMove)
         {
-            Moving(); // 일반 이동 처리
+            if (photonView.IsMine)
+            {
+                Moving(); // 일반 이동 처리
+            }
         }
 
         // 추락 감지 및 리스폰 처리
