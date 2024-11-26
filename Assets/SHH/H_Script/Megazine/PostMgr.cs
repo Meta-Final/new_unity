@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.UI;
 using System.IO;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class H_PostInfo
@@ -16,7 +13,7 @@ public class H_PostInfo
 [System.Serializable]
 public class PostInfoList
 {
-    public List<H_PostInfo> postData = new List<H_PostInfo>();  // 리스트를 빈 상태로 초기화
+    public List<H_PostInfo> postData = new List<H_PostInfo>();
 }
 
 public class PostMgr : MonoBehaviour
@@ -32,7 +29,7 @@ public class PostMgr : MonoBehaviour
     List<Button> btns = new List<Button>();
     public Button btn_Exit;
 
-    private string baseDirectory = Application.dataPath; // 기본 저장 경로
+    private string baseDirectory = Application.dataPath;
 
     void Start()
     {
@@ -55,7 +52,6 @@ public class PostMgr : MonoBehaviour
 
     public void ThumStart()
     {
-        // postId별로 저장된 폴더에서 thumbnail.json 파일을 찾습니다.
         if (Directory.Exists(baseDirectory))
         {
             string[] postDirectories = Directory.GetDirectories(baseDirectory);
@@ -72,7 +68,7 @@ public class PostMgr : MonoBehaviour
                         PostInfoList postInfoList = JsonUtility.FromJson<PostInfoList>(json);
                         allPost.AddRange(postInfoList.postData);
                     }
-                    catch (Exception e)
+                    catch (System.Exception e)
                     {
                         Debug.LogError($"JSON 파일을 로드하는 동안 오류가 발생했습니다: {e.Message}");
                     }
@@ -88,13 +84,17 @@ public class PostMgr : MonoBehaviour
             Debug.LogError($"기본 디렉토리가 존재하지 않습니다: {baseDirectory}");
         }
 
-        // 모든 포스트 정보를 로드한 후 UI 생성
         CreatePostThumbnails();
-        //btn_Exit.onClick.AddListener(OnClickExit);
     }
 
     private void CreatePostThumbnails()
     {
+        foreach (Transform child in content.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        btns.Clear();
+
         for (int i = 0; i < allPost.Count; i++)
         {
             GameObject go = Instantiate(prefabfactory, content.transform);
@@ -103,7 +103,8 @@ public class PostMgr : MonoBehaviour
             btns.Add(bu);
 
             string postId = allPost[i].postid;
-            btns[i].onClick.AddListener(() => OnClickMagContent(postId)); // 클릭 시 postId 전달
+            btns[i].onClick.RemoveAllListeners();
+            btns[i].onClick.AddListener(() => OnClickMagContent(postId));
 
             post.SetInfo(allPost[i]);
         }
@@ -116,11 +117,14 @@ public class PostMgr : MonoBehaviour
 
     public void OnClickMagContent(string postId)
     {
-        MagCanvas.SetActive(true);
+        if (!MagCanvas.activeSelf)
+        {
+            MagCanvas.SetActive(true);
+        }
 
         if (loadManager != null)
         {
-            loadManager.LoadObjectsFromFile(postId); // 특정 postId 전달
+            loadManager.LoadObjectsFromFile(postId);
         }
         else
         {
@@ -130,6 +134,9 @@ public class PostMgr : MonoBehaviour
 
     public void OnClickExit()
     {
-        MagCanvas.SetActive(false);
+        if (MagCanvas.activeSelf)
+        {
+            MagCanvas.SetActive(false);
+        }
     }
 }
