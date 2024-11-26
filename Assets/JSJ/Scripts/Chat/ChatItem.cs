@@ -33,6 +33,8 @@ public class ChatItem : MonoBehaviour
         // 텍스트 갱신
         chatText.text = s;
 
+        chatText.ForceMeshUpdate();
+
         // 사이즈 조절 코루틴 실행
         StartCoroutine(UpdateSize());
     }
