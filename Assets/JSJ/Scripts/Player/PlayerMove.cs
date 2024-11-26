@@ -46,16 +46,27 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 
         if (photonView.IsMine)
         {
+            if (canvasPlayerNickName != null) return;
+
             // 닉네임 오브젝트 생성
             canvasPlayerNickName = PhotonNetwork.Instantiate("Canvas_PlayerNickName", transform.position, Quaternion.identity);
             playerNickName = canvasPlayerNickName.GetComponentInChildren<TMP_Text>();
 
             // 플레이어 닉네임 부여
-            playerNickName.text = photonView.Owner.NickName;
+            string nick = photonView.Owner.NickName;
+            playerNickName.text = nick;
+
+            photonView.RPC("ShowNickName", RpcTarget.All, nick);
         }
         
         // 초기 위치 설정
         lastPosition = transform.position;
+    }
+
+    [PunRPC]
+    void ShowNickName(string nick)
+    {
+        playerNickName.text = nick;
     }
 
     void Update()
