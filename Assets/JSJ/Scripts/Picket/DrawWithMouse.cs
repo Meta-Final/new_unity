@@ -133,8 +133,11 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
                 {
                     Vector3 point = hitInfo.point + new Vector3(0, 0, -0.1f);
 
-                    line.AddPoint(point);
-
+                    if (line != null)
+                    {
+                        line.AddPoint(point);
+                    }
+                    
                     timestep = Time.time;
                 }
             }
