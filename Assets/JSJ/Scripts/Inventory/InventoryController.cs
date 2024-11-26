@@ -23,7 +23,7 @@ public class InventoryController : MonoBehaviourPun
 
     void Update()
     {
-        // 내 것이고, 키보드 I키를 누를 때마다 인벤토리 UI Toggle
+        // 내 것이고, 키보드 key 숫자1키를 누를 때마다 인벤토리 UI Toggle
         if (photonView.IsMine && Input.GetKeyDown(KeyCode.I))
         {
             inventoryPanel.SetActive(!inventoryPanel.activeSelf);
