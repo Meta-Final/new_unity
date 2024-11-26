@@ -227,7 +227,10 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
             Vector3 offset = new Vector3(60, -60, 0);
 
             // 닉네임 위치
-            text_NickName.transform.position = Input.mousePosition + offset;
+            
+
+            // RectTransform을 사용하여 화면 위치를 갱신
+            text_NickName.GetComponent<RectTransform>().anchoredPosition = Input.mousePosition;
         }
     }
 
@@ -236,11 +239,11 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
     {
         if (stream.IsWriting)
         {
-            stream.SendNext(text_NickName.transform.position);
+            stream.SendNext(text_NickName.GetComponent<RectTransform>().anchoredPosition);
         }
         else
         {
-            text_NickName.transform.position = (Vector3)stream.ReceiveNext();
+            text_NickName.GetComponent<RectTransform>().anchoredPosition = (Vector2)stream.ReceiveNext();
         }
     }
 }
