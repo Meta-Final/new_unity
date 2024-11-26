@@ -6,6 +6,10 @@ using TMPro;
 
 public class PlayerMove : MonoBehaviourPun, IPunObservable
 {
+    [Header("닉네임")]
+    public GameObject canvasNickName;
+    public TMP_Text playerNickName;
+
     [Header("이동")]
     public float moveSpeed = 5f;
     public float runSpeed = 10f;
@@ -27,9 +31,6 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     float currentSpeed;
     bool isRunning = false;
 
-    public GameObject canvasNickName;
-    public TMP_Text playerNickName;
-
     Animator animator;
     CharacterController cc;
 
@@ -38,13 +39,22 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     private Transform helperTarget; // Helper 오브젝트의 Transform
 
 
+    // 닉네임 동기화 함수
+    [PunRPC]
+    void SetNickName(string nickName)
+    {
+        playerNickName.text = nickName;
+    }
+
     void Start()
     {
         cc = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
 
-        // 해당 캐릭터의 닉네임 설정
-        playerNickName.text = photonView.Owner.NickName;
+        if (photonView.IsMine)
+        {
+            photonView.RPC("SetNickName", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.NickName);
+        }
 
         // 초기 위치 설정
         lastPosition = transform.position;
@@ -169,7 +179,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     }
 
 
-
+    // -------------------------------------------------------------------------------------------------------------------------------------- [ KJS ]
     // `Moving` 기능 활성화/비활성화
     public void EnableMoving(bool enable)
     {
