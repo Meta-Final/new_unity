@@ -58,24 +58,21 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 
     void Update()
     {
-        if (photonView.IsMine)
+        // Helper 방향으로 회전 중이라면
+        if (isRotatingToHelper && helperTarget != null)
         {
-            // Helper 방향으로 회전 중이라면
-            if (isRotatingToHelper && helperTarget != null)
-            {
-                RotateToHelper(); // Helper 방향으로 회전
-            }
-            else if (canMove)
-            {
-                Moving(); // 일반 이동 처리
-            }
+            RotateToHelper(); // Helper 방향으로 회전
+        }
+        else if (canMove)
+        {
+            Moving(); // 일반 이동 처리
+        }
 
-            // 추락 감지 및 리스폰 처리
-            if (transform.position.y < fallHeight)
-            {
-                // 리스폰
-                PlayerRespawn();
-            }
+        // 추락 감지 및 리스폰 처리
+        if (transform.position.y < fallHeight)
+        {
+            // 리스폰
+            PlayerRespawn();
         }
 
         // 닉네임을 카메라를 향해 회전
