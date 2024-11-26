@@ -7,8 +7,9 @@ using TMPro;
 public class PlayerMove : MonoBehaviourPun, IPunObservable
 {
     [Header("닉네임")]
-    public GameObject canvasNickName;
+    public GameObject canvasPlayerNickName;
     public TMP_Text playerNickName;
+    public Transform nickNamePos;
 
     [Header("이동")]
     public float moveSpeed = 5f;
@@ -43,46 +44,43 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         cc = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
 
-        canvasNickName = transform.Find("Canvas_NickName").gameObject;
-        playerNickName = canvasNickName.transform.Find("Text_NickName").GetComponent<TMP_Text>();
-
-        photonView.RPC("SetNickName", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.NickName);
-
+        // 닉네임 오브젝트 생성
+        canvasPlayerNickName = PhotonNetwork.Instantiate("Canvas_PlayerNickName", transform.position, Quaternion.identity);
+        playerNickName = canvasPlayerNickName.GetComponentInChildren<TMP_Text>();
+       
+        // 플레이어 닉네임 부여
+        playerNickName.text = PhotonNetwork.NickName;
+        
         // 초기 위치 설정
         lastPosition = transform.position;
     }
 
-    // 닉네임 동기화 함수
-    [PunRPC]
-    void SetNickName(string nickName)
-    {
-        playerNickName.text = nickName;
-    }
-
     void Update()
     {
-        // 내 것일 때만 컨트롤하자
-        if (photonView.IsMine)
-        {
-            // Helper 방향으로 회전 중이라면
-            if (isRotatingToHelper && helperTarget != null)
-            {
-                RotateToHelper(); // Helper 방향으로 회전
-            }
-            else if (canMove)
-            {
-                Moving(); // 일반 이동 처리
-            }
+        if (!photonView.IsMine) return;
 
-            // 추락 감지 및 리스폰 처리
-            if (transform.position.y < fallHeight)
-            {
-                // 리스폰
-                PlayerRespawn();
-            }
+        // 플레이어 머리 위에 닉네임을 고정
+        canvasPlayerNickName.transform.position = nickNamePos.position;
+
+        // 닉네임을 카메라를 향해 회전
+        canvasPlayerNickName.transform.rotation = Quaternion.LookRotation(canvasPlayerNickName.transform.position - Camera.main.transform.position);
+
+        // Helper 방향으로 회전 중이라면
+        if (isRotatingToHelper && helperTarget != null)
+        {
+            RotateToHelper(); // Helper 방향으로 회전
+        }
+        else if (canMove)
+        {
+            Moving(); // 일반 이동 처리
         }
 
-        canvasNickName.transform.rotation = Quaternion.LookRotation(canvasNickName.transform.position - Camera.main.transform.position);
+        // 추락 감지 및 리스폰 처리
+        if (transform.position.y < fallHeight)
+        {
+            // 리스폰
+            PlayerRespawn();
+        }
     }
 
 
