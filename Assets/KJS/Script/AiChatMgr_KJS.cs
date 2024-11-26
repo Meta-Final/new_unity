@@ -1,8 +1,10 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 using ReqRes;
+using Photon.Pun;
+using UnityEditor.SceneManagement;
 
 public class AiChatMgr_KJS : MonoBehaviour
 {
@@ -16,7 +18,7 @@ public class AiChatMgr_KJS : MonoBehaviour
 
     private GameObject chatUI;            // MagazineView 안의 Chat UI
     private GameObject toolUI;            // MagazineView 안의 Tool UI
-    private bool wasToolUIActive = false;
+    public GameObject thumbnailUI;        // 썸네일 UI를 제어하기 위한 이미지 UI 오브젝트
 
     private AudioSource audioSource;      // 오디오 소스
     public AudioClip typingSound;         // 타이핑 효과음
@@ -24,8 +26,12 @@ public class AiChatMgr_KJS : MonoBehaviour
     private float typingSoundDelay = 0.5f; // 타이핑 사운드 재생 간격 (초)
     private Coroutine typeTextCoroutine;
 
-    public Button specialActionButton;    // 특정 텍스트에 따라 활성화할 버튼
-    private bool activateButtonAfterTyping = false; // 메시지 출력 후 버튼 활성화 여부
+    
+    [Header("Photon Settings")]
+    public string prefabName;             // 생성하려는 프리팹 이름 (인스펙터에서 할당)
+    public Vector3 prefabScale = new Vector3(20f, 20f, 20f); // 프리팹의 스케일
+    public float prefabRotationX = -90f; // 프리팹의 x축 회전값
+    public float forwardOffset = 0.5f; // 플레이어 앞쪽의 스폰 거리
 
     private void Awake()
     {
@@ -80,10 +86,9 @@ public class AiChatMgr_KJS : MonoBehaviour
         {
             Debug.LogWarning("Extra UI가 설정되지 않았습니다.");
         }
-
-        if (specialActionButton != null)
+        if (thumbnailUI != null)
         {
-            specialActionButton.gameObject.SetActive(false); // 처음엔 버튼 비활성화
+            thumbnailUI.SetActive(false);
         }
 
         sendButton.onClick.AddListener(OnSendButtonClicked);
@@ -107,10 +112,20 @@ public class AiChatMgr_KJS : MonoBehaviour
             // AI API 호출
             apiManager.LLM(userMessage);
 
-            // 특정 메시지에 따라 버튼 활성화 예약
+            // 특정 메시지에 따라 UI 활성화 예약 및 오브젝트 생성
             if (userMessage.Contains("오브젝트 만들고 싶어"))
             {
-                activateButtonAfterTyping = true;
+                SpawnPrefabOnNetwork(); // 즉시 오브젝트 생성
+                StartCoroutine(ActivateExtraUIWithDelay(2f)); // extraUI 활성화
+            }
+            else if (userMessage.Contains("썸네일 만들어줘"))
+            {
+                // Extra UI 활성화 후 Thumbnail UI 활성화
+                StartCoroutine(ActivateExtraUIWithDelayThenThumbnail(2f, 2f)); // 각각 딜레이 값 전달
+            }
+            else if (userMessage.Contains("글 쓰고 싶어"))
+            {
+                StartCoroutine(ActivateToolUIWithDelay(2f)); // toolUI 활성화
             }
 
             // 입력 필드 초기화
@@ -125,39 +140,134 @@ public class AiChatMgr_KJS : MonoBehaviour
             StopCoroutine(typeTextCoroutine);
         }
 
-        // 응답 텍스트를 출력한 후 버튼 활성화 여부를 확인
-        typeTextCoroutine = StartCoroutine(TypeText(responseText, () =>
-        {
-            if (activateButtonAfterTyping)
-            {
-                ActivateSpecialButton();
-                activateButtonAfterTyping = false; // 상태 초기화
-            }
-        }));
+        // 응답 텍스트를 출력
+        typeTextCoroutine = StartCoroutine(TypeText(responseText));
     }
 
-    private void ActivateSpecialButton()
+    private IEnumerator ActivateExtraUIWithDelayThenThumbnail(float extraUIDelay, float thumbnailUIDelay)
     {
-        if (specialActionButton != null)
-        {
-            specialActionButton.gameObject.SetActive(true);
-            Debug.Log("특별한 버튼이 활성화되었습니다.");
-        }
-    }
-
-    private IEnumerator ShowExtraUIWithDelay(float delayBeforeShow, float duration)
-    {
-        yield return new WaitForSeconds(delayBeforeShow); // 출력 후 1초 대기
-
+        // Extra UI 활성화
+        yield return new WaitForSeconds(extraUIDelay); // 지정된 대기 시간 후
         if (extraUI != null)
         {
             extraUI.SetActive(true);
-            yield return new WaitForSeconds(duration);
+            Debug.Log("Extra UI가 활성화되었습니다.");
+
+            // 5초 뒤 Extra UI 비활성화
+            yield return new WaitForSeconds(5f);
             extraUI.SetActive(false);
+            Debug.Log("Extra UI가 비활성화되었습니다.");
+        }
+
+        // Thumbnail UI 활성화
+        yield return new WaitForSeconds(thumbnailUIDelay); // 지정된 대기 시간 후
+        if (thumbnailUI != null)
+        {
+            thumbnailUI.SetActive(true); // Thumbnail UI 활성화
+            Debug.Log("Thumbnail UI가 활성화되었습니다.");
+
+            // 5초 뒤 Thumbnail UI 비활성화
+            yield return new WaitForSeconds(5f);
+            thumbnailUI.SetActive(false);
+            Debug.Log("Thumbnail UI가 비활성화되었습니다.");
         }
     }
 
-    private IEnumerator TypeText(string text, System.Action onComplete)
+    private IEnumerator ActivateExtraUIWithDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay); // 지정된 대기 시간 후
+        if (extraUI != null)
+        {
+            extraUI.SetActive(true);
+            Debug.Log("Extra UI가 활성화되었습니다.");
+
+            // 5초 뒤 Extra UI 비활성화
+            yield return new WaitForSeconds(5f);
+            extraUI.SetActive(false);
+            Debug.Log("Extra UI가 비활성화되었습니다.");
+        }
+    }
+
+    public void SpawnPrefabOnNetwork()
+    {
+        if (string.IsNullOrEmpty(prefabName))
+        {
+            Debug.LogWarning("생성하려는 프리팹 이름이 설정되지 않았습니다.");
+            return;
+        }
+
+        if (PhotonNetwork.IsConnected && PhotonNetwork.InRoom)
+        {
+            // 로컬 플레이어 오브젝트를 찾음
+            GameObject playerObject = FindLocalPlayerObject();
+
+            if (playerObject != null)
+            {
+                Transform playerTransform = playerObject.transform;
+
+                // 스폰 위치 계산 (플레이어 앞쪽)
+                Vector3 spawnPosition = playerTransform.position + playerTransform.forward * forwardOffset;
+
+                // 스폰 회전값 계산
+                Quaternion spawnRotation = Quaternion.Euler(prefabRotationX, playerTransform.rotation.eulerAngles.y, 0);
+
+                // Photon 프리팹 생성
+                GameObject spawnedObject = PhotonNetwork.Instantiate(prefabName, spawnPosition, spawnRotation);
+
+                // 생성된 프리팹의 스케일 설정
+                spawnedObject.transform.localScale = prefabScale;
+
+                Debug.Log($"{prefabName} 프리팹이 생성되었습니다. 위치: {spawnPosition}, 회전: {spawnRotation.eulerAngles}, 스케일: {prefabScale}");
+            }
+            else
+            {
+                Debug.LogError("로컬 플레이어 오브젝트를 찾을 수 없습니다.");
+            }
+        }
+        else
+        {
+            Debug.LogError("Photon에 연결되어 있지 않거나 룸에 입장하지 않았습니다.");
+        }
+    }
+
+    // 로컬 플레이어 오브젝트를 찾는 메서드
+    private GameObject FindLocalPlayerObject()
+    {
+        // "Player" 태그를 가진 모든 오브젝트 검색
+        GameObject[] playerObjects = GameObject.FindGameObjectsWithTag("Player");
+
+        foreach (GameObject obj in playerObjects)
+        {
+            PhotonView photonView = obj.GetComponent<PhotonView>();
+
+            // isMine이 true인 오브젝트를 반환
+            if (photonView != null && photonView.IsMine)
+            {
+                return obj;
+            }
+        }
+
+        return null; // 로컬 플레이어 오브젝트를 찾지 못한 경우
+    }
+
+    private IEnumerator ActivateToolUIWithDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay); // LLM 메시지 출력 완료 후 1초 대기
+        if (toolUI != null)
+        {
+            toolUI.SetActive(true);
+            Debug.Log("Tool UI가 1초 후 활성화되었습니다.");
+        }
+
+        // 이 스크립트가 할당된 UI 비활성화
+        if (gameObject != null)
+        {
+            gameObject.SetActive(false);
+            Debug.Log("이 스크립트가 할당된 UI가 비활성화되었습니다.");
+        }
+    }
+
+    private IEnumerator TypeText(string text)
     {
         chatResponseText.text = "";
         foreach (char c in text)
@@ -176,8 +286,5 @@ public class AiChatMgr_KJS : MonoBehaviour
 
             yield return new WaitForSeconds(0.05f);
         }
-
-        // 모든 텍스트 출력이 완료된 후 콜백 실행
-        onComplete?.Invoke();
     }
 }

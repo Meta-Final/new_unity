@@ -20,6 +20,7 @@ public class ChannelBtnMgr : MonoBehaviour
     public void OnClickXTool2()
     {
         tool2.SetActive(false);
+        print("@@@");
 
     }
 }
