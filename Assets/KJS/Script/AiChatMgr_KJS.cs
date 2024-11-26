@@ -4,7 +4,6 @@ using TMPro;
 using System.Collections;
 using ReqRes;
 using Photon.Pun;
-using UnityEditor.SceneManagement;
 
 public class AiChatMgr_KJS : MonoBehaviour
 {

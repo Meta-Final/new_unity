@@ -1085,7 +1085,6 @@ MonoBehaviour:
   trContent: {fileID: 0}
   inputChat: {fileID: 0}
   chatBubble: {fileID: 0}
-  bubbleParent: {fileID: 0}
 --- !u!4 &369362713
 Transform:
   m_ObjectHideFlags: 0
@@ -4611,7 +4610,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 64cbd0ab2666e4e7c814310b8fedc1f5, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -9806,8 +9805,12 @@ MonoBehaviour:
   apiManager: {fileID: 1479273814}
   sendButton: {fileID: 380955424812191385}
   extraUI: {fileID: 0}
+  thumbnailUI: {fileID: 0}
   typingSound: {fileID: 8300000, guid: 0d10bb83678ae5b4ba7f76c46a46b41f, type: 3}
-  specialActionButton: {fileID: 0}
+  prefabName: 
+  prefabScale: {x: 20, y: 20, z: 20}
+  prefabRotationX: -90
+  forwardOffset: 0.5
 --- !u!222 &830427568300631112
 CanvasRenderer:
   m_ObjectHideFlags: 0
