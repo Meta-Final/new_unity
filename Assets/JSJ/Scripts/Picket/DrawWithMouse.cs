@@ -46,7 +46,7 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
         if (photonView.IsMine)
         {
             // 닉네임 프리팹 생성
-            nickNamePrefab = PhotonNetwork.Instantiate("Canvas_NickName", Vector3.zero, Quaternion.identity);
+            nickNamePrefab = PhotonNetwork.Instantiate("NickNamePrefab", Vector3.zero, Quaternion.identity);
             // 닉네임 프리팹의 Text 자식 받아오기
             text_NickName = nickNamePrefab.GetComponentInChildren<TMP_Text>();
 
