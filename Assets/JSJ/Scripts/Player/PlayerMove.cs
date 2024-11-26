@@ -41,6 +41,8 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 
     void Start()
     {
+        PhotonView photonview = GetComponent<PhotonView>();
+
         cc = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
 
