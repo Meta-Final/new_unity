@@ -38,18 +38,13 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     private bool isRotatingToHelper = false; // Helper 방향 회전 활성화 플래그
     private Transform helperTarget; // Helper 오브젝트의 Transform
 
-
-    // 닉네임 동기화 함수
-    [PunRPC]
-    void SetNickName(string nickName)
-    {
-        playerNickName.text = nickName;
-    }
-
     void Start()
     {
         cc = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+
+        canvasNickName = transform.Find("Canvas_NickName").gameObject;
+        playerNickName = canvasNickName.transform.Find("Text_NickName").GetComponent<TMP_Text>();
 
         photonView.RPC("SetNickName", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.NickName);
 
@@ -57,6 +52,12 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         lastPosition = transform.position;
     }
 
+    // 닉네임 동기화 함수
+    [PunRPC]
+    void SetNickName(string nickName)
+    {
+        playerNickName.text = nickName;
+    }
 
     void Update()
     {
