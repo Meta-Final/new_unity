@@ -10,6 +10,7 @@ public class H_MergePostIt : MonoBehaviour
     public Texture image;
     bool isCol = false;
 
+
     void Start()
     {
         image = GetComponentInChildren<RawImage>().texture;
@@ -25,13 +26,19 @@ public class H_MergePostIt : MonoBehaviour
         {
             if(H_DragManager.inst.currentPostIt == gameObject)
             {
+                // 새로운 머지한 폴더 생성
                 GameObject go = Instantiate(postit, transform.position, Quaternion.identity, noticepos);
                 
                 go.transform.localEulerAngles = new Vector3(180, 0, 90);
                 go.transform.localScale = new Vector3(10, 10, 10);
                 H_NewFolder hn = go.GetComponent<H_NewFolder>();
+
+                // 스크린샷사진 추가
                 hn.texs.Add(image);
                 hn.texs.Add(other.transform.GetComponent<H_MergePostIt>().image);
+
+                hn.MergeContentView();
+
                 Destroy(gameObject);
             }
             else
