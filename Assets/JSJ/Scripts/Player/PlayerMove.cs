@@ -10,7 +10,6 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     [Header("닉네임")]
     public GameObject canvasPlayerNickName;
     public TMP_Text playerNickName;
-    public Transform nickNamePos;
 
     [Header("이동")]
     public float moveSpeed = 5f;
@@ -45,9 +44,9 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         cc = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
 
-       
         canvasPlayerNickName = transform.GetChild(0).gameObject;
         playerNickName = canvasPlayerNickName.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
+
         // 플레이어 닉네임 부여
         playerNickName.text = photonView.Owner.NickName;
 
@@ -55,31 +54,30 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         lastPosition = transform.position;
     }
 
-   
-
     void Update()
     {
-        if (!photonView.IsMine) return;
+        if (photonView.IsMine)
+        {
+            // Helper 방향으로 회전 중이라면
+            if (isRotatingToHelper && helperTarget != null)
+            {
+                RotateToHelper(); // Helper 방향으로 회전
+            }
+            else if (canMove)
+            {
+                Moving(); // 일반 이동 처리
+            }
+
+            // 추락 감지 및 리스폰 처리
+            if (transform.position.y < fallHeight)
+            {
+                // 리스폰
+                PlayerRespawn();
+            }
+        }
 
         // 닉네임을 카메라를 향해 회전
         canvasPlayerNickName.transform.rotation = Quaternion.LookRotation(canvasPlayerNickName.transform.position - Camera.main.transform.position);
-
-        // Helper 방향으로 회전 중이라면
-        if (isRotatingToHelper && helperTarget != null)
-        {
-            RotateToHelper(); // Helper 방향으로 회전
-        }
-        else if (canMove)
-        {
-            Moving(); // 일반 이동 처리
-        }
-
-        // 추락 감지 및 리스폰 처리
-        if (transform.position.y < fallHeight)
-        {
-            // 리스폰
-            PlayerRespawn();
-        }
     }
 
 
@@ -163,6 +161,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 
         cc.Move(dir * currentSpeed * Time.deltaTime);
     }
+
 
     // -------------------------------------------------------------------------------------------------------------------------------------- [ Player Respawn ]
     // Player 리스폰 함수
