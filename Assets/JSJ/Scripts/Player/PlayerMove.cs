@@ -69,8 +69,8 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             }
             else
             {
-                animator.SetFloat("Moving", moveState);
-                animator.SetBool("Running", isRunning);
+                //animator.SetFloat("Moving", moveState);
+                //animator.SetBool("Running", isRunning);
             }
         }
 

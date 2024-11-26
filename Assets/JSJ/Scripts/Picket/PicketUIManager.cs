@@ -6,7 +6,9 @@ using System.IO;
 
 public class PicketUIManager : MonoBehaviour
 {
+    [Header("GameObject")]
     public GameObject player;
+    public GameObject playerPrefabPos;
     public GameObject currentPicket; // 방금 생성된 Picket Prefab
     public GameObject selectPicket; // 현재 선택된 Picket Prefab
 
@@ -33,6 +35,7 @@ public class PicketUIManager : MonoBehaviour
     void Start()
     {
         player = FindObjectOfType<GameManager>().player;
+        playerPrefabPos = player.transform.GetChild(1).gameObject;
 
         if (player != null)
         {
@@ -73,11 +76,12 @@ public class PicketUIManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = new Ray(playerPrefabPos.transform.position, playerPrefabPos.transform.forward);
             RaycastHit hitInfo;
-
-            if (Physics.Raycast(ray, out hitInfo))
+            
+            if (Physics.Raycast(ray, out hitInfo, 5))
             {
+                print(hitInfo.collider.name);
                 // 만일, 기사가 링크된 피켓을 클릭했다면
                 if (hitInfo.collider.gameObject.layer == 18 && currentPicket != null)
                 {
