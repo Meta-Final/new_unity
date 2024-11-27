@@ -34,11 +34,6 @@ public class RayController : MonoBehaviour
         if (interactNotice != null)
         {
             targetPos = interactNotice.transform;
-            Debug.Log("[RayController] InteractNotice 할당 성공: " + interactNotice.name); // 디버그 메시지
-        }
-        else
-        {
-            Debug.LogWarning("[RayController] InteractNotice 오브젝트를 찾을 수 없습니다!");
         }
     }
 
@@ -55,16 +50,12 @@ public class RayController : MonoBehaviour
             // 현재 위치와 InteractNotice 위치 간 거리 계산
             float distanceToNotice = Vector3.Distance(transform.position, targetPos.position);
 
-            // 디버그 로그로 거리 출력
-            Debug.Log("[RayController] InteractNotice와의 거리: " + distanceToNotice);
-
             // 거리 조건에 따라 RawImage 활성화/비활성화
             if (distanceToNotice <= noticeDistance)
             {
                 if (!rawImage.activeSelf) // 이미 활성화 상태가 아니라면 활성화
                 {
                     rawImage.SetActive(true);
-                    Debug.Log("[RayController] RawImage 활성화!");
                 }
             }
             else
@@ -72,13 +63,8 @@ public class RayController : MonoBehaviour
                 if (rawImage.activeSelf) // 이미 비활성화 상태가 아니라면 비활성화
                 {
                     rawImage.SetActive(false);
-                    Debug.Log("[RayController] RawImage 비활성화!");
                 }
             }
-        }
-        else
-        {
-            Debug.LogWarning("[RayController] targetPos 또는 rawImage가 설정되지 않았습니다.");
         }
     }
 }
