@@ -85,7 +85,7 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
             SetPenIcon();
 
             // 닉네임 생성 함수 RPC 호출
-            photonView.RPC("CreateNickName", RpcTarget.All);
+            photonView.RPC("CreateNickName", RpcTarget.AllBuffered);
            
             // 붙이기 비활성화
             isAttaching = false;
@@ -95,7 +95,7 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
             // 커서 초기화
             ResetCursor();
 
-            photonView.RPC("HideNickName", RpcTarget.All);
+            photonView.RPC("HideNickName", RpcTarget.AllBuffered);
         }
     }
 
