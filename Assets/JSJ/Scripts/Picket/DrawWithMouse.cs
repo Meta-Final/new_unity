@@ -114,9 +114,18 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
         // 그리기 모드일 때
         if (isDrawing == true)
         {
-            // 닉네임 프리팹 위치 업데이트
-            UpdateNickName();
-            text_NickName.transform.position = nickNamePos;
+            if (photonView.IsMine)
+            {
+                // 닉네임 프리팹 위치 업데이트
+                UpdateNickName();
+
+            }
+            else
+            {
+                text_NickName.transform.position = nickNamePos;
+
+            }
+            
 
         }
         
@@ -237,7 +246,7 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
             // 닉네임 위치
 
             nickNamePos = Input.mousePosition + offset;
-            //text_NickName.transform.position = nickNamePos;
+            text_NickName.transform.position = nickNamePos;
         }
     }
 
@@ -251,7 +260,7 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
         else
         {
             nickNamePos = (Vector2)stream.ReceiveNext();
-            //text_NickName.transform.position = nickNamePos;
+            text_NickName.transform.position = nickNamePos;
         }
     }
 }
