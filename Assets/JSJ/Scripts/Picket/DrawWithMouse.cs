@@ -129,6 +129,8 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
         if (isDrawing == true)
         {
             UpdateNickName();
+
+            text_NickName.transform.position = nickNamePos;
         }
         
         // ------------------------------------------------------------------------------------------------------- [ Start Draw ]
@@ -254,7 +256,6 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
 
             // 닉네임 프리팹 위치
             nickNamePos = Input.mousePosition + offset;
-            text_NickName.transform.position = nickNamePos;
         }
     }
 
@@ -268,12 +269,6 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
         else
         {
             nickNamePos = (Vector2)stream.ReceiveNext();
-
-            if (nickNamePos != null)
-            {
-                text_NickName.transform.position = nickNamePos;
-
-            }
         }
 
         
