@@ -44,17 +44,20 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
     {
         drawButton.onClick.AddListener(DrawMode);
         stickerButton.onClick.AddListener(StickerMode);
+    }
 
+    [PunRPC]
+    public void CreateNickName()
+    {
         // 닉네임 프리팹 생성
         nickNamePrefab = PhotonNetwork.Instantiate("NickNamePrefab", Vector3.zero, Quaternion.identity);
         // 닉네임 프리팹의 Text 자식 받아오기
         text_NickName = nickNamePrefab.GetComponentInChildren<TMP_Text>();
 
         text_NickName.text = photonView.Owner.NickName;
-
-        // 닉네임 프리팹 비활성화
-        nickNamePrefab.SetActive(false);
     }
+
+    
 
     // 그리기 모드
     public void DrawMode()
@@ -67,9 +70,8 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
             // 커서를 펜 아이콘으로 설정
             SetPenIcon();
 
-            // 닉네임 프리팹 활성화
-            nickNamePrefab.SetActive(true);
-
+            photonView.RPC("CreateNickName", RpcTarget.AllBuffered);
+           
             // 붙이기 비활성화
             isAttaching = false;
         }
@@ -78,8 +80,12 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
             // 커서 초기화
             ResetCursor();
 
-            // 닉네임 프리팹 비활성화
-            nickNamePrefab.SetActive(false);
+            if (nickNamePrefab != null)
+            {
+                // 닉네임 프리팹 비활성화
+                nickNamePrefab.SetActive(false);
+            }
+
         }
     }
 
@@ -110,8 +116,19 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
         // 그리기 모드일 때
         if (isDrawing == true)
         {
-            // 닉네임 프리팹 위치 업데이트
-            UpdateNickName();
+            if (photonView.IsMine)
+            {
+                // 닉네임 프리팹 위치 업데이트
+                UpdateNickName();
+
+            }
+            else
+            {
+                text_NickName.transform.position = nickNamePos;
+
+            }
+            
+
         }
         
         // 그리기가 true이고, 마우스를 눌렀을 때
