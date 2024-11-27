@@ -57,16 +57,7 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
         text_NickName.text = photonView.Owner.NickName;
     }
 
-    [PunRPC]
-    public void HideNickName()
-    {
-        if (nickNamePrefab != null)
-        {
-            // 닉네임 프리팹 비활성화
-            nickNamePrefab.SetActive(false);
-        }
-        
-    }
+    
 
     // 그리기 모드
     public void DrawMode()
@@ -89,9 +80,12 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
             // 커서 초기화
             ResetCursor();
 
-            photonView.RPC("HideNIckName", RpcTarget.AllBuffered);
-            
-            
+            if (nickNamePrefab != null)
+            {
+                // 닉네임 프리팹 비활성화
+                nickNamePrefab.SetActive(false);
+            }
+
         }
     }
 
