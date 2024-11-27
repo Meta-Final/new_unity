@@ -2,17 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class RayController : MonoBehaviour
 {
     public Transform targetPos; // "InteractNotice" 오브젝트의 Transform
     public GameObject rawImage; // Canvas_Interactive의 첫 번째 자식인 RawImage 오브젝트
     public float noticeDistance = 15f; // 알림 활성화 거리
-    public string targetLayerName = "MagazineObject"; // 이동할 대상 레이어 이름
-    public string sceneToLoad = "Meta_Magazine_Scene"; // 이동할 씬 이름
-    public float interactionDistance = 5f; // 상호작용 거리
-
-    public Transform rayPos;
 
     void Start()
     {
@@ -50,9 +46,6 @@ public class RayController : MonoBehaviour
     {
         // 거리 기반으로 RawImage 활성화/비활성화
         CheckDistance();
-
-        // MagazineObject 레이어의 오브젝트와 상호작용 체크
-        CheckInteraction();
     }
 
     public void CheckDistance()
@@ -86,40 +79,6 @@ public class RayController : MonoBehaviour
         else
         {
             Debug.LogWarning("[RayController] targetPos 또는 rawImage가 설정되지 않았습니다.");
-        }
-    }
-
-    public void CheckInteraction()
-    {
-        // MagazineObject 레이어의 오브젝트 탐지
-        int layerMask = 1 << LayerMask.NameToLayer(targetLayerName);
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, interactionDistance, layerMask);
-
-        // 해당 거리 안에 MagazineObject가 있는 경우
-        if (hitColliders.Length > 0)
-        {
-            Debug.Log("[RayController] MagazineObject 감지됨!");
-
-            // 상호작용 키 'K' 입력 시 씬 이동
-            if (Input.GetKeyDown(KeyCode.K))
-            {
-                Debug.Log("[RayController] 'K' 키 입력됨, 씬 이동 시도!");
-                SceneManager.LoadScene(sceneToLoad);
-            }
-        }
-    }
-
-    public void EnterMagazine()
-    {
-        Ray ray = new Ray(rayPos.position, rayPos.forward);
-        RaycastHit hitInfo;
-
-        if (Physics.Raycast(ray, out hitInfo))
-        {
-            if (hitInfo.collider.gameObject.layer == 21)
-            {
-
-            }
         }
     }
 }
