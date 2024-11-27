@@ -9,8 +9,6 @@ using TMPro;
 
 public class DrawWithMouse : MonoBehaviourPun, IPunObservable
 {
-    List<GameObject> nickNamePrefabList = new List<GameObject>();
-
     public Camera uiCamera;
 
     public Canvas canvasPicket;   // Picket UI Canvas
@@ -60,9 +58,6 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
         text_NickName = nickNamePrefab.GetComponentInChildren<TMP_Text>();
 
         text_NickName.text = photonView.Owner.NickName;
-
-        // 닉네임 프리팹 리스트에 추가
-        nickNamePrefabList.Add(nickNamePrefab);
     }
 
 
@@ -89,13 +84,9 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
             // 커서 초기화
             ResetCursor();
 
-            // 닉네임 프리팹 비활성화
-            foreach (var prefab in nickNamePrefabList)
+            if (nickNamePrefab != null)
             {
-                if (prefab != null)
-                {
-                    prefab.SetActive(false);
-                }
+                nickNamePrefab.SetActive(false);
             }
         }
     }
@@ -127,19 +118,19 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
     private void Update()
     {
         // 그리기 모드일 때
-        if (isDrawing == true)
+        if (isDrawing == true && nickNamePrefab != null)
         {
-            //if (photonView.IsMine)
-            //{
-            //    // 닉네임 프리팹 위치 업데이트
-            //    UpdateNickName();
-            //}
-            //else
-            //{
-            //    text_NickName.transform.position = nickNamePos;
-            //}
-            UpdateNickName();
-            text_NickName.transform.position = nickNamePos;
+            nickNamePrefab.SetActive(true);
+
+            if (photonView.IsMine)
+            {
+                // 닉네임 프리팹 위치 업데이트
+                UpdateNickName();
+            }
+            else
+            {
+                text_NickName.transform.position = nickNamePos;
+            }
         }
         else
         {
@@ -148,7 +139,11 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
             //    text_NickName.transform.position = new Vector3(3000, 3000, 0);
 
             //}
-            nickNamePrefab.SetActive(false);
+            if (nickNamePrefab != null)
+            {
+                nickNamePrefab.SetActive(false);
+            }
+            
             
 
         }
@@ -290,7 +285,7 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
         else
         {
             nickNamePos = (Vector2)stream.ReceiveNext();
-            text_NickName.transform.position = nickNamePos;
+            //text_NickName.transform.position = nickNamePos;
         }
     }
 }
