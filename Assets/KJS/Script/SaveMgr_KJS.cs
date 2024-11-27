@@ -1,5 +1,6 @@
 using Firebase.Auth;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -113,6 +114,7 @@ public class SaveMgr_KJS : MonoBehaviour
     public TMP_InputField inputPostIdField;
     public TMP_InputField loadPostIdField;
     private bool isUpdatingScrollbar = false;
+    public GameObject successUI; // 저장 성공 UI를 Inspector에서 할당 가능하도록 퍼블릭 필드 추가
 
 
     private void Start()
@@ -133,6 +135,10 @@ public class SaveMgr_KJS : MonoBehaviour
         else
         {
             Directory.CreateDirectory(saveDirectory);
+        }
+        if (successUI != null)
+        {
+            successUI.SetActive(false);
         }
     }
 
@@ -271,6 +277,10 @@ public class SaveMgr_KJS : MonoBehaviour
             File.WriteAllText(postSavePath, json);
 
             Debug.Log($"All data saved locally in {postSavePath}");
+
+            // UI 활성화 후 3초 후 비활성화
+            StartCoroutine(ShowUISuccessFeedback());
+
         }
         catch (Exception e)
         {
@@ -278,7 +288,24 @@ public class SaveMgr_KJS : MonoBehaviour
         }
     }
 
-    public void LoadSpecificPostById(string targetPostId) // targetPostId를 직접 전달받는 방식
+    // UI를 3초간 활성화하는 코루틴
+    private IEnumerator ShowUISuccessFeedback()
+    {
+        if (successUI != null)
+        {
+            successUI.SetActive(true); // UI 활성화
+            yield return new WaitForSeconds(3f); // 3초 대기
+            successUI.SetActive(false); // UI 비활성화
+        }
+        else
+        {
+            Debug.LogWarning("Success UI가 설정되지 않았습니다. Inspector에서 할당하세요.");
+        }
+    }
+
+    // ... 나머지 메서드들은 기존 코드 그대로 유지 ...
+
+public void LoadSpecificPostById(string targetPostId) // targetPostId를 직접 전달받는 방식
     {
         if (string.IsNullOrWhiteSpace(targetPostId))
         {

@@ -112,12 +112,12 @@ public class AiChatMgr_KJS : MonoBehaviour
             apiManager.LLM(userMessage);
 
             // 특정 메시지에 따라 UI 활성화 예약 및 오브젝트 생성
-            if (userMessage.Contains("오브젝트 만들고 싶어"))
+            if (userMessage.Contains("첫눈과 관련된 오브젝트를 만들고 싶어"))
             {
                 SpawnPrefabOnNetwork(); // 즉시 오브젝트 생성
                 StartCoroutine(ActivateExtraUIWithDelay(2f)); // extraUI 활성화
             }
-            else if (userMessage.Contains("썸네일 만들어줘"))
+            else if (userMessage.Contains("첫눈과 관련된 썸네일 만들어줘"))
             {
                 // Extra UI 활성화 후 Thumbnail UI 활성화
                 StartCoroutine(ActivateExtraUIWithDelayThenThumbnail(2f, 2f)); // 각각 딜레이 값 전달
