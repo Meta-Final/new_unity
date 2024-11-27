@@ -132,7 +132,11 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
 
         }
 
-        text_NickName.transform.position = nickNamePos;
+        if (text_NickName != null)
+        {
+            text_NickName.transform.position = nickNamePos;
+        }
+        
 
 
         // ------------------------------------------------------------------------------------------------------- [ Start Draw ]
