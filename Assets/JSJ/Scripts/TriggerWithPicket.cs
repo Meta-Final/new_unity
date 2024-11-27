@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,9 +18,14 @@ public class TriggerWithPicket : MonoBehaviour
     // Trigger 영역에 Player 가 들어갔을 때
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name.Contains("Player") && !enterPicketZone)
+        if (other.CompareTag("Player") && !enterPicketZone)
         {
-            canvas_PicketNotice.SetActive(true);
+            PhotonView pv = other.GetComponent<PhotonView>();
+            if (pv.IsMine)
+            {
+                canvas_PicketNotice.SetActive(true);
+            }
+
             enterPicketZone = true;
         }
     }
@@ -29,7 +35,12 @@ public class TriggerWithPicket : MonoBehaviour
     {
         if (other.CompareTag("Player") && enterPicketZone)
         {
-            canvas_PicketNotice.SetActive(false);
+            PhotonView pv = other.GetComponent<PhotonView>();
+            if (pv.IsMine)
+            {
+                canvas_PicketNotice.SetActive(false);
+            }
+            
             enterPicketZone = false;
         }
     }

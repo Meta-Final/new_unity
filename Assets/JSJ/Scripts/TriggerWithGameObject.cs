@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine.UI;
 
 public class TriggerWithGameObject : MonoBehaviour
 {
+    public PhotonView pv;
+
     [Header("Game Object")]
     public GameObject player;
     public GameObject panel_MagazineNotice;
@@ -18,14 +21,9 @@ public class TriggerWithGameObject : MonoBehaviour
     {
         player = FindObjectOfType<GameManager>().player;
 
+        pv = player.GetComponent<PhotonView>();
+
         btn_No.onClick.AddListener(OnClickBtnNo);
-
-    }
-
-   
-    void Update()
-    {
-        
     }
 
     // Trigger 영역에 Player 가 들어갔을 때
@@ -33,7 +31,11 @@ public class TriggerWithGameObject : MonoBehaviour
     {
         if (other.gameObject.name.Contains("Player") && !isPanelOpen)
         {
-            panel_MagazineNotice.SetActive(true);
+            if (pv.IsMine)
+            {
+                panel_MagazineNotice.SetActive(true);
+            }
+            
             isPanelOpen = true;
         }
     }
@@ -43,7 +45,11 @@ public class TriggerWithGameObject : MonoBehaviour
     {
         if (other.CompareTag("Player") && isPanelOpen)
         {
-            panel_MagazineNotice.SetActive(false);
+            if (pv.IsMine)
+            {
+                panel_MagazineNotice.SetActive(false);
+            }
+            
             isPanelOpen = false;
         }
     }
@@ -51,8 +57,11 @@ public class TriggerWithGameObject : MonoBehaviour
     // Panel 닫는 버튼
     public void OnClickBtnNo()
     {
-        panel_MagazineNotice.SetActive(false);
-
+        if (pv.IsMine)
+        {
+            panel_MagazineNotice.SetActive(false);
+        }
+        
         isPanelOpen = false;
     }
 }
