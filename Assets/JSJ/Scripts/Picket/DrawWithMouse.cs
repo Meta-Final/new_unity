@@ -122,15 +122,15 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
         {
             nickNamePrefab.SetActive(true);
 
-            if (photonView.IsMine)
-            {
-                // 닉네임 프리팹 위치 업데이트
-                UpdateNickName();
-            }
-            else
+            UpdateNickName();
+
+            if (!photonView.IsMine)
             {
                 text_NickName.transform.position = nickNamePos;
+
             }
+            
+            
         }
         else
         {
