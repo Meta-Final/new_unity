@@ -17810,6 +17810,79 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 428743907}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &429030086
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1403166856176801401, guid: 8b7234341e02f064c8a22e3d57c439c1,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4675653648790712286, guid: 8b7234341e02f064c8a22e3d57c439c1,
+        type: 3}
+      propertyPath: m_Name
+      value: Picket
+      objectReference: {fileID: 0}
+    - target: {fileID: 6293355992462656177, guid: 8b7234341e02f064c8a22e3d57c439c1,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 119.7954
+      objectReference: {fileID: 0}
+    - target: {fileID: 6293355992462656177, guid: 8b7234341e02f064c8a22e3d57c439c1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -4.6000004
+      objectReference: {fileID: 0}
+    - target: {fileID: 6293355992462656177, guid: 8b7234341e02f064c8a22e3d57c439c1,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 18.29343
+      objectReference: {fileID: 0}
+    - target: {fileID: 6293355992462656177, guid: 8b7234341e02f064c8a22e3d57c439c1,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6293355992462656177, guid: 8b7234341e02f064c8a22e3d57c439c1,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6293355992462656177, guid: 8b7234341e02f064c8a22e3d57c439c1,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6293355992462656177, guid: 8b7234341e02f064c8a22e3d57c439c1,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6293355992462656177, guid: 8b7234341e02f064c8a22e3d57c439c1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6293355992462656177, guid: 8b7234341e02f064c8a22e3d57c439c1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6293355992462656177, guid: 8b7234341e02f064c8a22e3d57c439c1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8b7234341e02f064c8a22e3d57c439c1, type: 3}
 --- !u!1001 &432408896
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43489,7 +43562,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2070151893}
         m_TargetAssemblyTypeName: ScrapBookBtnMgr, Assembly-CSharp
         m_MethodName: OnClickXTool1
         m_Mode: 1
@@ -47976,7 +48049,7 @@ MonoBehaviour:
   btn_Yes: {fileID: 6003797384274903848}
   btn_No: {fileID: 4161288318596247638}
   btn_X: {fileID: 1515515724}
-  img_News: {fileID: 0}
+  img_News: {fileID: 1794850323}
   screenshotList: []
   isShowPicketUI: 0
   drawWithMouse: {fileID: 39936043}
@@ -88393,7 +88466,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46e06aa6640c31f4cac2e296a595b2f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tool1: {fileID: 0}
+  tool1: {fileID: 1668244379}
 --- !u!4 &2070151894
 Transform:
   m_ObjectHideFlags: 0
@@ -96354,3 +96427,4 @@ SceneRoots:
   - {fileID: 2070151894}
   - {fileID: 881330208}
   - {fileID: 1244093160}
+  - {fileID: 429030086}
