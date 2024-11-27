@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TriggerWithPicket : MonoBehaviourPun
+public class TriggerWithPicket : MonoBehaviour
 {
     public GameObject player;
     public GameObject canvas_PicketNotice;
@@ -20,7 +20,8 @@ public class TriggerWithPicket : MonoBehaviourPun
     {
         if (other.CompareTag("Player") && !enterPicketZone)
         {
-            if (photonView.IsMine)
+            PhotonView pv = other.GetComponent<PhotonView>();
+            if (pv.IsMine)
             {
                 canvas_PicketNotice.SetActive(true);
             }
@@ -34,7 +35,8 @@ public class TriggerWithPicket : MonoBehaviourPun
     {
         if (other.CompareTag("Player") && enterPicketZone)
         {
-            if (photonView.IsMine)
+            PhotonView pv = other.GetComponent<PhotonView>();
+            if (pv.IsMine)
             {
                 canvas_PicketNotice.SetActive(false);
             }
