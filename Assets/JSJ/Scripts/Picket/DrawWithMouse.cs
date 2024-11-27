@@ -84,15 +84,22 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
             // 커서 초기화
             ResetCursor();
 
-            foreach (var prefab in nickNamePrefabList)
-            {
-                if (prefab != null)
-                {
-                    prefab.SetActive(false);
-                }
-            }
+            photonView.RPC("HideNickName", RpcTarget.All);
 
         }
+    }
+
+    [PunRPC]
+    void HideNickName()
+    {
+        foreach (var prefab in nickNamePrefabList)
+        {
+            if (prefab != null)
+            {
+                prefab.SetActive(false);
+            }
+        }
+
     }
 
     // 스티커 모드
