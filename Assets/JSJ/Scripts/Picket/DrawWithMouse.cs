@@ -16,6 +16,7 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
     public Canvas canvasPicket;   // Picket UI Canvas
 
     public Line line;
+
     public GameObject stickerPrefab;
 
     [Header("SetParent")]
@@ -30,7 +31,7 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
     public Texture2D penIcon;
     public Texture2D stickerIcon;
 
-
+    [Header("Bool")]
     public bool isDrawing = false;
     public bool isAttaching = false;
     public bool isCursorActive = false;
@@ -42,12 +43,14 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
 
     Vector2 nickNamePos;
 
+
     private void Start()
     {
         drawButton.onClick.AddListener(DrawMode);
         stickerButton.onClick.AddListener(StickerMode);
     }
 
+    // 닉네임 생성 동기화 함수
     [PunRPC]
     public void CreateNickName()
     {
@@ -58,11 +61,12 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
 
         text_NickName.text = photonView.Owner.NickName;
 
+        // 닉네임 프리팹 리스트에 추가
         nickNamePrefabList.Add(nickNamePrefab);
     }
 
-    
 
+    // ------------------------------------------------------------------------------------------------------- [ Draw ]
     // 그리기 모드
     public void DrawMode()
     {
@@ -74,6 +78,7 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
             // 커서를 펜 아이콘으로 설정
             SetPenIcon();
 
+            // 닉네임 생성 함수 RPC 호출
             photonView.RPC("CreateNickName", RpcTarget.AllBuffered);
            
             // 붙이기 비활성화
@@ -84,24 +89,19 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
             // 커서 초기화
             ResetCursor();
 
-            photonView.RPC("HideNickName", RpcTarget.All);
-
-        }
-    }
-
-    [PunRPC]
-    void HideNickName()
-    {
-        foreach (var prefab in nickNamePrefabList)
-        {
-            if (prefab != null)
+            // 닉네임 프리팹 비활성화
+            foreach (var prefab in nickNamePrefabList)
             {
-                prefab.SetActive(false);
+                if (prefab != null)
+                {
+                    prefab.SetActive(false);
+                }
             }
         }
-
     }
 
+
+    // ------------------------------------------------------------------------------------------------------- [ Sticker ]
     // 스티커 모드
     public void StickerMode()
     {
@@ -133,23 +133,21 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
             {
                 // 닉네임 프리팹 위치 업데이트
                 UpdateNickName();
-
             }
             else
             {
                 text_NickName.transform.position = nickNamePos;
-
             }
-            
-
         }
-        
+
+        // ------------------------------------------------------------------------------------------------------- [ Start Draw ]
         // 그리기가 true이고, 마우스를 눌렀을 때
         if (Input.GetMouseButtonDown(0) && isDrawing == true)
         {
             CreateNewLine();
-        }    
+        }
 
+        // ------------------------------------------------------------------------------------------------------- [ Drawing ]
         // 그리기가 true이고, 마우스를 누르고 있을 때
         if (Input.GetMouseButton(0) && isDrawing == true)
         {
@@ -169,6 +167,7 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
             }
         }
 
+        // ------------------------------------------------------------------------------------------------------- [ Start Sticker ]
         // 붙이기가 true이고, 마우스를 눌렀을 때
         if (Input.GetMouseButtonDown(0) && isAttaching == true)
         {
@@ -179,6 +178,7 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
             }
         }
     }
+
 
     // ------------------------------------------------------------------------------------------------------[ Line ]
     // 라인 생성 함수
@@ -205,6 +205,7 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
         lineObject.transform.SetParent(lineParent.transform);
     }
 
+
     // ---------------------------------------------------------------------------------------------------[ Sticker ]
     // 스티커 생성 함수
     void AttachSticker()
@@ -228,6 +229,7 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
         stickerInstance.transform.localPosition = localPoint;
     }
 
+
     // ----------------------------------------------------------------------------------------------------[ Cursor ]
     // 커서를 펜 아이콘으로 설정
     public void SetPenIcon()
@@ -247,6 +249,7 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
     }
 
+
     // --------------------------------------------------------------------------------------------------[ NIckName ]
     // 닉네임 프리팹 위치 업데이트
     public void UpdateNickName()
@@ -258,14 +261,13 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
         {
             Vector3 offset = new Vector3(60, -60, 0);
 
-            // 닉네임 위치
-
+            // 닉네임 프리팹 위치
             nickNamePos = Input.mousePosition + offset;
             text_NickName.transform.position = nickNamePos;
         }
     }
 
-    // 닉네임 위치 동기화
+    // 닉네임 프리팹 위치 동기화
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
