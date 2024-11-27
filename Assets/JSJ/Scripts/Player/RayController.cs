@@ -12,6 +12,8 @@ public class RayController : MonoBehaviour
     public string sceneToLoad = "Meta_Magazine_Scene"; // 이동할 씬 이름
     public float interactionDistance = 5f; // 상호작용 거리
 
+    public Transform rayPos;
+
     void Start()
     {
         // "Meta_ScrapBook_Scene"일 경우 Canvas를 찾음
@@ -103,6 +105,20 @@ public class RayController : MonoBehaviour
             {
                 Debug.Log("[RayController] 'K' 키 입력됨, 씬 이동 시도!");
                 SceneManager.LoadScene(sceneToLoad);
+            }
+        }
+    }
+
+    public void EnterMagazine()
+    {
+        Ray ray = new Ray(rayPos.position, rayPos.forward);
+        RaycastHit hitInfo;
+
+        if (Physics.Raycast(ray, out hitInfo))
+        {
+            if (hitInfo.collider.gameObject.layer == 21)
+            {
+
             }
         }
     }

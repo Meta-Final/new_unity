@@ -121,9 +121,9 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
     }
 
 
-    //----------------------------------------------------------------------- [ EyesMagazine ]
-    // EyesMagazine 입장
-    public void JoinEyesMagazine()
+    //----------------------------------------------------------------------- [ Magazine ]
+    // Magazine 생성 후 입장
+    public void JoinOrCreateMagazine()
     {
         loadLevelName = "Meta_Magazine_Scene";
 
@@ -137,7 +137,7 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         roomOptions.IsOpen = true;
 
         // Room 참여 or 생성
-        PhotonNetwork.JoinOrCreateRoom("EyesMagazine", roomOptions, TypedLobby.Default);
+        PhotonNetwork.JoinOrCreateRoom("TheEdit", roomOptions, TypedLobby.Default);
     }
 
 
@@ -199,7 +199,7 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
     }
 
     // Town -> EyesMagazine
-    public void TownToEyesMagazine()
+    public void TownToMagazine()
     {
         PhotonNetwork.LeaveRoom();
         roomNumber = 6;
@@ -256,10 +256,10 @@ public class MetaConnectionMgr : MonoBehaviourPunCallbacks
         {
             JoinOrCreateRoom();
         }
-        // 만약 룸넘버가 6이면, EyesMagazine 으로 이동한다.
+        // 만약 룸넘버가 6이면, Magazine 으로 이동한다.
         if (roomNumber == 6)
         {
-            JoinEyesMagazine();
+            JoinOrCreateMagazine();
         }
 
         // 이동 후 초기화
