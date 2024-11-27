@@ -6690,8 +6690,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetPos: {fileID: 0}
-  canvasNotice: {fileID: 0}
-  noticeDistance: 3
+  rawImage: {fileID: 0}
+  noticeDistance: 15
+  targetLayerName: MagazineObject
+  sceneToLoad: Meta_Magazine_Scene
+  interactionDistance: 5
+  rayPos: {fileID: 0}
 --- !u!114 &3911728353210943081
 MonoBehaviour:
   m_ObjectHideFlags: 0
