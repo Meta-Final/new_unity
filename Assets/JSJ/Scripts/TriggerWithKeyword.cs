@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TriggerWithKeyword : MonoBehaviourPun
+public class TriggerWithKeyword : MonoBehaviour
 {
     public GameObject player;
     public GameObject Canvas_KeywordNotice;
@@ -20,7 +20,8 @@ public class TriggerWithKeyword : MonoBehaviourPun
     {
         if (other.gameObject.name.Contains("Player") && !enterKeyword)
         {
-            if (photonView.IsMine)
+            PhotonView pv = other.GetComponent<PhotonView>();
+            if (pv.IsMine)
             {
                 Canvas_KeywordNotice.SetActive(true);
             }
@@ -34,7 +35,8 @@ public class TriggerWithKeyword : MonoBehaviourPun
     {
         if (other.CompareTag("Player") && enterKeyword)
         {
-            if (photonView.IsMine)
+            PhotonView pv = other.GetComponent<PhotonView>();
+            if (pv.IsMine)
             {
                 Canvas_KeywordNotice.SetActive(false);
             }

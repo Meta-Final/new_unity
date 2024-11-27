@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TriggerWithGameObject : MonoBehaviourPun
+public class TriggerWithGameObject : MonoBehaviour
 {
+    public PhotonView pv;
+
     [Header("Game Object")]
     public GameObject player;
     public GameObject panel_MagazineNotice;
@@ -19,14 +21,9 @@ public class TriggerWithGameObject : MonoBehaviourPun
     {
         player = FindObjectOfType<GameManager>().player;
 
+        pv = player.GetComponent<PhotonView>();
+
         btn_No.onClick.AddListener(OnClickBtnNo);
-
-    }
-
-   
-    void Update()
-    {
-        
     }
 
     // Trigger 영역에 Player 가 들어갔을 때
@@ -34,7 +31,7 @@ public class TriggerWithGameObject : MonoBehaviourPun
     {
         if (other.gameObject.name.Contains("Player") && !isPanelOpen)
         {
-            if (photonView.IsMine)
+            if (pv.IsMine)
             {
                 panel_MagazineNotice.SetActive(true);
             }
@@ -48,7 +45,7 @@ public class TriggerWithGameObject : MonoBehaviourPun
     {
         if (other.CompareTag("Player") && isPanelOpen)
         {
-            if (photonView.IsMine)
+            if (pv.IsMine)
             {
                 panel_MagazineNotice.SetActive(false);
             }
@@ -60,7 +57,7 @@ public class TriggerWithGameObject : MonoBehaviourPun
     // Panel 닫는 버튼
     public void OnClickBtnNo()
     {
-        if (photonView.IsMine)
+        if (pv.IsMine)
         {
             panel_MagazineNotice.SetActive(false);
         }
