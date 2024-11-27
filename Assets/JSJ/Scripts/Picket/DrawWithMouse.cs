@@ -141,7 +141,12 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
         }
         else
         {
-            text_NickName.transform.position = new Vector3(3000, 3000, 0);
+            if (text_NickName != null)
+            {
+                text_NickName.transform.position = new Vector3(3000, 3000, 0);
+
+            }
+            
 
         }
 
