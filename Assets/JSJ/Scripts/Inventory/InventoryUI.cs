@@ -227,7 +227,7 @@ public class InventoryUI : MonoBehaviourPun
 
             Vector3 spawnPosition = GetNewPosition();
             GameObject newPostIt = Instantiate(postItPrefab, spawnPosition, Quaternion.identity, noticePos);
-            newPostIt.transform.localScale = new Vector3(9, 6, 1);
+            newPostIt.transform.localScale = new Vector3(18, 12, 2);
             newPostIt.GetComponent<H_MergePostIt>().noticepos = noticePos;
 
             // 색상 및 텍스처 설정

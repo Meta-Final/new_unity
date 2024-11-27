@@ -30,7 +30,7 @@ public class H_MergePostIt : MonoBehaviour
                 GameObject go = Instantiate(postit, transform.position, Quaternion.identity, noticepos);
                 
                 go.transform.localEulerAngles = new Vector3(180, 0, 90);
-                go.transform.localScale = new Vector3(10, 10, 10);
+                go.transform.localScale = new Vector3(20, 20, 20);
                 H_NewFolder hn = go.GetComponent<H_NewFolder>();
 
                 // 스크린샷사진 추가
