@@ -139,6 +139,11 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
                 text_NickName.transform.position = nickNamePos;
             }
         }
+        else
+        {
+            text_NickName.transform.position = new Vector3(3000, 3000, 0);
+
+        }
 
         // ------------------------------------------------------------------------------------------------------- [ Start Draw ]
         // 그리기가 true이고, 마우스를 눌렀을 때
