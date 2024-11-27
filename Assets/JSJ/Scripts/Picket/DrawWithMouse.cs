@@ -9,6 +9,8 @@ using TMPro;
 
 public class DrawWithMouse : MonoBehaviourPun, IPunObservable
 {
+    List<GameObject> nickNamePrefabList = new List<GameObject>();
+
     public Camera uiCamera;
 
     public Canvas canvasPicket;   // Picket UI Canvas
@@ -55,6 +57,8 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
         text_NickName = nickNamePrefab.GetComponentInChildren<TMP_Text>();
 
         text_NickName.text = photonView.Owner.NickName;
+
+        nickNamePrefabList.Add(nickNamePrefab);
     }
 
     
@@ -80,10 +84,12 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
             // 커서 초기화
             ResetCursor();
 
-            if (nickNamePrefab != null)
+            foreach (var prefab in nickNamePrefabList)
             {
-                // 닉네임 프리팹 비활성화
-                nickNamePrefab.SetActive(false);
+                if (prefab != null)
+                {
+                    prefab.SetActive(false);
+                }
             }
 
         }
