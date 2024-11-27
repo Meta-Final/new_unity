@@ -1,9 +1,10 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TriggerWithGameObject : MonoBehaviour
+public class TriggerWithGameObject : MonoBehaviourPun
 {
     [Header("Game Object")]
     public GameObject player;
@@ -33,7 +34,11 @@ public class TriggerWithGameObject : MonoBehaviour
     {
         if (other.gameObject.name.Contains("Player") && !isPanelOpen)
         {
-            panel_MagazineNotice.SetActive(true);
+            if (photonView.IsMine)
+            {
+                panel_MagazineNotice.SetActive(true);
+            }
+            
             isPanelOpen = true;
         }
     }
@@ -43,7 +48,11 @@ public class TriggerWithGameObject : MonoBehaviour
     {
         if (other.CompareTag("Player") && isPanelOpen)
         {
-            panel_MagazineNotice.SetActive(false);
+            if (photonView.IsMine)
+            {
+                panel_MagazineNotice.SetActive(false);
+            }
+            
             isPanelOpen = false;
         }
     }
@@ -51,8 +60,11 @@ public class TriggerWithGameObject : MonoBehaviour
     // Panel ´Ý´Â ¹öÆ°
     public void OnClickBtnNo()
     {
-        panel_MagazineNotice.SetActive(false);
-
+        if (photonView.IsMine)
+        {
+            panel_MagazineNotice.SetActive(false);
+        }
+        
         isPanelOpen = false;
     }
 }
