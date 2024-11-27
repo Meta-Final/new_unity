@@ -130,9 +130,11 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
         {
             UpdateNickName();
 
-            text_NickName.transform.position = nickNamePos;
         }
-        
+
+        text_NickName.transform.position = nickNamePos;
+
+
         // ------------------------------------------------------------------------------------------------------- [ Start Draw ]
         // 그리기가 true이고, 마우스를 눌렀을 때
         if (Input.GetMouseButtonDown(0) && isDrawing == true)
@@ -256,6 +258,7 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
 
             // 닉네임 프리팹 위치
             nickNamePos = Input.mousePosition + offset;
+            text_NickName.transform.position = nickNamePos;
         }
     }
 
