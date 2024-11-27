@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using TMPro; // TextMeshPro 네임스페이스
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PostDropDownLoader_KJS : MonoBehaviour
 {
@@ -37,7 +36,10 @@ public class PostDropDownLoader_KJS : MonoBehaviour
     // postId 폴더를 탐색하고 Magazine.json 파일에서 postId 불러오기
     private void LoadPostIdsFromDirectories()
     {
-        List<string> postIdList = new List<string>();
+        List<string> postIdList = new List<string>
+        {
+            "문서 목록" // 기본값으로 추가
+        };
 
         try
         {
@@ -102,11 +104,9 @@ public class PostDropDownLoader_KJS : MonoBehaviour
         postDropdown.AddOptions(postIdList); // postId 추가
         Debug.Log($"Dropdown에 추가된 postId: {string.Join(", ", postIdList)}");
 
-        // 기본 선택값으로 첫 번째 postId를 선택
-        if (postIdList.Count > 0)
-        {
-            OnDropdownValueChanged(0); // 첫 번째 postId 로드
-        }
+        // 기본 선택값으로 "문서 목록"을 선택
+        postDropdown.value = 0; // 인덱스 0 선택
+        OnDropdownValueChanged(0); // 기본값 로드
     }
 
     // Dropdown에서 선택된 값이 변경되었을 때 호출되는 이벤트
@@ -118,6 +118,13 @@ public class PostDropDownLoader_KJS : MonoBehaviour
         string selectedPostId = postDropdown.options[index].text;
 
         Debug.Log($"Dropdown에서 선택된 postId: {selectedPostId}");
+
+        // "문서 목록"은 동작하지 않도록 설정
+        if (selectedPostId == "문서 목록")
+        {
+            Debug.Log("기본 항목 '문서 목록'이 선택되었습니다. 아무 작업도 수행하지 않습니다.");
+            return;
+        }
 
         // SaveMgr_KJS의 LoadSpecificPostById 호출
         if (saveManager != null)
