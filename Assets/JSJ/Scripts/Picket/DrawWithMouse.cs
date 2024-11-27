@@ -58,6 +58,17 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
         text_NickName = nickNamePrefab.GetComponentInChildren<TMP_Text>();
 
         text_NickName.text = photonView.Owner.NickName;
+
+        nickNamePrefab.SetActive(true);
+    }
+
+    [PunRPC]
+    public void HideNickName()
+    {
+        if (nickNamePrefab != null)
+        {
+            nickNamePrefab.SetActive(false);
+        }
     }
 
 
@@ -84,10 +95,7 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
             // 커서 초기화
             ResetCursor();
 
-            if (nickNamePrefab != null)
-            {
-                nickNamePrefab.SetActive(false);
-            }
+            photonView.RPC("HideNickName", RpcTarget.All);
         }
     }
 
@@ -118,36 +126,11 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
     private void Update()
     {
         // 그리기 모드일 때
-        if (isDrawing == true && nickNamePrefab != null)
+        if (isDrawing == true)
         {
-            nickNamePrefab.SetActive(true);
-
             UpdateNickName();
-
-            if (!photonView.IsMine)
-            {
-                text_NickName.transform.position = nickNamePos;
-
-            }
-            
-            
         }
-        else
-        {
-            //if (text_NickName != null)
-            //{
-            //    text_NickName.transform.position = new Vector3(3000, 3000, 0);
-
-            //}
-            if (nickNamePrefab != null)
-            {
-                nickNamePrefab.SetActive(false);
-            }
-            
-            
-
-        }
-
+        
         // ------------------------------------------------------------------------------------------------------- [ Start Draw ]
         // 그리기가 true이고, 마우스를 눌렀을 때
         if (Input.GetMouseButtonDown(0) && isDrawing == true)
@@ -285,7 +268,14 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
         else
         {
             nickNamePos = (Vector2)stream.ReceiveNext();
-            //text_NickName.transform.position = nickNamePos;
+
+            if (nickNamePos != null)
+            {
+                text_NickName.transform.position = nickNamePos;
+
+            }
         }
+
+        
     }
 }
