@@ -5,67 +5,104 @@ using UnityEngine.SceneManagement;
 
 public class RayController : MonoBehaviour
 {
-    public Transform targetPos; // 동적으로 생성된 "Player" 오브젝트의 Transform
-    public GameObject canvasNotice; // 알림 UI 오브젝트
-    public float noticeDistance = 3f; // 알림 활성화 거리
+    public Transform targetPos; // "InteractNotice" 오브젝트의 Transform
+    public GameObject rawImage; // Canvas_Interactive의 첫 번째 자식인 RawImage 오브젝트
+    public float noticeDistance = 15f; // 알림 활성화 거리
+    public string targetLayerName = "MagazineObject"; // 이동할 대상 레이어 이름
+    public string sceneToLoad = "Meta_Magazine_Scene"; // 이동할 씬 이름
+    public float interactionDistance = 5f; // 상호작용 거리
 
     void Start()
     {
-        // 현재 씬이 Meta_ScrapBook_Scene일 경우 Canvas를 찾음
+        // "Meta_ScrapBook_Scene"일 경우 Canvas를 찾음
         if (SceneManager.GetActiveScene().name == "Meta_ScrapBook_Scene")
         {
-            canvasNotice = GameObject.Find("Canvas_Interactive");
+            GameObject canvasNotice = GameObject.Find("Canvas_Interactive");
+            if (canvasNotice != null && canvasNotice.transform.childCount > 0)
+            {
+                rawImage = canvasNotice.transform.GetChild(0).gameObject; // 첫 번째 자식을 RawImage로 할당
+            }
+        }
+
+        // RawImage 초기 비활성화
+        if (rawImage != null)
+        {
+            rawImage.SetActive(false);
+            Debug.Log("[RayController] RawImage 비활성화 성공"); // 디버그 메시지
+        }
+
+        // "InteractNotice" 오브젝트를 찾아 targetPos에 할당
+        GameObject interactNotice = GameObject.Find("InteractNotice");
+        if (interactNotice != null)
+        {
+            targetPos = interactNotice.transform;
+            Debug.Log("[RayController] InteractNotice 할당 성공: " + interactNotice.name); // 디버그 메시지
         }
         else
         {
-            canvasNotice = null;
-        }
-
-        // Canvas를 초기에는 비활성화
-        if (canvasNotice != null)
-        {
-            canvasNotice.SetActive(false);
-        }
-
-        // "Player" 태그를 가진 오브젝트를 찾아 targetPos에 할당
-        GameObject player = GameObject.FindWithTag("Player");
-        if (player != null)
-        {
-            targetPos = player.transform;
+            Debug.LogWarning("[RayController] InteractNotice 오브젝트를 찾을 수 없습니다!");
         }
     }
 
     void Update()
     {
-        // Player가 동적으로 생성될 경우를 대비해 매 프레임 확인
-        if (targetPos == null)
-        {
-            GameObject player = GameObject.FindWithTag("Player");
-            if (player != null)
-            {
-                targetPos = player.transform;
-            }
-        }
-
-        // 거리 기반으로 Canvas 활성화/비활성화
+        // 거리 기반으로 RawImage 활성화/비활성화
         CheckDistance();
+
+        // MagazineObject 레이어의 오브젝트와 상호작용 체크
+        CheckInteraction();
     }
 
     public void CheckDistance()
     {
-        if (targetPos != null && canvasNotice != null)
+        if (targetPos != null && rawImage != null)
         {
-            // Player와 RayController 간의 거리 계산
-            float distanceToPlayer = Vector3.Distance(transform.position, targetPos.position);
+            // 현재 위치와 InteractNotice 위치 간 거리 계산
+            float distanceToNotice = Vector3.Distance(transform.position, targetPos.position);
 
-            // 거리가 설정된 noticeDistance 이내라면 Canvas 활성화
-            if (distanceToPlayer <= noticeDistance)
+            // 디버그 로그로 거리 출력
+            Debug.Log("[RayController] InteractNotice와의 거리: " + distanceToNotice);
+
+            // 거리 조건에 따라 RawImage 활성화/비활성화
+            if (distanceToNotice <= noticeDistance)
             {
-                canvasNotice.SetActive(true);
+                if (!rawImage.activeSelf) // 이미 활성화 상태가 아니라면 활성화
+                {
+                    rawImage.SetActive(true);
+                    Debug.Log("[RayController] RawImage 활성화!");
+                }
             }
             else
             {
-                canvasNotice.SetActive(false);
+                if (rawImage.activeSelf) // 이미 비활성화 상태가 아니라면 비활성화
+                {
+                    rawImage.SetActive(false);
+                    Debug.Log("[RayController] RawImage 비활성화!");
+                }
+            }
+        }
+        else
+        {
+            Debug.LogWarning("[RayController] targetPos 또는 rawImage가 설정되지 않았습니다.");
+        }
+    }
+
+    public void CheckInteraction()
+    {
+        // MagazineObject 레이어의 오브젝트 탐지
+        int layerMask = 1 << LayerMask.NameToLayer(targetLayerName);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, interactionDistance, layerMask);
+
+        // 해당 거리 안에 MagazineObject가 있는 경우
+        if (hitColliders.Length > 0)
+        {
+            Debug.Log("[RayController] MagazineObject 감지됨!");
+
+            // 상호작용 키 'K' 입력 시 씬 이동
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                Debug.Log("[RayController] 'K' 키 입력됨, 씬 이동 시도!");
+                SceneManager.LoadScene(sceneToLoad);
             }
         }
     }
