@@ -165,10 +165,13 @@ public class EditorMgr_KJS : MonoBehaviour
         inputField.text = buttonText;
 
         TMP_Text buttonTextComponent = button.GetComponentInChildren<TMP_Text>();
-        inputField.textComponent.fontSize = (int)(buttonTextComponent.fontSize / FontSizeMultiplier);
+
+        // 텍스트 크기를 2.5배로 설정
+        inputField.textComponent.fontSize = (int)(buttonTextComponent.fontSize / FontSizeMultiplier * 1.5f);
+
         inputField.textComponent.fontStyle = buttonTextComponent.fontStyle;
 
-        fontSizeInputField.text = ((int)(buttonTextComponent.fontSize / FontSizeMultiplier)).ToString();
+        fontSizeInputField.text = ((int)(buttonTextComponent.fontSize / FontSizeMultiplier * 1.5f)).ToString();
     }
 
     public void OnInputFieldTextChanged(string newText)
