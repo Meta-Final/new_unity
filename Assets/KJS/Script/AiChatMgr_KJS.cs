@@ -118,17 +118,14 @@ public class AiChatMgr_KJS : MonoBehaviour
         {
             if (userMessage.Contains("폭설을 주제로 오브젝트를 만들고 싶어"))
             {
-                // 메시지 출력 및 오브젝트 생성
-                StartCoroutine(ActivateExtraUIWithDelay(2f)); // 추가 UI 활성화
-                SpawnPrefabOnNetwork();
-                
+                // 추가 UI 활성화 후 메시지 출력
+                StartCoroutine(ActivateExtraUIWithDelayAndResponse(2f, "오브젝트를 만들었어 삐약! O키를 눌러 확인해봐."));
+                SpawnPrefabOnNetwork(); // 오브젝트 생성
             }
             else if (userMessage.Contains("폭설을 주제로 썸네일 만들어줘"))
             {
-                // 메시지 출력 및 썸네일 UI 활성화
-                UpdateChatResponse("썸네일을 만들었어 삐약! 썸네일 버튼을 눌러서 확인해봐.");
-                StartCoroutine(ActivateExtraUIWithDelayThenThumbnail(2f, 2f));
-                
+                // 썸네일 UI 활성화 후 메시지 출력
+                StartCoroutine(ActivateExtraUIWithThumbnailAndResponse(2f, 2f, "썸네일을 만들었어 삐약! 썸네일 버튼을 눌러서 확인해봐."));
             }
             else if (userMessage.Contains("글 쓰고 싶어"))
             {
@@ -145,6 +142,7 @@ public class AiChatMgr_KJS : MonoBehaviour
         }
     }
 
+
     public void UpdateChatResponse(string responseText)
     {
         if (typeTextCoroutine != null)
@@ -156,10 +154,10 @@ public class AiChatMgr_KJS : MonoBehaviour
         typeTextCoroutine = StartCoroutine(TypeText(responseText));
     }
 
-    private IEnumerator ActivateExtraUIWithDelayThenThumbnail(float extraUIDelay, float thumbnailUIDelay)
+    private IEnumerator ActivateExtraUIWithThumbnailAndResponse(float extraUIDelay, float thumbnailUIDelay, string response)
     {
         // Extra UI 활성화
-        yield return new WaitForSeconds(extraUIDelay); // 지정된 대기 시간 후
+        yield return new WaitForSeconds(extraUIDelay);
         if (extraUI != null)
         {
             extraUI.SetActive(true);
@@ -172,7 +170,7 @@ public class AiChatMgr_KJS : MonoBehaviour
         }
 
         // Thumbnail UI 활성화
-        yield return new WaitForSeconds(thumbnailUIDelay); // 지정된 대기 시간 후
+        yield return new WaitForSeconds(thumbnailUIDelay);
         if (thumbnailUI != null)
         {
             thumbnailUI.SetActive(true); // Thumbnail UI 활성화
@@ -183,11 +181,15 @@ public class AiChatMgr_KJS : MonoBehaviour
             thumbnailUI.SetActive(false);
             Debug.Log("Thumbnail UI가 비활성화되었습니다.");
         }
+
+        // 모든 UI 활성화 작업이 끝난 후 메시지 출력
+        UpdateChatResponse(response);
     }
 
-    private IEnumerator ActivateExtraUIWithDelay(float delay)
+    private IEnumerator ActivateExtraUIWithDelayAndResponse(float delay, string response)
     {
         yield return new WaitForSeconds(delay); // 지정된 대기 시간 후
+
         if (extraUI != null)
         {
             extraUI.SetActive(true);
@@ -198,6 +200,9 @@ public class AiChatMgr_KJS : MonoBehaviour
             extraUI.SetActive(false);
             Debug.Log("Extra UI가 비활성화되었습니다.");
         }
+
+        // 딜레이가 끝난 후 메시지 출력
+        UpdateChatResponse(response);
     }
 
     public void SpawnPrefabOnNetwork()
