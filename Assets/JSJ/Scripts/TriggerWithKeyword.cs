@@ -18,7 +18,7 @@ public class TriggerWithKeyword : MonoBehaviour
     // Trigger 영역에 Player 가 들어갔을 때
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name.Contains("Player") && !enterKeyword)
+        if (other.CompareTag("Player") && !enterKeyword)
         {
             PhotonView pv = other.GetComponent<PhotonView>();
             if (pv.IsMine)

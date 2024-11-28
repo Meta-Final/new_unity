@@ -56,7 +56,6 @@ public class RayController : MonoBehaviour
                 if (!rawImage.activeSelf) // 이미 활성화 상태가 아니라면 활성화
                 {
                     rawImage.SetActive(true);
-                    rawImage.SetActive(true);
                 }
             }
             else

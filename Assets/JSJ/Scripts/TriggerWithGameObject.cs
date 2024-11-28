@@ -29,7 +29,7 @@ public class TriggerWithGameObject : MonoBehaviour
     // Trigger 영역에 Player 가 들어갔을 때
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name.Contains("Player") && !isPanelOpen)
+        if (other.CompareTag("Player") && !isPanelOpen)
         {
             if (pv.IsMine)
             {
