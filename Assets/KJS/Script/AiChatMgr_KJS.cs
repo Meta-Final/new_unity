@@ -116,23 +116,28 @@ public class AiChatMgr_KJS : MonoBehaviour
 
         if (!string.IsNullOrEmpty(userMessage))
         {
-            // AI API 호출
-            apiManager.LLM(userMessage);
-
-            // 특정 메시지에 따라 UI 활성화 예약 및 오브젝트 생성
             if (userMessage.Contains("폭설을 주제로 오브젝트를 만들고 싶어"))
             {
-                StartCoroutine(ActivateExtraUIWithDelay(2f)); // extraUI 활성화
-                SpawnPrefabOnNetwork(); // 즉시 오브젝트 생성
+                // 메시지 출력 및 오브젝트 생성
+                StartCoroutine(ActivateExtraUIWithDelay(2f)); // 추가 UI 활성화
+                SpawnPrefabOnNetwork();
+                
             }
             else if (userMessage.Contains("폭설을 주제로 썸네일 만들어줘"))
             {
-                // Extra UI 활성화 후 Thumbnail UI 활성화
-                StartCoroutine(ActivateExtraUIWithDelayThenThumbnail(2f, 2f)); // 각각 딜레이 값 전달
+                // 메시지 출력 및 썸네일 UI 활성화
+                UpdateChatResponse("썸네일을 만들었어 삐약! 썸네일 버튼을 눌러서 확인해봐.");
+                StartCoroutine(ActivateExtraUIWithDelayThenThumbnail(2f, 2f));
+                
             }
             else if (userMessage.Contains("글 쓰고 싶어"))
             {
-                StartCoroutine(ActivateToolUIWithDelay(2f)); // toolUI 활성화
+                StartCoroutine(ActivateToolUIWithDelay(2f)); // Tool UI 활성화
+            }
+            else
+            {
+                // 기본 AI API 호출
+                apiManager.LLM(userMessage);
             }
 
             // 입력 필드 초기화
