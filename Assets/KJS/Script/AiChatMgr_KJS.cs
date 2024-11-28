@@ -117,17 +117,17 @@ public class AiChatMgr_KJS : MonoBehaviour
 
         if (!string.IsNullOrEmpty(userMessage))
         {
-            if (userMessage.Contains("폭설을 주제로 오브젝트를 만들고 싶어"))
+            if (userMessage.Contains("폭설에 대한 3D 오브젝트를 만들고 싶어"))
             {
                 // 추가 UI 활성화 후 메시지 출력
-                StartCoroutine(ActivateExtraUIWithDelayAndResponse(2f, "오브젝트를 만들었어 삐약! O키를 눌러 확인해봐."));
+                StartCoroutine(ActivateExtraUIWithDelayAndResponse(2f, "오브젝트를 만들었어 삐약!\n O키를 눌러 확인해봐."));
             }
-            else if (userMessage.Contains("폭설을 주제로 썸네일 만들어줘"))
+            else if (userMessage.Contains("폭설에 대한 기사 썸네일 만들어줘"))
             {
                 // 썸네일 UI 활성화 후 메시지 출력
-                StartCoroutine(ActivateExtraUIWithThumbnailAndResponse(2f, 2f, "썸네일을 만들었어 삐약! 썸네일 버튼을 눌러서 확인해봐."));
+                StartCoroutine(ActivateExtraUIWithThumbnailAndResponse(2f, 2f, "썸네일을 만들었어 삐약! \n 표지 썸네일버튼을 눌러서 확인할 수 있어!"));
             }
-            else if (userMessage.Contains("글 쓰고 싶어"))
+            else if (userMessage.Contains("기사창 열어줘"))
             {
                 StartCoroutine(ActivateToolUIWithDelay(2f)); // Tool UI 활성화
             }
