@@ -69,6 +69,7 @@ public class InventoryUI : MonoBehaviourPun
         }
         
         btn_PostIt.onClick.AddListener(() => OnPostitButtionClick());
+        print("왜안돼");
 
         if (closeButton != null)
         {
