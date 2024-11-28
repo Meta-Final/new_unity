@@ -13,7 +13,7 @@ public class Thumbnail_KJS : MonoBehaviour
     public TMP_InputField postIdInputField; // 사용자 입력을 통해 postId를 설정할 InputField (Inspector에서 할당)
 
     private PostInfoList postInfoList = new PostInfoList();  // 빈 리스트로 초기화
-    private string saveDirectory =Application.dataPath;
+    private string saveDirectory = Application.dataPath;
 
     void Start()
     {
@@ -71,7 +71,7 @@ public class Thumbnail_KJS : MonoBehaviour
         }
 
         string fileName = "UserImage_" + System.DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".png";
-        string imagePath = Path.Combine(Application.dataPath, fileName);
+        string imagePath = Path.Combine(postDirectory, fileName);
 
         // 이미지 파일을 로컬에 저장
         SaveImageToLocal(targetImage.sprite.texture, imagePath);
@@ -87,14 +87,23 @@ public class Thumbnail_KJS : MonoBehaviour
             postInfoList = new PostInfoList(); // 새로운 JSON 파일을 위해 리스트 초기화
         }
 
-        // 새로운 포스트 정보를 생성하여 리스트에 추가
-        H_PostInfo newPost = new H_PostInfo
+        // 동일한 postId가 존재하면 기존 항목을 덮어쓰기
+        H_PostInfo existingPost = postInfoList.postData.Find(post => post.postid == postId);
+        if (existingPost != null)
         {
-            postid = postId,
-            thumburl = imagePath
-        };
+            existingPost.thumburl = imagePath; // 기존 항목의 thumburl 업데이트
+        }
+        else
+        {
+            // 동일한 postId가 없을 경우 새 항목 추가
+            H_PostInfo newPost = new H_PostInfo
+            {
+                postid = postId,
+                thumburl = imagePath
+            };
+            postInfoList.postData.Add(newPost);  // 포스트 리스트에 추가
+        }
 
-        postInfoList.postData.Add(newPost);  // 포스트 리스트에 추가
         SaveJsonToLocal(jsonFilePath);  // postId별 폴더에 JSON 저장
     }
 
