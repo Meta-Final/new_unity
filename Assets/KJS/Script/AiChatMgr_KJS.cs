@@ -25,12 +25,13 @@ public class AiChatMgr_KJS : MonoBehaviour
     private float typingSoundDelay = 0.5f; // 타이핑 사운드 재생 간격 (초)
     private Coroutine typeTextCoroutine;
 
-    
     [Header("Photon Settings")]
     public string prefabName;             // 생성하려는 프리팹 이름 (인스펙터에서 할당)
     public Vector3 prefabScale = new Vector3(20f, 20f, 20f); // 프리팹의 스케일
     public float prefabRotationX = -90f; // 프리팹의 x축 회전값
     public float forwardOffset = 0.5f; // 플레이어 앞쪽의 스폰 거리
+
+    private ScrollRect chatScrollRect;    // 스크롤을 조정하기 위한 ScrollRect
 
     private void Awake()
     {
@@ -44,6 +45,13 @@ public class AiChatMgr_KJS : MonoBehaviour
         }
 
         audioSource = gameObject.AddComponent<AudioSource>();
+
+        // ScrollRect를 초기화
+        chatScrollRect = chatResponseText.GetComponentInParent<ScrollRect>();
+        if (chatScrollRect == null)
+        {
+            Debug.LogWarning("ScrollRect를 찾을 수 없습니다.");
+        }
     }
 
     void Start()
@@ -281,6 +289,14 @@ public class AiChatMgr_KJS : MonoBehaviour
                     audioSource.PlayOneShot(typingSound);
                     lastSoundPlayTime = Time.time; // 마지막 재생 시간 업데이트
                 }
+            }
+
+            // 텍스트 출력 시 스크롤을 아래로 내림
+            if (chatScrollRect != null)
+            {
+                Canvas.ForceUpdateCanvases();
+                chatScrollRect.verticalNormalizedPosition = 0f;
+                Canvas.ForceUpdateCanvases();
             }
 
             yield return new WaitForSeconds(0.05f);

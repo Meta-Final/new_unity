@@ -54,5 +54,24 @@ public class TextSizeController_KJS : MonoBehaviour
         rectTransform.sizeDelta = sizeDelta;
 
         Debug.Log($"텍스트 박스 크기 조정됨: {sizeDelta.y}");
+
+        // 자식 오브젝트의 크기를 동기화
+        AdjustChildrenSize(sizeDelta.y);
+    }
+
+    private void AdjustChildrenSize(float newHeight)
+    {
+        foreach (RectTransform child in rectTransform)
+        {
+            Vector2 childSizeDelta = child.sizeDelta;
+
+            // 자식 크기를 부모의 높이에 맞게 조정 (여기선 높이만 조정)
+            childSizeDelta.y = newHeight;
+
+            // 자식 RectTransform 업데이트
+            child.sizeDelta = childSizeDelta;
+
+            Debug.Log($"자식 오브젝트 크기 조정됨: {child.name}, 높이: {childSizeDelta.y}");
+        }
     }
 }
