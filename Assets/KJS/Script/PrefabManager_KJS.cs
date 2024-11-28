@@ -63,7 +63,7 @@ public class PrefabManager_KJS : MonoBehaviourPunCallbacks
             }
 
             // 범위 내에 있을 때 V 키를 누르면 UI를 토글하고 LoadObjectsFromFile 호출
-            if (isPlayerInRange && Input.GetKeyDown(KeyCode.V))
+            if (isPlayerInRange && Input.GetKeyDown(KeyCode.O))
             {
                 ToggleUI(!isUIActive);  // 현재 상태 반전
 

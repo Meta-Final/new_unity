@@ -52,5 +52,18 @@ public class AllButtonMgr : MonoBehaviour
     {
         MetaConnectionMgr.instance.TownToMagazine();
     }
-}
 
+    // 게임 종료
+    public void QuitGame()
+    {
+        Debug.Log("게임 종료 버튼이 눌렸습니다.");
+
+        // Unity 에디터에서 실행 중일 경우
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        // 빌드된 게임에서는 게임 종료
+        Application.Quit();
+#endif
+    }
+}
