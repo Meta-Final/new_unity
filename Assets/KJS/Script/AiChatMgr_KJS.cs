@@ -122,15 +122,13 @@ public class AiChatMgr_KJS : MonoBehaviour
             // 특정 메시지에 따라 UI 활성화 예약 및 오브젝트 생성
             if (userMessage.Contains("폭설을 주제로 오브젝트를 만들고 싶어"))
             {
-                SpawnPrefabOnNetwork(); // 즉시 오브젝트 생성
                 StartCoroutine(ActivateExtraUIWithDelay(2f)); // extraUI 활성화
-                Debug.Log("완성했어 삐약! o키를 눌러 담겨진 기사를 확인해봐 삐약!");
+                SpawnPrefabOnNetwork(); // 즉시 오브젝트 생성
             }
             else if (userMessage.Contains("폭설을 주제로 썸네일 만들어줘"))
             {
                 // Extra UI 활성화 후 Thumbnail UI 활성화
                 StartCoroutine(ActivateExtraUIWithDelayThenThumbnail(2f, 2f)); // 각각 딜레이 값 전달
-                Debug.Log("썸네일 완성했어 삐약! Asset파일에 확인해봐");
             }
             else if (userMessage.Contains("글 쓰고 싶어"))
             {
@@ -223,8 +221,12 @@ public class AiChatMgr_KJS : MonoBehaviour
                 // Photon 프리팹 생성
                 GameObject spawnedObject = PhotonNetwork.Instantiate(prefabName, spawnPosition, spawnRotation);
 
-                // 생성된 프리팹의 스케일 설정
+                //// 생성된 프리팹의 스케일 설정
                 spawnedObject.transform.localScale = prefabScale;
+
+                print("@@@");
+                spawnedObject.SetActive(true);
+                print("!!!");
 
                 Debug.Log($"{prefabName} 프리팹이 생성되었습니다. 위치: {spawnPosition}, 회전: {spawnRotation.eulerAngles}, 스케일: {prefabScale}");
             }
