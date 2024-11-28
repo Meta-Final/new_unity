@@ -202,6 +202,4 @@ public class PicketUIManager : MonoBehaviour
         // 커서 아이콘 초기화
         drawWithMouse.ResetCursor();
     }
-
-    
 }

@@ -2,8 +2,9 @@ using System;
 using System.Collections;
 using System.IO;
 using UnityEngine;
+using Photon.Pun; // Photon 네임스페이스 추가
 
-public class MaterialMgr_KJS : MonoBehaviour
+public class MaterialMgr_KJS : MonoBehaviourPunCallbacks // Photon의 MonoBehaviourPunCallbacks 상속
 {
     [Header("PicketId_KJS 참조")]
     [SerializeField]
@@ -73,7 +74,7 @@ public class MaterialMgr_KJS : MonoBehaviour
             if (string.IsNullOrEmpty(www.error))
             {
                 autoAssignTexture = www.texture; // 텍스처 로드 성공
-                AssignTextureToMaterial();       // 텍스처를 머티리얼에 할당
+                photonView.RPC("AssignTextureToMaterialRPC", RpcTarget.AllBuffered); // 포톤 RPC 호출
             }
             else
             {
@@ -82,7 +83,8 @@ public class MaterialMgr_KJS : MonoBehaviour
         }
     }
 
-    private void AssignTextureToMaterial()
+    [PunRPC]
+    private void AssignTextureToMaterialRPC()
     {
         // 첫 번째 자식을 가져옴
         Transform firstChild = transform.GetChild(0);

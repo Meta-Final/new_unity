@@ -112,7 +112,7 @@ public class Billboard : MonoBehaviourPunCallbacks, IPunObservable
                 string formattedDate = $"{fileDate.Month}월 {fileDate.Day}일"; // 날짜 포맷
 
                 // 텍스트 구성
-                formattedText = $"{photonNickname}의 {formattedDate} 스크랩";
+                formattedText = $"{photonNickname}의 피켓";
 
                 // TMP 텍스트 업데이트
                 if (textMeshPro != null)
