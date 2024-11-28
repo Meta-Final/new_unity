@@ -312,4 +312,19 @@ public class AiChatMgr_KJS : MonoBehaviour
             yield return new WaitForSeconds(0.05f);
         }
     }
+    private void OnDisable()
+    {
+        // 스크립트가 비활성화될 때 텍스트 초기화
+        if (chatResponseText != null)
+        {
+            chatResponseText.text = "";
+            Debug.Log("스크립트가 비활성화되어 텍스트가 초기화되었습니다.");
+        }
+
+        if (userInputField != null)
+        {
+            userInputField.text = "";
+            Debug.Log("스크립트가 비활성화되어 입력 필드가 초기화되었습니다.");
+        }
+    }
 }
