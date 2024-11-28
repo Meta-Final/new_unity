@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 1.88, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8033333301599543048}
@@ -71,7 +71,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  canvas_3DObject: {fileID: 7358927698216153489}
+  canvas_3DObject: {fileID: 0}
+  panel_3DObject: {fileID: 0}
 --- !u!114 &6120288081137959424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -896,12 +897,12 @@ GameObject:
   - component: {fileID: 8030270910713650398}
   - component: {fileID: 3022756817306605353}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Panel_3DObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7404639002750879278
 RectTransform:
   m_ObjectHideFlags: 0
