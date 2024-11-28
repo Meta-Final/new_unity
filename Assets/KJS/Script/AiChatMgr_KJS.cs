@@ -224,10 +224,6 @@ public class AiChatMgr_KJS : MonoBehaviour
                 //// 생성된 프리팹의 스케일 설정
                 spawnedObject.transform.localScale = prefabScale;
 
-                print("@@@");
-                spawnedObject.SetActive(true);
-                print("!!!");
-
                 Debug.Log($"{prefabName} 프리팹이 생성되었습니다. 위치: {spawnPosition}, 회전: {spawnRotation.eulerAngles}, 스케일: {prefabScale}");
             }
             else
