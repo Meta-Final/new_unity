@@ -57,7 +57,7 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
         // 닉네임 프리팹의 Text 자식 받아오기
         text_NickName = nickNamePrefab.GetComponentInChildren<TMP_Text>();
 
-        text_NickName.text = photonView.Owner.NickName;
+        text_NickName.text = PhotonNetwork.NickName;
 
         nickNamePrefab.SetActive(true);
     }

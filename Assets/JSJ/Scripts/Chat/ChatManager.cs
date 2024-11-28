@@ -107,7 +107,7 @@ public class ChatManager : MonoBehaviourPun
         // 채팅 내용을 NickName : 채팅 내용
         // "<collor=#ffffff> 원하는 내용 </color>"
         //string nick = "<color=#" + ColorUtility.ToHtmlStringRGB(nickNameColor) + ">" + PhotonNetwork.NickName + "</color>";
-        string nick = "<color=#" + ColorUtility.ToHtmlStringRGB(nickNameColor) + ">" + photonView.Owner.NickName + "</color>";
+        string nick = "<color=#" + ColorUtility.ToHtmlStringRGB(nickNameColor) + ">" + PhotonNetwork.NickName + "</color>";
         string chat = nick + " : " + s;
         
         // 현재 플레이어의 PhotonView ID 를 가져옴
