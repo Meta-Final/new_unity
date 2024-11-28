@@ -19,9 +19,9 @@ public class TriggerWith3DObject : MonoBehaviour
     // Trigger 영역에 Player 가 들어갔을 때
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && !enter3DObject)
+        if (Input.GetKeyDown(KeyCode.O))
         {
-            if (Input.GetMouseButton(1))
+            if (other.CompareTag("Player") && !enter3DObject)
             {
                 PhotonView pv = other.GetComponent<PhotonView>();
                 if (pv.IsMine)
@@ -30,10 +30,10 @@ public class TriggerWith3DObject : MonoBehaviour
                 }
 
                 enter3DObject = true;
-
             }
-            
+
         }
+        
     }
 
     // Trigger 영역에 Player 가 나갔을 때
