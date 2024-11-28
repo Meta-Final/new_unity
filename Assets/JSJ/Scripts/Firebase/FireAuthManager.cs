@@ -29,13 +29,13 @@ public class FireAuthManager : MonoBehaviour
 
     void Update()
     {
-        // 숫자키 1번이 눌렸는지 확인
-        if (Input.GetKeyDown(KeyCode.Alpha1)) // Alpha1 = 숫자키 1
-        {
-            string email = "emflazlwm@naver.com";
-            string password = "111111";
-            OnSignIn(email, password);
-        }
+        //// 숫자키 1번이 눌렸는지 확인
+        //if (Input.GetKeyDown(KeyCode.Alpha1)) // Alpha1 = 숫자키 1
+        //{
+        //    string email = "emflazlwm@naver.com";
+        //    string password = "111111";
+        //    OnSignIn(email, password);
+        //}
     }
 
     void OnChangedAuthState(object sender, EventArgs e)

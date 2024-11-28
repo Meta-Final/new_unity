@@ -116,29 +116,32 @@ public class AiChatMgr_KJS : MonoBehaviour
 
         if (!string.IsNullOrEmpty(userMessage))
         {
-            // AI API 호출
-            apiManager.LLM(userMessage);
-
-            // 특정 메시지에 따라 UI 활성화 예약 및 오브젝트 생성
             if (userMessage.Contains("폭설을 주제로 오브젝트를 만들고 싶어"))
             {
-                StartCoroutine(ActivateExtraUIWithDelay(2f)); // extraUI 활성화
-                SpawnPrefabOnNetwork(); // 즉시 오브젝트 생성
+                // 추가 UI 활성화 후 메시지 출력
+                StartCoroutine(ActivateExtraUIWithDelayAndResponse(2f, "오브젝트를 만들었어 삐약! O키를 눌러 확인해봐."));
+                SpawnPrefabOnNetwork(); // 오브젝트 생성
             }
             else if (userMessage.Contains("폭설을 주제로 썸네일 만들어줘"))
             {
-                // Extra UI 활성화 후 Thumbnail UI 활성화
-                StartCoroutine(ActivateExtraUIWithDelayThenThumbnail(2f, 2f)); // 각각 딜레이 값 전달
+                // 썸네일 UI 활성화 후 메시지 출력
+                StartCoroutine(ActivateExtraUIWithThumbnailAndResponse(2f, 2f, "썸네일을 만들었어 삐약! 썸네일 버튼을 눌러서 확인해봐."));
             }
             else if (userMessage.Contains("글 쓰고 싶어"))
             {
-                StartCoroutine(ActivateToolUIWithDelay(2f)); // toolUI 활성화
+                StartCoroutine(ActivateToolUIWithDelay(2f)); // Tool UI 활성화
+            }
+            else
+            {
+                // 기본 AI API 호출
+                apiManager.LLM(userMessage);
             }
 
             // 입력 필드 초기화
             userInputField.text = "";
         }
     }
+
 
     public void UpdateChatResponse(string responseText)
     {
@@ -151,10 +154,10 @@ public class AiChatMgr_KJS : MonoBehaviour
         typeTextCoroutine = StartCoroutine(TypeText(responseText));
     }
 
-    private IEnumerator ActivateExtraUIWithDelayThenThumbnail(float extraUIDelay, float thumbnailUIDelay)
+    private IEnumerator ActivateExtraUIWithThumbnailAndResponse(float extraUIDelay, float thumbnailUIDelay, string response)
     {
         // Extra UI 활성화
-        yield return new WaitForSeconds(extraUIDelay); // 지정된 대기 시간 후
+        yield return new WaitForSeconds(extraUIDelay);
         if (extraUI != null)
         {
             extraUI.SetActive(true);
@@ -167,7 +170,7 @@ public class AiChatMgr_KJS : MonoBehaviour
         }
 
         // Thumbnail UI 활성화
-        yield return new WaitForSeconds(thumbnailUIDelay); // 지정된 대기 시간 후
+        yield return new WaitForSeconds(thumbnailUIDelay);
         if (thumbnailUI != null)
         {
             thumbnailUI.SetActive(true); // Thumbnail UI 활성화
@@ -178,11 +181,15 @@ public class AiChatMgr_KJS : MonoBehaviour
             thumbnailUI.SetActive(false);
             Debug.Log("Thumbnail UI가 비활성화되었습니다.");
         }
+
+        // 모든 UI 활성화 작업이 끝난 후 메시지 출력
+        UpdateChatResponse(response);
     }
 
-    private IEnumerator ActivateExtraUIWithDelay(float delay)
+    private IEnumerator ActivateExtraUIWithDelayAndResponse(float delay, string response)
     {
         yield return new WaitForSeconds(delay); // 지정된 대기 시간 후
+
         if (extraUI != null)
         {
             extraUI.SetActive(true);
@@ -193,6 +200,9 @@ public class AiChatMgr_KJS : MonoBehaviour
             extraUI.SetActive(false);
             Debug.Log("Extra UI가 비활성화되었습니다.");
         }
+
+        // 딜레이가 끝난 후 메시지 출력
+        UpdateChatResponse(response);
     }
 
     public void SpawnPrefabOnNetwork()
@@ -300,6 +310,21 @@ public class AiChatMgr_KJS : MonoBehaviour
             }
 
             yield return new WaitForSeconds(0.05f);
+        }
+    }
+    private void OnDisable()
+    {
+        // 스크립트가 비활성화될 때 텍스트 초기화
+        if (chatResponseText != null)
+        {
+            chatResponseText.text = "";
+            Debug.Log("스크립트가 비활성화되어 텍스트가 초기화되었습니다.");
+        }
+
+        if (userInputField != null)
+        {
+            userInputField.text = "";
+            Debug.Log("스크립트가 비활성화되어 입력 필드가 초기화되었습니다.");
         }
     }
 }
