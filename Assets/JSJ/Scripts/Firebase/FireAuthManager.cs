@@ -13,7 +13,6 @@ public class FireAuthManager : MonoBehaviour
     public FirebaseAuth auth;
 
     public LoginSceneMgr loginSceneMgr;
-    
 
     private void Awake()
     {
@@ -26,6 +25,17 @@ public class FireAuthManager : MonoBehaviour
 
         // 로그인 상태 체크 이벤트 등록
         auth.StateChanged += OnChangedAuthState;
+    }
+
+    void Update()
+    {
+        // 숫자키 1번이 눌렸는지 확인
+        if (Input.GetKeyDown(KeyCode.Alpha1)) // Alpha1 = 숫자키 1
+        {
+            string email = "emflazlwm@naver.com";
+            string password = "111111";
+            OnSignIn(email, password);
+        }
     }
 
     void OnChangedAuthState(object sender, EventArgs e)
@@ -84,7 +94,7 @@ public class FireAuthManager : MonoBehaviour
         // 회원가입 시도
         Task<AuthResult> task = auth.CreateUserWithEmailAndPasswordAsync(email, password);
         // 통신이 완료될 때까지 기다린다.
-        yield return new WaitUntil( () => task.IsCompleted );
+        yield return new WaitUntil(() => task.IsCompleted);
         // 만약에 예외가 없다면
         if (task.Exception == null)
         {
@@ -102,12 +112,5 @@ public class FireAuthManager : MonoBehaviour
         {
             print("회원가입 실패 : " + task.Exception);
         }
-
-
     }
-
-   
-
-    
-   
 }
