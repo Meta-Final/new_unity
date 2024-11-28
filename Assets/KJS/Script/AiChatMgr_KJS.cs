@@ -30,6 +30,7 @@ public class AiChatMgr_KJS : MonoBehaviour
     public Vector3 prefabScale = new Vector3(20f, 20f, 20f); // 프리팹의 스케일
     public float prefabRotationX = -90f; // 프리팹의 x축 회전값
     public float forwardOffset = 0.5f; // 플레이어 앞쪽의 스폰 거리
+    public float yOffset = 0f; // Y축 오프셋 (Inspector에서 조정 가능)
 
     private ScrollRect chatScrollRect;    // 스크롤을 조정하기 위한 ScrollRect
 
@@ -120,7 +121,6 @@ public class AiChatMgr_KJS : MonoBehaviour
             {
                 // 추가 UI 활성화 후 메시지 출력
                 StartCoroutine(ActivateExtraUIWithDelayAndResponse(2f, "오브젝트를 만들었어 삐약! O키를 눌러 확인해봐."));
-                SpawnPrefabOnNetwork(); // 오브젝트 생성
             }
             else if (userMessage.Contains("폭설을 주제로 썸네일 만들어줘"))
             {
@@ -200,7 +200,7 @@ public class AiChatMgr_KJS : MonoBehaviour
             extraUI.SetActive(false);
             Debug.Log("Extra UI가 비활성화되었습니다.");
         }
-
+        SpawnPrefabOnNetwork(); // 오브젝트 생성
         // 딜레이가 끝난 후 메시지 출력
         UpdateChatResponse(response);
     }
@@ -222,8 +222,9 @@ public class AiChatMgr_KJS : MonoBehaviour
             {
                 Transform playerTransform = playerObject.transform;
 
-                // 스폰 위치 계산 (플레이어 앞쪽)
+                // 스폰 위치 계산 (플레이어 앞쪽 + Y 오프셋 적용)
                 Vector3 spawnPosition = playerTransform.position + playerTransform.forward * forwardOffset;
+                spawnPosition.y += yOffset; // Y축 조정 추가
 
                 // 스폰 회전값 계산
                 Quaternion spawnRotation = Quaternion.Euler(prefabRotationX, playerTransform.rotation.eulerAngles.y, 0);
@@ -231,7 +232,7 @@ public class AiChatMgr_KJS : MonoBehaviour
                 // Photon 프리팹 생성
                 GameObject spawnedObject = PhotonNetwork.Instantiate(prefabName, spawnPosition, spawnRotation);
 
-                //// 생성된 프리팹의 스케일 설정
+                // 생성된 프리팹의 스케일 설정
                 spawnedObject.transform.localScale = prefabScale;
 
                 Debug.Log($"{prefabName} 프리팹이 생성되었습니다. 위치: {spawnPosition}, 회전: {spawnRotation.eulerAngles}, 스케일: {prefabScale}");
