@@ -7,7 +7,7 @@ using UnityEngine.UI;
 using Unity.Mathematics;
 using TMPro;
 
-public class DrawWithMouse : MonoBehaviourPun, IPunObservable
+public class DrawWithMouse : MonoBehaviourPun //IPunObservable
 {
     public Camera uiCamera;
 
@@ -85,7 +85,7 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
             SetPenIcon();
 
             // 닉네임 생성 함수 RPC 호출
-            photonView.RPC("CreateNickName", RpcTarget.AllBuffered);
+            //photonView.RPC("CreateNickName", RpcTarget.AllBuffered);
            
             // 붙이기 비활성화
             isAttaching = false;
@@ -95,7 +95,7 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
             // 커서 초기화
             ResetCursor();
 
-            photonView.RPC("HideNickName", RpcTarget.AllBuffered);
+            //photonView.RPC("HideNickName", RpcTarget.AllBuffered);
         }
     }
 
@@ -128,12 +128,12 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
         // 그리기 모드일 때
         if (isDrawing == true)
         {
-            UpdateNickName();
+            //UpdateNickName();
         }
 
         if (text_NickName != null)
         {
-            text_NickName.transform.position = nickNamePos;
+            //text_NickName.transform.position = nickNamePos;
         }
         
 
@@ -266,17 +266,17 @@ public class DrawWithMouse : MonoBehaviourPun, IPunObservable
     }
 
     // 닉네임 프리팹 위치 동기화
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.IsWriting)
-        {
-            stream.SendNext(nickNamePos);
-        }
-        else
-        {
-            nickNamePos = (Vector2)stream.ReceiveNext();
-        }
+    //public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    //{
+    //    if (stream.IsWriting)
+    //    {
+    //        stream.SendNext(nickNamePos);
+    //    }
+    //    else
+    //    {
+    //        nickNamePos = (Vector2)stream.ReceiveNext();
+    //    }
 
         
-    }
+    //}
 }
