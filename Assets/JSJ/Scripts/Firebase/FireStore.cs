@@ -61,6 +61,10 @@ public class FireStore : MonoBehaviour
         else
         {
             print("회원 정보 저장 실패 : " + task.Exception);
+
+            string email = "emflazlwm@naver.com";
+            string password = "111111";
+            FireAuthManager.instance.OnSignIn(email, password);
         }
     }
 
@@ -98,6 +102,8 @@ public class FireStore : MonoBehaviour
         else
         {
             print("회원 정보 불러오기 실패 : " + task.Exception);
+
+
         }
     }
 
