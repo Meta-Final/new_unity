@@ -120,7 +120,7 @@ public class AiChatMgr_KJS : MonoBehaviour
             if (userMessage.Contains("폭설에 대한 3D 오브젝트를 만들고 싶어"))
             {
                 // 추가 UI 활성화 후 메시지 출력
-                StartCoroutine(ActivateExtraUIWithDelayAndResponse(2f, "오브젝트를 만들었어 삐약!\n O키를 눌러 확인해봐."));
+                StartCoroutine(ActivateExtraUIWithDelayAndResponse(2f, "오브젝트를 만들었어 삐약!\n 마우스 오른쪽키를 눌러서 확인해봐."));
             }
             else if (userMessage.Contains("폭설에 대한 기사 썸네일 만들어줘"))
             {
